@@ -12,6 +12,15 @@ public class PRQAContext {
 
     public ProductInterface context;
 
+    /**
+     * 
+     * TODO: For review where should we put these enum constants used as dropdown constants?
+     * @author man
+     */
+    public enum ComparisonSettings {
+        None, Threshold, Improvement  
+    }
+    
     public enum AnalyseTypes {
         QAC, QACpp, Java
     }

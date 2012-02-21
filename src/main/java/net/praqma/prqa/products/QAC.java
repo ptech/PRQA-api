@@ -15,8 +15,6 @@ import net.praqma.util.execute.CmdResult;
  */
 public class QAC extends PRQA implements AnalysisInterface  {
 
-    
-
     public CmdResult execute(String cmd) {
        return Cmd.run(cmd);
     }

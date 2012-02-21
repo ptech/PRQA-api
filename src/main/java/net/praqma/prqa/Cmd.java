@@ -22,29 +22,23 @@ public class Cmd extends PRQA {
 	private static Logger logger = Logger.getLogger();
 
 	static {
-		logger.debug( "Cleartool environment: " + System.getProperty( "cleartool" ) );
-//		if( System.getProperty( "cleartool" ) != null && System.getProperty( "cleartool" ).equalsIgnoreCase( "mock" ) ) {
-//			cli = CommandLineMock.getInstance();
-//		} else {
-			cli = CommandLine.getInstance();
-//		}
+            cli = CommandLine.getInstance();
 	}
 
 	public static CmdResult run( String cmd ) throws CommandLineException, AbnormalProcessTerminationException {
-		return cli.run( "cleartool " + cmd, null, true, false );
+		return cli.run( cmd, null, true, false );
 	}
 
 	public static CmdResult run( String cmd, File dir ) throws CommandLineException, AbnormalProcessTerminationException {
-		return cli.run( "cleartool " + cmd, dir, true, false );
+		return cli.run( cmd, dir, true, false );
 	}
 
 	public static CmdResult run( String cmd, File dir, boolean merge ) throws CommandLineException, AbnormalProcessTerminationException {
-		return cli.run( "cleartool " + cmd, dir, merge, false );
+		return cli.run( cmd, dir, merge, false );
 	}
 
 	public static CmdResult run( String cmd, File dir, boolean merge, boolean ignore ) throws CommandLineException, AbnormalProcessTerminationException {
-		return cli.run( "cleartool " + cmd, dir, merge, ignore );
+		return cli.run( cmd, dir, merge, ignore );
 	}
-    
-
+   
 }

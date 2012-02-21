@@ -16,7 +16,7 @@ import net.praqma.util.execute.CmdResult;
 public class QAR extends PRQA implements ReportInterface {
 
     public CmdResult executed(String product ) {
-        return Cmd.run("QAR-1.2/bin/qar.exe" + product);
+        return Cmd.run("QAR-1.2/bin/qar.exe " + product);
     }
 
 }
