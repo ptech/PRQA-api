@@ -6,17 +6,13 @@ package net.praqma.prqa;
 
 import java.io.File;
 import net.praqma.util.debug.Logger;
-import net.praqma.util.execute.AbnormalProcessTerminationException;
-import net.praqma.util.execute.CmdResult;
-import net.praqma.util.execute.CommandLine;
-import net.praqma.util.execute.CommandLineException;
-import net.praqma.util.execute.CommandLineInterface;
+import net.praqma.util.execute.*;
 
 /**
  *
  * @author jes
  */
-public class Cmd extends PRQA {
+public class Cmd {
 
     	private static CommandLineInterface cli = null;
 	private static Logger logger = Logger.getLogger();

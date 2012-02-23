@@ -1,23 +1,18 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package net.praqma.prqa;
 
+import java.io.File;
 import net.praqma.util.execute.CmdResult;
 
 /**
  *
- * @author jes
+ * @author jes, man
  */
-public class PRQA {
-
-
-   public CmdResult execute(String cmd) {
-       return Cmd.run(cmd);
-    }
-
-
+public abstract class PRQA extends Cmd implements ProductInterface {
     
+    protected String productHomeDir;
+    
+    public CmdResult execute(String cmd) {
+       return Cmd.run(cmd,new File(productHomeDir));
+    }
 
 }

@@ -4,14 +4,13 @@
  */
 package net.praqma.prqa;
 
-import net.praqma.util.execute.CmdResult;
-
 /**
  *
- * @author jes
+ * @author jes,man
+ * 
+ * Use this interface to set the place where the binaries for your executable are located. 
  */
 public interface ProductInterface {
-
-    public CmdResult execute(String cmd );
-
+    public String getProductHomeDir();
+    public void setProductHomeDir(String productHomeDir);
 }
