@@ -1,12 +1,17 @@
 package net.praqma.prqa;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.Map;
 
 /**
  *
  * @author Praqma
  */
 public class PRQAComplianceStatusCollection extends ArrayList<PRQAComplianceStatus> {
+    
+    private Map<ComplianceCategory,Number> overrideMinimum = new EnumMap<ComplianceCategory, Number>(ComplianceCategory.class);
+    private Map<ComplianceCategory,Number> overrideMaximum = new EnumMap<ComplianceCategory, Number>(ComplianceCategory.class);
     
     public enum ComplianceCategory {
         Messages,
@@ -29,20 +34,25 @@ public class PRQAComplianceStatusCollection extends ArrayList<PRQAComplianceStat
         }
     }
     
-    public PRQAComplianceStatusCollection() {
+    public PRQAComplianceStatusCollection() { 
         this(new ArrayList<PRQAComplianceStatus>());
     }
     
     public PRQAComplianceStatusCollection(ArrayList<PRQAComplianceStatus> collection) {
         this.addAll(collection);
     }
-
+ 
     /***
      * Implemented a collection method to gather extremities from a given set of collected compliance statistics.
      * @param category
      * @return 
      */
-    public int getMax(ComplianceCategory category) {
+    public Number getMax(ComplianceCategory category) {
+        
+        if(getOverriddenMax(category) != null) {
+            return getOverriddenMax(category);
+        }
+        
         int max = Integer.MIN_VALUE;
         int tmp = 0;
         switch(category) {
@@ -77,7 +87,12 @@ public class PRQAComplianceStatusCollection extends ArrayList<PRQAComplianceStat
      * @param category
      * @return a number indicating the smallest given observation for the specified category.
      */
-    public int getMin(ComplianceCategory category) {
+    public Number getMin(ComplianceCategory category) {
+        
+        if(getOverriddenMin(category) != null) {
+            return getOverriddenMin(category);
+        }
+        
         int min = Integer.MAX_VALUE;
         int tmp = 0;
         switch(category) {
@@ -104,5 +119,27 @@ public class PRQAComplianceStatusCollection extends ArrayList<PRQAComplianceStat
                 }
         }
         return min;
+    }
+    
+    public void overrideMin(ComplianceCategory category, Number value) {
+        overrideMinimum.put(category, value);
+    }
+    
+    public void overrideMax(ComplianceCategory category, Number value) {
+        overrideMaximum.put(category, value);
+    }
+    
+    public Number getOverriddenMax(ComplianceCategory category) {
+        if(overrideMaximum.containsKey(category)) {
+            return overrideMaximum.get(category);
+        }
+        return null;
+    }
+    
+    public Number getOverriddenMin(ComplianceCategory category) {
+        if(overrideMinimum.containsKey(category)) {
+            return overrideMinimum.get(category);
+        }
+        return null;
     }
 }

@@ -38,6 +38,7 @@ public class PRQAComplianceStatus implements Serializable, Comparable<PRQACompli
     private Double projectCompliance;
     //mark list as transient, we only use for console output purposes.
     private transient List<String> notifications;
+    private List<PRQAComplianceStatusCollection.ComplianceCategory> disabledCategories = new ArrayList<PRQAComplianceStatusCollection.ComplianceCategory>(); 
 
     public PRQAComplianceStatus() {
        notifications = new ArrayList<String>();
@@ -121,6 +122,19 @@ public class PRQAComplianceStatus implements Serializable, Comparable<PRQACompli
      */
     public void addNotication(String message) {
         notifications.add(message);
+    }
+    
+    /**
+     * Temporary solution to disable showing of specific properties.
+     * @param category
+     * @return 
+     */
+    public boolean isDisabled(PRQAComplianceStatusCollection.ComplianceCategory category) {
+        return disabledCategories.contains(category);
+    }
+    
+    public void disable(PRQAComplianceStatusCollection.ComplianceCategory category) {
+        disabledCategories.add(category);
     }
 
 }

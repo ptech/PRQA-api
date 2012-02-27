@@ -4,18 +4,24 @@
  */
 package net.praqma.prqa.products;
 
+import java.io.File;
 import net.praqma.prqa.Cmd;
 import net.praqma.prqa.PRQA;
 import net.praqma.util.execute.CmdResult;
 
 /**
- *
+ * Reporting class. 
+ * 
  * @author jes
  */
 public class QAR extends PRQA {
 
-    public CmdResult executed(String command) {
-        return Cmd.run(productHomeDir +" "+command);
+    public QAR(String homedir) {
+        this.productHomeDir = homedir;
+    }
+    
+    public CmdResult execute(String command) {
+        return Cmd.run(command,new File(productHomeDir));
     }
 
     public String getProductHomeDir() {

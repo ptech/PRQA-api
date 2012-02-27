@@ -4,7 +4,6 @@
  */
 package net.praqma.prqa.products;
 
-import java.io.File;
 import net.praqma.prqa.PRQA;
 import net.praqma.util.execute.CmdResult;
 

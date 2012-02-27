@@ -5,7 +5,6 @@
 package net.praqma.prqa.products;
 
 import java.io.File;
-import net.praqma.prqa.AnalysisInterface;
 import net.praqma.prqa.Cmd;
 import net.praqma.prqa.PRQA;
 import net.praqma.util.execute.CmdResult;
@@ -14,7 +13,7 @@ import net.praqma.util.execute.CmdResult;
  *
  * @author jes, man
  */
-public class QAC extends PRQA implements AnalysisInterface  {
+public class QAC extends PRQA {
 
     public QAC(String homeDir) {
         productHomeDir = homeDir;
