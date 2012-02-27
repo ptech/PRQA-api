@@ -121,6 +121,11 @@ public class PRQAComplianceStatusCollection extends ArrayList<PRQAComplianceStat
         return min;
     }
     
+    /**
+     * Implemented methods to override the min and max values, these are used in the graphing part of the project. You override specific performance metrics.
+     * @param category
+     * @param value 
+     */
     public void overrideMin(ComplianceCategory category, Number value) {
         overrideMinimum.put(category, value);
     }
