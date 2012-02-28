@@ -14,5 +14,4 @@ public abstract class PRQA extends Cmd implements ProductInterface {
     public CmdResult execute(String cmd) {
        return Cmd.run(cmd,new File(productHomeDir));
     }
-
 }
