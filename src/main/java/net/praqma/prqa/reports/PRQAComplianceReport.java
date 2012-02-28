@@ -11,6 +11,8 @@ import net.praqma.prqa.PRQATask;
 import net.praqma.prqa.parsers.ComplianceReportHtmlParser;
 import net.praqma.prqa.parsers.ReportHtmlParser;
 import net.praqma.prqa.products.QAR;
+import net.praqma.util.execute.CmdResult;
+import net.praqma.util.execute.CommandLineException;
 
 /**
  *
@@ -53,7 +55,12 @@ public class PRQAComplianceReport<T extends PRQAComplianceStatus, K extends Stri
      */
     public T completeTask(K reportpath) {
         //Generate the report
-        qar.execute();
+        CmdResult res = null;
+        try {
+            res = qar.execute();
+        } catch (CommandLineException cle) {
+            //TODO: REMOVE THIS CATCH PRIOR TO RELEASE            
+        }
         
         //Parse it.
         PRQAComplianceStatus stat = new PRQAComplianceStatus();

@@ -14,11 +14,11 @@ public class PRQAContext {
         None, Threshold, Improvement  
     }
     
-    public enum AnalyseTypes {
+    public enum AnalysisTools {
         QAC, QACpp, Java
     }
 
-    public enum ReportTypes {
+    public enum ReportingTools {
         QAV, QAR
     }
 
