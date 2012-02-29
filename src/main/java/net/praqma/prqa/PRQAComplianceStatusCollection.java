@@ -41,6 +41,10 @@ public class PRQAComplianceStatusCollection extends ArrayList<PRQAComplianceStat
     public PRQAComplianceStatusCollection(ArrayList<PRQAComplianceStatus> collection) {
         this.addAll(collection);
     }
+    
+    public PRQAComplianceStatusCollection(PRQAComplianceStatusCollection collection) {
+        this.addAll(collection);
+    }
  
     /***
      * Implemented a collection method to gather extremities from a given set of collected compliance statistics.
@@ -146,5 +150,10 @@ public class PRQAComplianceStatusCollection extends ArrayList<PRQAComplianceStat
             return overrideMinimum.get(category);
         }
         return null;
+    }
+    
+    public void clearOverrides() {
+        overrideMaximum.clear();
+        overrideMinimum.clear();
     }
 }

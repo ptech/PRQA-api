@@ -43,6 +43,13 @@ public class PRQAComplianceStatus implements Serializable, Comparable<PRQACompli
     public PRQAComplianceStatus() {
        notifications = new ArrayList<String>();
     }
+    
+    public PRQAComplianceStatus(int messages, Double fileCompliance, Double projectCompliance) {
+        this.messages = messages;
+        this.fileCompliance = fileCompliance;
+        this.projectCompliance = projectCompliance;
+        notifications = new ArrayList<String>();
+    }
 
     public int getMessages() {
         return messages;
