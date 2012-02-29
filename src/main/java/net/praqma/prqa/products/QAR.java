@@ -16,7 +16,6 @@ import net.praqma.util.execute.CmdResult;
  */
 public class QAR extends PRQA {
     private String reportOutputPath;
-    private String command;
     
     public QAR(String homedir) {
         this.productHomeDir = homedir;
@@ -52,4 +51,8 @@ public class QAR extends PRQA {
         return this.reportOutputPath;
     }
 
+    @Override
+    public String toString() {
+        return String.format("QAR Command: dir = %s, cmd = %s", this.productHomeDir, this.command);
+    }
 }

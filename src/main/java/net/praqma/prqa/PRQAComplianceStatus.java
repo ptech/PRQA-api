@@ -142,5 +142,5 @@ public class PRQAComplianceStatus implements Serializable, Comparable<PRQACompli
     
     public void disable(PRQAComplianceStatusCollection.ComplianceCategory category) {
         disabledCategories.add(category);
-    }
+    }    
 }

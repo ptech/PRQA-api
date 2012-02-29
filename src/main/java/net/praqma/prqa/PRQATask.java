@@ -4,10 +4,16 @@
  */
 package net.praqma.prqa;
 
+import net.praqma.jenkins.plugin.prqa.PrqaException;
+
 /**
  *
  * @author Praqma Very generic interface which all classes implementing the PRQA report should implement.
+ * 
+ * 
  */
 public interface PRQATask<T,K> {
-    public T completeTask(K parameter);  
+    public String getNamingTemplate();
+    public T completeTask(K parameter) throws PrqaException;
+    public T completeTask() throws PrqaException;
 }
