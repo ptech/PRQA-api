@@ -34,14 +34,6 @@ public class QAR extends PRQA {
     public CmdResult execute() {
         return Cmd.run(command, new File(productHomeDir));
     }
-
-    public String getProductHomeDir() {
-        return this.productHomeDir;
-    }
-
-    public void setProductHomeDir(String productHomeDir) {
-        this.productHomeDir = productHomeDir;
-    }
     
     public void setReportOutputPath(String reportOutputPath) {
         this.reportOutputPath = reportOutputPath;

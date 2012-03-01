@@ -32,7 +32,7 @@ public abstract class ReportHtmlParser {
         try {
             fis = new FileInputStream(file);
         } catch (FileNotFoundException ex) {
-            throw new PrqaException("Could not find file " + file.getPath());
+            throw new PrqaException.PrqaParserException("Could not find file "+file.getPath(),ex);
         }
 
         InputStreamReader isr = new InputStreamReader(fis);
@@ -44,7 +44,7 @@ public abstract class ReportHtmlParser {
                 report += sourceLine + "\n";
             }
         } catch (IOException ex) {
-            throw new PrqaException("Could not read the line after :\n" + sourceLine);
+            throw new PrqaException.PrqaParserException("Could not read the line after :\n" + sourceLine,ex);
         }
         Matcher match = pattern.matcher(report);
         while (match.find()) {

@@ -17,7 +17,7 @@ public class PRQAComplianceStatusCollection extends ArrayList<PRQAComplianceStat
         Messages,
         ProjectCompliance,
         FileCompliance;
-        
+    
 
         @Override
         public String toString() {

@@ -14,21 +14,18 @@ import net.praqma.util.execute.CmdResult;
  * @author jes, man
  */
 public class QAC extends PRQA {
-
+        
     public QAC(String homeDir) {
         productHomeDir = homeDir;
     }
     
+    public QAC(String homeDir, String command) {
+        this.productHomeDir = homeDir;
+        this.command = command;
+    }
+    
     @Override
     public CmdResult execute(String cmd) {
-       return Cmd.run(cmd, new File(productHomeDir));
-    }
-
-    public String getProductHomeDir() {
-        return this.productHomeDir;
-    }
-
-    public void setProductHomeDir(String productHomeDir) {
-        this.productHomeDir = productHomeDir;
+       return Cmd.run(cmd, new File(productHomeDir));       
     }
 }
