@@ -13,13 +13,13 @@ import net.praqma.util.execute.CmdResult;
  */
 public class QACpp extends PRQA {
     
-    public QACpp(String homeDir) {
-        this.productHomeDir = homeDir;
+    public QACpp(String productExecutable) {
+        this.productExecutable = productExecutable;
     }
     
-    public QACpp(String homeDir, String command) {
+    public QACpp(String productExecutable, String command) {
         this.command = command;
-        this.productHomeDir = homeDir;
+        this.productExecutable = productExecutable;
     }
 
     @Override

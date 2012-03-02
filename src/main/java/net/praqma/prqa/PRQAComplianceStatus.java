@@ -28,8 +28,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
- * @author jes
+ * This class represent a compliance status readout. 3 values, file compliance, project compliance and number of messages
+ * 
+ * @author jes, man
  */
 public class PRQAComplianceStatus implements Serializable, Comparable<PRQAComplianceStatus> {
 
@@ -37,7 +38,7 @@ public class PRQAComplianceStatus implements Serializable, Comparable<PRQACompli
     private Double fileCompliance;
     private Double projectCompliance;
     //mark list as transient, we only use for console output purposes.
-    private transient List<String> notifications;
+    private List<String> notifications;
     private List<PRQAComplianceStatusCollection.ComplianceCategory> disabledCategories = new ArrayList<PRQAComplianceStatusCollection.ComplianceCategory>(); 
 
     public PRQAComplianceStatus() {
@@ -98,8 +99,10 @@ public class PRQAComplianceStatus implements Serializable, Comparable<PRQACompli
         out += "Project Compliance Index : "+projectCompliance + "%\n";
         out += "File Compliance Index : "+fileCompliance + "%\n";
         out += "Messages : "+messages+"\n";
-        for(String note : notifications) {
-            out += "Notify: "+note+"\n";
+        if(notifications != null) {
+            for(String note : notifications) {
+                out += "Notify: "+note+"\n";
+            }
         }
         return out;       
     }

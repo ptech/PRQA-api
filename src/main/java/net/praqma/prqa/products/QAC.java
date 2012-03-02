@@ -4,9 +4,8 @@
  */
 package net.praqma.prqa.products;
 
-import java.io.File;
-import net.praqma.prqa.Cmd;
 import net.praqma.prqa.PRQA;
+import net.praqma.prqa.PRQACommandLineUtility;
 import net.praqma.util.execute.CmdResult;
 
 /**
@@ -15,17 +14,17 @@ import net.praqma.util.execute.CmdResult;
  */
 public class QAC extends PRQA {
         
-    public QAC(String homeDir) {
-        productHomeDir = homeDir;
+    public QAC(String productExecutable) {
+        this.productExecutable = productExecutable;
     }
     
-    public QAC(String homeDir, String command) {
-        this.productHomeDir = homeDir;
+    public QAC(String productExecutable, String command) {
         this.command = command;
+        this.productExecutable = productExecutable;
     }
     
     @Override
     public CmdResult execute(String cmd) {
-       return Cmd.run(cmd, new File(productHomeDir));       
+       return PRQACommandLineUtility.run(getProductExecutable() +" "+command);       
     }
 }

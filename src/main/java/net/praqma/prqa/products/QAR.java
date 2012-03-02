@@ -4,8 +4,7 @@
  */
 package net.praqma.prqa.products;
 
-import java.io.File;
-import net.praqma.prqa.Cmd;
+import net.praqma.prqa.PRQACommandLineUtility;
 import net.praqma.prqa.PRQA;
 import net.praqma.util.execute.CmdResult;
 
@@ -17,22 +16,18 @@ import net.praqma.util.execute.CmdResult;
 public class QAR extends PRQA {
     private String reportOutputPath;
     
-    public QAR(String homedir) {
-        this.productHomeDir = homedir;
+    public QAR(String productExecutable) {
+        this.productExecutable = productExecutable;
     }
     
-    public QAR(String homedir, String command) {
+    public QAR(String productExecutable, String command) {
         this.command = command;
-        this.productHomeDir = homedir;
+        this.productExecutable = productExecutable;
     }
     
     @Override
     public CmdResult execute(String command) {
-        return Cmd.run(command,new File(productHomeDir));
-    }
-        
-    public CmdResult execute() {
-        return Cmd.run(command, new File(productHomeDir));
+        return PRQACommandLineUtility.run(getProductExecutable() + " " + command);
     }
     
     public void setReportOutputPath(String reportOutputPath) {
@@ -45,6 +40,6 @@ public class QAR extends PRQA {
 
     @Override
     public String toString() {
-        return String.format("QAR Command: dir = %s, cmd = %s", this.productHomeDir, this.command);
+        return String.format("QAR Command: exe = %s, cmd = %s specified ouput path = %s", this.productExecutable, this.command, this.reportOutputPath);
     }
 }

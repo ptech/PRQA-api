@@ -11,6 +11,6 @@ package net.praqma.prqa;
  * Use this interface to set the place where the binaries for your executable are located. 
  */
 public interface PRQAProduct {
-    public String getProductHomeDir();
-    public void setProductHomeDir(String productHomeDir);
+    public String getProductExecutable();
+    public void setProductExecutable(String productHomeDir);
 }

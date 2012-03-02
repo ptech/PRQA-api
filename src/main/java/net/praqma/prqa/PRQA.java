@@ -1,23 +1,26 @@
 package net.praqma.prqa;
 
-import java.io.File;
+import java.io.Serializable;
 import net.praqma.util.execute.CmdResult;
 
 /**
- *
+ * Class wrapping a Programming research product. We pass this on to our remote method class, hence the need for serialization. 
+ * 
+ * The CLI is static and is therefore by default not serialized. 
+ * 
  * @author jes, man
  */
-public abstract class PRQA extends Cmd implements PRQAProduct {
+public abstract class PRQA implements PRQAProduct,Serializable {
     
-    protected String productHomeDir;
+    protected String productExecutable;
     protected String command;
     
-    public String getProductHomeDir() {
-        return this.productHomeDir;
+    public String getProductExecutable() {
+        return this.productExecutable;
     }
 
-    public void setProductHomeDir(String productHomeDir) {
-        this.productHomeDir = productHomeDir;
+    public void setProductExecutable(String productExecutable) {
+        this.productExecutable = productExecutable;
     }
     
     public String getCommand() {
@@ -29,6 +32,13 @@ public abstract class PRQA extends Cmd implements PRQAProduct {
     }
     
     public CmdResult execute(String cmd) {
-       return Cmd.run(cmd,new File(productHomeDir));
+       return PRQACommandLineUtility.run(getProductExecutable() + " "+cmd);
+    }
+    
+    public CmdResult execute() {
+        if(productExecutable == null || productExecutable.equals(""))  {
+            return PRQACommandLineUtility.run(command);
+        }    
+        return PRQACommandLineUtility.run(getProductExecutable()+" "+command);
     }
 }

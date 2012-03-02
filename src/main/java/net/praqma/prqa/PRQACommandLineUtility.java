@@ -9,10 +9,11 @@ import net.praqma.util.debug.Logger;
 import net.praqma.util.execute.*;
 
 /**
- *
+ * PRQA command line utility. Makes use Praqma jutils. Specifically the command line interface. 
+ * 
  * @author jes
  */
-public class Cmd {
+public class PRQACommandLineUtility {
 
     	private static CommandLineInterface cli = null;
 	private static Logger logger = Logger.getLogger();
