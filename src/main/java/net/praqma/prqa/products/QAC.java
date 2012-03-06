@@ -4,6 +4,7 @@
  */
 package net.praqma.prqa.products;
 
+import java.io.File;
 import net.praqma.prqa.PRQA;
 import net.praqma.prqa.PRQACommandLineUtility;
 import net.praqma.util.execute.CmdResult;
@@ -23,8 +24,13 @@ public class QAC extends PRQA {
         this.productExecutable = productExecutable;
     }
     
-    @Override
-    public CmdResult execute(String cmd) {
-       return PRQACommandLineUtility.run(getProductExecutable() +" "+command);       
+    public QAC(String productExecutable, String command, String commandBase) {
+        this.productExecutable = productExecutable;
+        this.command = command;
+        this.commandBase = commandBase;
+    }
+    
+    public CmdResult execute(String command, File dir) {
+        return PRQACommandLineUtility.run(command, dir);
     }
 }

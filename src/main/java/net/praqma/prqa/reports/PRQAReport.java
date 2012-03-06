@@ -24,7 +24,5 @@ public abstract class PRQAReport {
     
     public ReportHtmlParser getParser() {
         return this.parser;
-    }
-            
-    
+    }    
 }

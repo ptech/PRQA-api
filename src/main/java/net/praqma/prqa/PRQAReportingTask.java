@@ -13,7 +13,6 @@ import net.praqma.jenkins.plugin.prqa.PrqaException;
  * 
  */
 public interface PRQAReportingTask<T,K> {
-    public String getNamingTemplate();
     public String getFullReportPath();
     public T completeTask(K parameter) throws PrqaException;
     public T completeTask() throws PrqaException;

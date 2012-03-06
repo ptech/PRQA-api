@@ -4,6 +4,7 @@
  */
 package net.praqma.prqa;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import junit.framework.TestCase;
@@ -62,5 +63,15 @@ public class PRQATest extends TestCase {
         collection.removeAll(list);
         assertEquals(collection.size(), 2);
 
+    }
+    
+    @Test
+    public void testParsableCommand() {
+        //String testSource = "C:\\Users\\Praqma";
+        //String testString2 = "\"C:\\Program Files\\git\\bin\\git.exe\" --version";
+        //String testString  = "\"C:\\Program Files (x86)\\PRQA\\QAR-1.2\\bin\\qar.exe\"";// QAC -po qar::report_type=\"Compliance Report\" -list \"C:\\j\\workspace\\PRQA Test\\examples\\examples.prj\" -po qar::output_path=\"C:\\Projects\\PRQA-plugin\\work\\jobs\\PRQA\\workspace\" -cmaf \"C:\\Projects\\PRQA-plugin\\work\\jobs\\PRQA\\workspace\\qar_out\"";
+        //System.out.println("TEST: "+testString2   );
+        //PRQACommandLineUtility.run(testString2, new File(testSource));
+        //assertFalse(false);
     }
 }

@@ -4,8 +4,9 @@
  */
 package net.praqma.prqa.products;
 
-import net.praqma.prqa.PRQACommandLineUtility;
+import java.io.File;
 import net.praqma.prqa.PRQA;
+import net.praqma.prqa.PRQACommandLineUtility;
 import net.praqma.util.execute.CmdResult;
 
 /**
@@ -15,9 +16,15 @@ import net.praqma.util.execute.CmdResult;
  */
 public class QAR extends PRQA {
     private String reportOutputPath;
+    private PRQACommandBuilder builder;
     
     public QAR(String productExecutable) {
         this.productExecutable = productExecutable;
+        builder = new PRQACommandBuilder(productExecutable);
+    }
+    
+    public PRQACommandBuilder getBuilder() {
+        return builder;
     }
     
     public QAR(String productExecutable, String command) {
@@ -25,9 +32,8 @@ public class QAR extends PRQA {
         this.productExecutable = productExecutable;
     }
     
-    @Override
-    public CmdResult execute(String command) {
-        return PRQACommandLineUtility.run(getProductExecutable() + " " + command);
+    public CmdResult execute() {
+        return PRQACommandLineUtility.run(command,new File(commandBase));
     }
     
     public void setReportOutputPath(String reportOutputPath) {

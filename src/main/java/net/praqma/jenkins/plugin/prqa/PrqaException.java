@@ -14,24 +14,23 @@ public class PrqaException extends Exception {
     public PrqaException(String string) {
         super(string);
     }
+    
+    public PrqaException(Throwable cause) {
+        super(cause);
+    }
+    
     /**
      * A small static class. Several subtypes of the same exception.
      */
     public static class PrqaCommandLineException extends PrqaException {
         public PrqaCommandLineException(PRQA command, Exception ex) {
-            super(command.toString());
-            super.rootCause = ex;
+            super(ex);
         }
     }
     
     public static class PrqaParserException extends PrqaException {
         public PrqaParserException(String message, IOException originalException) {         
-            super(message + "Orignal exception: "+originalException);
-            super.rootCause = originalException;
+            super(originalException);
         }
-    }
-    
-    public Exception getRootCause() {
-        return this.rootCause;
     }
 }

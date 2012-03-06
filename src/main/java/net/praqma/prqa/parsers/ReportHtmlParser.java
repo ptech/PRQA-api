@@ -43,6 +43,7 @@ public abstract class ReportHtmlParser {
             while ((sourceLine = source.readLine()) != null) {
                 report += sourceLine + "\n";
             }
+            source.close();
         } catch (IOException ex) {
             throw new PrqaException.PrqaParserException("Could not read the line after :\n" + sourceLine,ex);
         }
@@ -50,7 +51,7 @@ public abstract class ReportHtmlParser {
         while (match.find()) {
             result.add(match.group(1));
         }
-
+            
 
         return result;
     }        
