@@ -18,6 +18,11 @@ public class QAR extends PRQA {
     private String reportOutputPath;
     private PRQACommandBuilder builder;
     
+    public QAR() {
+        this.productExecutable = "qar";
+        builder = new PRQACommandBuilder(this.productExecutable);
+    }
+    
     public QAR(String productExecutable) {
         this.productExecutable = productExecutable;
         builder = new PRQACommandBuilder(productExecutable);
@@ -33,7 +38,7 @@ public class QAR extends PRQA {
     }
     
     public CmdResult execute() {
-        return PRQACommandLineUtility.run(command,new File(commandBase));
+        return PRQACommandLineUtility.run(getBuilder().getCommand(),new File(commandBase));
     }
     
     public void setReportOutputPath(String reportOutputPath) {
@@ -48,4 +53,13 @@ public class QAR extends PRQA {
     public String toString() {
         return String.format("QAR Command: exe = %s, cmd = %s specified ouput path = %s", this.productExecutable, this.command, this.reportOutputPath);
     }
+    
+    public static String getStandardReportsDir(String base) {
+        return base + "\\" + "standard_reports";
+    }
+    
+    public static String getExecutable(String base) {
+        return base + "\\bin\\qar.exe";
+    }
+    
 }

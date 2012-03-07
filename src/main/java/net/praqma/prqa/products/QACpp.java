@@ -4,7 +4,10 @@
  */
 package net.praqma.prqa.products;
 
+import java.io.File;
 import net.praqma.prqa.PRQA;
+import net.praqma.prqa.PRQACommandLineUtility;
+import net.praqma.util.execute.CmdResult;
 
 /**
  *
@@ -12,12 +15,24 @@ import net.praqma.prqa.PRQA;
  */
 public class QACpp extends PRQA {
     
-    public QACpp(String productExecutable) {
-        this.productExecutable = productExecutable;
+    public QACpp(String command) {
+        this.command = command;
     }
     
-    public QACpp(String productExecutable, String command) {
+    public QACpp(String commandBase, String command) {
         this.command = command;
-        this.productExecutable = productExecutable;
-    }       
+        this.commandBase = commandBase;
+    }
+    
+    public CmdResult execute(String command, File dir) {
+        return PRQACommandLineUtility.run(command, dir);
+    }
+    
+    public CmdResult execute(String command) {
+        return PRQACommandLineUtility.run(command,new File(commandBase));
+    }
+    
+    public CmdResult execute() {
+        return PRQACommandLineUtility.run(command,new File(commandBase));
+    }
 }

@@ -145,5 +145,13 @@ public class PRQAComplianceStatus implements Serializable, Comparable<PRQACompli
     
     public void disable(PRQAComplianceStatusCollection.ComplianceCategory category) {
         disabledCategories.add(category);
-    }    
+    }
+    
+    /**
+     * Tests whether the result contains valid values. in some cases we could end up in situation where an "empty" result would be created.
+     * @return 
+     */
+    public boolean isValid() {
+        return this.fileCompliance != null && this.projectCompliance != null;
+    }
 }

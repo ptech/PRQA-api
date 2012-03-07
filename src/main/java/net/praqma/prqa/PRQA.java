@@ -1,6 +1,7 @@
 package net.praqma.prqa;
 
 import java.io.Serializable;
+import net.praqma.util.execute.CmdResult;
 
 /**
  * Class wrapping a Programming research product. We pass this on to our remote method class, hence the need for serialization. 
@@ -37,5 +38,7 @@ public abstract class PRQA implements PRQAProduct,Serializable {
     
     public void setCommand(String command) {
         this.command = command;
-    }    
+    }
+    
+    public abstract CmdResult execute();
 }

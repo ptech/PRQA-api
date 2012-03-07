@@ -15,22 +15,30 @@ import net.praqma.util.execute.CmdResult;
  */
 public class QAC extends PRQA {
         
-    public QAC(String productExecutable) {
-        this.productExecutable = productExecutable;
-    }
-    
-    public QAC(String productExecutable, String command) {
+    public QAC(String command) {
         this.command = command;
-        this.productExecutable = productExecutable;
     }
     
+    public QAC(String commandBase, String command) {
+        this.command = command;
+        this.commandBase = commandBase;
+    }
+    /*
     public QAC(String productExecutable, String command, String commandBase) {
         this.productExecutable = productExecutable;
         this.command = command;
         this.commandBase = commandBase;
     }
-    
+    */
     public CmdResult execute(String command, File dir) {
         return PRQACommandLineUtility.run(command, dir);
     }
-}
+    
+    public CmdResult execute(String command) {
+        return PRQACommandLineUtility.run(command,new File(commandBase));
+    }
+    
+    public CmdResult execute() {
+        return PRQACommandLineUtility.run(command,new File(commandBase));
+    }
+ }

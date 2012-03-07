@@ -19,7 +19,7 @@ public class PRQACommandLineUtility {
 	private static Logger logger = Logger.getLogger();
 
 	static {
-            cli = CommandLine.getInstance();
+            cli = CommandLine.getInstance();            
 	}
 
 	public static CmdResult run( String cmd ) throws CommandLineException, AbnormalProcessTerminationException {

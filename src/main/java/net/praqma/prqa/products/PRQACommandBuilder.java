@@ -5,7 +5,6 @@
 package net.praqma.prqa.products;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.LinkedList;
 
 /**
@@ -15,9 +14,7 @@ import java.util.LinkedList;
 public class PRQACommandBuilder implements Serializable{
     private String executable;
     private LinkedList<String> arguments = new LinkedList<String>();
-    private HashMap<String,String> requiredEnvVars = new HashMap<String, String>();
-    
-    
+      
     public PRQACommandBuilder(String executable) {
         this.executable = executable;
     }
@@ -34,7 +31,7 @@ public class PRQACommandBuilder implements Serializable{
     
     public String getCommand() {
         String out = "";
-        out+=executable+" ";
+        out+=executable + " ";
         
         for(String s : arguments) {
             out+= s+ " ";
@@ -59,7 +56,7 @@ public class PRQACommandBuilder implements Serializable{
     }
     
     public static String getListReportFiles(String list){
-        return String.format("-list %s", list);
+        return String.format("-list \"%s\"", list);
     }
     
     public static String getProduct(String product) {

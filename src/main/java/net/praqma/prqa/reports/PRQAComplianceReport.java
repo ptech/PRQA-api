@@ -12,7 +12,6 @@ import net.praqma.prqa.PRQAContext.QARReportType;
 import net.praqma.prqa.PRQAReportingTask;
 import net.praqma.prqa.parsers.ComplianceReportHtmlParser;
 import net.praqma.prqa.parsers.ReportHtmlParser;
-import net.praqma.prqa.products.PRQACommandBuilder;
 import net.praqma.prqa.products.QAR;
 import net.praqma.util.execute.AbnormalProcessTerminationException;
 import net.praqma.util.execute.CmdResult;
@@ -23,8 +22,6 @@ import net.praqma.util.execute.CommandLineException;
  * @author Praqma
  */
 public class PRQAComplianceReport<T extends PRQAComplianceStatus, K extends String> extends PRQAReport implements PRQAReportingTask<T,K> {
-
-    private QARReportType type = QARReportType.Compliance;
     private QAR qar;
     
     /**
@@ -55,10 +52,8 @@ public class PRQAComplianceReport<T extends PRQAComplianceStatus, K extends Stri
         try {
             res = qar.execute();
         } catch (AbnormalProcessTerminationException ex) {
-            //TODO: Remove the commented lines below when we go live.
             throw new PrqaException.PrqaCommandLineException(qar,ex);            
         } catch (CommandLineException cle) {      
-            //TODO:Remove the commented lines below when we go live.
             throw new PrqaException.PrqaCommandLineException(qar,cle);            
         }
         
