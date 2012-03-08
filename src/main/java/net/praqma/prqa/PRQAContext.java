@@ -15,7 +15,7 @@ public class PRQAContext {
     }
     
     public enum AnalysisTools {
-        QAC, QACpp, Java
+        QAC, QACpp
     }
 
     public enum ReportingTools {
