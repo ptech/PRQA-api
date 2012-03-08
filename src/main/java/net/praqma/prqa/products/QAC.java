@@ -23,13 +23,7 @@ public class QAC extends PRQA {
         this.command = command;
         this.commandBase = commandBase;
     }
-    /*
-    public QAC(String productExecutable, String command, String commandBase) {
-        this.productExecutable = productExecutable;
-        this.command = command;
-        this.commandBase = commandBase;
-    }
-    */
+
     public CmdResult execute(String command, File dir) {
         return PRQACommandLineUtility.run(command, dir);
     }

@@ -8,6 +8,8 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import junit.framework.TestCase;
+import net.praqma.prqa.products.PRQACommandBuilder;
+import net.praqma.prqa.products.QAR;
 import org.junit.BeforeClass;
 import org.junit.Test;
 /**
@@ -73,5 +75,17 @@ public class PRQATest extends TestCase {
         //System.out.println("TEST: "+testString2   );
         //PRQACommandLineUtility.run(testString2, new File(testSource));
         //assertFalse(false);
+    }
+    
+    @Test 
+    public void testCreateQARCommand() {
+        QAR qar = new QAR();
+        qar.getBuilder().prependArgument(PRQACommandBuilder.getProduct("qacpp"));
+        String qarString = "qar %Q %P+ %L+ "+ PRQACommandBuilder.getReportTypeParameter("Compliance") + " " +
+                PRQACommandBuilder.getProjectName() + " " + PRQACommandBuilder.getOutputPathParameter("C:\\Program\\ Files\\") + " " + PRQACommandBuilder.getViewingProgram("dummy");
+        qar.getBuilder().appendArgument(PRQACommandBuilder.getMaseq(qarString));
+        System.out.println(qar.getBuilder().getCommand());
+        assertTrue(true);
+        
     }
 }

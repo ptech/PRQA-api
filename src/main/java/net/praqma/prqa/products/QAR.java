@@ -7,6 +7,7 @@ package net.praqma.prqa.products;
 import java.io.File;
 import net.praqma.prqa.PRQA;
 import net.praqma.prqa.PRQACommandLineUtility;
+import net.praqma.prqa.PRQAContext.QARReportType;
 import net.praqma.util.execute.CmdResult;
 
 /**
@@ -17,9 +18,15 @@ import net.praqma.util.execute.CmdResult;
 public class QAR extends PRQA {
     private String reportOutputPath;
     private PRQACommandBuilder builder;
+    private QARReportType type;
+    
+    /**
+     * QAR is invoked using QAW where this is taken as parameter in the QAW command.
+     * 
+     */
     
     public QAR() {
-        this.productExecutable = "qar";
+        this.productExecutable = "qaw";
         builder = new PRQACommandBuilder(this.productExecutable);
     }
     
@@ -53,13 +60,18 @@ public class QAR extends PRQA {
     public String toString() {
         return String.format("QAR Command: exe = %s, cmd = %s specified ouput path = %s", this.productExecutable, this.command, this.reportOutputPath);
     }
-    
-    public static String getStandardReportsDir(String base) {
-        return base + "\\" + "standard_reports";
+
+    /**
+     * @return the type
+     */
+    public QARReportType getType() {
+        return type;
     }
-    
-    public static String getExecutable(String base) {
-        return base + "\\bin\\qar.exe";
+
+    /**
+     * @param type the type to set
+     */
+    public void setType(QARReportType type) {
+        this.type = type;
     }
-    
 }
