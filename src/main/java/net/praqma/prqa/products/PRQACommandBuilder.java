@@ -92,14 +92,6 @@ public class PRQACommandBuilder implements Serializable{
         return String.format("-po qar::output_path=%s", outpath);        
     }    
     
-    public static String getUserReportsDirectoryDirParameter(String dir) {
-        return String.format("-po qar::user_reports_dir=\"%s\"", dir);
-    }
-        
-    public static String getUserReportsDirectoryDirParameter(String dir, boolean escapeInputParameterWhiteSpace) {
-        return String.format("-po qar::user_reports_dir=\"%s\"", dir);
-    }
-    
     /**
      * Uses the project names as specfied in the project file
      * @return 

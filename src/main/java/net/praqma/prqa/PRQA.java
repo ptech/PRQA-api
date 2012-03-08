@@ -10,7 +10,7 @@ import net.praqma.util.execute.CmdResult;
  * 
  * @author jes, man
  */
-public abstract class PRQA implements PRQAProduct,Serializable {
+public abstract class PRQA implements Serializable {
     
     protected String commandBase;
     protected String productExecutable;
