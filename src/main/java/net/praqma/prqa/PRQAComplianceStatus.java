@@ -90,11 +90,17 @@ public class PRQAComplianceStatus implements Serializable, Comparable<PRQACompli
      */
     @Override
     public int compareTo(PRQAComplianceStatus o) {
-        if(o == null)
+        if(this == o) {
+            return 0;
+        }
+        
+        if(o == null) {
             return 1;
+        }
+        
         if(this.projectCompliance < o.getProjectCompliance() || this.fileCompliance < o.getProjectCompliance() || this.messages > o.getMessages()) {
            return -1; 
-        } else if (this.projectCompliance > o.getProjectCompliance() && this.fileCompliance > o.getFileCompliance() && this.messages < o.getMessages()) {
+        } else if (this.projectCompliance > o.getProjectCompliance() || this.fileCompliance > o.getFileCompliance() || this.messages < o.getMessages()) {
             return 1;
         } else {
             return 0;
@@ -128,5 +134,9 @@ public class PRQAComplianceStatus implements Serializable, Comparable<PRQACompli
      */
     public boolean isValid() {
         return this.fileCompliance != null && this.projectCompliance != null;
+    }
+    
+    public static PRQAComplianceStatus createEmptyResult() {
+        return new PRQAComplianceStatus(0, new Double(0), new Double(0));
     }
 }

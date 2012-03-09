@@ -4,12 +4,15 @@
  */
 package net.praqma.prqa;
 
-import java.io.File;
+import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 import junit.framework.TestCase;
+import net.praqma.jenkins.plugin.prqa.PrqaException;
+import net.praqma.prqa.parsers.ComplianceReportHtmlParser;
 import net.praqma.prqa.products.PRQACommandBuilder;
 import net.praqma.prqa.products.QAR;
+import net.praqma.prqa.reports.PRQAComplianceReport;
 import org.junit.BeforeClass;
 import org.junit.Test;
 /**
@@ -67,16 +70,6 @@ public class PRQATest extends TestCase {
 
     }
     
-    @Test
-    public void testParsableCommand() {
-        //String testSource = "C:\\Users\\Praqma";
-        //String testString2 = "\"C:\\Program Files\\git\\bin\\git.exe\" --version";
-        //String testString  = "\"C:\\Program Files (x86)\\PRQA\\QAR-1.2\\bin\\qar.exe\"";// QAC -po qar::report_type=\"Compliance Report\" -list \"C:\\j\\workspace\\PRQA Test\\examples\\examples.prj\" -po qar::output_path=\"C:\\Projects\\PRQA-plugin\\work\\jobs\\PRQA\\workspace\" -cmaf \"C:\\Projects\\PRQA-plugin\\work\\jobs\\PRQA\\workspace\\qar_out\"";
-        //System.out.println("TEST: "+testString2   );
-        //PRQACommandLineUtility.run(testString2, new File(testSource));
-        //assertFalse(false);
-    }
-    
     @Test 
     public void testCreateQARCommand() {
         QAR qar = new QAR();
@@ -88,4 +81,48 @@ public class PRQATest extends TestCase {
         assertTrue(true);
         
     }
+    
+    @Test
+    public void testResultComparison() {
+        PRQAComplianceStatus stat = PRQAComplianceStatus.createEmptyResult();
+        PRQAComplianceStatus statTwo = PRQAComplianceStatus.createEmptyResult();
+        assertEquals(0, stat.compareTo(statTwo));
+        
+        statTwo.setProjectCompliance(new Double(50));
+        assertEquals(-1, stat.compareTo(statTwo));
+        assertEquals(1, statTwo.compareTo(stat));
+    }
+    
+    @Test
+    public void testParseComplianceReport() throws IOException, PrqaException {
+        InputStream is = this.getClass().getResourceAsStream("Compliance_Report.xhtml");
+        assertNotNull(is);
+        File f = File.createTempFile("testParse", ".xhtml");
+        FileWriter fw = new FileWriter(f);
+        
+        for( int c = is.read(); c != -1; c = is.read() ) {
+            fw.write(c);
+        }
+        
+        ComplianceReportHtmlParser parser = new ComplianceReportHtmlParser();
+        List<String> listFileC = parser.parse(f.getPath(), ComplianceReportHtmlParser.fileCompliancePattern);
+        List<String> listProjC = parser.parse(f.getPath(), ComplianceReportHtmlParser.projectCompliancePattern);
+        List<String> listMsg = parser.parse(f.getPath(), ComplianceReportHtmlParser.totalMessagesPattern);
+        
+        //Assert Not null.
+        
+        assertNotNull(listFileC);
+        assertNotNull(listProjC);
+        assertNotNull(listMsg);
+        
+        //Assert that each list contains EXACTLY 1 element. That is the requirement for the compliance report.
+        
+        assertEquals(1, listFileC.size());
+        assertEquals(1, listProjC.size());
+        assertEquals(1, listMsg.size());
+          
+        f.delete();                
+    }
+    
+    
 }
