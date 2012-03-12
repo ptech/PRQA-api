@@ -56,7 +56,7 @@ public class PRQAComplianceReport<T extends PRQAComplianceStatus, K extends Stri
         } catch (CommandLineException cle) {      
             throw new PrqaException.PrqaCommandLineException(qar,cle);            
         }
-        
+       
         //Parse it.
         PRQAComplianceStatus stat = new PRQAComplianceStatus();
         

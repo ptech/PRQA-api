@@ -10,11 +10,13 @@ import java.util.List;
 import junit.framework.TestCase;
 import net.praqma.jenkins.plugin.prqa.PrqaException;
 import net.praqma.prqa.parsers.ComplianceReportHtmlParser;
+import net.praqma.prqa.parsers.ReportHtmlParser;
 import net.praqma.prqa.products.PRQACommandBuilder;
 import net.praqma.prqa.products.QAR;
 import net.praqma.prqa.reports.PRQAComplianceReport;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.omg.CORBA.Environment;
 /**
  *
  * @author Praqma
@@ -97,32 +99,45 @@ public class PRQATest extends TestCase {
     public void testParseComplianceReport() throws IOException, PrqaException {
         InputStream is = this.getClass().getResourceAsStream("Compliance_Report.xhtml");
         assertNotNull(is);
+        InputStreamReader isr = new InputStreamReader(is);
+        BufferedReader br = new BufferedReader(isr);
+        
         File f = File.createTempFile("testParse", ".xhtml");
         FileWriter fw = new FileWriter(f);
         
-        for( int c = is.read(); c != -1; c = is.read() ) {
-            fw.write(c);
+        String line;
+
+        
+        while((line = br.readLine()) != null ) {
+            fw.write(line+System.getProperty("line.separator"));
         }
         
+        fw.close();
+       
         ComplianceReportHtmlParser parser = new ComplianceReportHtmlParser();
         List<String> listFileC = parser.parse(f.getPath(), ComplianceReportHtmlParser.fileCompliancePattern);
         List<String> listProjC = parser.parse(f.getPath(), ComplianceReportHtmlParser.projectCompliancePattern);
         List<String> listMsg = parser.parse(f.getPath(), ComplianceReportHtmlParser.totalMessagesPattern);
+        List<String> listIconAddress = parser.parse(f.getPath(), ReportHtmlParser.iconLinkPattern);
+        System.out.println(f.getPath().toString());
+        int replace = parser.replaceIcon(f.getPath(),  "Hello there!");
+        System.out.println("Replaced: "+replace);
         
         //Assert Not null.
         
         assertNotNull(listFileC);
         assertNotNull(listProjC);
         assertNotNull(listMsg);
-        
+        assertNotNull(listIconAddress);
         //Assert that each list contains EXACTLY 1 element. That is the requirement for the compliance report.
         
         assertEquals(1, listFileC.size());
         assertEquals(1, listProjC.size());
         assertEquals(1, listMsg.size());
+        assertEquals(1, listIconAddress.size());
+        System.out.println(listIconAddress.get(0));
           
-        f.delete();                
-    }
-    
-    
+        System.out.println(f.getPath().toString());
+        //f.delete();                
+    }  
 }
