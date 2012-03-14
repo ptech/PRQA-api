@@ -16,7 +16,7 @@ import net.praqma.jenkins.plugin.prqa.PrqaException.PrqaParserException;
  *
  * @author Praqma
  */
-public abstract class ReportHtmlParser {
+public abstract class ReportHtmlParser implements Serializable {
     public static Pattern iconLinkPattern = Pattern.compile("<img(.+)src=\"[^\"]+\"(.*)>");
     
     /***

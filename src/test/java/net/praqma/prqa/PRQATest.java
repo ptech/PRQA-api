@@ -9,14 +9,13 @@ import java.util.Arrays;
 import java.util.List;
 import junit.framework.TestCase;
 import net.praqma.jenkins.plugin.prqa.PrqaException;
+import net.praqma.prqa.PRQAStatus.ComplianceCategory;
 import net.praqma.prqa.parsers.ComplianceReportHtmlParser;
 import net.praqma.prqa.parsers.ReportHtmlParser;
 import net.praqma.prqa.products.PRQACommandBuilder;
 import net.praqma.prqa.products.QAR;
-import net.praqma.prqa.reports.PRQAComplianceReport;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.omg.CORBA.Environment;
 /**
  *
  * @author Praqma
@@ -45,17 +44,17 @@ public class PRQATest extends TestCase {
     public void testClearOverridesVerification() {
         assertNotNull(collection);
         collection.clearOverrides();
-        assertEquals(collection.getMin(PRQAComplianceStatusCollection.ComplianceCategory.Messages),new Integer(1000));
-        assertEquals(collection.getMax(PRQAComplianceStatusCollection.ComplianceCategory.Messages),new Integer(20000));        
+        assertEquals(collection.getMin(ComplianceCategory.Messages),new Integer(1000));
+        assertEquals(collection.getMax(ComplianceCategory.Messages),new Integer(20000));        
     }
     
     @Test 
     public void testComplianceStatusOverride() {
-        collection.overrideMax(PRQAComplianceStatusCollection.ComplianceCategory.Messages, 100);
-        collection.overrideMin(PRQAComplianceStatusCollection.ComplianceCategory.Messages, 0);
+        collection.overrideMax(ComplianceCategory.Messages, 100);
+        collection.overrideMin(ComplianceCategory.Messages, 0);
         
-        assertEquals(collection.getMax(PRQAComplianceStatusCollection.ComplianceCategory.Messages), 100);
-        assertEquals(collection.getMin(PRQAComplianceStatusCollection.ComplianceCategory.Messages), 0);
+        assertEquals(collection.getMax(ComplianceCategory.Messages), 100);
+        assertEquals(collection.getMin(ComplianceCategory.Messages), 0);
         
     }
     

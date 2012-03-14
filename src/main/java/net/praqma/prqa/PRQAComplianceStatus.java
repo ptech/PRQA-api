@@ -1,6 +1,5 @@
 package net.praqma.prqa;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,13 +7,13 @@ import java.util.List;
  * This class represent a compliance status readout. 3 values, file compliance, project compliance and number of messages
  * @author jes, man
  */
-public class PRQAComplianceStatus implements Serializable, Comparable<PRQAComplianceStatus> {
+public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAComplianceStatus> {
 
     private int messages;
     private Double fileCompliance;
     private Double projectCompliance;
     private List<String> notifications;
-    private List<PRQAComplianceStatusCollection.ComplianceCategory> disabledCategories = new ArrayList<PRQAComplianceStatusCollection.ComplianceCategory>(); 
+    private List<ComplianceCategory> disabledCategories = new ArrayList<ComplianceCategory>(); 
 
     public PRQAComplianceStatus() {
        notifications = new ArrayList<String>();
@@ -51,7 +50,7 @@ public class PRQAComplianceStatus implements Serializable, Comparable<PRQACompli
         this.projectCompliance = projCompliance;
     }
     
-    public Number getComplianceReadout(PRQAComplianceStatusCollection.ComplianceCategory cat) {
+    public Number getReadout(ComplianceCategory cat) {
         switch(cat) {
             case ProjectCompliance:
                 return this.getProjectCompliance();
@@ -59,6 +58,22 @@ public class PRQAComplianceStatus implements Serializable, Comparable<PRQACompli
                 return this.getMessages();
             case FileCompliance:
                 return this.getFileCompliance();
+            default:
+                throw new IllegalArgumentException("Invalid complianace category");
+        }
+    }   
+    
+    public void setReadout(ComplianceCategory category, Number value) {
+        switch(category) {
+            case ProjectCompliance:
+                setProjectCompliance(value.doubleValue());
+                break;
+            case Messages:
+                setMessages(value.intValue());
+                break;
+            case FileCompliance:
+                setFileCompliance(value.doubleValue());
+                break;
             default:
                 throw new IllegalArgumentException("Invalid complianace category");
         }
@@ -111,7 +126,7 @@ public class PRQAComplianceStatus implements Serializable, Comparable<PRQACompli
      * TODO: Where is the best place to show build messages?
      * @param message 
      */
-    public void addNotication(String message) {
+    public void addNotification(String message) {
         notifications.add(message);
     }
     
@@ -120,18 +135,15 @@ public class PRQAComplianceStatus implements Serializable, Comparable<PRQACompli
      * @param category
      * @return 
      */
-    public boolean isDisabled(PRQAComplianceStatusCollection.ComplianceCategory category) {
+    public boolean isDisabled(ComplianceCategory category) {
         return disabledCategories.contains(category);
     }
     
-    public void disable(PRQAComplianceStatusCollection.ComplianceCategory category) {
+    public void disable(ComplianceCategory category) {
         disabledCategories.add(category);
     }
-    
-    /**
-     * Tests whether the result contains valid values. in some cases we could end up in situation where an "empty" result would be created.
-     * @return 
-     */
+ 
+    @Override
     public boolean isValid() {
         return this.fileCompliance != null && this.projectCompliance != null;
     }
