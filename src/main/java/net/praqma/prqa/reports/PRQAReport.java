@@ -12,7 +12,7 @@ import net.praqma.prqa.products.QAR;
 import net.praqma.util.execute.CmdResult;
 
 /**
- *Class defining a report. 
+ *Class defining a report. The report holds a commmand line too. (The QAR object) and also holds a result, 
  * 
  * @author Praqma
  */
