@@ -10,7 +10,6 @@
 
     <name>prqa</name>
     <url>http://maven.apache.org</url>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -18,7 +17,7 @@
         <repository>
             <id>praqma</id>
             <name>praqma</name>
-            <url>scpexe://10.10.1.25:/var/www/repo/maven</url>
+            <url>scp://10.10.1.25:/var/www/repo/maven</url>
         </repository>
     </distributionManagement>
     <build>
