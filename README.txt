@@ -1,1 +1,1 @@
-PRQA API
+PRQA API - Programming Research
