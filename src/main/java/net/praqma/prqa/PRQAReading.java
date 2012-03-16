@@ -11,7 +11,7 @@ import net.praqma.prqa.PRQAStatus.ComplianceCategory;
  *
  * @author Praqma
  */
-public interface PRQAReading {
+public interface PRQAReading extends Serializable {
     public Number getReadout(ComplianceCategory category);
     public void setReadout(ComplianceCategory category, Number value);
     public void addNotification(String notificaction);

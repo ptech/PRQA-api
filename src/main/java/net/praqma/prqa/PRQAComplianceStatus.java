@@ -126,6 +126,8 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
      * TODO: Where is the best place to show build messages?
      * @param message 
      */
+    
+    @Override
     public void addNotification(String message) {
         notifications.add(message);
     }
@@ -139,6 +141,7 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
         return disabledCategories.contains(category);
     }
     
+    @Override
     public void disable(ComplianceCategory category) {
         disabledCategories.add(category);
     }
