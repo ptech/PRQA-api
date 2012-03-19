@@ -50,6 +50,7 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
         this.projectCompliance = projCompliance;
     }
     
+    @Override
     public Number getReadout(ComplianceCategory cat) {
         switch(cat) {
             case ProjectCompliance:
@@ -63,6 +64,7 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
         }
     }   
     
+    @Override
     public void setReadout(ComplianceCategory category, Number value) {
         switch(category) {
             case ProjectCompliance:
