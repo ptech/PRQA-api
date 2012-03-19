@@ -8,7 +8,8 @@ import java.io.Serializable;
 import net.praqma.prqa.PRQAStatus.ComplianceCategory;
 
 /**
- *
+ * Abstracting readings. This means that we can now have a single object for each build. 
+ * 
  * @author Praqma
  */
 public interface PRQAReading extends Serializable {
