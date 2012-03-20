@@ -82,7 +82,7 @@
         </dependency>
     </dependencies>
     <scm>
-        <connection>scm:git:http://github.com/Praqma/PRQA-api.git</connection>
+        <connection>scm:git:http://github.com/Praqmai/PRQA-api.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/Praqma/PRQA-api.git</developerConnection>
         <url>https://github.com/Praqma/PRQA-api.git</url>
     </scm>
