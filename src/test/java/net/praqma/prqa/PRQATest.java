@@ -4,12 +4,13 @@
  */
 package net.praqma.prqa;
 
+import net.praqma.prqa.status.PRQAComplianceStatus;
 import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 import junit.framework.TestCase;
 import net.praqma.jenkins.plugin.prqa.PrqaException;
-import net.praqma.prqa.PRQAStatus.ComplianceCategory;
+import net.praqma.prqa.PRQAStatus.StatusCategory;
 import net.praqma.prqa.parsers.ComplianceReportHtmlParser;
 import net.praqma.prqa.parsers.ReportHtmlParser;
 import net.praqma.prqa.products.PRQACommandBuilder;
@@ -21,11 +22,11 @@ import org.junit.Test;
  * @author Praqma
  */
 public class PRQATest extends TestCase {
-    private static PRQAComplianceStatusCollection collection = null;
+    private static PRQAStatusCollection collection = null;
     
     @BeforeClass 
     public static void testCreateMockCollection () {
-        collection = new PRQAComplianceStatusCollection();
+        collection = new PRQAStatusCollection();
         PRQAComplianceStatus status = new PRQAComplianceStatus();
         status.setFileCompliance(new Double(10.0));
         status.setProjectCompliance(new Double(20.22));
@@ -44,17 +45,17 @@ public class PRQATest extends TestCase {
     public void testClearOverridesVerification() {
         assertNotNull(collection);
         collection.clearOverrides();
-        assertEquals(collection.getMin(ComplianceCategory.Messages),new Integer(1000));
-        assertEquals(collection.getMax(ComplianceCategory.Messages),new Integer(20000));        
+        assertEquals(collection.getMin(StatusCategory.Messages),new Integer(1000));
+        assertEquals(collection.getMax(StatusCategory.Messages),new Integer(20000));        
     }
     
     @Test 
     public void testComplianceStatusOverride() {
-        collection.overrideMax(ComplianceCategory.Messages, 100);
-        collection.overrideMin(ComplianceCategory.Messages, 0);
+        collection.overrideMax(StatusCategory.Messages, 100);
+        collection.overrideMin(StatusCategory.Messages, 0);
         
-        assertEquals(collection.getMax(ComplianceCategory.Messages), 100);
-        assertEquals(collection.getMin(ComplianceCategory.Messages), 0);
+        assertEquals(collection.getMax(StatusCategory.Messages), 100);
+        assertEquals(collection.getMin(StatusCategory.Messages), 0);
         
     }
     

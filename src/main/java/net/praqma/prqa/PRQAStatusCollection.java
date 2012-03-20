@@ -1,28 +1,29 @@
 package net.praqma.prqa;
 
+import net.praqma.prqa.status.PRQAComplianceStatus;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
-import net.praqma.prqa.PRQAStatus.ComplianceCategory;
+import net.praqma.prqa.PRQAStatus.StatusCategory;
 
 /**
  *
  * @author Praqma
  */
-public class PRQAComplianceStatusCollection extends ArrayList<PRQAReading>  {
+public class PRQAStatusCollection extends ArrayList<PRQAReading>  {
     
-    private Map<ComplianceCategory,Number> overrideMinimum = new EnumMap<ComplianceCategory, Number>(ComplianceCategory.class);
-    private Map<ComplianceCategory,Number> overrideMaximum = new EnumMap<ComplianceCategory, Number>(ComplianceCategory.class);
+    private Map<StatusCategory,Number> overrideMinimum = new EnumMap<StatusCategory, Number>(StatusCategory.class);
+    private Map<StatusCategory,Number> overrideMaximum = new EnumMap<StatusCategory, Number>(StatusCategory.class);
     
-    public PRQAComplianceStatusCollection() { 
-        this(new ArrayList<PRQAComplianceStatus>());
+    public PRQAStatusCollection() { 
+        this(new ArrayList<PRQAReading>());
     }
     
-    public PRQAComplianceStatusCollection(ArrayList<PRQAComplianceStatus> collection) {
+    public PRQAStatusCollection(ArrayList<PRQAReading> collection) {
         this.addAll(collection);
     }
     
-    public PRQAComplianceStatusCollection(PRQAComplianceStatusCollection collection) {
+    public PRQAStatusCollection(PRQAStatusCollection collection) {
         this.addAll(collection);
     }
  
@@ -31,7 +32,7 @@ public class PRQAComplianceStatusCollection extends ArrayList<PRQAReading>  {
      * @param category
      * @return 
      */
-    public Number getMax(ComplianceCategory category) {
+    public Number getMax(StatusCategory category) {
         
         if(getOverriddenMax(category) != null) {
             return getOverriddenMax(category);
@@ -52,7 +53,7 @@ public class PRQAComplianceStatusCollection extends ArrayList<PRQAReading>  {
      * @param category
      * @return a number indicating the smallest given observation for the specified category.
      */
-    public Number getMin(ComplianceCategory category) {
+    public Number getMin(StatusCategory category) {
         
         if(getOverriddenMin(category) != null) {
             return getOverriddenMin(category);
@@ -73,22 +74,22 @@ public class PRQAComplianceStatusCollection extends ArrayList<PRQAReading>  {
      * @param category
      * @param value 
      */
-    public void overrideMin(ComplianceCategory category, Number value) {
+    public void overrideMin(StatusCategory category, Number value) {
         overrideMinimum.put(category, value);
     }
     
-    public void overrideMax(ComplianceCategory category, Number value) {
+    public void overrideMax(StatusCategory category, Number value) {
         overrideMaximum.put(category, value);
     }
     
-    public Number getOverriddenMax(ComplianceCategory category) {
+    public Number getOverriddenMax(StatusCategory category) {
         if(overrideMaximum.containsKey(category)) {
             return overrideMaximum.get(category);
         }
         return null;
     }
     
-    public Number getOverriddenMin(ComplianceCategory category) {
+    public Number getOverriddenMin(StatusCategory category) {
         if(overrideMinimum.containsKey(category)) {
             return overrideMinimum.get(category);
         }

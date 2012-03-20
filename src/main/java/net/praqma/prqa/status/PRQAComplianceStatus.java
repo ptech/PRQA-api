@@ -1,7 +1,8 @@
-package net.praqma.prqa;
+package net.praqma.prqa.status;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.praqma.prqa.PRQAStatus;
 
 /**
  * This class represent a compliance status readout. 3 values, file compliance, project compliance and number of messages
@@ -13,7 +14,7 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
     private Double fileCompliance;
     private Double projectCompliance;
     private List<String> notifications;
-    private List<ComplianceCategory> disabledCategories = new ArrayList<ComplianceCategory>(); 
+    private List<StatusCategory> disabledCategories = new ArrayList<StatusCategory>(); 
 
     public PRQAComplianceStatus() {
        notifications = new ArrayList<String>();
@@ -51,7 +52,7 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
     }
     
     @Override
-    public Number getReadout(ComplianceCategory cat) {
+    public Number getReadout(StatusCategory cat) {
         switch(cat) {
             case ProjectCompliance:
                 return this.getProjectCompliance();
@@ -65,7 +66,7 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
     }   
     
     @Override
-    public void setReadout(ComplianceCategory category, Number value) {
+    public void setReadout(StatusCategory category, Number value) {
         switch(category) {
             case ProjectCompliance:
                 setProjectCompliance(value.doubleValue());
@@ -139,12 +140,12 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
      * @param category
      * @return 
      */
-    public boolean isDisabled(ComplianceCategory category) {
+    public boolean isDisabled(StatusCategory category) {
         return disabledCategories.contains(category);
     }
     
     @Override
-    public void disable(ComplianceCategory category) {
+    public void disable(StatusCategory category) {
         disabledCategories.add(category);
     }
  

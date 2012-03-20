@@ -5,7 +5,7 @@
 package net.praqma.prqa;
 
 import java.io.Serializable;
-import net.praqma.prqa.PRQAStatus.ComplianceCategory;
+import net.praqma.prqa.PRQAStatus.StatusCategory;
 
 /**
  * Abstracting readings. This means that we can now have a single object for each build. 
@@ -13,8 +13,8 @@ import net.praqma.prqa.PRQAStatus.ComplianceCategory;
  * @author Praqma
  */
 public interface PRQAReading extends Serializable {
-    public Number getReadout(ComplianceCategory category);
-    public void setReadout(ComplianceCategory category, Number value);
+    public Number getReadout(StatusCategory category);
+    public void setReadout(StatusCategory category, Number value);
     public void addNotification(String notificaction);
-    public void disable(ComplianceCategory category);
+    public void disable(StatusCategory category);
 }

@@ -7,7 +7,7 @@ package net.praqma.prqa.reports;
 import java.io.File;
 import java.util.List;
 import net.praqma.jenkins.plugin.prqa.PrqaException;
-import net.praqma.prqa.PRQAComplianceStatus;
+import net.praqma.prqa.status.PRQAComplianceStatus;
 import net.praqma.prqa.PRQAContext.QARReportType;
 import net.praqma.prqa.parsers.ComplianceReportHtmlParser;
 import net.praqma.prqa.products.QAR;

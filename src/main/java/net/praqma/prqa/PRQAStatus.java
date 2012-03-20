@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @author Praqma
  */
 public abstract class PRQAStatus implements PRQAReading,Serializable {
-    public enum ComplianceCategory {
+    public enum StatusCategory {
         Messages,
         ProjectCompliance,
         FileCompliance;
