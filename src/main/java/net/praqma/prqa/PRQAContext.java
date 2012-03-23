@@ -15,7 +15,7 @@ public class PRQAContext {
     }
     
     public enum AnalysisTools {
-        QAC, QACpp
+        QAC, QACpp, Java
     }
 
     public enum ReportingTools {
@@ -23,6 +23,15 @@ public class PRQAContext {
     }
 
     public enum QARReportType {
-        Compliance, Quality, CodeReview, Supression
+        Compliance, Quality, CodeReview, Suppression;
+
+        @Override
+        public String toString() {
+            if(this.equals(CodeReview)) {
+                return "Code Review";
+            } else {
+                return this.name();
+            }            
+        }
     }
 }

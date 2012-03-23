@@ -2,7 +2,6 @@ package net.praqma.prqa.status;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.praqma.prqa.PRQAStatus;
 
 /**
  * This class represent a compliance status readout. 3 values, file compliance, project compliance and number of messages
@@ -13,18 +12,13 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
     private int messages;
     private Double fileCompliance;
     private Double projectCompliance;
-    private List<String> notifications;
-    private List<StatusCategory> disabledCategories = new ArrayList<StatusCategory>(); 
-
-    public PRQAComplianceStatus() {
-       notifications = new ArrayList<String>();
-    }
+    
+    public PRQAComplianceStatus() {}
     
     public PRQAComplianceStatus(int messages, Double fileCompliance, Double projectCompliance) {
         this.messages = messages;
         this.fileCompliance = fileCompliance;
-        this.projectCompliance = projectCompliance;
-        notifications = new ArrayList<String>();
+        this.projectCompliance = projectCompliance;       
     }
 
     public int getMessages() {
@@ -125,30 +119,6 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
         }       
     }
     
-    /**
-     * TODO: Where is the best place to show build messages?
-     * @param message 
-     */
-    
-    @Override
-    public void addNotification(String message) {
-        notifications.add(message);
-    }
-    
-    /**
-     * Temporary solution to disable showing of specific properties.
-     * @param category
-     * @return 
-     */
-    public boolean isDisabled(StatusCategory category) {
-        return disabledCategories.contains(category);
-    }
-    
-    @Override
-    public void disable(StatusCategory category) {
-        disabledCategories.add(category);
-    }
- 
     @Override
     public boolean isValid() {
         return this.fileCompliance != null && this.projectCompliance != null;

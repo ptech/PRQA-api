@@ -58,6 +58,12 @@ public abstract class ReportHtmlParser implements Serializable {
         return result;
     }
     
+    public String getFirstResult(List<String> results) {
+        if(results.size() > 0)
+            return results.get(0);
+        return null;
+    }
+    
     public int replace(String path, Pattern pattern, String replacement) throws PrqaParserException {
         int numberOfReplacements = 0;
         File file = new File(path);

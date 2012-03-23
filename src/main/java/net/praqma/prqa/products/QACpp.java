@@ -32,6 +32,7 @@ public class QACpp extends PRQA {
         return PRQACommandLineUtility.run(command,new File(commandBase));
     }
     
+    @Override
     public CmdResult execute() {
         return PRQACommandLineUtility.run(command,new File(commandBase));
     }

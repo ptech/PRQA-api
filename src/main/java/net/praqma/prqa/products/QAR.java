@@ -17,8 +17,11 @@ import net.praqma.util.execute.CmdResult;
  */
 public class QAR extends PRQA {
     private String reportOutputPath;
+    private String projectFile;
+    private String product;
     private PRQACommandBuilder builder;
     private QARReportType type;
+    public static final String QAW_WRAPPER = "qaw";
     
     /**
      * QAR is invoked using QAW where this is taken as parameter in the QAW command.
@@ -26,24 +29,21 @@ public class QAR extends PRQA {
      */
     
     public QAR() {
-        this.productExecutable = "qaw";
-        builder = new PRQACommandBuilder(this.productExecutable);
+        builder = new PRQACommandBuilder(QAR.QAW_WRAPPER);
     }
     
-    public QAR(String productExecutable) {
-        this.productExecutable = productExecutable;
-        builder = new PRQACommandBuilder(productExecutable);
+    public QAR(String product, String projectFile, QARReportType type) {
+        this.builder = new PRQACommandBuilder(QAR.QAW_WRAPPER);
+        this.product = product;
+        this.projectFile = projectFile;
+        this.type = type;
     }
     
     public PRQACommandBuilder getBuilder() {
         return builder;
     }
     
-    public QAR(String productExecutable, String command) {
-        this.command = command;
-        this.productExecutable = productExecutable;
-    }
-    
+    @Override
     public CmdResult execute() {
         return PRQACommandLineUtility.run(getBuilder().getCommand(),new File(commandBase));
     }
@@ -55,10 +55,30 @@ public class QAR extends PRQA {
     public String getReportOutputPath() {
         return this.reportOutputPath;
     }
+    
+    public String getProduct() {
+        return this.product;
+    }
+    
+    public void setProduct(String product) {
+        this.product = product;
+    }
+    
+    public String getProjectFile() {
+        return this.projectFile;
+    }
+    
+    public void setProjectFile(String projectFile) {
+        this.projectFile = projectFile;
+    }
 
     @Override
     public String toString() {
-        return String.format("QAR Command: exe = %s, cmd = %s specified ouput path = %s", this.productExecutable, this.command, this.reportOutputPath);
+        String out = "";
+        out += "QAR selected project file:\t" + this.projectFile + "\n";
+        out += "QAR selected product:\t\t" + this.product + "\n";
+        out += "QAR selected report type:\t" + this.type + "\n";
+        return out;
     }
 
     /**

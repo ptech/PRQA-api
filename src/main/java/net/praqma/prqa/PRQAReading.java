@@ -5,7 +5,7 @@
 package net.praqma.prqa;
 
 import java.io.Serializable;
-import net.praqma.prqa.PRQAStatus.StatusCategory;
+import net.praqma.prqa.status.PRQAStatus.StatusCategory;
 
 /**
  * Abstracting readings. This means that we can now have a single object for each build. 

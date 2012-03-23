@@ -79,7 +79,8 @@
         </repository>
         <repository>
             <id>praqma-repo</id>
-            <url>http://code.praqma.net/repo/maven/</url>
+			<name>libs-release</name>
+            <url>http://localhost:8081/artifactory/libs-release/</url>
         </repository>
     </repositories>
     <dependencies>

@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import junit.framework.TestCase;
 import net.praqma.jenkins.plugin.prqa.PrqaException;
-import net.praqma.prqa.PRQAStatus.StatusCategory;
+import net.praqma.prqa.status.PRQAStatus.StatusCategory;
 import net.praqma.prqa.parsers.ComplianceReportHtmlParser;
 import net.praqma.prqa.parsers.ReportHtmlParser;
 import net.praqma.prqa.products.PRQACommandBuilder;

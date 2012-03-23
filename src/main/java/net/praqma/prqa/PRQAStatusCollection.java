@@ -1,10 +1,9 @@
 package net.praqma.prqa;
 
-import net.praqma.prqa.status.PRQAComplianceStatus;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
-import net.praqma.prqa.PRQAStatus.StatusCategory;
+import net.praqma.prqa.status.PRQAStatus.StatusCategory;
 
 /**
  *

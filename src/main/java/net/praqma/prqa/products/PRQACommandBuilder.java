@@ -56,7 +56,9 @@ public class PRQACommandBuilder implements Serializable{
     }
     
     /**
-     * Embedding QAR using QAW. Analysis will be performed and the analysis results used as a base for our report. 
+     * Embedding QAR using QAW. Analysis will be performed and the analysis results used as a base for our report.
+     * 
+     * Constructs a valid secondary analysis command parameter for PRQA. Use this to wrap all your secondary analysis commands.  
      */ 
     public static String getMaseq(String commmandSequence) {
         return String.format("-maseq \"%s\"", commmandSequence);
