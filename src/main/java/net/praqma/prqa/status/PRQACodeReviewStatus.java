@@ -31,7 +31,4 @@ public class PRQACodeReviewStatus extends PRQAStatus {
         res += "Scanned the following CodeReview values"+"\n";
         return res;
     }
-    
-    
-    
 }

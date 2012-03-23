@@ -35,6 +35,10 @@ public class PRQASuppressionStatus extends PRQAStatus {
     public String toString() {
         String res = "";
         res += "Scanned the following supression report values: \n";
+        res += "Number of Files: "+numberOfFiles + "\n";
+        res += "Lines of Code: "+linesOfCode + "\n";
+        res += "Unique Messages Suppressed: " + uniqueMsgsSuppressed + "\n";
+        res += "Percentage of Messages Suppressed: "+pctMsgsSuppressed + "\n";
         return res;
     }
 
@@ -107,7 +111,5 @@ public class PRQASuppressionStatus extends PRQAStatus {
     public void setPctMsgsSuppressed(double pctMsgsSuppressed) {
         this.pctMsgsSuppressed = pctMsgsSuppressed;
     }
-    
-    
-    
+       
 }
