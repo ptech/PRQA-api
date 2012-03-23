@@ -20,6 +20,7 @@ public class PRQASuppressionReport extends PRQAReport<PRQASuppressionStatus,Stri
     
     public PRQASuppressionReport(QAR qar) {
         this.qar = qar;
+        this.parser = new SuppressionReportParser();
     }
 
     @Override

@@ -38,7 +38,8 @@ public class PRQASuppressionStatus extends PRQAStatus {
         res += "Number of Files: "+numberOfFiles + "\n";
         res += "Lines of Code: "+linesOfCode + "\n";
         res += "Unique Messages Suppressed: " + uniqueMsgsSuppressed + "\n";
-        res += "Percentage of Messages Suppressed: "+pctMsgsSuppressed + "\n";
+        res += "Number of Messages Suppressed: " + msgsSuppressed + "\n";
+        res += "Percentage of Messages Suppressed: "+pctMsgsSuppressed + "\n";        
         return res;
     }
 

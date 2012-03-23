@@ -9,7 +9,6 @@ import net.praqma.prqa.parsers.CodeReviewReportParser;
 import net.praqma.prqa.products.QAR;
 import net.praqma.prqa.status.PRQACodeReviewStatus;
 import net.praqma.util.execute.AbnormalProcessTerminationException;
-import net.praqma.util.execute.CmdResult;
 import net.praqma.util.execute.CommandLineException;
 
 /**
