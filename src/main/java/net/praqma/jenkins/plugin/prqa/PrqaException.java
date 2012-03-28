@@ -19,6 +19,10 @@ public class PrqaException extends Exception {
         super(cause);
     }
     
+    public PrqaException(String msg, Throwable cause) {
+        super(msg,cause);
+    }
+    
     /**
      * A small static class. Several subtypes of the same exception.
      */
@@ -33,4 +37,15 @@ public class PrqaException extends Exception {
             super(originalException);
         }
     }
+    
+    public static class PrqaReadingException extends PrqaException {
+        public PrqaReadingException(String message) {
+            super(message);
+        }
+        public PrqaReadingException(String message, Exception ex) {
+            super(message,ex);
+        }
+    }
+    
+    
 }

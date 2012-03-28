@@ -4,6 +4,8 @@
  */
 package net.praqma.prqa.status;
 
+import net.praqma.jenkins.plugin.prqa.PrqaException;
+
 /**
  *
  * @author Praqma
@@ -22,25 +24,26 @@ public class PRQASuppressionStatus extends PRQAStatus {
     }
 
     @Override
-    public Number getReadout(StatusCategory category) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Number getReadout(StatusCategory category) throws PrqaException.PrqaReadingException {
+        switch(category) {
+            case TotalNumberOfFiles:
+                return getNumberOfFiles();
+            case LinesOfCode:
+                return getLinesOfCode();
+            case UniqueMessagesSupperessed:
+                return getUniqueMsgsSuppressed();
+            case MessagesSuppressed:
+                return getMsgsSuppressed();
+            case PercentageMessagesSuppressed:
+                return getMsgsSuppressed();
+            default:
+                throw new PrqaException.PrqaReadingException(String.format("Dident find category %s for class %s", category, this.getClass()));
+        }
     }
 
     @Override
     public void setReadout(StatusCategory category, Number value) {
         throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public String toString() {
-        String res = "";
-        res += "Scanned the following supression report values: \n";
-        res += "Number of Files: "+numberOfFiles + "\n";
-        res += "Lines of Code: "+linesOfCode + "\n";
-        res += "Unique Messages Suppressed: " + uniqueMsgsSuppressed + "\n";
-        res += "Number of Messages Suppressed: " + msgsSuppressed + "\n";
-        res += "Percentage of Messages Suppressed: "+pctMsgsSuppressed + "\n";        
-        return res;
     }
 
     /**
@@ -111,6 +114,45 @@ public class PRQASuppressionStatus extends PRQAStatus {
      */
     public void setPctMsgsSuppressed(double pctMsgsSuppressed) {
         this.pctMsgsSuppressed = pctMsgsSuppressed;
+    }
+    
+    @Override
+    public String toString() {
+        String res = "";
+        res += "Scanned the following supression report values: \n";
+        res += "Number of Files: "+numberOfFiles + "\n";
+        res += "Lines of Code: "+linesOfCode + "\n";
+        res += "Unique Messages Suppressed: " + uniqueMsgsSuppressed + "\n";
+        res += "Number of Messages Suppressed: " + msgsSuppressed + "\n";
+        res += "Percentage of Messages Suppressed: "+pctMsgsSuppressed + "\n";        
+        return res;
+    }
+
+    @Override
+    public String toHtml() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<table style=\"border:solid;border-width:1px;padding:15px;margin:10px;\">");
+        sb.append("<h2>Quality Summary</h2>");
+        sb.append("<thead>");
+        sb.append("<tr>");
+        sb.append("<th>Number of Files</th>");
+        sb.append("<th>Lines of Code</th>");
+        sb.append("<th>Unique Messages Suppressed</th>");
+        sb.append("<th>Number of Messages Suppressed</th>");
+        sb.append("<th>Percentage of Messages Suppressed</th>");
+        sb.append("</tr>");
+        sb.append("</thead>");
+        sb.append("<tbody>");
+        sb.append("<tr>");
+        sb.append("<td>"+getNumberOfFiles()+"</td>");
+        sb.append("<td>"+getLinesOfCode()+"</td>");
+        sb.append("<td>"+getUniqueMsgsSuppressed()+"</td>");
+        sb.append("<td>"+getMsgsSuppressed()+"</td>");
+        sb.append("<td>"+getPctMsgsSuppressed()+"%</td>");
+        sb.append("</tr>");
+        sb.append("</tbody>");
+        sb.append("</table>");
+        return sb.toString();
     }
        
 }

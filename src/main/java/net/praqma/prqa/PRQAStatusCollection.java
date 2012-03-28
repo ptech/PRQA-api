@@ -3,7 +3,8 @@ package net.praqma.prqa;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
-import net.praqma.prqa.status.PRQAStatus.StatusCategory;
+import net.praqma.jenkins.plugin.prqa.PrqaException;
+import net.praqma.prqa.status.StatusCategory;
 
 /**
  *
@@ -31,7 +32,7 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading>  {
      * @param category
      * @return 
      */
-    public Number getMax(StatusCategory category) {
+    public Number getMax(StatusCategory category) throws PrqaException.PrqaReadingException {
         
         if(getOverriddenMax(category) != null) {
             return getOverriddenMax(category);
@@ -40,8 +41,13 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading>  {
         int max = Integer.MIN_VALUE;
         int tmp = 0;
         
-        for(PRQAReading s : this) {                    
-            tmp = s.getReadout(category) == null ? 0 : s.getReadout(category).intValue();
+        for(PRQAReading s : this) {
+            try 
+            {
+                tmp = s.getReadout(category) == null ? 0 : s.getReadout(category).intValue();
+            } catch (PrqaException.PrqaReadingException iex) {
+                throw iex;
+            }
             if(tmp >= max)
                 max = tmp;
         }
@@ -52,7 +58,7 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading>  {
      * @param category
      * @return a number indicating the smallest given observation for the specified category.
      */
-    public Number getMin(StatusCategory category) {
+    public Number getMin(StatusCategory category) throws PrqaException.PrqaReadingException {
         
         if(getOverriddenMin(category) != null) {
             return getOverriddenMin(category);
@@ -61,7 +67,12 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading>  {
         int min = Integer.MAX_VALUE;
         int tmp = 0;
         for(PRQAReading s : this) {
-            tmp = s.getReadout(category) == null ? 0 : s.getReadout(category).intValue();
+            try
+            {
+                tmp = s.getReadout(category) == null ? 0 : s.getReadout(category).intValue();
+            } catch (PrqaException.PrqaReadingException iex) {
+                throw iex;
+            }
             if(tmp <= min)
                 min = tmp;
         }

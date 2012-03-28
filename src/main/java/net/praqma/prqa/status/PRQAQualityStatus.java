@@ -4,6 +4,8 @@
  */
 package net.praqma.prqa.status;
 
+import net.praqma.jenkins.plugin.prqa.PrqaException;
+
 /**
  *
  * @author Praqma
@@ -16,14 +18,14 @@ public class PRQAQualityStatus extends PRQAStatus {
     private int numberOfFileMetrics;
     private int numberOfFunctions;
     private int numberOfFunctionMetrics;
-
+    
     @Override
     public boolean isValid() {
         return true;
     }
 
     @Override
-    public Number getReadout(StatusCategory category) {
+    public Number getReadout(StatusCategory category) throws PrqaException.PrqaReadingException {
         switch(category) {
             case NumberOfFunctionMetrics:
                 return getNumberOfFunctionMetrics();
@@ -37,8 +39,9 @@ public class PRQAQualityStatus extends PRQAStatus {
                 return getLinesOfCode();
             case NumberOfFileMetrics:
                 return getNumberOfFileMetrics();
+            default:
+                throw new PrqaException.PrqaReadingException(String.format("Dident find category %s for class %s", category, this.getClass()));
         }
-        return null;
     }
 
     @Override
@@ -160,7 +163,33 @@ public class PRQAQualityStatus extends PRQAStatus {
         res += "Number of Function Metrics: "+ numberOfFunctionMetrics + "\n";        
         return res;
     }
-    
-     
-   
+
+    @Override
+    public String toHtml() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<table style=\"border:solid;border-width:1px;padding:15px;margin:10px;\">");
+        sb.append("<h2>Quality Summary</h2>");
+        sb.append("<thead>");
+        sb.append("<tr>");
+        sb.append("<th>Total Number of Files</th>");
+        sb.append("<th>Lines of Code</th>");
+        sb.append("<th>Number of Source Files</th>");
+        sb.append("<th>Number of File Metrics</th>");
+        sb.append("<th>Number of Functions</th>");
+        sb.append("<th>Number of Function Metrics</th>");
+        sb.append("</tr>");
+        sb.append("</thead>");
+        sb.append("<tbody>");
+        sb.append("<tr>");
+        sb.append("<td>"+getTotalNumberOfFiles()+"</td>");
+        sb.append("<td>"+getLinesOfCode()+"</td>");
+        sb.append("<td>"+getNumberOfSourceFiles()+"</td>");
+        sb.append("<td>"+getNumberOfFileMetrics()+"</td>");
+        sb.append("<td>"+getNumberOfFunctions()+"</td>");
+        sb.append("<td>"+getNumberOfFunctionMetrics()+"</td>");
+        sb.append("</tr>");
+        sb.append("</tbody>");
+        sb.append("</table>");
+        return sb.toString();
+    }
 }

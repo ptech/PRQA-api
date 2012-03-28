@@ -4,17 +4,21 @@
  */
 package net.praqma.prqa;
 
-import net.praqma.prqa.status.PRQAComplianceStatus;
 import java.io.*;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import junit.framework.TestCase;
 import net.praqma.jenkins.plugin.prqa.PrqaException;
-import net.praqma.prqa.status.PRQAStatus.StatusCategory;
+import net.praqma.jenkins.plugin.prqa.PrqaException.PrqaReadingException;
 import net.praqma.prqa.parsers.ComplianceReportHtmlParser;
 import net.praqma.prqa.parsers.ReportHtmlParser;
 import net.praqma.prqa.products.PRQACommandBuilder;
 import net.praqma.prqa.products.QAR;
+import net.praqma.prqa.status.PRQAComplianceStatus;
+import net.praqma.prqa.status.PRQAQualityStatus;
+import net.praqma.prqa.status.StatusCategory;
 import org.junit.BeforeClass;
 import org.junit.Test;
 /**
@@ -45,17 +49,25 @@ public class PRQATest extends TestCase {
     public void testClearOverridesVerification() {
         assertNotNull(collection);
         collection.clearOverrides();
-        assertEquals(collection.getMin(StatusCategory.Messages),new Integer(1000));
-        assertEquals(collection.getMax(StatusCategory.Messages),new Integer(20000));        
+        try {
+            assertEquals(collection.getMin(StatusCategory.Messages),new Integer(1000));
+            assertEquals(collection.getMax(StatusCategory.Messages),new Integer(20000));        
+        } catch (PrqaException.PrqaReadingException ex) {
+            fail();
+        }
     }
     
     @Test 
     public void testComplianceStatusOverride() {
-        collection.overrideMax(StatusCategory.Messages, 100);
-        collection.overrideMin(StatusCategory.Messages, 0);
-        
-        assertEquals(collection.getMax(StatusCategory.Messages), 100);
-        assertEquals(collection.getMin(StatusCategory.Messages), 0);
+        try {
+            collection.overrideMax(StatusCategory.Messages, 100);
+            collection.overrideMin(StatusCategory.Messages, 0);
+            
+            assertEquals(collection.getMax(StatusCategory.Messages), 100);
+            assertEquals(collection.getMin(StatusCategory.Messages), 0);
+        } catch (PrqaReadingException ex) {
+            fail();
+        }
         
     }
     
@@ -139,5 +151,21 @@ public class PRQATest extends TestCase {
           
         System.out.println(f.getPath().toString());
         //f.delete();                
-    }  
+    }
+    
+    @Test
+    public void testCorrectNumberOfCategories() {
+//        PRQAComplianceStatus prqastatus = new PRQAComplianceStatus();
+//        assertEquals(3, prqastatus.getIncludedCategories().size());
+//        
+//        PRQAComplianceStatus prqastatus2 = new PRQAComplianceStatus();
+//        assertEquals(3, prqastatus2.getIncludedCategories().size());
+//        
+//        PRQAQualityStatus status = new PRQAQualityStatus();
+//        assertEquals(6, prqastatus2.getIncludedCategories().size());
+//        assertEquals(3, prqastatus2.getIncludedCategories().size());
+//        assertEquals(3, prqastatus.getIncludedCategories().size());
+        
+        
+    }
 }

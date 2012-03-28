@@ -1,7 +1,6 @@
 package net.praqma.prqa.status;
 
-import java.util.ArrayList;
-import java.util.List;
+import net.praqma.jenkins.plugin.prqa.PrqaException;
 
 /**
  * This class represent a compliance status readout. 3 values, file compliance, project compliance and number of messages
@@ -18,7 +17,7 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
     public PRQAComplianceStatus(int messages, Double fileCompliance, Double projectCompliance) {
         this.messages = messages;
         this.fileCompliance = fileCompliance;
-        this.projectCompliance = projectCompliance;       
+        this.projectCompliance = projectCompliance;
     }
 
     public int getMessages() {
@@ -46,7 +45,7 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
     }
     
     @Override
-    public Number getReadout(StatusCategory cat) {
+    public Number getReadout(StatusCategory cat) throws PrqaException.PrqaReadingException {
         switch(cat) {
             case ProjectCompliance:
                 return this.getProjectCompliance();
@@ -55,7 +54,7 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
             case FileCompliance:
                 return this.getFileCompliance();
             default:
-                throw new IllegalArgumentException("Invalid complianace category");
+                throw new PrqaException.PrqaReadingException(String.format("Dident find category %s for class %s", cat, this.getClass()));
         }
     }   
     
@@ -126,5 +125,28 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
     
     public static PRQAComplianceStatus createEmptyResult() {
         return new PRQAComplianceStatus(0, new Double(0), new Double(0));
+    }
+
+    @Override
+    public String toHtml() {        
+        StringBuilder sb = new StringBuilder();
+        sb.append("<table style=\"border:solid;border-width:1px;padding:15px;margin:10px;\">");
+        sb.append("<h2>Compliance Summary</h2>");
+        sb.append("<thead>");
+        sb.append("<tr>");
+        sb.append("<th>Max Messages</th>");
+        sb.append("<th>Project Compliance</th>");
+        sb.append("<th>File Compliance</th>");
+        sb.append("</tr>");
+        sb.append("</thead>");
+        sb.append("<tbody>");
+        sb.append("<tr>");
+        sb.append("<td>"+getMessages()+"</td>");
+        sb.append("<td>"+getProjectCompliance()+"%</td>");
+        sb.append("<td>"+getFileCompliance()+"%</td>");
+        sb.append("</tr>");
+        sb.append("</tbody>");
+        sb.append("</table>");               
+        return sb.toString();
     }
 }

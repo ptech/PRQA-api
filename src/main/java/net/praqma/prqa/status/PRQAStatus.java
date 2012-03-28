@@ -5,8 +5,9 @@
 package net.praqma.prqa.status;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import net.praqma.jenkins.plugin.prqa.PrqaException;
+import net.praqma.prqa.PRQAContext.ComparisonSettings;
 import net.praqma.prqa.PRQAReading;
 
 /**
@@ -21,37 +22,6 @@ import net.praqma.prqa.PRQAReading;
 public abstract class PRQAStatus implements PRQAReading,Serializable {
     
     protected List<String> notifications = new ArrayList<String>();
-    protected List<StatusCategory> disabledCategories = new ArrayList<StatusCategory>(); 
-    
-    public enum StatusCategory {
-        Messages,
-        ProjectCompliance,
-        FileCompliance,
-        TotalNumberOfFiles,
-        LinesOfCode,
-        NumberOfSourceFiles,
-        NumberOfFileMetrics,
-        NumberOfFunctions,
-        NumberOfFunctionMetrics;
-    }
-    
-        /**
-     * Temporary solution to disable showing of specific properties.
-     * @param category
-     * @return 
-     */
-    public boolean isDisabled(StatusCategory category) {
-        return disabledCategories.contains(category);
-    }
-    
-    @Override
-    public void disable(StatusCategory category) {
-        disabledCategories.add(category);
-    }
-    
-    public List<StatusCategory> getDisabledCategories() {
-        return disabledCategories;
-    }
     
      /**
      * 
@@ -62,10 +32,119 @@ public abstract class PRQAStatus implements PRQAReading,Serializable {
     public void addNotification(String message) {
         notifications.add(message);
     }
-       
+    
+    /**
+     * Gets all associated readouts.
+     */
+    
+    @Override
+    public HashMap<StatusCategory,Number> getReadouts(StatusCategory... categories) throws PrqaException.PrqaReadingException {
+        HashMap<StatusCategory,Number> map = new HashMap<StatusCategory, Number>();
+        for (StatusCategory category : categories) {
+            try {
+                Number readout = getReadout(category);
+                map.put(category, getReadout(category));
+            } catch (PrqaException.PrqaReadingException ex) {
+                throw ex;
+            }           
+        }    
+        return map;
+    }
+    
+     
     /**
      * Tests whether the result contains valid values. in some cases we could end up in situation where an "empty" result would be created.
      * @return 
      */
     public abstract boolean isValid();
+    
+    /**
+     * Returns a table representation of the the toString method.
+     * @return 
+     */
+    public abstract String toHtml();
+    
+    //EXPERIMENTS BELOW
+    @Override
+    public PRQAComparisonMatrix createComparison(ComparisonSettings setting, StatusCategory cat) {
+        return new PRQAComparisonMatrix(setting, cat);
+    }
+    
+    @Override
+    public PRQAComparisonMatrix createComparison(ComparisonSettings setting, StatusCategory cat, PRQAReading lastReading) throws PrqaException.PrqaReadingException {
+        return new PRQAComparisonMatrix(setting, cat, lastReading);
+    }
+    
+    /**
+     * Small helper class for creating a comparison. Given a mode of operation (None, Threshold, Improvement) compare a given set of readings. 
+     * 
+     * 
+     */
+    public class PRQAComparisonMatrix {
+        private transient ComparisonSettings setting;
+        private transient StatusCategory category;
+        private transient Number compareValue;
+        private transient PRQAReading lastReading;
+       
+        
+        public PRQAComparisonMatrix(ComparisonSettings setting, StatusCategory category) {
+            this.setting = setting;
+            this.category = category;
+            this.lastReading = null;
+        }
+        
+        public PRQAComparisonMatrix(ComparisonSettings setting, StatusCategory category, PRQAReading lastReading) throws PrqaException.PrqaReadingException {
+            this.setting = setting;
+            this.category = category;
+            this.lastReading = lastReading;
+            this.compareValue = lastReading.getReadout(category);
+        }
+        
+        
+        /**
+         * Small piece of logic. Given a setting for comparison, find out if the readings are better or worse than the user expected. 
+         * @param number
+         * @param less
+         * @return
+         * @throws net.praqma.jenkins.plugin.prqa.PrqaException.PrqaReadingException 
+         */
+        public boolean compareIsLower(Number number) throws PrqaException.PrqaReadingException {
+            return compare(number, true);
+        }
+        
+        public boolean compareIsEqualOrHigher(Number number) throws PrqaException.PrqaReadingException {
+            return compare(number, false);
+        }
+        
+        public Number getCompareValue() {
+            return compareValue;
+        }
+        
+        private boolean compare(Number number, boolean less) throws PrqaException.PrqaReadingException {
+            switch (setting) {
+                case Threshold:
+                    this.compareValue = number;
+                    if(less && getReadout(category).doubleValue() < number.doubleValue()) {
+                        return true;  
+                    } else if(!less && getReadout(category).doubleValue() >= number.doubleValue()) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                case Improvement:
+                    if(less && getReadout(category).doubleValue() < lastReading.getReadout(category).doubleValue()) {
+                        return true;  
+                    } else if(!less && getReadout(category).doubleValue() >= lastReading.getReadout(category).doubleValue()) {
+                        return true;
+                    } else {
+                        return false;
+                    }                    
+                case None:
+                default:
+                    return true;
+                    
+            }
+        }
+        
+    }
 }
