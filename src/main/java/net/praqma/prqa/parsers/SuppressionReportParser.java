@@ -11,14 +11,6 @@ import java.util.regex.Pattern;
  * @author Praqma
  */
 public class SuppressionReportParser extends ReportHtmlParser {
-    
-    /*
-        Number of Files	89
-        Lines of Code	188
-        Number of Unique Messages Suppressed	0
-        Number of Messages Suppressed	0
-        Percentage of Messages Suppressed	0.0% 
-     */
     public static Pattern numberOfFilesPattern;
     public static Pattern linesOfCodePattern;
     public static Pattern uniqueMessagesSuppressedPattern;

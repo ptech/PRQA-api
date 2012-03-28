@@ -9,8 +9,6 @@ import net.praqma.prqa.PRQA;
  */
 public class PrqaException extends Exception {
 
-    private Exception rootCause;
-    
     public PrqaException(String string) {
         super(string);
     }
