@@ -16,7 +16,7 @@ public class SuppressionReportParser extends ReportHtmlParser {
     public static Pattern uniqueMessagesSuppressedPattern;
     public static Pattern numberOfMessagesSuppressedPattern;
     public static Pattern percentageOfMsgSuppressedPattern;
-    
+        
     static {
         numberOfFilesPattern = Pattern.compile("<td align=\"left\">Number of Files</td>\\r?\\n<td align=\"right\">(\\d+)</td>");
         linesOfCodePattern = Pattern.compile("<td align=\"left\">Lines of Code</td>\\r?\\n<td align=\"right\">(\\d+)</td>");

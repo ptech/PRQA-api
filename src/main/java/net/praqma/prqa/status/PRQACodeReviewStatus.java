@@ -26,8 +26,11 @@ public class PRQACodeReviewStatus extends PRQAStatus {
     }
 
     @Override
-    public void setReadout(StatusCategory category, Number value) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void setReadout(StatusCategory category, Number value) throws PrqaException.PrqaReadingException {
+        switch(category) {
+            default:
+                throw new PrqaException.PrqaReadingException(String.format("Could not set value of %s for category %s in class %s",value,category,this.getClass()));
+        }       
     }
 
     @Override

@@ -9,5 +9,4 @@ package net.praqma.prqa.parsers;
  * @author Praqma
  */
 public class CodeReviewReportParser extends ReportHtmlParser {
-    
 }

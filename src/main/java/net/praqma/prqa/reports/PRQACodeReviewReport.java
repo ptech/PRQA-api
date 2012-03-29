@@ -24,6 +24,7 @@ public class PRQACodeReviewReport extends PRQAReport<PRQACodeReviewStatus,String
 
     @Override
     public PRQACodeReviewStatus completeTask(String parameter) throws PrqaException {
+        parser.setFullReportPath(this.getFullReportPath());
         cmdResult = null;
         try 
         {

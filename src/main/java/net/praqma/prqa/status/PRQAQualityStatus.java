@@ -45,7 +45,7 @@ public class PRQAQualityStatus extends PRQAStatus {
     }
 
     @Override
-    public void setReadout(StatusCategory category, Number value) {
+    public void setReadout(StatusCategory category, Number value) throws PrqaException.PrqaReadingException {
         switch(category) {
             case NumberOfFunctionMetrics:
                 setNumberOfFunctionMetrics(value.intValue());
@@ -65,6 +65,8 @@ public class PRQAQualityStatus extends PRQAStatus {
             case NumberOfFileMetrics:
                 setNumberOfFileMetrics(value.intValue());
                 break;
+            default:
+                throw new PrqaException.PrqaReadingException(String.format("Could not set value of %s for category %s in class %s",value,category,this.getClass()));
         }
     }
 

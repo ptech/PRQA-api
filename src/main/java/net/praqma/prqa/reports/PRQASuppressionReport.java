@@ -18,13 +18,14 @@ import net.praqma.util.execute.CommandLineException;
  */
 public class PRQASuppressionReport extends PRQAReport<PRQASuppressionStatus,String> {
     
-    public PRQASuppressionReport(QAR qar) {
+    public PRQASuppressionReport(QAR qar) throws PrqaException {
         this.qar = qar;
         this.parser = new SuppressionReportParser();
     }
 
     @Override
     public PRQASuppressionStatus completeTask(String parameter) throws PrqaException {
+        parser.setFullReportPath(this.getFullReportPath());
         cmdResult = null;
         try {
             cmdResult = qar.execute();
@@ -34,20 +35,13 @@ public class PRQASuppressionReport extends PRQAReport<PRQASuppressionStatus,Stri
             throw new PrqaException.PrqaCommandLineException(qar,cle);            
         }
         
+        
         PRQASuppressionStatus status = new PRQASuppressionStatus();
-        
-        List<String> linesOfCode = parser.parse(getFullReportPath(), SuppressionReportParser.linesOfCodePattern);
-        List<String> numberOfFiles = parser.parse(getFullReportPath(), SuppressionReportParser.numberOfFilesPattern);
-        List<String> suppressedMsgs = parser.parse(getFullReportPath(), SuppressionReportParser.numberOfMessagesSuppressedPattern);
-        List<String> pctSuppressedMsgs = parser.parse(getFullReportPath(), SuppressionReportParser.percentageOfMsgSuppressedPattern);
-        List<String> uniMsgSuppressed = parser.parse(getFullReportPath(), SuppressionReportParser.uniqueMessagesSuppressedPattern);
-        
-        status.setLinesOfCode(Integer.parseInt(parser.getFirstResult(linesOfCode)));
-        status.setNumberOfFiles(Integer.parseInt(parser.getFirstResult(numberOfFiles)));
-        status.setMsgsSuppressed(Integer.parseInt(parser.getFirstResult(suppressedMsgs)));
-        status.setPctMsgsSuppressed(Double.parseDouble(parser.getFirstResult(pctSuppressedMsgs)));
-        status.setUniqueMsgsSuppressed(Integer.parseInt(parser.getFirstResult(uniMsgSuppressed)));
-        
+        status.setLinesOfCode(Integer.parseInt(parser.getResult(SuppressionReportParser.linesOfCodePattern)));
+        status.setNumberOfFiles(Integer.parseInt(parser.getResult(SuppressionReportParser.numberOfFilesPattern)));
+        status.setMsgsSuppressed(Integer.parseInt(parser.getResult(SuppressionReportParser.numberOfMessagesSuppressedPattern)));
+        status.setPctMsgsSuppressed(Double.parseDouble(parser.getResult(SuppressionReportParser.percentageOfMsgSuppressedPattern)));
+        status.setUniqueMsgsSuppressed(Integer.parseInt(parser.getResult(SuppressionReportParser.uniqueMessagesSuppressedPattern)));        
         return status;
     }
 

@@ -6,6 +6,7 @@ package net.praqma.prqa.parsers;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,8 +18,7 @@ import net.praqma.jenkins.plugin.prqa.PrqaException.PrqaParserException;
  * @author Praqma
  */
 public abstract class ReportHtmlParser implements Serializable {
-    public static Pattern iconLinkPattern = Pattern.compile("<img(.+)src=\"[^\"]+\"(.*)>");
-    
+    protected String fullReportPath;
     /***
      * Parse method. Takes a path to a file, and a pattern for which to scan for. 
      * @param path
@@ -26,6 +26,19 @@ public abstract class ReportHtmlParser implements Serializable {
      * @return
      * @throws PrqaException 
      */
+    
+    public String getFullReportPath() {
+        return this.fullReportPath;
+    }
+    
+    public void setFullReportPath(String fullReportPath) {
+       this.fullReportPath = fullReportPath;
+    }
+    
+    public String getResult(Pattern pattern) throws PrqaException {
+        return getFirstResult(parse(this.fullReportPath, pattern));
+    }
+    
     public List<String> parse(String path, Pattern pattern) throws PrqaException {
                List<String> result = new ArrayList<String>();
         File file = new File(path);
@@ -111,13 +124,5 @@ public abstract class ReportHtmlParser implements Serializable {
         }
          
         return numberOfReplacements;
-    }
-    
-    public int replaceIcon(String path, String iconaddress) throws PrqaParserException {
-        return replace(path,ReportHtmlParser.iconLinkPattern,ReportHtmlParser.createComplianceLogoLocation(iconaddress));
-    }
-    
-    public static String createComplianceLogoLocation(String logopath)  {
-        return String.format("<img src=\"%s\" alt=\"logo\"/>", logopath);
     }
 }

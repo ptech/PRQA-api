@@ -42,8 +42,26 @@ public class PRQASuppressionStatus extends PRQAStatus {
     }
 
     @Override
-    public void setReadout(StatusCategory category, Number value) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void setReadout(StatusCategory category, Number value) throws PrqaException.PrqaReadingException {
+        switch(category) {
+            case TotalNumberOfFiles:
+                setNumberOfFiles(value.intValue());
+                break;
+            case LinesOfCode:
+                setLinesOfCode(value.intValue());
+                break;
+            case UniqueMessagesSupperessed:
+                setUniqueMsgsSuppressed(value.intValue());
+                break;
+            case MessagesSuppressed:
+                setMsgsSuppressed(value.intValue());
+                break;
+            case PercentageMessagesSuppressed:
+                setPctMsgsSuppressed(value.doubleValue());
+                break;
+            default:
+                throw new PrqaException.PrqaReadingException(String.format("Could not set value of %s for category %s in class %s",value,category,this.getClass()));
+        }
     }
 
     /**

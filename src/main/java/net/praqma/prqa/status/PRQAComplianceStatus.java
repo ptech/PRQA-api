@@ -59,7 +59,7 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
     }   
     
     @Override
-    public void setReadout(StatusCategory category, Number value) {
+    public void setReadout(StatusCategory category, Number value) throws PrqaException.PrqaReadingException {
         switch(category) {
             case ProjectCompliance:
                 setProjectCompliance(value.doubleValue());
@@ -71,7 +71,7 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
                 setFileCompliance(value.doubleValue());
                 break;
             default:
-                throw new IllegalArgumentException("Invalid complianace category");
+                throw new PrqaException.PrqaReadingException(String.format("Could not set value of %s for category %s in class %s",value,category,this.getClass()));
         }
     }
     

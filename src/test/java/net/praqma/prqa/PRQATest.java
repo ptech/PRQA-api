@@ -7,12 +7,11 @@ package net.praqma.prqa;
 import java.io.*;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import junit.framework.TestCase;
 import net.praqma.jenkins.plugin.prqa.PrqaException;
 import net.praqma.jenkins.plugin.prqa.PrqaException.PrqaReadingException;
 import net.praqma.prqa.parsers.ComplianceReportHtmlParser;
+import net.praqma.prqa.parsers.QualityReportParser;
 import net.praqma.prqa.parsers.ReportHtmlParser;
 import net.praqma.prqa.products.PRQACommandBuilder;
 import net.praqma.prqa.products.QAR;
@@ -130,42 +129,76 @@ public class PRQATest extends TestCase {
         List<String> listFileC = parser.parse(f.getPath(), ComplianceReportHtmlParser.fileCompliancePattern);
         List<String> listProjC = parser.parse(f.getPath(), ComplianceReportHtmlParser.projectCompliancePattern);
         List<String> listMsg = parser.parse(f.getPath(), ComplianceReportHtmlParser.totalMessagesPattern);
-        List<String> listIconAddress = parser.parse(f.getPath(), ReportHtmlParser.iconLinkPattern);
-        System.out.println(f.getPath().toString());
-        int replace = parser.replaceIcon(f.getPath(),  "Hello there!");
-        System.out.println("Replaced: "+replace);
+        
         
         //Assert Not null.
         
         assertNotNull(listFileC);
         assertNotNull(listProjC);
         assertNotNull(listMsg);
-        assertNotNull(listIconAddress);
+        
         //Assert that each list contains EXACTLY 1 element. That is the requirement for the compliance report.
         
         assertEquals(1, listFileC.size());
         assertEquals(1, listProjC.size());
         assertEquals(1, listMsg.size());
-        assertEquals(1, listIconAddress.size());
-        System.out.println(listIconAddress.get(0));
-          
-        System.out.println(f.getPath().toString());
-        //f.delete();                
+         
+        String fileName = f.getAbsolutePath();
+        System.out.println(String.format("Deleted file %s : %s", fileName, f.delete()));           
     }
     
     @Test
-    public void testCorrectNumberOfCategories() {
-//        PRQAComplianceStatus prqastatus = new PRQAComplianceStatus();
-//        assertEquals(3, prqastatus.getIncludedCategories().size());
-//        
-//        PRQAComplianceStatus prqastatus2 = new PRQAComplianceStatus();
-//        assertEquals(3, prqastatus2.getIncludedCategories().size());
-//        
-//        PRQAQualityStatus status = new PRQAQualityStatus();
-//        assertEquals(6, prqastatus2.getIncludedCategories().size());
-//        assertEquals(3, prqastatus2.getIncludedCategories().size());
-//        assertEquals(3, prqastatus.getIncludedCategories().size());
+    public void testParseQualityReport() throws IOException, PrqaException {
+        InputStream is = this.getClass().getResourceAsStream("Quality_Report.xhtml");
+        assertNotNull(is);
+        InputStreamReader isr = new InputStreamReader(is);
+        BufferedReader br = new BufferedReader(isr);
         
+        File f = File.createTempFile("testParse", ".xhtml");
+        FileWriter fw = new FileWriter(f);
         
+        String line;
+        while((line = br.readLine()) != null ) {
+            fw.write(line+System.getProperty("line.separator"));
+        }
+        
+        fw.close();
+       
+        ComplianceReportHtmlParser parser = new ComplianceReportHtmlParser();
+        List<String> totalNumFiles = parser.parse(f.getPath(), QualityReportParser.totalNumberOfFilesPattern);
+        List<String> linesOfCode = parser.parse(f.getPath(), QualityReportParser.linesOfCodePattern);
+        List<String> sourceFiles = parser.parse(f.getPath(), QualityReportParser.numberOfSourceFilesPattern);
+        List<String> numFunctions = parser.parse(f.getPath(), QualityReportParser.numberOfFunctionsPattern);
+        List<String> numFileMetrics = parser.parse(f.getPath(), QualityReportParser.numberOfFileMetricsPattern);
+        List<String> numFunctionMetrics = parser.parse(f.getPath(), QualityReportParser.numberOfFunctionsMetricPattern);
+        System.out.println(f.getPath().toString());
+        
+        assertNotNull(totalNumFiles);
+        assertNotNull(linesOfCode);
+        assertNotNull(sourceFiles);
+        assertNotNull(numFunctions);
+        assertNotNull(numFileMetrics);
+        assertNotNull(numFunctionMetrics);
+                
+        assertEquals(1, totalNumFiles.size());
+        assertEquals(1, linesOfCode.size());
+        assertEquals(1, sourceFiles.size());
+        assertEquals(1, numFunctions.size());
+        assertEquals(1, numFileMetrics.size());
+        assertEquals(1, numFunctionMetrics.size());
+
+        System.out.println(f.getPath().toString());
+        String fileName = f.getAbsolutePath();
+        System.out.println(String.format("Deleted file %s : %s", fileName, f.delete()));
     }
+    
+    @Test
+    public void testSetReading() {
+        PRQAQualityStatus stat = new PRQAQualityStatus();
+        try {
+            stat.setReadout(StatusCategory.Messages, new Integer(40));
+        } catch (PrqaReadingException ex) {
+            assertTrue("Test succeeded, quality status does not have a field with label Messages", true);
+        }        
+    } 
 }

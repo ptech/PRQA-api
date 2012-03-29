@@ -35,6 +35,7 @@ public class PRQAComplianceReport extends PRQAReport<PRQAComplianceStatus,String
     
     @Override
     public PRQAComplianceStatus completeTask(String reportpath) throws PrqaException {
+        parser.setFullReportPath(this.getFullReportPath());
         cmdResult = null;
         try {
             cmdResult = qar.execute();
@@ -45,25 +46,10 @@ public class PRQAComplianceReport extends PRQAReport<PRQAComplianceStatus,String
         }
        
         //Parse it.
-        PRQAComplianceStatus stat = new PRQAComplianceStatus();
-        
-        List<String> parseResult = parser.parse(reportpath, ComplianceReportHtmlParser.totalMessagesPattern);
-        if(!parseResult.isEmpty()) {
-            Integer tmp = Integer.parseInt(parseResult.get(0)); 
-            stat.setMessages(tmp);
-        }
-
-        parseResult = parser.parse(reportpath, ComplianceReportHtmlParser.fileCompliancePattern);
-        if(!parseResult.isEmpty()) {
-            Double tmp = Double.parseDouble(parseResult.get(0));
-            stat.setFileCompliance(tmp);
-        }
-        parseResult = parser.parse(reportpath, ComplianceReportHtmlParser.projectCompliancePattern);
-        if(!parseResult.isEmpty()) {
-            Double tmp = Double.parseDouble(parseResult.get(0));
-            stat.setProjectCompliance(tmp);
-        }
-        
+        PRQAComplianceStatus stat = new PRQAComplianceStatus();        
+        stat.setMessages(Integer.parseInt(parser.getResult(ComplianceReportHtmlParser.totalMessagesPattern)));
+        stat.setProjectCompliance(Double.parseDouble(parser.getResult(ComplianceReportHtmlParser.projectCompliancePattern)));
+        stat.setFileCompliance(Double.parseDouble(parser.getResult(ComplianceReportHtmlParser.fileCompliancePattern)));    
         return stat;
     }
 
