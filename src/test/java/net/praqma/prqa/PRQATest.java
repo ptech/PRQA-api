@@ -12,7 +12,7 @@ import net.praqma.jenkins.plugin.prqa.PrqaException;
 import net.praqma.jenkins.plugin.prqa.PrqaException.PrqaReadingException;
 import net.praqma.prqa.parsers.ComplianceReportHtmlParser;
 import net.praqma.prqa.parsers.QualityReportParser;
-import net.praqma.prqa.parsers.ReportHtmlParser;
+import net.praqma.prqa.parsers.SuppressionReportParser;
 import net.praqma.prqa.products.PRQACommandBuilder;
 import net.praqma.prqa.products.QAR;
 import net.praqma.prqa.status.PRQAComplianceStatus;
@@ -26,6 +26,12 @@ import org.junit.Test;
  */
 public class PRQATest extends TestCase {
     private static PRQAStatusCollection collection = null;
+    //private static InputStream stream;
+    private static InputStream getResourceInputStream(Class clazz, String file) {
+        InputStream is;
+        is = clazz.getResourceAsStream(file);
+        return is;
+    }
     
     @BeforeClass 
     public static void testCreateMockCollection () {
@@ -165,6 +171,8 @@ public class PRQATest extends TestCase {
         fw.close();
        
         ComplianceReportHtmlParser parser = new ComplianceReportHtmlParser();
+        parser.setFullReportPath(f.getPath());
+        
         List<String> totalNumFiles = parser.parse(f.getPath(), QualityReportParser.totalNumberOfFilesPattern);
         List<String> linesOfCode = parser.parse(f.getPath(), QualityReportParser.linesOfCodePattern);
         List<String> sourceFiles = parser.parse(f.getPath(), QualityReportParser.numberOfSourceFilesPattern);
@@ -186,10 +194,77 @@ public class PRQATest extends TestCase {
         assertEquals(1, numFunctions.size());
         assertEquals(1, numFileMetrics.size());
         assertEquals(1, numFunctionMetrics.size());
-
+        
+        String res1 = parser.getResult(QualityReportParser.totalNumberOfFilesPattern);
+        String res2 = parser.getResult(QualityReportParser.linesOfCodePattern);
+        String res3 = parser.getResult(QualityReportParser.numberOfSourceFilesPattern);
+        String res4 = parser.getResult(QualityReportParser.numberOfFunctionsPattern);
+        
+        assertNotNull(res1);
+        assertNotNull(res2);
+        assertNotNull(res3);
+        assertNotNull(res4);
+        
         System.out.println(f.getPath().toString());
         String fileName = f.getAbsolutePath();
         System.out.println(String.format("Deleted file %s : %s", fileName, f.delete()));
+    }
+    
+    @Test
+    public void testParseSupressionReport() throws IOException, PrqaException {
+        InputStream is = this.getClass().getResourceAsStream("Suppression_Report.xhtml");
+        assertNotNull(is);
+        InputStreamReader isr = new InputStreamReader(is);
+        BufferedReader br = new BufferedReader(isr);
+        
+        File f = File.createTempFile("testParse", ".xhtml");
+        FileWriter fw = new FileWriter(f);
+        
+        String line;
+        while((line = br.readLine()) != null ) {
+            fw.write(line+System.getProperty("line.separator"));
+        }
+        
+        fw.close();
+       
+        SuppressionReportParser parser = new SuppressionReportParser();
+        parser.setFullReportPath(f.getPath());
+        
+        String totalNumFiles = parser.getResult(SuppressionReportParser.numberOfFilesPattern);
+        String linesOfCode = parser.getResult(SuppressionReportParser.linesOfCodePattern);
+        String numSupMsg = parser.getResult(SuppressionReportParser.numberOfMessagesSuppressedPattern);
+        String pctSupMsg = parser.getResult(SuppressionReportParser.percentageOfMsgSuppressedPattern);
+        String uniSupMsg = parser.getResult(SuppressionReportParser.uniqueMessagesSuppressedPattern);
+        
+        
+        
+        assertNotNull(totalNumFiles);
+        assertNotNull(linesOfCode);
+        assertNotNull(numSupMsg);
+        assertNotNull(pctSupMsg);
+        assertNotNull(uniSupMsg);
+       
+        int restNumFiles = Integer.parseInt(totalNumFiles);
+        int resLinesCode = Integer.parseInt(linesOfCode);
+        int resNumSupMsg = Integer.parseInt(numSupMsg);
+        double resPctSupMsg = Double.parseDouble(pctSupMsg);
+        int resUniSupMsg = Integer.parseInt(uniSupMsg);
+        
+        assertTrue(restNumFiles >= 0);
+        assertTrue(resLinesCode >= 0);
+        assertTrue(resNumSupMsg >= 0);
+        assertTrue(resPctSupMsg >= 0);
+        assertTrue(resUniSupMsg >= 0);
+        
+        System.out.println(f.getPath().toString());
+        String fileName = f.getAbsolutePath();
+        System.out.println(String.format("Deleted file %s : %s", fileName, f.delete()));
+    }
+    
+        
+    @Test
+    public void testParserMethods() {
+        ComplianceReportHtmlParser parser = new ComplianceReportHtmlParser();
     }
     
     @Test
@@ -200,5 +275,31 @@ public class PRQATest extends TestCase {
         } catch (PrqaReadingException ex) {
             assertTrue("Test succeeded, quality status does not have a field with label Messages", true);
         }        
-    } 
+    }
+    
+    @Test
+    public void testGetReadings() {
+        PRQAComplianceStatus status = new PRQAComplianceStatus(100, 100d, 34.5d);
+        try {
+            for (Number num : status.getReadouts(StatusCategory.FileCompliance,StatusCategory.ProjectCompliance,StatusCategory.Messages).values()){
+                assertNotNull(num);                     
+            }
+        } catch (PrqaReadingException ex) {
+            fail();
+        }
+    }
+    
+    @Test 
+    public void testGetGetWrongReadings() {
+        PRQAComplianceStatus status = new PRQAComplianceStatus(100, 100d, 34.5d);
+        boolean caught = false;
+        try {
+            for (Number num : status.getReadouts(StatusCategory.FileCompliance,StatusCategory.ProjectCompliance,StatusCategory.Messages,StatusCategory.NumberOfFunctions).values()){
+                assertNotNull(num);                     
+            }
+        } catch (PrqaReadingException ex) {
+            caught = true;
+        }
+        assertTrue(caught);
+    }
 }

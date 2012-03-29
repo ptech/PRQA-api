@@ -183,12 +183,12 @@ public class PRQAQualityStatus extends PRQAStatus {
         sb.append("</thead>");
         sb.append("<tbody>");
         sb.append("<tr>");
-        sb.append("<td>"+getTotalNumberOfFiles()+"</td>");
-        sb.append("<td>"+getLinesOfCode()+"</td>");
-        sb.append("<td>"+getNumberOfSourceFiles()+"</td>");
-        sb.append("<td>"+getNumberOfFileMetrics()+"</td>");
-        sb.append("<td>"+getNumberOfFunctions()+"</td>");
-        sb.append("<td>"+getNumberOfFunctionMetrics()+"</td>");
+        sb.append("<td>").append(getTotalNumberOfFiles()).append("</td>");
+        sb.append("<td>").append(getLinesOfCode()).append("</td>");
+        sb.append("<td>").append(getNumberOfSourceFiles()).append("</td>");
+        sb.append("<td>").append(getNumberOfFileMetrics()).append("</td>");
+        sb.append("<td>").append(getNumberOfFunctions()).append("</td>");
+        sb.append("<td>").append(getNumberOfFunctionMetrics()).append("</td>");
         sb.append("</tr>");
         sb.append("</tbody>");
         sb.append("</table>");

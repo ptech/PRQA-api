@@ -162,11 +162,11 @@ public class PRQASuppressionStatus extends PRQAStatus {
         sb.append("</thead>");
         sb.append("<tbody>");
         sb.append("<tr>");
-        sb.append("<td>"+getNumberOfFiles()+"</td>");
-        sb.append("<td>"+getLinesOfCode()+"</td>");
-        sb.append("<td>"+getUniqueMsgsSuppressed()+"</td>");
-        sb.append("<td>"+getMsgsSuppressed()+"</td>");
-        sb.append("<td>"+getPctMsgsSuppressed()+"%</td>");
+        sb.append("<td>").append(getNumberOfFiles()).append("</td>");
+        sb.append("<td>").append(getLinesOfCode()).append("</td>");
+        sb.append("<td>").append(getUniqueMsgsSuppressed()).append("</td>");
+        sb.append("<td>").append(getMsgsSuppressed()).append("</td>");
+        sb.append("<td>").append(getPctMsgsSuppressed()).append("%</td>");
         sb.append("</tr>");
         sb.append("</tbody>");
         sb.append("</table>");

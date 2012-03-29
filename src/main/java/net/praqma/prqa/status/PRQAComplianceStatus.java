@@ -54,7 +54,7 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
             case FileCompliance:
                 return this.getFileCompliance();
             default:
-                throw new PrqaException.PrqaReadingException(String.format("Dident find category %s for class %s", cat, this.getClass()));
+                throw new PrqaException.PrqaReadingException(String.format("Didn't find category %s for class %s", cat, this.getClass()));
         }
     }   
     
@@ -141,9 +141,9 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
         sb.append("</thead>");
         sb.append("<tbody>");
         sb.append("<tr>");
-        sb.append("<td>"+getMessages()+"</td>");
-        sb.append("<td>"+getProjectCompliance()+"%</td>");
-        sb.append("<td>"+getFileCompliance()+"%</td>");
+        sb.append("<td>").append(getMessages()).append("</td>");
+        sb.append("<td>").append(getProjectCompliance()).append("%</td>");
+        sb.append("<td>").append(getFileCompliance()).append("%</td>");
         sb.append("</tr>");
         sb.append("</tbody>");
         sb.append("</table>");               
