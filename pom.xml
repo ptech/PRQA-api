@@ -12,25 +12,12 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    <!--
+
     <distributionManagement>
         <repository>
             <id>praqma</id>
             <name>praqma</name>
             <url>scpexe://10.10.1.25:/var/www/repo/maven</url>
-        </repository>
-    </distributionManagement>
-    -->
-    <distributionManagement>
-        <snapshotRepository>
-            <id>praqma</id>
-            <name>praqma</name>
-            <url>http://localhost:8081/artifactory/libs-snapshot-local</url>
-        </snapshotRepository>
-        <repository>
-            <id>praqma</id>
-            <name>praqma</name>
-            <url>http://localhost:8081/artifactory/libs-release-local</url>
         </repository>
     </distributionManagement>
 
