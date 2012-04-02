@@ -7,6 +7,8 @@ package net.praqma.prqa;
 import java.io.*;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import junit.framework.TestCase;
 import net.praqma.jenkins.plugin.prqa.PrqaException;
 import net.praqma.jenkins.plugin.prqa.PrqaException.PrqaReadingException;
@@ -27,10 +29,22 @@ import org.junit.Test;
 public class PRQATest extends TestCase {
     private static PRQAStatusCollection collection = null;
     //private static InputStream stream;
-    private static InputStream getResourceInputStream(Class clazz, String file) {
-        InputStream is;
-        is = clazz.getResourceAsStream(file);
-        return is;
+    private static File copyResourceToTestFile(Class clazz, String file) throws IOException {
+        InputStream is = clazz.getResourceAsStream("Suppression_Report.xhtml");
+        assertNotNull(is);
+        InputStreamReader isr = new InputStreamReader(is);
+        BufferedReader br = new BufferedReader(isr);
+        
+        File f = File.createTempFile("testParse", ".xhtml");
+        FileWriter fw = new FileWriter(f);
+        
+        String line;
+        while((line = br.readLine()) != null ) {
+            fw.write(line+System.getProperty("line.separator"));
+        }
+        
+        fw.close();
+        return f;
     }
     
     @BeforeClass 
@@ -155,7 +169,7 @@ public class PRQATest extends TestCase {
     
     @Test
     public void testParseQualityReport() throws IOException, PrqaException {
-        InputStream is = this.getClass().getResourceAsStream("Quality_Report.xhtml");
+        InputStream is = this.getClass().getResourceAsStream("Quality_Report_LARGE.xhtml");
         assertNotNull(is);
         InputStreamReader isr = new InputStreamReader(is);
         BufferedReader br = new BufferedReader(isr);
@@ -187,6 +201,7 @@ public class PRQATest extends TestCase {
         assertNotNull(numFunctions);
         assertNotNull(numFileMetrics);
         assertNotNull(numFunctionMetrics);
+       
                 
         assertEquals(1, totalNumFiles.size());
         assertEquals(1, linesOfCode.size());
@@ -199,6 +214,11 @@ public class PRQATest extends TestCase {
         String res2 = parser.getResult(QualityReportParser.linesOfCodePattern);
         String res3 = parser.getResult(QualityReportParser.numberOfSourceFilesPattern);
         String res4 = parser.getResult(QualityReportParser.numberOfFunctionsPattern);
+        
+        System.out.println(res1);
+        System.out.println(res2);
+        System.out.println(res3);
+        System.out.println(res4);
         
         assertNotNull(res1);
         assertNotNull(res2);
@@ -302,4 +322,29 @@ public class PRQATest extends TestCase {
         }
         assertTrue(caught);
     }
+    
+//    @Test
+//    public void testParseVeryLargeReport() {
+//        try {
+//            File f = copyResourceToTestFile(this.getClass(), "Quality_Report_LARGE.xhtml");
+//            QualityReportParser parser = new QualityReportParser();
+//            System.out.println(f.getPath());
+//            parser.setFullReportPath(f.getPath());
+//            
+//            String res1 = parser.getResult(QualityReportParser.totalNumberOfFilesPattern);
+//            String res2 = parser.getResult(QualityReportParser.linesOfCodePattern);
+//            String res3 = parser.getResult(QualityReportParser.numberOfSourceFilesPattern);
+//            String res4 = parser.getResult(QualityReportParser.numberOfFunctionsPattern);
+//
+//            assertNotNull(res1);
+//            assertNotNull(res2);
+//            assertNotNull(res3);
+//            assertNotNull(res4);
+//
+//        } catch (PrqaException ex) {
+//            fail();
+//        } catch (IOException ex) {
+//            fail();
+//        }
+//    }
 }

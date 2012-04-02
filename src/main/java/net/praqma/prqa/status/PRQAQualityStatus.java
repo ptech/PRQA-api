@@ -19,6 +19,10 @@ public class PRQAQualityStatus extends PRQAStatus {
     private int numberOfFunctions;
     private int numberOfFunctionMetrics;
     
+    //Added for Cpp projects
+    private int numberOfClasses = 0;
+    private int numberOfClassMetrics = 0;
+    
     @Override
     public boolean isValid() {
         return true;
@@ -39,6 +43,10 @@ public class PRQAQualityStatus extends PRQAStatus {
                 return getLinesOfCode();
             case NumberOfFileMetrics:
                 return getNumberOfFileMetrics();
+            case NumberOfClassMetrics:
+                return getNumberOfClassMetrics();
+            case NumberOfClasses:
+                return getNumberOfClasses();
             default:
                 throw new PrqaException.PrqaReadingException(String.format("Dident find category %s for class %s", category, this.getClass()));
         }
@@ -65,9 +73,31 @@ public class PRQAQualityStatus extends PRQAStatus {
             case NumberOfFileMetrics:
                 setNumberOfFileMetrics(value.intValue());
                 break;
+            case NumberOfClasses:
+                setNumberOfClasses(value.intValue());
+                break;
+            case NumberOfClassMetrics:
+                setNumberOfClassMetrics(value.intValue());
+                break;
             default:
                 throw new PrqaException.PrqaReadingException(String.format("Could not set value of %s for category %s in class %s",value,category,this.getClass()));
         }
+    }
+    
+    public int getNumberOfClasses() {
+        return numberOfClasses;
+    }
+    
+    public void setNumberOfClasses(int numberOfClasses) {
+        this.numberOfClasses = numberOfClasses;
+    }
+    
+    public int getNumberOfClassMetrics() {
+        return this.numberOfClassMetrics;
+    }
+    
+    public void setNumberOfClassMetrics(int numberOfClassMetrics) {
+        this.numberOfClassMetrics = numberOfClassMetrics;
     }
 
     /**
@@ -179,6 +209,8 @@ public class PRQAQualityStatus extends PRQAStatus {
         sb.append("<th>Number of File Metrics</th>");
         sb.append("<th>Number of Functions</th>");
         sb.append("<th>Number of Function Metrics</th>");
+        sb.append("<th>Number of Classes</th>");
+        sb.append("<th>Number of Class Metrics</th>");
         sb.append("</tr>");
         sb.append("</thead>");
         sb.append("<tbody>");
@@ -189,6 +221,8 @@ public class PRQAQualityStatus extends PRQAStatus {
         sb.append("<td>").append(getNumberOfFileMetrics()).append("</td>");
         sb.append("<td>").append(getNumberOfFunctions()).append("</td>");
         sb.append("<td>").append(getNumberOfFunctionMetrics()).append("</td>");
+        sb.append("<td>").append(getNumberOfClasses()).append("</td>");
+        sb.append("<td>").append(getNumberOfClassMetrics()).append("</td>");
         sb.append("</tr>");
         sb.append("</tbody>");
         sb.append("</table>");

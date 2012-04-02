@@ -12,6 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.praqma.jenkins.plugin.prqa.PrqaException;
 import net.praqma.jenkins.plugin.prqa.PrqaException.PrqaParserException;
+import net.praqma.prqa.PRQACommandLineUtility;
 
 /**
  *
@@ -54,20 +55,20 @@ public abstract class ReportHtmlParser implements Serializable {
         BufferedReader source = new BufferedReader(isr);
         String sourceLine = "";
         String report = "";
+        Matcher match = null;
         try {
             while ((sourceLine = source.readLine()) != null) {
-                report += sourceLine+System.getProperty("line.separator");
+                report += sourceLine+PRQACommandLineUtility.LINE_SEPARATOR;
+                match = pattern.matcher(report);
+                while (match.find()) {
+                    result.add(match.group(1));
+                    return result;
+                }
             }
             source.close();
         } catch (IOException ex) {
             throw new PrqaException.PrqaParserException("Could not read the line after :\n" + sourceLine,ex);
         }
-        Matcher match = pattern.matcher(report);
-        while (match.find()) {
-            result.add(match.group(1));
-        }
-            
-
         return result;
     }
     

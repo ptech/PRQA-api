@@ -17,6 +17,8 @@ public class QualityReportParser extends ReportHtmlParser {
     public static Pattern numberOfFileMetricsPattern;
     public static Pattern numberOfFunctionsPattern;
     public static Pattern numberOfFunctionsMetricPattern;
+    public static Pattern numberOfClassMetrics;
+    public static Pattern numberOfClasses;
     
     static {       
         totalNumberOfFilesPattern = Pattern.compile("<td align=\"left\">Total Number of Files</td>\\r?\\n<td align=\"right\">(\\d+)</td>");
@@ -25,5 +27,10 @@ public class QualityReportParser extends ReportHtmlParser {
         numberOfFileMetricsPattern = Pattern.compile("<td align=\"left\">Number of File Metrics</td>\\r?\\n<td align=\"right\">(\\d+)</td>");
         numberOfFunctionsPattern = Pattern.compile("<td align=\"left\">Number of Functions</td>\\r?\\n<td align=\"right\">(\\d+)</td>");
         numberOfFunctionsMetricPattern = Pattern.compile("<td align=\"left\">Number of Function Metrics</td>\\r?\\n<td align=\"right\">(\\d+)</td>");
+        
+        //Cpp/Java analysis:
+        numberOfClassMetrics = Pattern.compile("<td align=\"left\">Number of Class Metrics</td>\\r?\\n<td align=\"right\">(\\d+)</td>");
+        numberOfClasses = Pattern.compile("<td align=\"left\">Number of Classes</td>\\r?\\n<td align=\"right\">(\\d+)</td>");
+        
     }
 }

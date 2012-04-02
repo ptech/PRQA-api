@@ -5,7 +5,9 @@
 package net.praqma.prqa.status;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import net.praqma.jenkins.plugin.prqa.PrqaException;
 import net.praqma.prqa.PRQAContext.ComparisonSettings;
 import net.praqma.prqa.PRQAReading;
@@ -97,7 +99,7 @@ public abstract class PRQAStatus implements PRQAReading,Serializable {
             this.setting = setting;
             this.category = category;
             this.lastReading = lastReading;
-            this.compareValue = lastReading.getReadout(category);
+            this.compareValue = lastReading != null ? lastReading.getReadout(category) : null;
         }
         
         
@@ -132,6 +134,9 @@ public abstract class PRQAStatus implements PRQAReading,Serializable {
                         return false;
                     }
                 case Improvement:
+                    if(lastReading == null) {
+                        return true;
+                    }
                     if(less && getReadout(category).doubleValue() < lastReading.getReadout(category).doubleValue()) {
                         return true;  
                     } else if(!less && getReadout(category).doubleValue() >= lastReading.getReadout(category).doubleValue()) {

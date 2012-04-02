@@ -17,6 +17,7 @@ public class PRQACommandLineUtility {
 
     	private static CommandLineInterface cli = null;
 	private static Logger logger = Logger.getLogger();
+        public static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
 	static {
             cli = CommandLine.getInstance();            
