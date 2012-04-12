@@ -126,6 +126,9 @@ public abstract class PRQAStatus implements PRQAReading,Serializable {
             switch (setting) {
                 case Threshold:
                     this.compareValue = number;
+                    if(this.compareValue == null)
+                        return true;
+                    
                     if(less && getReadout(category).doubleValue() < number.doubleValue()) {
                         return true;  
                     } else if(!less && getReadout(category).doubleValue() >= number.doubleValue()) {

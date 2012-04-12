@@ -142,9 +142,15 @@ public class PRQATest extends TestCase {
         fw.close();
        
         ComplianceReportHtmlParser parser = new ComplianceReportHtmlParser();
+        parser.setFullReportPath(f.getPath());
+        
         List<String> listFileC = parser.parse(f.getPath(), ComplianceReportHtmlParser.fileCompliancePattern);
         List<String> listProjC = parser.parse(f.getPath(), ComplianceReportHtmlParser.projectCompliancePattern);
         List<String> listMsg = parser.parse(f.getPath(), ComplianceReportHtmlParser.totalMessagesPattern);
+        
+        String dman = parser.getResult(ComplianceReportHtmlParser.totalMessagesPattern);
+        
+        System.out.println("Result was: "+dman);
         
         
         //Assert Not null.

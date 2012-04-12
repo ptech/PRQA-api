@@ -8,6 +8,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import net.praqma.jenkins.plugin.prqa.PrqaException;
@@ -65,10 +67,15 @@ public abstract class ReportHtmlParser implements Serializable {
                     return result;
                 }
             }
-            source.close();
         } catch (IOException ex) {
             throw new PrqaException.PrqaParserException("Could not read the line after :\n" + sourceLine,ex);
-        }
+        } finally {
+            try {
+                source.close();
+            } catch (IOException ex) {
+                throw new PrqaException.PrqaParserException("Failed to close file after parse!", ex);
+            }
+        }  
         return result;
     }
     
