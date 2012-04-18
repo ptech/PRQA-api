@@ -24,6 +24,7 @@ import net.praqma.prqa.PRQAReading;
 public abstract class PRQAStatus implements PRQAReading,Serializable {
     
     protected List<String> notifications = new ArrayList<String>();
+    protected HashMap<StatusCategory,Number> thresholds;
     
      /**
      * 
@@ -33,6 +34,14 @@ public abstract class PRQAStatus implements PRQAReading,Serializable {
     @Override
     public void addNotification(String message) {
         notifications.add(message);
+    }
+		
+    public HashMap<StatusCategory,Number> getThresholds() {
+        return thresholds;
+    }
+    
+    public void setThresholds(HashMap<StatusCategory,Number> thresholds) {
+        this.thresholds = thresholds;
     }
     
     /**
@@ -129,7 +138,7 @@ public abstract class PRQAStatus implements PRQAReading,Serializable {
                     if(this.compareValue == null)
                         return true;
                     
-                    if(less && getReadout(category).doubleValue() < number.doubleValue()) {
+                    if(less && getReadout(category).doubleValue() <= number.doubleValue()) {
                         return true;  
                     } else if(!less && getReadout(category).doubleValue() >= number.doubleValue()) {
                         return true;

@@ -324,6 +324,24 @@ public class PRQATest extends TestCase {
         }
         assertTrue(caught);
     }
+		
+		@Test
+		public void testComaprisonForLowerValues() throws PrqaReadingException {
+				PRQAComplianceStatus status = new PRQAComplianceStatus();
+        status.setFileCompliance(new Double(10.0));
+        status.setProjectCompliance(new Double(20.22));
+        status.setMessages(1000);
+        
+        PRQAComplianceStatus statusTwo = new PRQAComplianceStatus();
+        statusTwo.setFileCompliance(new Double(67.45));
+        statusTwo.setMessages(1000);
+        statusTwo.setProjectCompliance(new Double(56.09));
+        
+				boolean res = status.createComparison(PRQAContext.ComparisonSettings.Threshold, StatusCategory.Messages).compareIsLower(1000);
+				assertTrue(res);
+				
+
+		}
     
 //    @Test
 //    public void testParseVeryLargeReport() {

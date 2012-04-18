@@ -15,10 +15,6 @@ public class PRQAContext {
         @Override
         public String toString() {
             switch(this) {
-//                case Greaterorequaltolast:
-//                    return "Greater or equal to last";
-//                case Lessorequaltolast:
-//                    return "Less or equal to last";
                 default:
                     return this.name();
             }
@@ -26,7 +22,7 @@ public class PRQAContext {
     }
     
     public enum AnalysisTools {
-        QAC, QACpp, Java
+        QAC, QACPP
     }
 
     public enum ReportingTools {
