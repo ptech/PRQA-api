@@ -114,6 +114,8 @@ public abstract class PRQAStatus implements PRQAReading,Serializable {
         
         /**
          * Small piece of logic. Given a setting for comparison, find out if the readings are better or worse than the user expected. 
+         * 
+         * The comparison always have a value for 
          * @param number
          * @param less
          * @return
@@ -136,8 +138,7 @@ public abstract class PRQAStatus implements PRQAReading,Serializable {
                 case Threshold:
                     this.compareValue = number;
                     if(this.compareValue == null)
-                        return true;
-                    
+                        return true;                  
                     if(less && getReadout(category).doubleValue() <= number.doubleValue()) {
                         return true;  
                     } else if(!less && getReadout(category).doubleValue() >= number.doubleValue()) {
