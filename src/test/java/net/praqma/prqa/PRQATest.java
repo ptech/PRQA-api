@@ -325,46 +325,41 @@ public class PRQATest extends TestCase {
         assertTrue(caught);
     }
 		
-		@Test
-		public void testComaprisonForLowerValues() throws PrqaReadingException {
-				PRQAComplianceStatus status = new PRQAComplianceStatus();
+    @Test
+    public void testComaprisonForLowerValues() throws PrqaReadingException {
+        PRQAComplianceStatus status = new PRQAComplianceStatus();
+        status.setFileCompliance(new Double(10.0));
+        status.setProjectCompliance(new Double(20.22));
+        status.setMessages(1000);
+
+        PRQAComplianceStatus statusTwo = new PRQAComplianceStatus();
+        statusTwo.setFileCompliance(new Double(67.45));
+        statusTwo.setMessages(1000);
+        statusTwo.setProjectCompliance(new Double(56.09));
+
+        boolean res = status.createComparison(PRQAContext.ComparisonSettings.Threshold, StatusCategory.Messages).compareIsEqualOrLower(1000);
+        boolean res2 = status.createComparison(PRQAContext.ComparisonSettings.Improvement, StatusCategory.Messages, statusTwo).compareIsEqualOrLower(1000);
+        assertTrue(res2);
+        assertTrue(res);
+    }
+    
+    @Test
+    public void testCompareDoubleValues() throws PrqaReadingException {
+        PRQAComplianceStatus status = new PRQAComplianceStatus();
         status.setFileCompliance(new Double(10.0));
         status.setProjectCompliance(new Double(20.22));
         status.setMessages(1000);
         
         PRQAComplianceStatus statusTwo = new PRQAComplianceStatus();
-        statusTwo.setFileCompliance(new Double(67.45));
+        statusTwo.setFileCompliance(new Double(10.00));
         statusTwo.setMessages(1000);
         statusTwo.setProjectCompliance(new Double(56.09));
+        boolean res = status.createComparison(PRQAContext.ComparisonSettings.Threshold, StatusCategory.FileCompliance).compareIsEqualOrLower(10);
+        boolean res2 = status.createComparison(PRQAContext.ComparisonSettings.Threshold, StatusCategory.FileCompliance).compareIsEqualOrHigher(10);
+        assertTrue(res);
+        assertTrue(res2);
         
-				boolean res = status.createComparison(PRQAContext.ComparisonSettings.Threshold, StatusCategory.Messages).compareIsLower(1000);
-				assertTrue(res);
-				
-
-		}
-    
-//    @Test
-//    public void testParseVeryLargeReport() {
-//        try {
-//            File f = copyResourceToTestFile(this.getClass(), "Quality_Report_LARGE.xhtml");
-//            QualityReportParser parser = new QualityReportParser();
-//            System.out.println(f.getPath());
-//            parser.setFullReportPath(f.getPath());
-//            
-//            String res1 = parser.getResult(QualityReportParser.totalNumberOfFilesPattern);
-//            String res2 = parser.getResult(QualityReportParser.linesOfCodePattern);
-//            String res3 = parser.getResult(QualityReportParser.numberOfSourceFilesPattern);
-//            String res4 = parser.getResult(QualityReportParser.numberOfFunctionsPattern);
-//
-//            assertNotNull(res1);
-//            assertNotNull(res2);
-//            assertNotNull(res3);
-//            assertNotNull(res4);
-//
-//        } catch (PrqaException ex) {
-//            fail();
-//        } catch (IOException ex) {
-//            fail();
-//        }
-//    }
+        boolean res3 = status.createComparison(PRQAContext.ComparisonSettings.Threshold, StatusCategory.FileCompliance).compareIsEqualOrHigher(10.1);
+        assertFalse(res3);
+    }
 }

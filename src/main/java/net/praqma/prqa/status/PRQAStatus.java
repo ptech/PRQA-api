@@ -119,7 +119,7 @@ public abstract class PRQAStatus implements PRQAReading,Serializable {
          * @return
          * @throws net.praqma.jenkins.plugin.prqa.PrqaException.PrqaReadingException 
          */
-        public boolean compareIsLower(Number number) throws PrqaException.PrqaReadingException {
+        public boolean compareIsEqualOrLower(Number number) throws PrqaException.PrqaReadingException {
             return compare(number, true);
         }
         
@@ -149,7 +149,7 @@ public abstract class PRQAStatus implements PRQAReading,Serializable {
                     if(lastReading == null) {
                         return true;
                     }
-                    if(less && getReadout(category).doubleValue() < lastReading.getReadout(category).doubleValue()) {
+                    if(less && getReadout(category).doubleValue() <= lastReading.getReadout(category).doubleValue()) {
                         return true;  
                     } else if(!less && getReadout(category).doubleValue() >= lastReading.getReadout(category).doubleValue()) {
                         return true;
