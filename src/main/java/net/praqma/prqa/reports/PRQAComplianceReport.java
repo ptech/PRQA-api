@@ -4,7 +4,6 @@
  */
 package net.praqma.prqa.reports;
 
-import java.util.List;
 import net.praqma.jenkins.plugin.prqa.PrqaException;
 import net.praqma.prqa.parsers.ComplianceReportHtmlParser;
 import net.praqma.prqa.products.QAR;

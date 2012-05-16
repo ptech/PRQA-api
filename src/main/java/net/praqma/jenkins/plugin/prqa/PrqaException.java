@@ -18,7 +18,7 @@ public class PrqaException extends Exception {
     }
     
     public PrqaException(String msg, Throwable cause) {
-        super(msg,cause);
+        super(msg, cause);
     }
     
     /**

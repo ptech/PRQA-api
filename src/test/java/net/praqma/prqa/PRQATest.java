@@ -3,8 +3,6 @@ package net.praqma.prqa;
 import java.io.*;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import junit.framework.TestCase;
 import net.praqma.jenkins.plugin.prqa.PrqaException;
 import net.praqma.jenkins.plugin.prqa.PrqaException.PrqaReadingException;

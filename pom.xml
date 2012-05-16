@@ -4,7 +4,7 @@
 
     <groupId>net.praqma</groupId>
     <artifactId>prqa</artifactId>
-    <version>0.5-SNAPSHOT</version>
+    <version>0.6-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>prqa</name>
@@ -60,21 +60,16 @@
         </extensions>
     </build> 
     <repositories>
-        <repository>
-            <id>m.g.o-public</id>
-            <url>http://maven.glassfish.org/content/groups/public/</url>
-        </repository>
-        <repository>
-            <id>praqma-repo</id>
-			<name>libs-release</name>
-            <url>http://localhost:8081/artifactory/libs-release/</url>
-        </repository>
+		<repository>
+			<id>praqma-repo</id>
+			<url>http://code.praqma.net/repo/maven/</url>
+		</repository>
     </repositories>
     <dependencies>
         <dependency>
             <groupId>net.praqma</groupId>
             <artifactId>praqmajutils</artifactId>
-            <version>0.1.18</version>
+            <version>0.1.19</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
