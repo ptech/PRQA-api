@@ -4,7 +4,7 @@
 
     <groupId>net.praqma</groupId>
     <artifactId>prqa</artifactId>
-    <version>0.6-SNAPSHOT</version>
+    <version>0.7-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>prqa</name>
@@ -12,13 +12,49 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
+        
+    <profiles>
+        <profile>
+            <id>copertura</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>cobertura-maven-plugin</artifactId>
+                        <version>2.4</version>
+                        <configuration>
+                            <formats>
+                                <format>html</format>
+                                <format>xml</format>
+                            </formats>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>do-coverage</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>cobertura</goal>
+                                </goals>
+                                <!-- <inherited>false</inherited> <configuration> </configuration> -->
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+    
     <distributionManagement>
+        <snapshotRepository>
+            <id>ubuntu</id>
+            <name>ubuntu-snapshots</name>
+            <url>http://217.116.243.220:8081/artifactory/libs-snapshot-local</url>
+        </snapshotRepository>
         <repository>
-            <id>praqma</id>
-            <name>praqma</name>
-            <url>scpexe://10.10.1.25:/var/www/repo/maven</url>
-        </repository>
+            <id>ubuntu</id>
+            <name>ubuntu-releases</name>
+            <url>http://217.116.243.220:8081/artifactory/libs-release-local</url>      
+        </repository>       
     </distributionManagement>
 
     <build>
@@ -58,13 +94,23 @@
                 <version>1.0</version>
             </extension>
         </extensions>
-    </build> 
+    </build>
+    
     <repositories>
+        <!--
 		<repository>
 			<id>praqma-repo</id>
 			<url>http://code.praqma.net/repo/maven/</url>
 		</repository>
+        -->
+        <repository>
+            <id>ubuntu</id>
+            <name>ubuntu-releases</name>
+            <url>http://217.116.243.220:8081/artifactory/repo</url>
+        </repository>
     </repositories>
+   
+
     <dependencies>
         <dependency>
             <groupId>net.praqma</groupId>

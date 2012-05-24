@@ -45,5 +45,12 @@ public class PrqaException extends Exception {
         }
     }
     
-    
+    public static class PrqaSetupException extends PrqaException {
+        public PrqaSetupException(String message) {
+            super(message);
+        }
+        public PrqaSetupException(String message, Exception ex) {
+            super(message,ex);
+        }
+    }  
 }
