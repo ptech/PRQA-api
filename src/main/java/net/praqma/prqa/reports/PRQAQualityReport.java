@@ -16,7 +16,7 @@ import net.praqma.util.execute.CommandLineException;
  *
  * @author Praqma
  */
-public class PRQAQualityReport extends PRQAReport<PRQAQualityStatus,String> {
+public class PRQAQualityReport extends PRQAReport<PRQAQualityStatus> {
     
     public PRQAQualityReport(QAR qar) {
         this.qar = qar;
@@ -24,7 +24,7 @@ public class PRQAQualityReport extends PRQAReport<PRQAQualityStatus,String> {
     }
 
     @Override
-    public PRQAQualityStatus completeTask(String parameter) throws PrqaException {
+    public PRQAQualityStatus completeTask() throws PrqaException {
         parser.setFullReportPath(this.getFullReportPath());
         cmdResult = null;
         try {
@@ -44,10 +44,5 @@ public class PRQAQualityReport extends PRQAReport<PRQAQualityStatus,String> {
         status.setNumberOfSourceFiles(Integer.parseInt(parser.getResult(QualityReportParser.numberOfSourceFilesPattern)));
         status.setTotalNumberOfFiles(Integer.parseInt(parser.getResult(QualityReportParser.totalNumberOfFilesPattern)));        
         return status;        
-    }
-
-    @Override
-    public PRQAQualityStatus completeTask() throws PrqaException {
-        return completeTask(getFullReportPath());
     }
 }

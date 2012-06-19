@@ -45,16 +45,11 @@
     </profiles>
     
     <distributionManagement>
-        <snapshotRepository>
-            <id>ubuntu</id>
-            <name>ubuntu-snapshots</name>
-            <url>http://217.116.243.220:8081/artifactory/libs-snapshot-local</url>
-        </snapshotRepository>
         <repository>
-            <id>ubuntu</id>
-            <name>ubuntu-releases</name>
-            <url>http://217.116.243.220:8081/artifactory/libs-release-local</url>      
-        </repository>       
+            <id>praqma</id>
+            <name>praqma</name>
+            <url>scpexe://10.10.1.25:/var/www/repo/maven</url>
+        </repository>      
     </distributionManagement>
 
     <build>
@@ -86,32 +81,16 @@
                 </configuration>
             </plugin>
         </plugins>
-        <!--
-        <extensions>           
+        <extensions>
             <extension>
                 <groupId>org.apache.maven.wagon</groupId>
                 <artifactId>wagon-ssh-external</artifactId>
                 <version>1.0</version>
-            </extension>
+        </extension>
         </extensions>
-        -->
+        
     </build>
     
-    <repositories>
-        <!--
-		<repository>
-			<id>praqma-repo</id>
-			<url>http://code.praqma.net/repo/maven/</url>
-		</repository>
-        -->
-        <repository>
-            <id>ubuntu</id>
-            <name>ubuntu-releases</name>
-            <url>http://217.116.243.220:8081/artifactory/repo</url>
-        </repository>
-    </repositories>
-   
-
     <dependencies>
         <dependency>
             <groupId>net.praqma</groupId>
@@ -126,6 +105,14 @@
             <type>jar</type>
         </dependency>
     </dependencies>
+    
+    <repositories>
+        <repository>
+            <id>praqma-repo</id>
+            <url>http://code.praqma.net/repo/maven/</url>
+        </repository>
+	</repositories>
+     
     <scm>
         <connection>scm:git:http://github.com/Praqma/PRQA-api.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/Praqma/PRQA-api.git</developerConnection>

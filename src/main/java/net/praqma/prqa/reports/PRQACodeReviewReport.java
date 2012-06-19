@@ -15,7 +15,7 @@ import net.praqma.util.execute.CommandLineException;
  *
  * @author Praqma
  */
-public class PRQACodeReviewReport extends PRQAReport<PRQACodeReviewStatus,String> {
+public class PRQACodeReviewReport extends PRQAReport<PRQACodeReviewStatus> {
 
     public PRQACodeReviewReport(QAR qar) {
         this.qar = qar;
@@ -23,7 +23,7 @@ public class PRQACodeReviewReport extends PRQAReport<PRQACodeReviewStatus,String
     }
 
     @Override
-    public PRQACodeReviewStatus completeTask(String parameter) throws PrqaException {
+    public PRQACodeReviewStatus completeTask() throws PrqaException {
         parser.setFullReportPath(this.getFullReportPath());
         cmdResult = null;
         try 
@@ -36,10 +36,5 @@ public class PRQACodeReviewReport extends PRQAReport<PRQACodeReviewStatus,String
         }
         PRQACodeReviewStatus status = new PRQACodeReviewStatus();
         return status;
-    }
-
-    @Override
-    public PRQACodeReviewStatus completeTask() throws PrqaException {
-        return completeTask(getFullReportPath());
     }
 }

@@ -15,7 +15,7 @@ import net.praqma.util.execute.CommandLineException;
  *
  * @author Praqma
  */
-public class PRQAComplianceReport extends PRQAReport<PRQAComplianceStatus,String> {    
+public class PRQAComplianceReport extends PRQAReport<PRQAComplianceStatus> {    
     /**
      * A compliance report. Takes a command line wrapper for Programming Research QAR tool. Each report must implement their own parser.
      * 
@@ -33,7 +33,7 @@ public class PRQAComplianceReport extends PRQAReport<PRQAComplianceStatus,String
      */
     
     @Override
-    public PRQAComplianceStatus completeTask(String reportpath) throws PrqaException {
+    public PRQAComplianceStatus completeTask() throws PrqaException {
         parser.setFullReportPath(this.getFullReportPath());
         cmdResult = null;
         try {
@@ -50,10 +50,5 @@ public class PRQAComplianceReport extends PRQAReport<PRQAComplianceStatus,String
         stat.setProjectCompliance(Double.parseDouble(parser.getResult(ComplianceReportHtmlParser.projectCompliancePattern)));
         stat.setFileCompliance(Double.parseDouble(parser.getResult(ComplianceReportHtmlParser.fileCompliancePattern)));    
         return stat;
-    }
-
-    @Override
-    public PRQAComplianceStatus completeTask() throws PrqaException {
-        return completeTask(getFullReportPath());
     }
 }

@@ -17,7 +17,7 @@ import net.praqma.util.execute.CmdResult;
  * 
  * @author Praqma
  */
-public abstract class PRQAReport<T extends PRQAStatus,K> implements Serializable {
+public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
     
     protected ReportHtmlParser parser;
     protected QAR qar;
@@ -96,6 +96,5 @@ public abstract class PRQAReport<T extends PRQAStatus,K> implements Serializable
      * @return
      * @throws PrqaException 
      */
-    public abstract T completeTask(K parameter) throws PrqaException;
     public abstract <T> T completeTask() throws PrqaException;
 }

@@ -15,7 +15,7 @@ import net.praqma.util.execute.CommandLineException;
  *
  * @author Praqma
  */
-public class PRQASuppressionReport extends PRQAReport<PRQASuppressionStatus,String> {
+public class PRQASuppressionReport extends PRQAReport<PRQASuppressionStatus> {
     
     public PRQASuppressionReport(QAR qar) throws PrqaException {
         this.qar = qar;
@@ -23,7 +23,7 @@ public class PRQASuppressionReport extends PRQAReport<PRQASuppressionStatus,Stri
     }
 
     @Override
-    public PRQASuppressionStatus completeTask(String parameter) throws PrqaException {
+    public PRQASuppressionStatus completeTask() throws PrqaException {
         parser.setFullReportPath(this.getFullReportPath());
         cmdResult = null;
         try {
@@ -42,10 +42,5 @@ public class PRQASuppressionReport extends PRQAReport<PRQASuppressionStatus,Stri
         status.setPctMsgsSuppressed(Double.parseDouble(parser.getResult(SuppressionReportParser.percentageOfMsgSuppressedPattern)));
         status.setUniqueMsgsSuppressed(Integer.parseInt(parser.getResult(SuppressionReportParser.uniqueMessagesSuppressedPattern)));        
         return status;
-    }
-
-    @Override
-    public PRQASuppressionStatus completeTask() throws PrqaException {
-        return completeTask(getFullReportPath()); 
     }
 }
