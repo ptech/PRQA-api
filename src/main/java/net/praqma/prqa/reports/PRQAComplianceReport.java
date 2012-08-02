@@ -4,7 +4,9 @@
  */
 package net.praqma.prqa.reports;
 
+import java.io.File;
 import net.praqma.jenkins.plugin.prqa.PrqaException;
+import net.praqma.prqa.PRQACommandLineUtility;
 import net.praqma.prqa.parsers.ComplianceReportHtmlParser;
 import net.praqma.prqa.products.QAR;
 import net.praqma.prqa.status.PRQAComplianceStatus;
@@ -19,10 +21,10 @@ public class PRQAComplianceReport extends PRQAReport<PRQAComplianceStatus> {
     /**
      * A compliance report. Takes a command line wrapper for Programming Research QAR tool. Each report must implement their own parser.
      * 
-     * @param qar 
+     * @param reportTool 
      */
     public PRQAComplianceReport(QAR qar) {
-        this.qar = qar;
+        this.reportTool = qar;
         this.parser = new ComplianceReportHtmlParser();
     }
    
@@ -33,17 +35,17 @@ public class PRQAComplianceReport extends PRQAReport<PRQAComplianceStatus> {
      */
     
     @Override
-    public PRQAComplianceStatus completeTask() throws PrqaException {
+    public PRQAComplianceStatus generateReport() throws PrqaException {
         parser.setFullReportPath(this.getFullReportPath());
         cmdResult = null;
         try {
-            cmdResult = qar.execute();
+            cmdResult = reportTool.generateReportFiles();
         } catch (AbnormalProcessTerminationException ex) {
-            throw new PrqaException.PrqaCommandLineException(qar,ex);            
+            throw new PrqaException.PrqaCommandLineException(reportTool, ex);            
         } catch (CommandLineException cle) {      
-            throw new PrqaException.PrqaCommandLineException(qar,cle);            
+            throw new PrqaException.PrqaCommandLineException(reportTool, cle);            
         }
-       
+               
         //Parse it.
         PRQAComplianceStatus stat = new PRQAComplianceStatus();        
         stat.setMessages(Integer.parseInt(parser.getResult(ComplianceReportHtmlParser.totalMessagesPattern)));

@@ -17,21 +17,21 @@ import net.praqma.util.execute.CommandLineException;
  */
 public class PRQASuppressionReport extends PRQAReport<PRQASuppressionStatus> {
     
-    public PRQASuppressionReport(QAR qar) throws PrqaException {
-        this.qar = qar;
+    public PRQASuppressionReport(QAR qar) {
+        this.reportTool = qar;
         this.parser = new SuppressionReportParser();
     }
 
     @Override
-    public PRQASuppressionStatus completeTask() throws PrqaException {
+    public PRQASuppressionStatus generateReport() throws PrqaException {
         parser.setFullReportPath(this.getFullReportPath());
         cmdResult = null;
         try {
-            cmdResult = qar.execute();
+            cmdResult = reportTool.generateReportFiles();
         } catch (AbnormalProcessTerminationException ex) {
-            throw new PrqaException.PrqaCommandLineException(qar,ex);            
+            throw new PrqaException.PrqaCommandLineException(reportTool,ex);            
         } catch (CommandLineException cle) {      
-            throw new PrqaException.PrqaCommandLineException(qar,cle);            
+            throw new PrqaException.PrqaCommandLineException(reportTool,cle);            
         }
         
         

@@ -15,6 +15,8 @@ import net.praqma.util.execute.CmdResult;
  */
 public class QACpp extends PRQA {
     
+    public QACpp() {}
+    
     public QACpp(String command) {
         this.command = command;
     }
@@ -32,8 +34,21 @@ public class QACpp extends PRQA {
         return PRQACommandLineUtility.run(command,new File(commandBase));
     }
     
-    @Override
-    public CmdResult execute() {
+    public CmdResult generateReportFiles() {
         return PRQACommandLineUtility.run(command,new File(commandBase));
     }
+
+    @Override
+    public String getProductVersion() {
+        String version = "Unknown";
+        
+        return version;
+    }
+
+    @Override
+    public String toString() {
+        return "qacpp";
+    }
+    
+    
 }

@@ -6,6 +6,8 @@ package net.praqma.prqa.products;
 
 import java.io.Serializable;
 import java.util.LinkedList;
+import net.praqma.prqa.PRQA;
+import org.apache.commons.lang.StringUtils;
 
 /**
  *
@@ -55,6 +57,10 @@ public class PRQACommandBuilder implements Serializable{
         return String.format("-maseq \"%s\"", commandSequence);
     }
     
+    public static String getVcsXmlString(String vcsXmlPath) {
+        return String.format("-po qav::prqavcs=\\\"%s\\\"", vcsXmlPath);
+    }
+    
     /**
      * Embedding QAR using QAW. Analysis will be performed and the analysis results used as a base for our report.
      * 
@@ -92,7 +98,17 @@ public class PRQACommandBuilder implements Serializable{
         if(escapeInputParameterWhiteSpace)
             return String.format("-po qar::output_path=%s", outpath.replace(" ", "\\ "));        
         return String.format("-po qar::output_path=%s", outpath);        
-    }    
+    }
+    
+    public static String getQavOutPathParameter(String outpath) {
+        return getQavOutPathParameter(outpath, false);
+    }
+    
+    public static String getQavOutPathParameter(String outpath, boolean escapeInputParameterWhiteSpace) {
+        if(escapeInputParameterWhiteSpace)
+            return String.format("-po qav::outputh=%s", outpath.replace(" ", "\\ "));        
+        return String.format("-po qav::output=%s", outpath);    
+    }
     
     /**
      * Uses the project names as specfied in the project file
@@ -119,8 +135,61 @@ public class PRQACommandBuilder implements Serializable{
     public static String getProjectFile(String file) {
         return String.format("\"%s\"", file);
     }
+
+    public static String getProduct(PRQA product) {
+        return product.toString();
+    }
     
-    public static String getProduct(String product) {
-        return product;
+    public static String getHost(String hostname) {
+        return String.format("-host %s", hostname);
+    }
+    
+    public static String getUser(String user) {
+        return String.format("-user %s", user);
+    }
+    
+    public static String getPassword(String password) {
+        return String.format("-pass %s", password);
+    }
+    
+    public static String getProjectDatabase(String databaseName) {
+        return String.format("-db %s", databaseName);
+    }
+    
+    public static String getSingle(boolean useSingleSnapshotMode) {
+        if(useSingleSnapshotMode) 
+            return "-single";
+        return "";
+    }
+    
+    public static String getSnapshotName(String snapshotName) {
+        if(StringUtils.isNotBlank(snapshotName)) {
+            return String.format("-ssname %s", snapshotName);
+        }
+        return "";
+    }
+    
+    public static String getCodeAll() {
+        return "-po qav::code=all";
+    }
+    
+    /**
+     * 
+     * @param string
+     * @return 
+     */
+    
+    public static String escapeWhitespace(String string) {
+        return String.format("%s", string.replace(" ", "\\ "));
+    }
+    
+    /**
+     * 
+     * @param string
+     * @return 
+     */
+    
+    public static String wrapInQuotationMarks(String string) {
+        return String.format("\""+"%s"+"\"", string);
     }
 }

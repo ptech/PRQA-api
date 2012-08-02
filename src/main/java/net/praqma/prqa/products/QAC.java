@@ -15,6 +15,7 @@ import net.praqma.util.execute.CmdResult;
  */
 public class QAC extends PRQA {
         
+    public QAC() {}
     public QAC(String command) {
         this.command = command;
     }
@@ -32,8 +33,22 @@ public class QAC extends PRQA {
         return PRQACommandLineUtility.run(command,new File(commandBase));
     }
     
-    @Override
-    public CmdResult execute() {
+    public CmdResult generateReportFiles() {
         return PRQACommandLineUtility.run(command,new File(commandBase));
     }
+
+    @Override
+    public String getProductVersion() {
+        String productVersion = "Unknown version";
+       
+        //CmdResult res = PRQACommandLineUtility.run(this.toString()+" -version", new File(commandBase));
+       
+        return productVersion;
+    }
+
+    @Override
+    public String toString() {
+        return "qac";
+    }
+    
  }

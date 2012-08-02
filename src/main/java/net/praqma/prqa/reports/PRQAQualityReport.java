@@ -4,7 +4,6 @@
  */
 package net.praqma.prqa.reports;
 
-import java.util.List;
 import net.praqma.jenkins.plugin.prqa.PrqaException;
 import net.praqma.prqa.parsers.QualityReportParser;
 import net.praqma.prqa.products.QAR;
@@ -13,26 +12,25 @@ import net.praqma.util.execute.AbnormalProcessTerminationException;
 import net.praqma.util.execute.CommandLineException;
 
 /**
- *
  * @author Praqma
  */
 public class PRQAQualityReport extends PRQAReport<PRQAQualityStatus> {
     
     public PRQAQualityReport(QAR qar) {
-        this.qar = qar;
+        this.reportTool = qar;
         this.parser = new QualityReportParser();
     }
 
     @Override
-    public PRQAQualityStatus completeTask() throws PrqaException {
+    public PRQAQualityStatus generateReport() throws PrqaException {
         parser.setFullReportPath(this.getFullReportPath());
         cmdResult = null;
         try {
-            cmdResult = qar.execute();
+            cmdResult = reportTool.generateReportFiles();
         } catch (AbnormalProcessTerminationException ex) {
-            throw new PrqaException.PrqaCommandLineException(qar,ex);            
+            throw new PrqaException.PrqaCommandLineException(reportTool,ex);            
         } catch (CommandLineException cle) {      
-            throw new PrqaException.PrqaCommandLineException(qar,cle);            
+            throw new PrqaException.PrqaCommandLineException(reportTool,cle);            
         }
                 
         PRQAQualityStatus status = new PRQAQualityStatus();
@@ -42,7 +40,10 @@ public class PRQAQualityReport extends PRQAReport<PRQAQualityStatus> {
         status.setNumberOfFunctionMetrics(Integer.parseInt(parser.getResult(QualityReportParser.numberOfFunctionsMetricPattern)));
         status.setNumberOfFunctions(Integer.parseInt(parser.getResult(QualityReportParser.numberOfFunctionsPattern)));
         status.setNumberOfSourceFiles(Integer.parseInt(parser.getResult(QualityReportParser.numberOfSourceFilesPattern)));
-        status.setTotalNumberOfFiles(Integer.parseInt(parser.getResult(QualityReportParser.totalNumberOfFilesPattern)));        
+        status.setTotalNumberOfFiles(Integer.parseInt(parser.getResult(QualityReportParser.totalNumberOfFilesPattern)));
+        
+        
+        
         return status;        
     }
 }

@@ -20,7 +20,11 @@ public class PrqaException extends Exception {
     public PrqaException(String msg, Throwable cause) {
         super(msg, cause);
     }
-    
+
+    @Override
+    public String toString() {
+        return String.format("Caught exception with message:\n\t%s\nCaused by:\n\t%s", getMessage(),getCause());
+    }
     /**
      * A small static class. Several subtypes of the same exception.
      */
@@ -52,5 +56,11 @@ public class PrqaException extends Exception {
         public PrqaSetupException(String message, Exception ex) {
             super(message,ex);
         }
-    }  
+    }
+    
+    public static class PrqaUploadException extends PrqaException {
+        public PrqaUploadException(String message) {
+            super(message);
+        }
+    }
 }

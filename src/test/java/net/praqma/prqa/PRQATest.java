@@ -10,7 +10,9 @@ import net.praqma.prqa.parsers.ComplianceReportHtmlParser;
 import net.praqma.prqa.parsers.QualityReportParser;
 import net.praqma.prqa.parsers.SuppressionReportParser;
 import net.praqma.prqa.products.PRQACommandBuilder;
+import net.praqma.prqa.products.QACpp;
 import net.praqma.prqa.products.QAR;
+import net.praqma.prqa.products.QAV;
 import net.praqma.prqa.status.PRQAComplianceStatus;
 import net.praqma.prqa.status.PRQAQualityStatus;
 import net.praqma.prqa.status.StatusCategory;
@@ -100,7 +102,8 @@ public class PRQATest extends TestCase {
     @Test 
     public void testCreateQARCommand() {
         QAR qar = new QAR();
-        qar.getBuilder().prependArgument(PRQACommandBuilder.getProduct("qacpp"));
+        QACpp qacpp = new QACpp();
+        qar.getBuilder().prependArgument(PRQACommandBuilder.getProduct(qacpp));
         String qarString = "qar %Q %P+ %L+ "+ PRQACommandBuilder.getReportTypeParameter("Compliance") + " " +
                 PRQACommandBuilder.getProjectName() + " " + PRQACommandBuilder.getOutputPathParameter("C:\\Program\\ Files\\") + " " + PRQACommandBuilder.getViewingProgram("dummy");
         qar.getBuilder().appendArgument(PRQACommandBuilder.getMaseq(qarString));
@@ -359,5 +362,37 @@ public class PRQATest extends TestCase {
         
         boolean res3 = status.createComparison(PRQAContext.ComparisonSettings.Threshold, StatusCategory.FileCompliance).compareIsEqualOrHigher(10.1);
         assertFalse(res3);
+    }
+    
+    @Test
+    public void testPrqaExceptionPrint() {
+        PrqaException.PrqaReadingException prqerror = new PrqaException.PrqaReadingException(null, null);
+        System.out.println(prqerror);
+        
+        PrqaException.PrqaReadingException prqerror2 = new PrqaException.PrqaReadingException("Message", new IOException("IOEX"));
+        System.out.println(prqerror2);
+        
+        PrqaException.PrqaCommandLineException prqerror3 = new PrqaException.PrqaCommandLineException(new QAR(), new IOException("Ex"));
+        System.out.println(prqerror3);
+    }
+    
+    @Test
+    public void testQav() {
+        QAV qav = new QAV();
+    }
+    
+    @Test
+    public void testPrqaCommandBuilder() {
+        String codeAll = "-po qav::code=all";
+        String snapShotName = "-ssname myname";
+        String projectDatabase ="-db mydb";
+        
+        assertEquals(codeAll, PRQACommandBuilder.getCodeAll());
+        assertEquals(codeAll, PRQACommandBuilder.getSnapshotName("myname"));
+        assertEquals("", PRQACommandBuilder.getSingle(false));
+        assertEquals("-single", PRQACommandBuilder.getSingle(true));
+        assertEquals(projectDatabase, PRQACommandBuilder.getProjectDatabase("mydb"));
+        
+        
     }
 }

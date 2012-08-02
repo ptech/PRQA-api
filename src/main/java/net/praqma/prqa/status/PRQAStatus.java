@@ -87,8 +87,12 @@ public abstract class PRQAStatus implements PRQAReading,Serializable {
     }
     
     /**
-     * Small helper class for creating a comparison. Given a mode of operation (None, Threshold, Improvement) compare a given set of readings. 
+     * Small helper class for creating a comparison. Given a mode of operation (None, Threshold, Improvement) compare a given set of readings.
      * 
+     * Takes 3 arguments. The first one was the mode of operation, the second one is the category to select for comparison and the 3rd and final parameter 
+     * is the previous reading.
+     * 
+     * When the comparison is created you can choose your compare method.
      * 
      */
     public class PRQAComparisonMatrix {
@@ -143,7 +147,7 @@ public abstract class PRQAStatus implements PRQAReading,Serializable {
                         return true;  
                     } else if(!less && getReadout(category).doubleValue() >= number.doubleValue()) {
                         return true;
-                    } else {
+                    } else { 
                         return false;
                     }
                 case Improvement:
