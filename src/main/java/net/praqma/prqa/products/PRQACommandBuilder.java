@@ -18,7 +18,7 @@ public class PRQACommandBuilder implements Serializable {
 
     private String executable;
     private LinkedList<String> arguments = new LinkedList<String>();
-    private static final Logger logger;
+    private transient static final Logger logger;
 
     static {
         logger = Logger.getLogger(Config.GLOBAL_LOGGER_NAME);

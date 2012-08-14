@@ -4,15 +4,11 @@
  */
 package net.praqma.prqa.reports;
 
-import java.util.List;
 import java.util.logging.Level;
-
 import net.praqma.jenkins.plugin.prqa.PrqaException;
 import net.praqma.prqa.parsers.QualityReportParser;
 import net.praqma.prqa.products.QAR;
 import net.praqma.prqa.status.PRQAQualityStatus;
-import net.praqma.util.execute.AbnormalProcessTerminationException;
-import net.praqma.util.execute.CommandLineException;
 
 /**
  *
