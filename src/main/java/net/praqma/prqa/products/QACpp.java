@@ -18,7 +18,7 @@ import net.praqma.util.execute.CmdResult;
  */
 public class QACpp extends PRQA {
 
-    private static final Logger logger;
+    private transient static final Logger logger;
 
     static {
         logger = Logger.getLogger(Config.GLOBAL_LOGGER_NAME);

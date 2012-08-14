@@ -17,7 +17,7 @@ public abstract class PRQA implements Serializable {
     protected String commandBase;
     protected String productExecutable;
     protected String command;
-    private static final Logger logger;
+    private transient static final Logger logger;
 
     static {
         logger = Logger.getLogger(Config.GLOBAL_LOGGER_NAME);

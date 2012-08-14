@@ -23,7 +23,11 @@ import net.praqma.prqa.logging.Config;
 public abstract class ReportHtmlParser implements Serializable {
 
     protected String fullReportPath;
-    private Logger logger;
+    private static final transient Logger logger;
+
+    static {
+        logger = Logger.getLogger(Config.GLOBAL_LOGGER_NAME);
+    }
 
     /**
      * *
@@ -34,9 +38,6 @@ public abstract class ReportHtmlParser implements Serializable {
      * @return
      * @throws PrqaException
      */
-    public ReportHtmlParser() {
-        logger = Logger.getLogger(Config.GLOBAL_LOGGER_NAME);
-    }
 
     public String getFullReportPath() {
         logger.finest("Starting execution of method - getFullReportPath");
@@ -242,7 +243,7 @@ public abstract class ReportHtmlParser implements Serializable {
         }
 
         logger.log(Level.FINEST, "Returning numberOfReplacements: {0}", numberOfReplacements);
-        
+
         return numberOfReplacements;
     }
 }

@@ -16,7 +16,7 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading> {
 
     private Map<StatusCategory, Number> overrideMinimum = new EnumMap<StatusCategory, Number>(StatusCategory.class);
     private Map<StatusCategory, Number> overrideMaximum = new EnumMap<StatusCategory, Number>(StatusCategory.class);
-    private static final Logger logger;
+    private transient static final Logger logger;
 
     static {
         logger = Logger.getLogger(Config.GLOBAL_LOGGER_NAME);
