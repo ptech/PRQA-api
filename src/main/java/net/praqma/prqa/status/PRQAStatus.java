@@ -10,11 +10,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import net.praqma.jenkins.plugin.prqa.PrqaException;
 import net.praqma.prqa.PRQAContext.ComparisonSettings;
-import net.praqma.prqa.logging.Config;
 import net.praqma.prqa.PRQAReading;
+import net.praqma.prqa.logging.Config;
 
 /**
  * Base class for all status objects.
@@ -29,7 +28,7 @@ public abstract class PRQAStatus implements PRQAReading,Serializable {
     
     protected List<String> notifications = new ArrayList<String>();
     protected HashMap<StatusCategory,Number> thresholds;
-    protected Logger logger;
+    protected transient final Logger logger;
     
     public PRQAStatus() {
     	logger = Logger.getLogger(Config.GLOBAL_LOGGER_NAME);
