@@ -140,7 +140,7 @@ public abstract class ReportHtmlParser implements Serializable {
         logger.finest("File read successfully!");
 
 
-        logger.finest(String.format("Returning result: %s", result));
+        logger.finest(String.format("Returning result:"));
         for (String s : result) {
             logger.log(Level.FINEST, "    {0}", s);
         }
