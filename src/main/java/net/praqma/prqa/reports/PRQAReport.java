@@ -7,14 +7,10 @@ package net.praqma.prqa.reports;
 import java.io.File;
 import java.io.Serializable;
 import net.praqma.jenkins.plugin.prqa.PrqaException;
-import net.praqma.jenkins.plugin.prqa.PrqaException.PrqaUploadException;
-import net.praqma.prqa.PRQACommandLineUtility;
 import net.praqma.prqa.PRQAContext;
 import net.praqma.prqa.parsers.ReportHtmlParser;
-import net.praqma.prqa.products.PRQACommandBuilder;
 import net.praqma.prqa.products.QAR;
 import net.praqma.prqa.status.PRQAStatus;
-import net.praqma.util.execute.AbnormalProcessTerminationException;
 import net.praqma.util.execute.CmdResult;
 
 /**
@@ -110,67 +106,31 @@ public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
      * @throws PrqaException 
      */
     public abstract <T> T generateReport() throws PrqaException;
-    /*
-    public String upload(String qavOutputPath) throws PrqaException { 
-        String importOperation ="";
+    
+    public abstract String getDisplayName();
 
-        String program ="\"C:\\Program Files (x86)\\PRQA\\QA Verify 1.3\\Client\\upload.exe\"";
-        program+=" " + PRQACommandBuilder.getHost("localhost")+ " " +PRQACommandBuilder.getUser("admin") + " " + PRQACommandBuilder.getPassword("admin") + " " + PRQACommandBuilder.getProjectDatabase(uploadProjectName)+ " " + qavOutputPath + " " + PRQACommandBuilder.getSingle(singleSnapshotMode);       
-        program+= " " + PRQACommandBuilder.getSnapshotName(snapshotName);
-        importOperation+=" "+program;
-        try {
-            PRQACommandLineUtility.run(importOperation, new File(qavOutputPath));
-        } catch (Exception ex) {
-            throw new PrqaException.PrqaUploadException("Upload filed in upload phase!");
-        }
-        return importOperation;
-    }
-    */
-    /*
-    public String qavImport(String outputPath) throws PrqaUploadException {
-        //String outpath = String.format("-po qav::output=%s", reportTool.getProjectFile());
-        String outpath = PRQACommandBuilder.getQavOutPathParameter(outputPath);
-        
-        //String commandTest = "QAW qac \"C:\\Program Files (x86)\\PRQA\\QAC-8.0-R\\projects\\examples\\examples.prj\" ";
-        String command ="QAW "+reportTool.getAnalysisTool() +" "+ PRQACommandBuilder.getProjectFile(getReportTool().getProjectFile());
-        
-        String maseqSection ="C:\\Program\\ Files\\ (x86)\\PRQA\\QA\\ Verify\\ 1.3\\Client\\qaimport ";
-        maseqSection+= "%Q %L+ -sop %D ";
-        maseqSection+=PRQACommandBuilder.getVcsXmlString(vcsConfigFile);
-        maseqSection+=" " + PRQACommandBuilder.getCodeAll(); 
-        maseqSection+= " "+outpath+" %P+";
-        command+=" "+PRQACommandBuilder.getMaseq(maseqSection, false);
-        
-        try {
-            PRQACommandLineUtility.run(command, new File(outputPath));
-        } catch (Exception ex) {
-            throw new PrqaException.PrqaUploadException("Upload filed in import phase!");
-        }
-        
-        return command;
-    }
-    */
-    
-    
     public static PRQAReport create(PRQAContext.QARReportType type, QAR reportTool) {
         PRQAReport report = null;
         switch(type) {
             case Compliance:
-                report = new PRQAComplianceReport(reportTool);                                  
+                report = new PRQAComplianceReport();
+                report.reportTool = reportTool;
                 return report;
             case Quality:
-                report = new PRQAQualityReport(reportTool);
+                report = new PRQAQualityReport();
+                report.reportTool = reportTool;
                 return report;
             case CodeReview:
-                report = new PRQACodeReviewReport(reportTool);                
+                report = new PRQACodeReviewReport();                
+                report.reportTool = reportTool;
                 return report;
             case Suppression:
-                report = new PRQASuppressionReport(reportTool);
+                report = new PRQASuppressionReport();
+                report.reportTool = reportTool;
                 return report;
             default:
                 throw new IllegalArgumentException("No valid report type given!");
-        }
-        
+        }   
     }
 
     /**
@@ -186,86 +146,4 @@ public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
     public void setUseCrossModuleAnalysis(boolean useCrossModuleAnalysis) {
         this.useCrossModuleAnalysis = useCrossModuleAnalysis;
     }
-
-    /**
-     * @return the publishToQAV
-     */
-    /*
-    public boolean isPublishToQAV() {
-        return publishToQAV;
-    }
-*/
-    /**
-     * @param publishToQAV the publishToQAV to set
-     */
-    /*
-    public void setPublishToQAV(boolean publishToQAV) {
-        this.publishToQAV = publishToQAV;
-    }
-*/
-    /**
-     * @return the singleSnapshotMode
-     */
-    /*
-    public boolean isSingleSnapshotMode() {
-        return singleSnapshotMode;
-    }
-*/
-    /**
-     * @param singleSnapshotMode the singleSnapshotMode to set
-     */
-    /*
-    public void setSingleSnapshotMode(boolean singleSnapshotMode) {
-        this.singleSnapshotMode = singleSnapshotMode;
-    }
-*/
-    /**
-     * @return the uploadProjectName
-     */
-    /*
-    public String getUploadProjectName() {
-        return uploadProjectName;
-    }
-*/
-    /**
-     * @param uploadProjectName the uploadProjectName to set
-     */
-    /*
-    public void setUploadProjectName(String uploadProjectName) {
-        this.uploadProjectName = uploadProjectName;
-    }
-*/
-    /**
-     * @return the snapshotName
-     */
-    /*
-    public String getSnapshotName() {
-        return snapshotName;
-    }
-*/
-    /**
-     * @param snapshotName the snapshotName to set
-     */
-    /*
-    public void setSnapshotName(String snapshotName, int builNumber) {
-        this.snapshotName = snapshotName+builNumber;
-    }
-*/
-    /**
-     * @return the vcsConfigFile
-     */
-    /*
-    public String getVcsConfigFile() {
-        return vcsConfigFile;
-    }
-*/
-    /**
-     * @param vcsConfigFile the vcsConfigFile to set
-     */
-    /*
-    public void setVcsConfigFile(String vcsConfigFile) {
-        this.vcsConfigFile = vcsConfigFile;
-    }
-    
-    */
 }

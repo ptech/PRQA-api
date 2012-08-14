@@ -21,6 +21,10 @@ public class PRQASuppressionReport extends PRQAReport<PRQASuppressionStatus> {
         this.reportTool = qar;
         this.parser = new SuppressionReportParser();
     }
+    
+    public PRQASuppressionReport() {
+        this.parser = new SuppressionReportParser();
+    }
 
     @Override
     public PRQASuppressionStatus generateReport() throws PrqaException {
@@ -42,5 +46,10 @@ public class PRQASuppressionReport extends PRQAReport<PRQASuppressionStatus> {
         status.setPctMsgsSuppressed(Double.parseDouble(parser.getResult(SuppressionReportParser.percentageOfMsgSuppressedPattern)));
         status.setUniqueMsgsSuppressed(Integer.parseInt(parser.getResult(SuppressionReportParser.uniqueMessagesSuppressedPattern)));        
         return status;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return "Suppression";
     }
 }

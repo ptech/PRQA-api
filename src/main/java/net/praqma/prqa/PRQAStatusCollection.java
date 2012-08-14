@@ -48,8 +48,11 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading>  {
             } catch (PrqaException.PrqaReadingException iex) {
                 throw iex;
             }
-            if(tmp >= max)
+            
+            if(tmp >= max) {
                 max = tmp;
+            }
+                
         }
         return max;
     }
@@ -73,8 +76,9 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading>  {
             } catch (PrqaException.PrqaReadingException iex) {
                 throw iex;
             }
-            if(tmp <= min)
+            if(tmp <= min) {
                 min = tmp;
+            }
         }
         return min;
     }

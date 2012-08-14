@@ -22,6 +22,10 @@ public class PRQACodeReviewReport extends PRQAReport<PRQACodeReviewStatus> {
         this.reportTool = qar;
         this.parser = new CodeReviewReportParser();
     }
+    
+    public PRQACodeReviewReport() {
+        this.parser = new CodeReviewReportParser();
+    }
 
     @Override
     public PRQACodeReviewStatus generateReport() throws PrqaException {
@@ -37,5 +41,10 @@ public class PRQACodeReviewReport extends PRQAReport<PRQACodeReviewStatus> {
         }
         PRQACodeReviewStatus status = new PRQACodeReviewStatus();
         return status;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return "Code Review";
     }
 }

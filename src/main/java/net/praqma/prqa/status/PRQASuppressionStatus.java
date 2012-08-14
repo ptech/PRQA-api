@@ -30,7 +30,7 @@ public class PRQASuppressionStatus extends PRQAStatus {
                 return getNumberOfFiles();
             case LinesOfCode:
                 return getLinesOfCode();
-            case UniqueMessagesSupperessed:
+            case UniqueMessagesSuppressed:
                 return getUniqueMsgsSuppressed();
             case MessagesSuppressed:
                 return getMsgsSuppressed();
@@ -50,7 +50,7 @@ public class PRQASuppressionStatus extends PRQAStatus {
             case LinesOfCode:
                 setLinesOfCode(value.intValue());
                 break;
-            case UniqueMessagesSupperessed:
+            case UniqueMessagesSuppressed:
                 setUniqueMsgsSuppressed(value.intValue());
                 break;
             case MessagesSuppressed:

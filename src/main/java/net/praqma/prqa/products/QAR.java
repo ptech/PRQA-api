@@ -4,7 +4,6 @@
  */
 package net.praqma.prqa.products;
 
-import com.sun.corba.se.impl.oa.toa.TOA;
 import java.io.File;
 import net.praqma.prqa.PRQA;
 import net.praqma.prqa.PRQACommandLineUtility;

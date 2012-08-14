@@ -20,6 +20,10 @@ public class PRQAQualityReport extends PRQAReport<PRQAQualityStatus> {
         this.reportTool = qar;
         this.parser = new QualityReportParser();
     }
+        
+    public PRQAQualityReport() {
+        this.parser = new QualityReportParser();
+    }
 
     @Override
     public PRQAQualityStatus generateReport() throws PrqaException {
@@ -45,5 +49,10 @@ public class PRQAQualityReport extends PRQAReport<PRQAQualityStatus> {
         
         
         return status;        
+    }
+
+    @Override
+    public String getDisplayName() {
+        return "Quality";
     }
 }

@@ -14,7 +14,7 @@ package net.praqma.prqa.status;
         NumberOfFileMetrics,
         NumberOfFunctions,
         NumberOfFunctionMetrics,
-        UniqueMessagesSupperessed,
+        UniqueMessagesSuppressed,
         MessagesSuppressed,
         PercentageMessagesSuppressed,
         NumberOfClasses,
