@@ -26,7 +26,7 @@ public class QAR extends PRQA {
     private PRQACommandBuilder builder;
     private QARReportType type;
     public static final String QAW_WRAPPER = "qaw";
-    private static final Logger logger;
+    private transient static final Logger logger;
 
     /**
      * QAR is invoked using QAW where this is taken as parameter in the QAW command.
