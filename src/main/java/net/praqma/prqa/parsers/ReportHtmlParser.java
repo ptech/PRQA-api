@@ -106,6 +106,7 @@ public abstract class ReportHtmlParser implements Serializable {
                     result.add(match.group(1));
 
                     logger.finest(String.format("Returning result: %s", result));
+                    // TODO figure out a way to make it so that we only loop through them if logging is enabled
                     for (String s : result) {
                         logger.log(Level.FINEST, "    {0}", s);
                     }
@@ -141,6 +142,7 @@ public abstract class ReportHtmlParser implements Serializable {
 
 
         logger.finest(String.format("Returning result: %s", result));
+        // TODO figure out a way to make it so that we only loop through them if logging is enabled
         for (String s : result) {
             logger.log(Level.FINEST, "    {0}", s);
         }

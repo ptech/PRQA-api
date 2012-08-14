@@ -4,7 +4,10 @@
  */
 package net.praqma.prqa.reports;
 
+import java.util.logging.Level;
+
 import net.praqma.jenkins.plugin.prqa.PrqaException;
+import net.praqma.prqa.parsers.QualityReportParser;
 import net.praqma.prqa.parsers.SuppressionReportParser;
 import net.praqma.prqa.products.QAR;
 import net.praqma.prqa.status.PRQASuppressionStatus;
@@ -18,29 +21,26 @@ import net.praqma.util.execute.CommandLineException;
 public class PRQASuppressionReport extends PRQAReport<PRQASuppressionStatus> {
     
     public PRQASuppressionReport(QAR qar) throws PrqaException {
-        this.qar = qar;
+    	super(qar);
+        logger.log(Level.FINEST, "Constructor and super constructor called for class PRQASuppressionReport");
         this.parser = new SuppressionReportParser();
     }
 
     @Override
     public PRQASuppressionStatus completeTask() throws PrqaException {
-        parser.setFullReportPath(this.getFullReportPath());
-        cmdResult = null;
-        try {
-            cmdResult = qar.execute();
-        } catch (AbnormalProcessTerminationException ex) {
-            throw new PrqaException.PrqaCommandLineException(qar,ex);            
-        } catch (CommandLineException cle) {      
-            throw new PrqaException.PrqaCommandLineException(qar,cle);            
-        }
-        
+    	logger.log(Level.FINEST, "Starting execution of method - completeTask");
+    	
+        executeQAR();
         
         PRQASuppressionStatus status = new PRQASuppressionStatus();
         status.setLinesOfCode(Integer.parseInt(parser.getResult(SuppressionReportParser.linesOfCodePattern)));
         status.setNumberOfFiles(Integer.parseInt(parser.getResult(SuppressionReportParser.numberOfFilesPattern)));
         status.setMsgsSuppressed(Integer.parseInt(parser.getResult(SuppressionReportParser.numberOfMessagesSuppressedPattern)));
         status.setPctMsgsSuppressed(Double.parseDouble(parser.getResult(SuppressionReportParser.percentageOfMsgSuppressedPattern)));
-        status.setUniqueMsgsSuppressed(Integer.parseInt(parser.getResult(SuppressionReportParser.uniqueMessagesSuppressedPattern)));        
+        status.setUniqueMsgsSuppressed(Integer.parseInt(parser.getResult(SuppressionReportParser.uniqueMessagesSuppressedPattern)));
+        
+        logger.log(Level.FINEST, "Returning status {0}", status);
+        
         return status;
     }
 }

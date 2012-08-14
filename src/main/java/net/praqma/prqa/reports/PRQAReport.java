@@ -6,11 +6,18 @@ package net.praqma.prqa.reports;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import net.praqma.jenkins.plugin.prqa.PrqaException;
+import net.praqma.jenkins.plugin.prqa.PrqaException.PrqaCommandLineException;
+import net.praqma.prqa.logging.Config;
 import net.praqma.prqa.parsers.ReportHtmlParser;
 import net.praqma.prqa.products.QAR;
 import net.praqma.prqa.status.PRQAStatus;
+import net.praqma.util.execute.AbnormalProcessTerminationException;
 import net.praqma.util.execute.CmdResult;
+import net.praqma.util.execute.CommandLineException;
 
 /**
  *Class defining a report. The report holds a commmand line too. (The QAR object) and also holds a result, 
@@ -19,6 +26,8 @@ import net.praqma.util.execute.CmdResult;
  */
 public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
     
+	protected Logger logger;
+	
     protected ReportHtmlParser parser;
     protected QAR qar;
     
@@ -33,7 +42,14 @@ public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
     public static String XML_REPORT_EXTENSION = "Report."+PRQAReport.XML;
     public static String HTML_REPORT_EXTENSION = "Report."+PRQAReport.HTML;
     
-    public void setParser(ReportHtmlParser parser) {
+    public PRQAReport(QAR qar) {
+    	logger = Logger.getLogger(Config.GLOBAL_LOGGER_NAME);
+    	logger.log(Level.FINEST, "Constructor called for class PRQAReport");
+    	logger.log(Level.FINEST, "Input parameter qar type: {0}; value: {1}", new Object[]{qar.getClass(), qar});
+        this.qar = qar;
+	}
+
+	public void setParser(ReportHtmlParser parser) {
         this.parser = parser;
     }
     
@@ -82,7 +98,7 @@ public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
     }
     
     /**
-     * Knowing the nameing convention. This will give us a complate path to the report. This should always be the Workspace directory, followed by 
+     * Knowing the naming convention. This will give us a complete path to the report. This should always be the Workspace directory, followed by 
      * the template name for the report.
      * @return A string representing the full path to the generated report.
      */
@@ -90,8 +106,36 @@ public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
         return qar.getReportOutputPath()+File.separator+getNamingTemplate();
     }
     
+    public void executeQAR() throws PrqaException {
+    	logger.log(Level.FINEST, "Starting execution of method - executeQAR");
+		
+		String fullReportPath = this.getFullReportPath();
+		logger.log(Level.FINEST, "Setting full report path to: {0}", fullReportPath);
+		
+		parser.setFullReportPath(fullReportPath);
+		cmdResult = null;
+		
+		logger.log(Level.FINEST, "Attempting to execute qar...");
+		try {
+			cmdResult = qar.execute();
+		} catch (AbnormalProcessTerminationException ex) {
+			PrqaException.PrqaCommandLineException exception = new PrqaException.PrqaCommandLineException(qar, ex);
+			
+			logger.log(Level.SEVERE, "Exception thrown type: {0}; message: {1}", new Object[]{exception.getClass(), exception.getMessage()});
+			
+			throw exception;
+		} catch (CommandLineException cle) {
+			PrqaException.PrqaCommandLineException exception = new PrqaException.PrqaCommandLineException(qar, cle);
+			
+			logger.log(Level.SEVERE, "Exception thrown type: {0}; message: {1}", new Object[]{exception.getClass(), exception.getMessage()});
+			
+			throw exception;
+		}
+		logger.log(Level.FINEST, "qar executed successfully!");
+    }
+    
     /**
-     * The task taht is to be executed on the master/slave hosting the job. 
+     * The task that is to be executed on the master/slave hosting the job. 
      * @param parameter
      * @return
      * @throws PrqaException 

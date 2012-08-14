@@ -8,8 +8,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import net.praqma.jenkins.plugin.prqa.PrqaException;
 import net.praqma.prqa.PRQAContext.ComparisonSettings;
+import net.praqma.prqa.logging.Config;
 import net.praqma.prqa.PRQAReading;
 
 /**
@@ -25,6 +29,11 @@ public abstract class PRQAStatus implements PRQAReading,Serializable {
     
     protected List<String> notifications = new ArrayList<String>();
     protected HashMap<StatusCategory,Number> thresholds;
+    protected Logger logger;
+    
+    public PRQAStatus() {
+    	logger = Logger.getLogger(Config.GLOBAL_LOGGER_NAME);
+    }
     
      /**
      * 
@@ -33,7 +42,12 @@ public abstract class PRQAStatus implements PRQAReading,Serializable {
     
     @Override
     public void addNotification(String message) {
-        notifications.add(message);
+    	logger.log(Level.FINEST, "Starting execution of method - addNotification");
+    	logger.log(Level.FINEST, "Input parameter message type: {0}; value: {1}", new Object[]{message.getClass(), message});
+        
+    	notifications.add(message);
+        
+        logger.log(Level.FINEST, "Ending execution of method - setFullReportPath");
     }
 		
     public HashMap<StatusCategory,Number> getThresholds() {
