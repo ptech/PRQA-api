@@ -1,6 +1,10 @@
 package net.praqma.prqa.status;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import net.praqma.jenkins.plugin.prqa.PrqaException;
+import net.praqma.prqa.logging.Config;
 
 /**
  * This class represent a compliance status readout. 3 values, file compliance, project compliance and number of messages
@@ -11,67 +15,111 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
     private int messages;
     private Double fileCompliance;
     private Double projectCompliance;
+    protected static transient Logger logger;
     
     public PRQAComplianceStatus() {}
     
     public PRQAComplianceStatus(int messages, Double fileCompliance, Double projectCompliance) {
+    	logger = Logger.getLogger(Config.GLOBAL_LOGGER_NAME);
+    	logger.log(Level.FINEST, "Constructor called for class PRQAComplianceStatus");
+    	logger.log(Level.FINEST, "Input parameter messages type: {0}; value: {1}", new Object[]{"int", messages});
+    	logger.log(Level.FINEST, "Input parameter fileCompliance type: {0}; value: {1}", new Object[]{fileCompliance.getClass(), fileCompliance});
+    	logger.log(Level.FINEST, "Input parameter projectCompliance type: {0}; value: {1}", new Object[]{projectCompliance.getClass(), projectCompliance});
         this.messages = messages;
         this.fileCompliance = fileCompliance;
         this.projectCompliance = projectCompliance;
+        logger.log(Level.FINEST, "Ending execution of constructor - PRQAComplianceStatus");
     }
 
     public int getMessages() {
+    	logger.log(Level.FINEST, "Starting execution of method - getMessages");
+    	logger.log(Level.FINEST, "Returning messages: {0}", messages);
         return messages;
     }
 
     public void setMessages(int messages) {
+    	logger.log(Level.FINEST, "Starting execution of method - setMessages");
+		logger.log(Level.FINEST, "Input parameter messages type: {0}; value: {1}", new Object[]{"int", messages});
         this.messages = messages;
+        logger.log(Level.FINEST, "Ending execution of method - setMessages");
     }
     
     public Double getFileCompliance() {
+    	logger.log(Level.FINEST, "Starting execution of method - getFileCompliance");
+    	logger.log(Level.FINEST, "Returning this.fileCompliance: {0}", this.fileCompliance);
         return this.fileCompliance;
     }
     
     public void setFileCompliance(Double fileCompliance) {
+    	logger.log(Level.FINEST, "Starting execution of method - setFileCompliance");
+		logger.log(Level.FINEST, "Input parameter fileCompliance type: {0}; value: {1}", new Object[]{fileCompliance.getClass(), fileCompliance});
         this.fileCompliance = fileCompliance;
+        logger.log(Level.FINEST, "Ending execution of method - setFileCompliance");
     }
     
     public Double getProjectCompliance() {
+    	logger.log(Level.FINEST, "Starting execution of method - getProjectCompliance");
+    	logger.log(Level.FINEST, "Returning this.projectCompliance: {0}", this.projectCompliance);
         return this.projectCompliance;
     }
     
     public void setProjectCompliance(Double projCompliance) {
+    	logger.log(Level.FINEST, "Starting execution of method - setProjectCompliance");
+		logger.log(Level.FINEST, "Input parameter projCompliance type: {0}; value: {1}", new Object[]{projCompliance.getClass(), projCompliance});
         this.projectCompliance = projCompliance;
+        logger.log(Level.FINEST, "Ending execution of method - setProjectCompliance");
     }
     
     @Override
     public Number getReadout(StatusCategory cat) throws PrqaException.PrqaReadingException {
+    	logger.log(Level.FINEST, "Starting execution of method - getReadout");
+    	logger.log(Level.FINEST, "Input parameter cat type: {0}; value: {1}", new Object[]{cat.getClass(), cat});
         switch(cat) {
             case ProjectCompliance:
+            	logger.log(Level.FINEST, "Returning this.getProjectCompliance(): {0}", this.getProjectCompliance());
                 return this.getProjectCompliance();
             case Messages:
+            	logger.log(Level.FINEST, "Returning this.getMessages(): {0}", this.getMessages());
                 return this.getMessages();
             case FileCompliance:
+            	logger.log(Level.FINEST, "Returning this.getFileCompliance(): {0}", this.getFileCompliance());
                 return this.getFileCompliance();
             default:
-                throw new PrqaException.PrqaReadingException(String.format("Didn't find category %s for class %s", cat, this.getClass()));
+            	PrqaException.PrqaReadingException exception = new PrqaException.PrqaReadingException(String.format("Didn't find category %s for class %s", cat, this.getClass()));
+    			
+    			logger.log(Level.SEVERE, "Exception thrown type: {0}; message: {1}", new Object[]{exception.getClass(), exception.getMessage()});
+    			
+    			throw exception;
         }
     }   
     
     @Override
     public void setReadout(StatusCategory category, Number value) throws PrqaException.PrqaReadingException {
+    	logger.log(Level.FINEST, "Starting execution of method - setReadout");
+    	logger.log(Level.FINEST, "Input parameter category type: {0}; value: {1}", new Object[]{category.getClass(), category});
+    	logger.log(Level.FINEST, "Input parameter value type: {0}; value: {1}", new Object[]{value.getClass(), value});
         switch(category) {
             case ProjectCompliance:
-                setProjectCompliance(value.doubleValue());
+            	double prjCompliance = value.doubleValue();
+            	logger.log(Level.FINEST, "Setting projectCompliance to: {0}.", prjCompliance);
+                setProjectCompliance(prjCompliance);
                 break;
             case Messages:
-                setMessages(value.intValue());
+            	int msgs = value.intValue();
+            	logger.log(Level.FINEST, "Setting messages to: {0}.", msgs);
+                setMessages(msgs);
                 break;
             case FileCompliance:
-                setFileCompliance(value.doubleValue());
+            	double fileCompl = value.doubleValue();
+            	logger.log(Level.FINEST, "Setting fileCompliance to: {0}.", fileCompl);
+                setFileCompliance(fileCompl);
                 break;
             default:
-                throw new PrqaException.PrqaReadingException(String.format("Could not set value of %s for category %s in class %s",value,category,this.getClass()));
+            	PrqaException.PrqaReadingException exception = new PrqaException.PrqaReadingException(String.format("Could not set value of %s for category %s in class %s",value,category,this.getClass()));
+    			
+    			logger.log(Level.SEVERE, "Exception thrown type: {0}; message: {1}", new Object[]{exception.getClass(), exception.getMessage()});
+    			
+    			throw exception;
         }
     }
     
@@ -120,11 +168,17 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
     
     @Override
     public boolean isValid() {
-        return this.fileCompliance != null && this.projectCompliance != null;
+    	logger.log(Level.FINEST, "Starting execution of method - isValid");
+    	boolean result = this.fileCompliance != null && this.projectCompliance != null;
+    	logger.log(Level.FINEST, "Returning result: {0}", result);
+        return result;
     }
     
     public static PRQAComplianceStatus createEmptyResult() {
-        return new PRQAComplianceStatus(0, new Double(0), new Double(0));
+    	logger.log(Level.FINEST, "Starting execution of method - createEmptyResult");
+    	PRQAComplianceStatus output = new PRQAComplianceStatus(0, new Double(0), new Double(0));
+    	logger.log(Level.FINEST, "Returning output: {0}", output);
+        return output;
     }
 
     @Override
