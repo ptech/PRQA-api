@@ -56,8 +56,8 @@ public abstract class PRQA implements Serializable {
     }
 
     public String getCommand() {
-        logger.finest("Starting execution of method - getProductExecutable");
-        logger.finest(String.format("Returning value: %s", this.productExecutable));
+        logger.finest("Starting execution of method - getCommand");
+        logger.finest(String.format("Returning value: %s", this.command));
 
         return this.command;
     }
