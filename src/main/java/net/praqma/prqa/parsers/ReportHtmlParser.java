@@ -67,7 +67,7 @@ public abstract class ReportHtmlParser implements Serializable {
     }
 
     public List<String> parse(String path, Pattern pattern) throws PrqaException {
-        logger.finest("Starting execution of method - getResult");
+        logger.finest("Starting execution of method - parse");
         logger.finest(String.format("Input parameter path type: %s; value: %s", path.getClass(), path));
         logger.finest(String.format("Input parameter pattern type: %s; value: %s", pattern.getClass(), pattern));
 
@@ -219,7 +219,6 @@ public abstract class ReportHtmlParser implements Serializable {
         }
         logger.log(Level.FINEST, "File read successfully!");
 
-
         logger.log(Level.FINEST, "Deleting file.");
         //Delete original: 
         file.delete();
@@ -241,6 +240,7 @@ public abstract class ReportHtmlParser implements Serializable {
 
             throw exception;
         }
+        logger.log(Level.FINEST, "Successfully wrote to substitute file!");
 
         logger.log(Level.FINEST, "Returning numberOfReplacements: {0}", numberOfReplacements);
 

@@ -25,48 +25,59 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
     	logger.log(Level.FINEST, "Input parameter messages type: {0}; value: {1}", new Object[]{"int", messages});
     	logger.log(Level.FINEST, "Input parameter fileCompliance type: {0}; value: {1}", new Object[]{fileCompliance.getClass(), fileCompliance});
     	logger.log(Level.FINEST, "Input parameter projectCompliance type: {0}; value: {1}", new Object[]{projectCompliance.getClass(), projectCompliance});
+    	
         this.messages = messages;
         this.fileCompliance = fileCompliance;
         this.projectCompliance = projectCompliance;
+        
         logger.log(Level.FINEST, "Ending execution of constructor - PRQAComplianceStatus");
     }
 
     public int getMessages() {
     	logger.log(Level.FINEST, "Starting execution of method - getMessages");
-    	logger.log(Level.FINEST, "Returning messages: {0}", messages);
+    	logger.log(Level.FINEST, "Returning value: {0}", messages);
+    	
         return messages;
     }
 
     public void setMessages(int messages) {
     	logger.log(Level.FINEST, "Starting execution of method - setMessages");
 		logger.log(Level.FINEST, "Input parameter messages type: {0}; value: {1}", new Object[]{"int", messages});
+		
         this.messages = messages;
+        
         logger.log(Level.FINEST, "Ending execution of method - setMessages");
     }
     
     public Double getFileCompliance() {
     	logger.log(Level.FINEST, "Starting execution of method - getFileCompliance");
-    	logger.log(Level.FINEST, "Returning this.fileCompliance: {0}", this.fileCompliance);
+    	logger.log(Level.FINEST, "Returning value: {0}", this.fileCompliance);
+    	
         return this.fileCompliance;
     }
     
     public void setFileCompliance(Double fileCompliance) {
     	logger.log(Level.FINEST, "Starting execution of method - setFileCompliance");
 		logger.log(Level.FINEST, "Input parameter fileCompliance type: {0}; value: {1}", new Object[]{fileCompliance.getClass(), fileCompliance});
+		
         this.fileCompliance = fileCompliance;
+        
         logger.log(Level.FINEST, "Ending execution of method - setFileCompliance");
     }
     
     public Double getProjectCompliance() {
     	logger.log(Level.FINEST, "Starting execution of method - getProjectCompliance");
-    	logger.log(Level.FINEST, "Returning this.projectCompliance: {0}", this.projectCompliance);
+    	logger.log(Level.FINEST, "Returning value: {0}", this.projectCompliance);
+    	
         return this.projectCompliance;
     }
     
     public void setProjectCompliance(Double projCompliance) {
     	logger.log(Level.FINEST, "Starting execution of method - setProjectCompliance");
 		logger.log(Level.FINEST, "Input parameter projCompliance type: {0}; value: {1}", new Object[]{projCompliance.getClass(), projCompliance});
+		
         this.projectCompliance = projCompliance;
+        
         logger.log(Level.FINEST, "Ending execution of method - setProjectCompliance");
     }
     
@@ -74,16 +85,27 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
     public Number getReadout(StatusCategory cat) throws PrqaException.PrqaReadingException {
     	logger.log(Level.FINEST, "Starting execution of method - getReadout");
     	logger.log(Level.FINEST, "Input parameter cat type: {0}; value: {1}", new Object[]{cat.getClass(), cat});
+    	
+    	Number output;
         switch(cat) {
             case ProjectCompliance:
-            	logger.log(Level.FINEST, "Returning this.getProjectCompliance(): {0}", this.getProjectCompliance());
-                return this.getProjectCompliance();
+                output = this.getProjectCompliance();
+                
+                logger.log(Level.FINEST, "Returning value: {0}", output);
+
+                return output;
             case Messages:
-            	logger.log(Level.FINEST, "Returning this.getMessages(): {0}", this.getMessages());
-                return this.getMessages();
+                output = this.getMessages();
+                
+                logger.log(Level.FINEST, "Returning value: {0}", output);
+                
+                return output;
             case FileCompliance:
-            	logger.log(Level.FINEST, "Returning this.getFileCompliance(): {0}", this.getFileCompliance());
-                return this.getFileCompliance();
+                output = this.getFileCompliance();
+                
+                logger.log(Level.FINEST, "Returning this.getFileCompliance(): {0}", this.getFileCompliance());
+                
+                return output;
             default:
             	PrqaException.PrqaReadingException exception = new PrqaException.PrqaReadingException(String.format("Didn't find category %s for class %s", cat, this.getClass()));
     			
@@ -98,21 +120,37 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
     	logger.log(Level.FINEST, "Starting execution of method - setReadout");
     	logger.log(Level.FINEST, "Input parameter category type: {0}; value: {1}", new Object[]{category.getClass(), category});
     	logger.log(Level.FINEST, "Input parameter value type: {0}; value: {1}", new Object[]{value.getClass(), value});
+    	
         switch(category) {
             case ProjectCompliance:
             	double prjCompliance = value.doubleValue();
+            	
             	logger.log(Level.FINEST, "Setting projectCompliance to: {0}.", prjCompliance);
+            	
                 setProjectCompliance(prjCompliance);
+                
+                logger.log(Level.FINEST, "Ending execution of method - setReadout");
+                
                 break;
             case Messages:
             	int msgs = value.intValue();
+            	
             	logger.log(Level.FINEST, "Setting messages to: {0}.", msgs);
+            	
                 setMessages(msgs);
+                
+                logger.log(Level.FINEST, "Ending execution of method - setReadout");
+                
                 break;
             case FileCompliance:
             	double fileCompl = value.doubleValue();
+            	
             	logger.log(Level.FINEST, "Setting fileCompliance to: {0}.", fileCompl);
+            	
                 setFileCompliance(fileCompl);
+                
+                logger.log(Level.FINEST, "Ending execution of method - setReadout");
+                
                 break;
             default:
             	PrqaException.PrqaReadingException exception = new PrqaException.PrqaReadingException(String.format("Could not set value of %s for category %s in class %s",value,category,this.getClass()));
@@ -130,14 +168,16 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
     @Override
     public String toString() {
         String out = "";       
-        out += "Project Compliance Index : "+projectCompliance + "%\n";
-        out += "File Compliance Index : "+fileCompliance + "%\n";
-        out += "Messages : "+messages+"\n";
+        out += "Project Compliance Index : " + projectCompliance + "%" + System.getProperty("line.separator");
+        out += "File Compliance Index : " + fileCompliance + "%" + System.getProperty("line.separator");
+        out += "Messages : " + messages + System.getProperty("line.separator") ;
+        
         if(notifications != null) {
             for(String note : notifications) {
-                out += "Notify: "+note+"\n";
+                out += "Notify: " + note + System.getProperty("line.separator");
             }
         }
+        
         return out;       
     }
     
@@ -169,15 +209,21 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
     @Override
     public boolean isValid() {
     	logger.log(Level.FINEST, "Starting execution of method - isValid");
+    	
     	boolean result = this.fileCompliance != null && this.projectCompliance != null;
-    	logger.log(Level.FINEST, "Returning result: {0}", result);
+    	
+    	logger.log(Level.FINEST, "Returning value: {0}", result);
+    	
         return result;
     }
     
     public static PRQAComplianceStatus createEmptyResult() {
     	logger.log(Level.FINEST, "Starting execution of method - createEmptyResult");
+    	
     	PRQAComplianceStatus output = new PRQAComplianceStatus(0, new Double(0), new Double(0));
-    	logger.log(Level.FINEST, "Returning output: {0}", output);
+    	
+    	logger.log(Level.FINEST, "Returning value: {0}", output);
+    	
         return output;
     }
 

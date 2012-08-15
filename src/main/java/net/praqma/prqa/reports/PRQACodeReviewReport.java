@@ -19,7 +19,9 @@ public class PRQACodeReviewReport extends PRQAReport<PRQACodeReviewStatus> {
 	public PRQACodeReviewReport(QAR qar) {
 		super(qar);
         logger.log(Level.FINEST, "Constructor and super constructor called for class PRQACodeReviewReport");
+        
         this.parser = new CodeReviewReportParser();
+        
         logger.log(Level.FINEST, "Ending execution of constructor - PRQACodeReviewReport");
     }
 
@@ -31,7 +33,7 @@ public class PRQACodeReviewReport extends PRQAReport<PRQACodeReviewStatus> {
 		
 		PRQACodeReviewStatus status = new PRQACodeReviewStatus();
 		
-		logger.log(Level.FINEST, "Returning status {0}", status);
+		logger.log(Level.FINEST, "Returning value: {0}", status);
 		
 		return status;
 	}

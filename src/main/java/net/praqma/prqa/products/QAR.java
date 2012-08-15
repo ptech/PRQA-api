@@ -20,124 +20,139 @@ import net.praqma.util.execute.CmdResult;
  */
 public class QAR extends PRQA {
 
-    private String reportOutputPath;
-    private String projectFile;
-    private String product;
-    private PRQACommandBuilder builder;
-    private QARReportType type;
-    public static final String QAW_WRAPPER = "qaw";
-    private transient static final Logger logger;
+	private String reportOutputPath;
+	private String projectFile;
+	private String product;
+	private PRQACommandBuilder builder;
+	private QARReportType type;
+	public static final String QAW_WRAPPER = "qaw";
+	private transient static final Logger logger;
 
-    /**
-     * QAR is invoked using QAW where this is taken as parameter in the QAW command.
-     *
-     */
-    static {
-        logger = Logger.getLogger(Config.GLOBAL_LOGGER_NAME);
-    }
+	/**
+	 * QAR is invoked using QAW where this is taken as parameter in the QAW command.
+	 *
+	 */
+	static {
+		logger = Logger.getLogger(Config.GLOBAL_LOGGER_NAME);
+	}
 
-    public QAR() {
-        builder = new PRQACommandBuilder(QAR.QAW_WRAPPER);
-    }
+	public QAR() {
+		logger.log(Level.FINEST, "Constructor called for class QAR()");
 
-    public QAR(String product, String projectFile, QARReportType type) {
-        this.builder = new PRQACommandBuilder(QAR.QAW_WRAPPER);
-        this.product = product;
-        this.projectFile = projectFile;
-        this.type = type;
-    }
+		builder = new PRQACommandBuilder(QAR.QAW_WRAPPER);
 
-    public PRQACommandBuilder getBuilder() {
-        logger.log(Level.FINEST, "Starting execution of method - getBuilder");
-        logger.log(Level.FINEST, "Returning builder");
+		logger.log(Level.FINEST, "Ending execution of constructor - QAR()");
+	}
 
-        return builder;
-    }
+	public QAR(String product, String projectFile, QARReportType type) {
+		logger.log(Level.FINEST, "Constructor called for class QAR(String product, String projectFile, QARReportType type)");
+		logger.log(Level.FINEST, "Input parameter product type: {0}; value: {1}", new Object[]{product.getClass(), product});
+		logger.log(Level.FINEST, "Input parameter projectFile type: {0}; value: {1}", new Object[]{projectFile.getClass(), projectFile});
+		logger.log(Level.FINEST, "Input parameter type type: {0}; value: {1}", new Object[]{type.getClass(), type});
 
-    @Override
-    public CmdResult execute() {
-        logger.log(Level.FINEST, "Starting execution of method - execute()");
+		this.builder = new PRQACommandBuilder(QAR.QAW_WRAPPER);
+		this.product = product;
+		this.projectFile = projectFile;
+		this.type = type;
 
-        return PRQACommandLineUtility.run(getBuilder().getCommand(), new File(commandBase));
-    }
+		logger.log(Level.FINEST, "Ending execution of constructor - QAR(String product, String projectFile, QARReportType type)");
+	}
 
-    public void setReportOutputPath(String reportOutputPath) {
-        logger.log(Level.FINEST, "Starting execution of method - setReportOutputPath");
-        logger.log(Level.FINEST, "Input parameter argument type: {0}; value: {1}", new Object[]{reportOutputPath.getClass(), reportOutputPath});
+	public PRQACommandBuilder getBuilder() {
+		logger.log(Level.FINEST, "Starting execution of method - getBuilder");
+		logger.log(Level.FINEST, "Returning value: {0}", builder);
 
-        this.reportOutputPath = reportOutputPath;
+		return builder;
+	}
 
-        logger.log(Level.FINEST, "Ending execution of method - setProductExecutable");
-    }
+	@Override
+	public CmdResult execute() {
+		logger.log(Level.FINEST, "Starting execution of method - execute()");
 
-    public String getReportOutputPath() {
-        logger.log(Level.FINEST, "Starting execution of method - getReportOutputPath");
-        logger.log(Level.FINEST, "Returning value: {0}", this.reportOutputPath);
+		CmdResult output = PRQACommandLineUtility.run(getBuilder().getCommand(), new File(commandBase));
+		
+		logger.log(Level.FINEST, "Returning value: {0}", output);
+		
+		return output;
+	}
 
-        return this.reportOutputPath;
-    }
+	public void setReportOutputPath(String reportOutputPath) {
+		logger.log(Level.FINEST, "Starting execution of method - setReportOutputPath");
+		logger.log(Level.FINEST, "Input parameter reportOutputPath type: {0}; value: {1}", new Object[]{reportOutputPath.getClass(), reportOutputPath});
 
-    public String getProduct() {
-        logger.log(Level.FINEST, "Starting execution of method - getProduct");
-        logger.log(Level.FINEST, "Returning value: {0}", this.product);
+		this.reportOutputPath = reportOutputPath;
 
-        return this.product;
-    }
+		logger.log(Level.FINEST, "Ending execution of method - setReportOutputPath");
+	}
 
-    public void setProduct(String product) {
-        logger.log(Level.FINEST, "Starting execution of method - setProduct");
-        logger.log(Level.FINEST, "Input parameter argument type: {0}; value: {1}", new Object[]{product.getClass(), product});
+	public String getReportOutputPath() {
+		logger.log(Level.FINEST, "Starting execution of method - getReportOutputPath");
+		logger.log(Level.FINEST, "Returning value: {0}", this.reportOutputPath);
 
-        this.product = product;
+		return this.reportOutputPath;
+	}
 
-        logger.log(Level.FINEST, "Ending execution of method - setProductExecutable");
-    }
+	public String getProduct() {
+		logger.log(Level.FINEST, "Starting execution of method - getProduct");
+		logger.log(Level.FINEST, "Returning value: {0}", this.product);
 
-    public String getProjectFile() {
-        logger.log(Level.FINEST, "Starting execution of method - getProjectFile");
-        logger.log(Level.FINEST, "Returning value: {0}", this.projectFile);
+		return this.product;
+	}
 
-        return this.projectFile;
-    }
+	public void setProduct(String product) {
+		logger.log(Level.FINEST, "Starting execution of method - setProduct");
+		logger.log(Level.FINEST, "Input parameter product type: {0}; value: {1}", new Object[]{product.getClass(), product});
 
-    public void setProjectFile(String projectFile) {
-        logger.log(Level.FINEST, "Starting execution of method - setProjectFile");
-        logger.log(Level.FINEST, "Input parameter argument type: {0}; value: {1}", new Object[]{projectFile.getClass(), projectFile});
+		this.product = product;
 
-        this.projectFile = projectFile;
+		logger.log(Level.FINEST, "Ending execution of method - setProduct");
+	}
 
-        logger.log(Level.FINEST, "Ending execution of method - setProjectFile");
-    }
+	public String getProjectFile() {
+		logger.log(Level.FINEST, "Starting execution of method - getProjectFile");
+		logger.log(Level.FINEST, "Returning value: {0}", this.projectFile);
 
-    @Override
-    public String toString() {
-        String out = "";
-        out += "QAR selected project file:\t" + this.projectFile + "\n";
-        out += "QAR selected product:\t\t" + this.product + "\n";
-        out += "QAR selected report type:\t" + this.type + "\n";
+		return this.projectFile;
+	}
 
-        return out;
-    }
+	public void setProjectFile(String projectFile) {
+		logger.log(Level.FINEST, "Starting execution of method - setProjectFile");
+		logger.log(Level.FINEST, "Input parameter projectFile type: {0}; value: {1}", new Object[]{projectFile.getClass(), projectFile});
 
-    /**
-     * @return the type
-     */
-    public QARReportType getType() {
-        logger.log(Level.FINEST, "Starting execution of method - getType");
-        logger.log(Level.FINEST, "Returning value: {0}", type);
+		this.projectFile = projectFile;
 
-        return type;
-    }
+		logger.log(Level.FINEST, "Ending execution of method - setProjectFile");
+	}
 
-    /**
-     * @param type the type to set
-     */
-    public void setType(QARReportType type) {
-        logger.log(Level.FINEST, "Starting execution of method - setType");
-        logger.log(Level.FINEST, "Input parameter argument type: {0}; value: {1}", new Object[]{type.getClass(), type});
+	@Override
+	public String toString() {
+		String out = "";
+		out += "QAR selected project file:\t" + this.projectFile + System.getProperty("line.separator");
+		out += "QAR selected product:\t\t" + this.product + System.getProperty("line.separator");
+		out += "QAR selected report type:\t" + this.type + System.getProperty("line.separator");
 
-        this.type = type;
+		return out;
+	}
 
-        logger.log(Level.FINEST, "Ending execution of method - setType");
-    }
+	/**
+	 * @return the type
+	 */
+	public QARReportType getType() {
+		logger.log(Level.FINEST, "Starting execution of method - getType");
+		logger.log(Level.FINEST, "Returning value: {0}", type);
+
+		return type;
+	}
+
+	/**
+	 * @param type the type to set
+	 */
+	public void setType(QARReportType type) {
+		logger.log(Level.FINEST, "Starting execution of method - setType");
+		logger.log(Level.FINEST, "Input parameter type type: {0}; value: {1}", new Object[]{type.getClass(), type});
+
+		this.type = type;
+
+		logger.log(Level.FINEST, "Ending execution of method - setType");
+	}
 }
