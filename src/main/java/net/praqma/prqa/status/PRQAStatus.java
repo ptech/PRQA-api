@@ -222,9 +222,10 @@ public abstract class PRQAStatus implements PRQAReading, Serializable {
                 case Threshold:
                 	logger.log(Level.FINEST, "setting is Threshold");
                     this.compareValue = number;
-                    if(this.compareValue == null)
+                    if(this.compareValue == null) {
                     	logger.log(Level.FINEST, "compareValue is null, returning true");
-                        return true;                  
+                        return true;
+                    }
                     if(less && getReadout(category).doubleValue() <= number.doubleValue()) {
                     	logger.log(Level.FINEST, "less is true and category readout less than number, returning true");
                         return true;  
