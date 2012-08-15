@@ -23,7 +23,9 @@ public class PRQAComplianceReport extends PRQAReport<PRQAComplianceStatus> {
     public PRQAComplianceReport(QAR qar) {
     	super(qar);
         logger.log(Level.FINEST, "Constructor and super constructor called for class PRQAComplianceReport");
+        
         this.parser = new ComplianceReportHtmlParser();
+        
         logger.log(Level.FINEST, "Ending execution of constructor - PRQAComplianceReport");
     }
    
@@ -45,7 +47,7 @@ public class PRQAComplianceReport extends PRQAReport<PRQAComplianceStatus> {
         status.setProjectCompliance(Double.parseDouble(parser.getResult(ComplianceReportHtmlParser.projectCompliancePattern)));
         status.setFileCompliance(Double.parseDouble(parser.getResult(ComplianceReportHtmlParser.fileCompliancePattern)));
         
-        logger.log(Level.FINEST, "Returning status {0}", status);
+        logger.log(Level.FINEST, "Returning value: {0}", status);
         
         return status;
     }
