@@ -20,6 +20,7 @@ public class PRQACodeReviewReport extends PRQAReport<PRQACodeReviewStatus> {
 		super(qar);
         logger.log(Level.FINEST, "Constructor and super constructor called for class PRQACodeReviewReport");
         this.parser = new CodeReviewReportParser();
+        logger.log(Level.FINEST, "Ending execution of constructor - PRQACodeReviewReport");
     }
 
 	@Override

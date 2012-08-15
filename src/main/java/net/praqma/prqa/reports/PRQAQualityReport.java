@@ -20,6 +20,7 @@ public class PRQAQualityReport extends PRQAReport<PRQAQualityStatus> {
         super(qar);
         logger.log(Level.FINEST, "Constructor and super constructor called for class PRQAQualityReport");
         this.parser = new QualityReportParser();
+        logger.log(Level.FINEST, "Ending execution of constructor - PRQAQualityReport");
     }
 
     @Override

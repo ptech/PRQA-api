@@ -24,6 +24,7 @@ public class PRQAComplianceReport extends PRQAReport<PRQAComplianceStatus> {
     	super(qar);
         logger.log(Level.FINEST, "Constructor and super constructor called for class PRQAComplianceReport");
         this.parser = new ComplianceReportHtmlParser();
+        logger.log(Level.FINEST, "Ending execution of constructor - PRQAComplianceReport");
     }
    
     /**

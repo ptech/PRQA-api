@@ -20,6 +20,7 @@ public class PRQASuppressionReport extends PRQAReport<PRQASuppressionStatus> {
     	super(qar);
         logger.log(Level.FINEST, "Constructor and super constructor called for class PRQASuppressionReport");
         this.parser = new SuppressionReportParser();
+        logger.log(Level.FINEST, "Ending execution of constructor - PRQASuppressionReport");
     }
 
     @Override

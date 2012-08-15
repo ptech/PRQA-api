@@ -46,6 +46,7 @@ public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
     	logger.log(Level.FINEST, "Constructor called for class PRQAReport");
     	logger.log(Level.FINEST, "Input parameter qar type: {0}; value: {1}", new Object[]{qar.getClass(), qar});
         this.qar = qar;
+        logger.log(Level.FINEST, "Ending execution of constructor - PRQAReport");
 	}
 
 	public void setParser(ReportHtmlParser parser) {
@@ -68,8 +69,8 @@ public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
     }
     
     public void setQar(QAR qar) {
-    	logger.log(Level.FINEST, "Starting execution of method - setParser");
-		logger.log(Level.FINEST, "Input parameter parser type: {0}; value: {1}", new Object[]{parser.getClass(), parser});
+    	logger.log(Level.FINEST, "Starting execution of method - setQar");
+		logger.log(Level.FINEST, "Input parameter qar type: {0}; value: {1}", new Object[]{qar.getClass(), qar});
         this.qar = qar;
         logger.log(Level.FINEST, "Ending execution of method - setQar");
     }
