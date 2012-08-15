@@ -4,12 +4,11 @@
  */
 package net.praqma.prqa.reports;
 
+import java.util.logging.Level;
 import net.praqma.jenkins.plugin.prqa.PrqaException;
 import net.praqma.prqa.parsers.ComplianceReportHtmlParser;
 import net.praqma.prqa.products.QAR;
 import net.praqma.prqa.status.PRQAComplianceStatus;
-import net.praqma.util.execute.AbnormalProcessTerminationException;
-import net.praqma.util.execute.CommandLineException;
 
 /**
  *
@@ -22,8 +21,10 @@ public class PRQAComplianceReport extends PRQAReport<PRQAComplianceStatus> {
      * @param qar 
      */
     public PRQAComplianceReport(QAR qar) {
-        this.qar = qar;
+    	super(qar);
+        logger.log(Level.FINEST, "Constructor and super constructor called for class PRQAComplianceReport");
         this.parser = new ComplianceReportHtmlParser();
+        logger.log(Level.FINEST, "Ending execution of constructor - PRQAComplianceReport");
     }
    
     /**
@@ -34,21 +35,18 @@ public class PRQAComplianceReport extends PRQAReport<PRQAComplianceStatus> {
     
     @Override
     public PRQAComplianceStatus completeTask() throws PrqaException {
-        parser.setFullReportPath(this.getFullReportPath());
-        cmdResult = null;
-        try {
-            cmdResult = qar.execute();
-        } catch (AbnormalProcessTerminationException ex) {
-            throw new PrqaException.PrqaCommandLineException(qar,ex);            
-        } catch (CommandLineException cle) {      
-            throw new PrqaException.PrqaCommandLineException(qar,cle);            
-        }
-       
+    	logger.log(Level.FINEST, "Starting execution of method - completeTask");
+    	
+        executeQAR();
+        
         //Parse it.
-        PRQAComplianceStatus stat = new PRQAComplianceStatus();        
-        stat.setMessages(Integer.parseInt(parser.getResult(ComplianceReportHtmlParser.totalMessagesPattern)));
-        stat.setProjectCompliance(Double.parseDouble(parser.getResult(ComplianceReportHtmlParser.projectCompliancePattern)));
-        stat.setFileCompliance(Double.parseDouble(parser.getResult(ComplianceReportHtmlParser.fileCompliancePattern)));    
-        return stat;
+        PRQAComplianceStatus status = new PRQAComplianceStatus();
+        status.setMessages(Integer.parseInt(parser.getResult(ComplianceReportHtmlParser.totalMessagesPattern)));
+        status.setProjectCompliance(Double.parseDouble(parser.getResult(ComplianceReportHtmlParser.projectCompliancePattern)));
+        status.setFileCompliance(Double.parseDouble(parser.getResult(ComplianceReportHtmlParser.fileCompliancePattern)));
+        
+        logger.log(Level.FINEST, "Returning status {0}", status);
+        
+        return status;
     }
 }
