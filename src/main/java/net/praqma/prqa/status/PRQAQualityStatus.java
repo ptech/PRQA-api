@@ -33,28 +33,61 @@ public class PRQAQualityStatus extends PRQAStatus {
 	@Override
 	public Number getReadout(StatusCategory category) throws PrqaException.PrqaReadingException {
 		logger.log(Level.FINEST, "Starting execution of method - getReadout");
-		logger.log(Level.FINEST, "Input parameter argument type: {0}; value: {1}", new Object[]{category.getClass(), category});
+		logger.log(Level.FINEST, "Input parameter category type: {0}; value: {1}", new Object[]{category.getClass(), category});
 
+		Number output;
 		switch(category) {
 		case NumberOfFunctionMetrics:
-			return getNumberOfFunctionMetrics();
+			output = getNumberOfFunctionMetrics();
+			
+			logger.log(Level.FINEST, "Returning value: {0}", output);
+			
+			return output;
 		case NumberOfFunctions:
-			return getNumberOfFunctions();
+			output = getNumberOfFunctions();
+			
+			logger.log(Level.FINEST, "Returning value: {0}", output);
+			
+			return output;
 		case NumberOfSourceFiles:
-			return getNumberOfSourceFiles();
+			output = getNumberOfSourceFiles();
+			
+			logger.log(Level.FINEST, "Returning value: {0}", output);
+			
+			return output;
 		case TotalNumberOfFiles:
-			return getTotalNumberOfFiles();
+			output = getTotalNumberOfFiles();
+			
+			logger.log(Level.FINEST, "Returning value: {0}", output);
+			
+			return output;
 		case LinesOfCode:
-			return getLinesOfCode();
+			output = getLinesOfCode();
+			
+			logger.log(Level.FINEST, "Returning value: {0}", output);
+			
+			return output;
 		case NumberOfFileMetrics:
-			return getNumberOfFileMetrics();
+			output = getNumberOfFileMetrics();
+			
+			logger.log(Level.FINEST, "Returning value: {0}", output);
+			
+			return output;
 		case NumberOfClassMetrics:
-			return getNumberOfClassMetrics();
+			output = getNumberOfClassMetrics();
+			
+			logger.log(Level.FINEST, "Returning value: {0}", output);
+			
+			return output;
 		case NumberOfClasses:
-			return getNumberOfClasses();
+			output = getNumberOfClasses();
+			
+			logger.log(Level.FINEST, "Returning value: {0}", output);
+			
+			return output;
 		default:
 			PrqaException.PrqaReadingException exception;
-			exception = new PrqaException.PrqaReadingException(String.format("Dident find category %s for class %s", category, this.getClass()));
+			exception = new PrqaException.PrqaReadingException(String.format("Didn't find category %s for class %s", category, this.getClass()));
 
 			logger.log(Level.SEVERE, "Exception thrown type: {0}; message: {1}", new Object[]{exception.getClass(), exception.getMessage()});
 
@@ -65,55 +98,63 @@ public class PRQAQualityStatus extends PRQAStatus {
 	@Override
 	public void setReadout(StatusCategory category, Number value) throws PrqaException.PrqaReadingException {
 		logger.log(Level.FINEST, "Starting execution of method - setReadout");
-		logger.log(Level.FINEST, "Input parameter argument type: {0}; value: {1}", new Object[]{category.getClass(), category});
-		logger.log(Level.FINEST, "Input parameter argument type: {0}; value: {1}", new Object[]{value.getClass(), value});
+		logger.log(Level.FINEST, "Input parameter category type: {0}; value: {1}", new Object[]{category.getClass(), category});
+		logger.log(Level.FINEST, "Input parameter value type: {0}; value: {1}", new Object[]{value.getClass(), value});
 
 		switch(category) {
 		case NumberOfFunctionMetrics:
 			setNumberOfFunctionMetrics(value.intValue());
-
+			
+			logger.log(Level.FINEST, "Setting numberOfFunctionMetrics to: {0}.", value.intValue());
 			logger.log(Level.FINEST, "Ending execution of method - setReadout");
 
 			break;
 		case NumberOfFunctions:
 			setNumberOfFunctions(value.intValue());
 
+			logger.log(Level.FINEST, "Setting numberOfFunctions to: {0}.", value.intValue());
 			logger.log(Level.FINEST, "Ending execution of method - setReadout");
 
 			break;
 		case NumberOfSourceFiles:
 			setNumberOfSourceFiles(value.intValue());
 
+			logger.log(Level.FINEST, "Setting numberOfSourceFiles to: {0}.", value.intValue());
 			logger.log(Level.FINEST, "Ending execution of method - setReadout");
 
 			break;
 		case TotalNumberOfFiles:
 			setTotalNumberOfFiles(value.intValue());
 
+			logger.log(Level.FINEST, "Setting totalNumberOfFiles to: {0}.", value.intValue());
 			logger.log(Level.FINEST, "Ending execution of method - setReadout");
 
 			break;
 		case LinesOfCode:
 			setLinesOfCode(value.intValue());
 
+			logger.log(Level.FINEST, "Setting linesOfCode to: {0}.", value.intValue());
 			logger.log(Level.FINEST, "Ending execution of method - setReadout");
 
 			break;
 		case NumberOfFileMetrics:
 			setNumberOfFileMetrics(value.intValue());
 
+			logger.log(Level.FINEST, "Setting numberOfFileMetrics to: {0}.", value.intValue());
 			logger.log(Level.FINEST, "Ending execution of method - setReadout");
 
 			break;
 		case NumberOfClasses:
 			setNumberOfClasses(value.intValue());
 
+			logger.log(Level.FINEST, "Setting numberOfClasses to: {0}.", value.intValue());
 			logger.log(Level.FINEST, "Ending execution of method - setReadout");
 
 			break;
 		case NumberOfClassMetrics:
 			setNumberOfClassMetrics(value.intValue());
 
+			logger.log(Level.FINEST, "Setting numberOfClassMetrics to: {0}.", value.intValue());
 			logger.log(Level.FINEST, "Ending execution of method - setReadout");
 
 			break;
@@ -136,7 +177,7 @@ public class PRQAQualityStatus extends PRQAStatus {
 
 	public void setNumberOfClasses(int numberOfClasses) {
 		logger.log(Level.FINEST, "Starting execution of method - setNumberOfClasses");
-		logger.log(Level.FINEST, "Input parameter argument type: {0}; value: {1}", new Object[]{"int", numberOfClasses});
+		logger.log(Level.FINEST, "Input parameter numberOfClasses type: {0}; value: {1}", new Object[]{"int", numberOfClasses});
 
 		this.numberOfClasses = numberOfClasses;
 
@@ -152,7 +193,7 @@ public class PRQAQualityStatus extends PRQAStatus {
 
 	public void setNumberOfClassMetrics(int numberOfClassMetrics) {
 		logger.log(Level.FINEST, "Starting execution of method - setNumberOfClassMetrics");
-		logger.log(Level.FINEST, "Input parameter argument type: {0}; value: {1}", new Object[]{"int", numberOfClassMetrics});
+		logger.log(Level.FINEST, "Input parameter numberOfClassMetrics type: {0}; value: {1}", new Object[]{"int", numberOfClassMetrics});
 
 		this.numberOfClassMetrics = numberOfClassMetrics;
 
@@ -174,7 +215,7 @@ public class PRQAQualityStatus extends PRQAStatus {
 	 */
 	public void setTotalNumberOfFiles(int totalNumberOfFiles) {
 		logger.log(Level.FINEST, "Starting execution of method - setTotalNumberOfFiles");
-		logger.log(Level.FINEST, "Input parameter argument type: {0}; value: {1}", new Object[]{"int", totalNumberOfFiles});
+		logger.log(Level.FINEST, "Input parameter totalNumberOfFiles type: {0}; value: {1}", new Object[]{"int", totalNumberOfFiles});
 
 		this.totalNumberOfFiles = totalNumberOfFiles;
 
@@ -196,7 +237,7 @@ public class PRQAQualityStatus extends PRQAStatus {
 	 */
 	public void setLinesOfCode(int linesOfCode) {
 		logger.log(Level.FINEST, "Starting execution of method - setLinesOfCode");
-		logger.log(Level.FINEST, "Input parameter argument type: {0}; value: {1}", new Object[]{"int", linesOfCode});
+		logger.log(Level.FINEST, "Input parameter linesOfCode type: {0}; value: {1}", new Object[]{"int", linesOfCode});
 
 		this.linesOfCode = linesOfCode;
 
@@ -218,7 +259,7 @@ public class PRQAQualityStatus extends PRQAStatus {
 	 */
 	public void setNumberOfSourceFiles(int numberOfSourceFiles) {
 		logger.log(Level.FINEST, "Starting execution of method - setNumberOfSourceFiles");
-		logger.log(Level.FINEST, "Input parameter argument type: {0}; value: {1}", new Object[]{"int", numberOfSourceFiles});
+		logger.log(Level.FINEST, "Input parameter numberOfSourceFiles type: {0}; value: {1}", new Object[]{"int", numberOfSourceFiles});
 
 		this.numberOfSourceFiles = numberOfSourceFiles;
 
@@ -240,7 +281,7 @@ public class PRQAQualityStatus extends PRQAStatus {
 	 */
 	public void setNumberOfFileMetrics(int numberOfFileMetrics) {
 		logger.log(Level.FINEST, "Starting execution of method - setNumberOfFileMetrics");
-		logger.log(Level.FINEST, "Input parameter argument type: {0}; value: {1}", new Object[]{"int", numberOfFileMetrics});
+		logger.log(Level.FINEST, "Input parameter numberOfFileMetrics type: {0}; value: {1}", new Object[]{"int", numberOfFileMetrics});
 
 		this.numberOfFileMetrics = numberOfFileMetrics;
 
@@ -262,7 +303,7 @@ public class PRQAQualityStatus extends PRQAStatus {
 	 */
 	public void setNumberOfFunctions(int numberOfFunctions) {
 		logger.log(Level.FINEST, "Starting execution of method - setNumberOfFunctions");
-		logger.log(Level.FINEST, "Input parameter argument type: {0}; value: {1}", new Object[]{"int", numberOfFunctions});
+		logger.log(Level.FINEST, "Input parameter numberOfFunctions type: {0}; value: {1}", new Object[]{"int", numberOfFunctions});
 
 		this.numberOfFunctions = numberOfFunctions;
 
@@ -284,7 +325,7 @@ public class PRQAQualityStatus extends PRQAStatus {
 	 */
 	public void setNumberOfFunctionMetrics(int numberOfFunctionMetrics) {
 		logger.log(Level.FINEST, "Starting execution of method - setNumberOfFunctionMetrics");
-		logger.log(Level.FINEST, "Input parameter argument type: {0}; value: {1}", new Object[]{"int", numberOfFunctionMetrics});
+		logger.log(Level.FINEST, "Input parameter numberOfFunctionMetrics type: {0}; value: {1}", new Object[]{"int", numberOfFunctionMetrics});
 
 		this.numberOfFunctionMetrics = numberOfFunctionMetrics;
 

@@ -45,46 +45,57 @@ public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
     	logger = Logger.getLogger(Config.GLOBAL_LOGGER_NAME);
     	logger.log(Level.FINEST, "Constructor called for class PRQAReport");
     	logger.log(Level.FINEST, "Input parameter qar type: {0}; value: {1}", new Object[]{qar.getClass(), qar});
+    	
         this.qar = qar;
+        
         logger.log(Level.FINEST, "Ending execution of constructor - PRQAReport");
 	}
 
 	public void setParser(ReportHtmlParser parser) {
 		logger.log(Level.FINEST, "Starting execution of method - setParser");
 		logger.log(Level.FINEST, "Input parameter parser type: {0}; value: {1}", new Object[]{parser.getClass(), parser});
+		
         this.parser = parser;
+        
         logger.log(Level.FINEST, "Ending execution of method - setParser");
     }
     
     public ReportHtmlParser getParser() {
     	logger.log(Level.FINEST, "Starting execution of method - getParser");
-    	logger.log(Level.FINEST, "Returning this.parser: {0}", this.parser);
+    	logger.log(Level.FINEST, "Returning value: {0}", this.parser);
+    	
         return this.parser;
     }
     
     public QAR getQar() {
     	logger.log(Level.FINEST, "Starting execution of method - getQar");
-    	logger.log(Level.FINEST, "Returning this.qar: {0}", this.qar);
+    	logger.log(Level.FINEST, "Returning value: {0}", this.qar);
+    	
         return this.qar;
     }
     
     public void setQar(QAR qar) {
     	logger.log(Level.FINEST, "Starting execution of method - setQar");
 		logger.log(Level.FINEST, "Input parameter qar type: {0}; value: {1}", new Object[]{qar.getClass(), qar});
+		
         this.qar = qar;
+        
         logger.log(Level.FINEST, "Ending execution of method - setQar");
     }
     
     public CmdResult getCmdResult() {
     	logger.log(Level.FINEST, "Starting execution of method - getCmdResult");
-    	logger.log(Level.FINEST, "Returning this.cmdResult: {0}", this.cmdResult);
+    	logger.log(Level.FINEST, "Returning value: {0}", this.cmdResult);
+    	
         return this.cmdResult;
     }
     
     public void setCmdResult(CmdResult res) {
     	logger.log(Level.FINEST, "Starting execution of method - setCmdResult");
 		logger.log(Level.FINEST, "Input parameter res type: {0}; value: {1}", new Object[]{res.getClass(), res});
+		
         this.cmdResult = res;
+        
         logger.log(Level.FINEST, "Ending execution of method - setCmdResult");
     }
     
@@ -94,9 +105,11 @@ public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
      */
     public String getNamingTemplate() {
     	logger.log(Level.FINEST, "Starting execution of method - getNamingTemplate()");
+    	
     	String result = qar.getType() + " " + PRQAReport.XHTML_REPORT_EXTENSION;
     	
-    	logger.log(Level.FINEST, "Returning result: {0}", result);
+    	logger.log(Level.FINEST, "Returning value: {0}", result);
+    	
         return result;
     }
     
@@ -118,7 +131,8 @@ public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
     	
     	String result = qar.getType() + " " + extension;
     	
-    	logger.log(Level.FINEST, "Returning result: {0}", result);
+    	logger.log(Level.FINEST, "Returning value: {0}", result);
+    	
         return result;
     }
     
@@ -132,7 +146,8 @@ public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
     	
     	String result = qar.getReportOutputPath() + File.separator + getNamingTemplate();
     	
-    	logger.log(Level.FINEST, "Returning result: {0}", result);
+    	logger.log(Level.FINEST, "Returning value: {0}", result);
+    	
         return result;
     }
     
@@ -140,6 +155,7 @@ public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
     	logger.log(Level.FINEST, "Starting execution of method - executeQAR");
 		
 		String fullReportPath = this.getFullReportPath();
+		
 		logger.log(Level.FINEST, "Setting full report path to: {0}", fullReportPath);
 		
 		parser.setFullReportPath(fullReportPath);

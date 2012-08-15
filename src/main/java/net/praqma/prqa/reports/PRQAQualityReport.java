@@ -19,7 +19,9 @@ public class PRQAQualityReport extends PRQAReport<PRQAQualityStatus> {
     public PRQAQualityReport(QAR qar) {
         super(qar);
         logger.log(Level.FINEST, "Constructor and super constructor called for class PRQAQualityReport");
+        
         this.parser = new QualityReportParser();
+        
         logger.log(Level.FINEST, "Ending execution of constructor - PRQAQualityReport");
     }
 
@@ -38,7 +40,7 @@ public class PRQAQualityReport extends PRQAReport<PRQAQualityStatus> {
         status.setNumberOfSourceFiles(Integer.parseInt(parser.getResult(QualityReportParser.numberOfSourceFilesPattern)));
         status.setTotalNumberOfFiles(Integer.parseInt(parser.getResult(QualityReportParser.totalNumberOfFilesPattern)));
         
-        logger.log(Level.FINEST, "Returning status {0}", status);
+        logger.log(Level.FINEST, "Returning value: {0}", status);
         
         return status;        
     }
