@@ -62,5 +62,9 @@ public class PrqaException extends Exception {
         public PrqaUploadException(String message) {
             super(message);
         }
+        
+        public PrqaUploadException(String message, Exception ex) {
+            super(message, ex);
+        }
     }
 }

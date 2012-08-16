@@ -80,7 +80,11 @@ public class QACpp extends PRQA {
     
     @Override
     public String getProductVersion() {
+        logger.finest(String.format("Starting execution of method - getProductVersion"));
+        
         String version = "Unknown";
+        
+        logger.finest(String.format("Returning value %s", version));
         
         return version;
     }

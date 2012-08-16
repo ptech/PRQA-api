@@ -31,7 +31,7 @@ public abstract class PRQA implements Serializable {
     public abstract String getProductVersion();
     
 
-    private static final Logger logger;
+    protected static final Logger logger;
 
     static {
         logger = Logger.getLogger(Config.GLOBAL_LOGGER_NAME);

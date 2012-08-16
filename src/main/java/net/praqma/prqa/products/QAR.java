@@ -161,9 +161,13 @@ public class QAR extends PRQA {
     
     @Override
     public String getProductVersion() {
+        logger.finest(String.format("Starting execution of method - getProductVersion"));
+        
         String version = "Unknown"; 
         CmdResult res = PRQACommandLineUtility.run("qar -version", new File(commandBase));
         version = res.stdoutBuffer.toString();
+        
+        logger.finest(String.format("Returning value %s", version));
         
         return version;
     }

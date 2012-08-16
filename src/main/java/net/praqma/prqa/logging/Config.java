@@ -9,6 +9,5 @@ package net.praqma.prqa.logging;
  * @author andrius
  */
 public class Config {
-    public static final String  GLOBAL_LOGGER_NAME = "net.praqma.prqa";
-    
+    public static final String  GLOBAL_LOGGER_NAME = "net.praqma.prqa";    
 }
