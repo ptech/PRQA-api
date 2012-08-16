@@ -18,16 +18,16 @@ public class PRQAQualityReport extends PRQAReport<PRQAQualityStatus> {
     
     public PRQAQualityReport(QAR qar) {
         super(qar);
-        logger.log(Level.FINEST, "Constructor and super constructor called for class PRQAQualityReport");
+        logger.finest(String.format("Constructor and super constructor called for class PRQAQualityReport"));
         
         this.parser = new QualityReportParser();
         
-        logger.log(Level.FINEST, "Ending execution of constructor - PRQAQualityReport");
+        logger.finest(String.format("Ending execution of constructor - PRQAQualityReport"));
     }
 
     @Override
     public PRQAQualityStatus completeTask() throws PrqaException {
-    	logger.log(Level.FINEST, "Starting execution of method - completeTask");
+    	logger.finest(String.format("Starting execution of method - completeTask"));
     	
     	executeQAR();
                 
@@ -40,7 +40,7 @@ public class PRQAQualityReport extends PRQAReport<PRQAQualityStatus> {
         status.setNumberOfSourceFiles(Integer.parseInt(parser.getResult(QualityReportParser.numberOfSourceFilesPattern)));
         status.setTotalNumberOfFiles(Integer.parseInt(parser.getResult(QualityReportParser.totalNumberOfFilesPattern)));
         
-        logger.log(Level.FINEST, "Returning value: {0}", status);
+        logger.finest(String.format("Returning value: %s", status));
         
         return status;        
     }

@@ -18,62 +18,62 @@ import net.praqma.util.execute.CmdResult;
  */
 public class QAC extends PRQA {
 
-    private transient static final Logger logger;
+    private static final Logger logger;
 
     static {
         logger = Logger.getLogger(Config.GLOBAL_LOGGER_NAME);
     }
 
     public QAC(String command) {
-    	logger.log(Level.FINEST, "Constructor called for class QAC(String command)");
-    	logger.log(Level.FINEST, "Input parameter command type: {0}; value: {1}", new Object[]{command.getClass(), command});
+    	logger.finest(String.format("Constructor called for class QAC(String command)"));
+    	logger.finest(String.format("Input parameter command type: %s; value: %s", command.getClass(), command));
     	
         this.command = command;
         
-        logger.log(Level.FINEST, "Ending execution of constructor - QAC");
+        logger.finest(String.format("Ending execution of constructor - QAC"));
     }
 
     public QAC(String commandBase, String command) {
-    	logger.log(Level.FINEST, "Constructor called for class QAC(String commandBase, String command)");
-    	logger.log(Level.FINEST, "Input parameter commandBase type: {0}; value: {1}", new Object[]{commandBase.getClass(), commandBase});
-    	logger.log(Level.FINEST, "Input parameter command type: {0}; value: {1}", new Object[]{command.getClass(), command});
+    	logger.finest(String.format("Constructor called for class QAC(String commandBase, String command)"));
+    	logger.finest(String.format("Input parameter commandBase type: %s; value: %s", commandBase.getClass(), commandBase));
+    	logger.finest(String.format("Input parameter command type: %s; value: %s", command.getClass(), command));
     	
         this.command = command;
         this.commandBase = commandBase;
         
-        logger.log(Level.FINEST, "Ending execution of constructor - QAC");
+        logger.finest(String.format("Ending execution of constructor - QAC"));
     }
 
     public CmdResult execute(String command, File dir) {
-        logger.log(Level.FINEST, "Starting execution of method - execute(String command, File dir)");
-        logger.log(Level.FINEST, "Input parameter command type: {0}; value: {1}", new Object[]{command.getClass(), command});
-        logger.log(Level.FINEST, "Input parameter dir type: {0}; value: {1}", new Object[]{dir.getClass(), dir});
+        logger.finest(String.format("Starting execution of method - execute(String command, File dir)"));
+        logger.finest(String.format("Input parameter command type: %s; value: %s", command.getClass(), command));
+        logger.finest(String.format("Input parameter dir type: %s; value: %s", dir.getClass(), dir));
 
         CmdResult output = PRQACommandLineUtility.run(command, dir);
         
-        logger.log(Level.FINEST, "Returning value: {0}", output);
+        logger.finest(String.format("Returning value: %s", output));
         
         return output;
     }
 
     public CmdResult execute(String command) {
-        logger.log(Level.FINEST, "Starting execution of method - execute(String command)");
-        logger.log(Level.FINEST, "Input parameter command type: {0}; value: {1}", new Object[]{command.getClass(), command});
+        logger.finest(String.format("Starting execution of method - execute(String command)"));
+        logger.finest(String.format("Input parameter command type: %s; value: %s", command.getClass(), command));
 
         CmdResult output = PRQACommandLineUtility.run(command, new File(commandBase));
         
-        logger.log(Level.FINEST, "Returning value: {0}", output);
+        logger.finest(String.format("Returning value: %s", output));
         
         return output;
     }
 
     @Override
     public CmdResult execute() {
-        logger.log(Level.FINEST, "Starting execution of method - execute()");
+        logger.finest(String.format("Starting execution of method - execute()"));
 
         CmdResult output = PRQACommandLineUtility.run(command, new File(commandBase));
         
-        logger.log(Level.FINEST, "Returning value: {0}", output);
+        logger.finest(String.format("Returning value: %s", output));
         
         return output; 
     }

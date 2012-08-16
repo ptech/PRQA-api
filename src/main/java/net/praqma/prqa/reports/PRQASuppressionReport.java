@@ -19,16 +19,16 @@ public class PRQASuppressionReport extends PRQAReport<PRQASuppressionStatus> {
     public PRQASuppressionReport(QAR qar) throws PrqaException {
     	super(qar);
     	
-        logger.log(Level.FINEST, "Constructor and super constructor called for class PRQASuppressionReport");
+        logger.finest(String.format("Constructor and super constructor called for class PRQASuppressionReport"));
         
         this.parser = new SuppressionReportParser();
         
-        logger.log(Level.FINEST, "Ending execution of constructor - PRQASuppressionReport");
+        logger.finest(String.format("Ending execution of constructor - PRQASuppressionReport"));
     }
 
     @Override
     public PRQASuppressionStatus completeTask() throws PrqaException {
-    	logger.log(Level.FINEST, "Starting execution of method - completeTask");
+    	logger.finest(String.format("Starting execution of method - completeTask"));
     	
         executeQAR();
         
@@ -39,7 +39,7 @@ public class PRQASuppressionReport extends PRQAReport<PRQASuppressionStatus> {
         status.setPctMsgsSuppressed(Double.parseDouble(parser.getResult(SuppressionReportParser.percentageOfMsgSuppressedPattern)));
         status.setUniqueMsgsSuppressed(Integer.parseInt(parser.getResult(SuppressionReportParser.uniqueMessagesSuppressedPattern)));
         
-        logger.log(Level.FINEST, "Returning value: {0}", status);
+        logger.finest(String.format("Returning value: %s", status));
         
         return status;
     }

@@ -18,45 +18,45 @@ public class PRQACommandBuilder implements Serializable {
 
     private String executable;
     private LinkedList<String> arguments = new LinkedList<String>();
-    private transient static final Logger logger;
+    private static final Logger logger;
 
     static {
         logger = Logger.getLogger(Config.GLOBAL_LOGGER_NAME);
     }
 
     public PRQACommandBuilder(String executable) {
-    	logger.log(Level.FINEST, "Constructor called for class PRQACommandBuilder");
-    	logger.log(Level.FINEST, "Input parameter executable type: {0}; value: {1}", new Object[]{executable.getClass(), executable});
+    	logger.finest(String.format("Constructor called for class PRQACommandBuilder"));
+    	logger.finest(String.format("Input parameter executable type: %s; value: %s", executable.getClass(), executable));
 
     	this.executable = executable;
         
-        logger.log(Level.FINEST, "Ending execution of constructor - PRQACommandBuilder");
+        logger.finest(String.format("Ending execution of constructor - PRQACommandBuilder"));
     }
 
     public PRQACommandBuilder appendArgument(String argument) {
-        logger.log(Level.FINEST, "Starting execution of method - appendArgument");
-        logger.log(Level.FINEST, "Input parameter argument type: {0}; value: {1}", new Object[]{argument.getClass(), argument});
+        logger.finest(String.format("Starting execution of method - appendArgument"));
+        logger.finest(String.format("Input parameter argument type: %s; value: %s", argument.getClass(), argument));
 
         arguments.addLast(argument);
 
-        logger.log(Level.FINEST, "Returning {0}", this);
+        logger.finest(String.format("Returning %s", this));
 
         return this;
     }
 
     public PRQACommandBuilder prependArgument(String argument) {
-        logger.log(Level.FINEST, "Starting execution of method - prependArgument");
-        logger.log(Level.FINEST, "Input parameter argument type: {0}; value: {1}", new Object[]{argument.getClass(), argument});
+        logger.finest(String.format("Starting execution of method - prependArgument"));
+        logger.finest(String.format("Input parameter argument type: %s; value: %s", argument.getClass(), argument));
 
         arguments.addFirst(argument);
 
-        logger.log(Level.FINEST, "Returning {0}", this);
+        logger.finest(String.format("Returning %s", this));
 
         return this;
     }
 
     public String getCommand() {
-        logger.log(Level.FINEST, "Starting execution of method - getCommand");
+        logger.finest(String.format("Starting execution of method - getCommand"));
 
         String output = "";
         output += executable + " ";
@@ -65,62 +65,62 @@ public class PRQACommandBuilder implements Serializable {
             output += s + " ";
         }
 
-        logger.log(Level.FINEST, "Returning value: {0}", output);
+        logger.finest(String.format("Returning value: %s", output));
 
         return output;
     }
 
     public static String getCmaf(String path, boolean escapeInputParameterWhiteSpace) {
-        logger.log(Level.FINEST, "Starting execution of method - getCmaf(String path, boolean escapeInputParameterWhiteSpace)");
-        logger.log(Level.FINEST, "Input parameter path type: {0}; value: {1}", new Object[]{path.getClass(), path});
-        logger.log(Level.FINEST, "Input parameter escapeInputParameterWhiteSpace type: {0}; value: {1}", new Object[]{"boolean", escapeInputParameterWhiteSpace});
+        logger.finest(String.format("Starting execution of method - getCmaf(String path, boolean escapeInputParameterWhiteSpace)"));
+        logger.finest(String.format("Input parameter path type: %s; value: %s", path.getClass(), path));
+        logger.finest(String.format("Input parameter escapeInputParameterWhiteSpace type: %s; value: %s", "boolean", escapeInputParameterWhiteSpace));
 
         if (escapeInputParameterWhiteSpace) {
-            logger.log(Level.FINEST, "Replacing spaces with \"\\ \"");
+            logger.finest(String.format("Replacing spaces with \"\\ \""));
             
             String output = String.format("-cmaf \"%s\"", path.replace(" ", "\\ "));
 
-            logger.log(Level.FINEST, "Returning value: {0}", output);
+            logger.finest(String.format("Returning value: %s", output));
 
             return output;
         }
 
         String output = String.format("-cmaf \"%s\"", path);
 
-        logger.log(Level.FINEST, "Returning value: {0}", output);
+        logger.finest(String.format("Returning value: %s", output));
 
         return output;
     }
 
     public static String getCmaf(String path) {
-        logger.log(Level.FINEST, "Starting execution of method - getCmaf(String path)");
-        logger.log(Level.FINEST, "Input parameter path type: {0}; value: {1}", new Object[]{path.getClass(), path});
+        logger.finest(String.format("Starting execution of method - getCmaf(String path)"));
+        logger.finest(String.format("Input parameter path type: %s; value: %s", path.getClass(), path));
 
         String output = PRQACommandBuilder.getCmaf(path, false);
 
-        logger.log(Level.FINEST, "Returning value: {0}", output);
+        logger.finest(String.format("Returning value: %s", output));
 
         return output;
     }
 
     public static String getMaseq(String commandSequence, boolean escapeInputParameterWhiteSpace) {
-        logger.log(Level.FINEST, "Starting execution of method - getMaseq(String commandSequence, boolean escapeInputParameterWhiteSpace)");
-        logger.log(Level.FINEST, "Input parameter commandSequence type: {0}; value: {1}", new Object[]{commandSequence.getClass(), commandSequence});
-        logger.log(Level.FINEST, "Input parameter escapeInputParameterWhiteSpace type: {0}; value: {1}", new Object[]{"boolean", escapeInputParameterWhiteSpace});
+        logger.finest(String.format("Starting execution of method - getMaseq(String commandSequence, boolean escapeInputParameterWhiteSpace)"));
+        logger.finest(String.format("Input parameter commandSequence type: %s; value: %s", commandSequence.getClass(), commandSequence));
+        logger.finest(String.format("Input parameter escapeInputParameterWhiteSpace type: %s; value: %s", "boolean", escapeInputParameterWhiteSpace));
 
         if (escapeInputParameterWhiteSpace) {
-            logger.log(Level.FINEST, "Replacing spaces with \"\\ \"");
+            logger.finest(String.format("Replacing spaces with \"\\ \""));
 
             String output = String.format(commandSequence.replace(" ", "\\ "), commandSequence);
 
-            logger.log(Level.FINEST, "Returning value: {0}", output);
+            logger.finest(String.format("Returning value: %s", output));
 
             return output;
         }
 
         String output = String.format("-maseq \"%s\"", commandSequence);
 
-        logger.log(Level.FINEST, "Returning value: {0}", output);
+        logger.finest(String.format("Returning value: %s", output));
 
         return output;
     }
@@ -131,112 +131,112 @@ public class PRQACommandBuilder implements Serializable {
      * Constructs a valid secondary analysis command parameter for PRQA. Use this to wrap all your secondary analysis commands.
      */
     public static String getMaseq(String commandSequence) {
-        logger.log(Level.FINEST, "Starting execution of method - getMaseq(String commandSequence)");
-        logger.log(Level.FINEST, "Input parameter commandSequence type: {0}; value: {1}", new Object[]{commandSequence.getClass(), commandSequence});
+        logger.finest(String.format("Starting execution of method - getMaseq(String commandSequence)"));
+        logger.finest(String.format("Input parameter commandSequence type: %s; value: %s", commandSequence.getClass(), commandSequence));
 
         String output = String.format("-maseq \"%s\"", commandSequence);
 
-        logger.log(Level.FINEST, "Returning value: {0}", output);
+        logger.finest(String.format("Returning value: %s", output));
 
         return output;
     }
 
     public static String getReportFormatParameter(String reportFormat) {
-        logger.log(Level.FINEST, "Starting execution of method - getReportFormatParameter(String reportFormat)");
-        logger.log(Level.FINEST, "Input parameter reportFormat type: {0}; value: {1}", new Object[]{reportFormat.getClass(), reportFormat});
+        logger.finest(String.format("Starting execution of method - getReportFormatParameter(String reportFormat)"));
+        logger.finest(String.format("Input parameter reportFormat type: %s; value: %s", reportFormat.getClass(), reportFormat));
 
         String output = PRQACommandBuilder.getReportFormatParameter(reportFormat, false);
 
-        logger.log(Level.FINEST, "Returning value: {0}", output);
+        logger.finest(String.format("Returning value: %s", output));
 
         return output;
     }
 
     public static String getReportFormatParameter(String reportFormat, boolean escapeinInputParameterWhiteSpace) {
-        logger.log(Level.FINEST, "Starting execution of method - getReportFormatParameter(String reportFormat, boolean escapeinInputParameterWhiteSpace)");
-        logger.log(Level.FINEST, "Input parameter reportFormat type: {0}; value: {1}", new Object[]{reportFormat.getClass(), reportFormat});
-        logger.log(Level.FINEST, "Input parameter escapeinInputParameterWhiteSpace type: {0}; value: {1}", new Object[]{"boolean", escapeinInputParameterWhiteSpace});
+        logger.finest(String.format("Starting execution of method - getReportFormatParameter(String reportFormat, boolean escapeinInputParameterWhiteSpace)"));
+        logger.finest(String.format("Input parameter reportFormat type: %s; value: %s", reportFormat.getClass(), reportFormat));
+        logger.finest(String.format("Input parameter escapeinInputParameterWhiteSpace type: %s; value: %s", "boolean", escapeinInputParameterWhiteSpace));
 
         if (escapeinInputParameterWhiteSpace) {
-            logger.log(Level.FINEST, "Replacing spaces with \"\\ \"");
+            logger.finest(String.format("Replacing spaces with \"\\ \""));
 
             String output = String.format("-po qar::report_format=%s", reportFormat.replace(" ", "\\ "));
 
-            logger.log(Level.FINEST, "Returning value: {0}", output);
+            logger.finest(String.format("Returning value: %s", output));
 
             return output;
         }
 
         String output = String.format("-po qar::report_format=%s", reportFormat);
 
-        logger.log(Level.FINEST, "Returning value: {0}", output);
+        logger.finest(String.format("Returning value: %s", output));
 
         return output;
     }
 
     public static String getReportTypeParameter(String reportType) {
-        logger.log(Level.FINEST, "Starting execution of method - getReportTypeParameter(String reportType)");
-        logger.log(Level.FINEST, "Input parameter reportType type: {0}; value: {1}", new Object[]{reportType.getClass(), reportType});
+        logger.finest(String.format("Starting execution of method - getReportTypeParameter(String reportType)"));
+        logger.finest(String.format("Input parameter reportType type: %s; value: %s", reportType.getClass(), reportType));
 
         String output = String.format("-po qar::report_type=%s\\ Report", reportType);
 
-        logger.log(Level.FINEST, "Returning value: {0}", output);
+        logger.finest(String.format("Returning value: %s", output));
 
         return output;
     }
 
     public static String getReportTypeParameter(String reportType, boolean escapeInputParameterWhiteSpace) {
-        logger.log(Level.FINEST, "Starting execution of method - getReportTypeParameter(String reportType, boolean escapeInputParameterWhiteSpace)");
-        logger.log(Level.FINEST, "Input parameter reportType type: {0}; value: {1}", new Object[]{reportType.getClass(), reportType});
-        logger.log(Level.FINEST, "Input parameter escapeInputParameterWhiteSpace type: {0}; value: {1}", new Object[]{"boolean", escapeInputParameterWhiteSpace});
+        logger.finest(String.format("Starting execution of method - getReportTypeParameter(String reportType, boolean escapeInputParameterWhiteSpace)"));
+        logger.finest(String.format("Input parameter reportType type: %s; value: %s", reportType.getClass(), reportType));
+        logger.finest(String.format("Input parameter escapeInputParameterWhiteSpace type: %s; value: %s", "boolean", escapeInputParameterWhiteSpace));
 
         if (escapeInputParameterWhiteSpace) {
-            logger.log(Level.FINEST, "Replacing spaces with \"\\ \"");
+            logger.finest(String.format("Replacing spaces with \"\\ \""));
 
             String output = String.format("-po qar::report_type=%s\\ Report", reportType.replace(" ", "\\ "));
 
-            logger.log(Level.FINEST, "Returning value: {0}", output);
+            logger.finest(String.format("Returning value: %s", output));
 
             return output;
         }
 
         String output = String.format("-po qar::report_type=%s\\ Report", reportType);
 
-        logger.log(Level.FINEST, "Returning value: {0}", output);
+        logger.finest(String.format("Returning value: %s", output));
 
         return output;
     }
 
     public static String getOutputPathParameter(String outpath) {
-        logger.log(Level.FINEST, "Starting execution of method - getOutputPathParameter(String outpath)");
-        logger.log(Level.FINEST, "Input parameter outpath type: {0}; value: {1}", new Object[]{outpath.getClass(), outpath});
+        logger.finest(String.format("Starting execution of method - getOutputPathParameter(String outpath)"));
+        logger.finest(String.format("Input parameter outpath type: %s; value: %s", outpath.getClass(), outpath));
 
         String output = PRQACommandBuilder.getOutputPathParameter(outpath, false);
 
-        logger.log(Level.FINEST, "Returning value: {0}", output);
+        logger.finest(String.format("Returning value: %s", output));
 
         return output;
     }
 
     public static String getOutputPathParameter(String outpath, boolean escapeInputParameterWhiteSpace) {
-        logger.log(Level.FINEST, "Starting execution of method - getOutputPathParameter(String outpath, boolean escapeInputParameterWhiteSpace)");
-        logger.log(Level.FINEST, "Input parameter outpath type: {0}; value: {1}", new Object[]{outpath.getClass(), outpath});
-        logger.log(Level.FINEST, "Input parameter escapeInputParameterWhiteSpace type: {0}; value: {1}", new Object[]{"boolean", escapeInputParameterWhiteSpace});
+        logger.finest(String.format("Starting execution of method - getOutputPathParameter(String outpath, boolean escapeInputParameterWhiteSpace)"));
+        logger.finest(String.format("Input parameter outpath type: %s; value: %s", outpath.getClass(), outpath));
+        logger.finest(String.format("Input parameter escapeInputParameterWhiteSpace type: %s; value: %s", "boolean", escapeInputParameterWhiteSpace));
 
 
         if (escapeInputParameterWhiteSpace) {
-            logger.log(Level.FINEST, "Replacing spaces with \"\\ \"");
+            logger.finest(String.format("Replacing spaces with \"\\ \""));
 
             String output = String.format("-po qar::output_path=%s", outpath.replace(" ", "\\ "));
 
-            logger.log(Level.FINEST, "Returning value: {0}", output);
+            logger.finest(String.format("Returning value: %s", output));
 
             return output;
         }
 
         String output = String.format("-po qar::output_path=%s", outpath);
 
-        logger.log(Level.FINEST, "Returning value: {0}", output);
+        logger.finest(String.format("Returning value: %s", output));
 
         return output;
     }
@@ -247,75 +247,75 @@ public class PRQACommandBuilder implements Serializable {
      * @return
      */
     public static String getProjectName() {
-        logger.log(Level.FINEST, "Starting execution of method - getProjectName");
+        logger.finest(String.format("Starting execution of method - getProjectName"));
 
         String output = "-po qar::project_name=%J";
 
-        logger.log(Level.FINEST, "Returning value: {0}", output);
+        logger.finest(String.format("Returning value: %s", output));
 
         return output;
     }
 
     public static String getViewingProgram(String program) {
-        logger.log(Level.FINEST, "Starting execution of method - getViewingProgram(String program)");
-        logger.log(Level.FINEST, "Input parameter program type: {0}; value: {1}", new Object[]{program.getClass(), program});
+        logger.finest(String.format("Starting execution of method - getViewingProgram(String program)"));
+        logger.finest(String.format("Input parameter program type: %s; value: %s", program.getClass(), program));
 
         String output = PRQACommandBuilder.getViewingProgram(program, false);
 
-        logger.log(Level.FINEST, "Returning value: {0}", output);
+        logger.finest(String.format("Returning value: %s", output));
 
         return output;
     }
 
     public static String getViewingProgram(String program, boolean escapeInputParameterWhiteSpace) {
-        logger.log(Level.FINEST, "Starting execution of method - getViewingProgram(String program, boolean escapeInputParameterWhiteSpace)");
-        logger.log(Level.FINEST, "Input parameter program type: {0}; value: {1}", new Object[]{program.getClass(), program});
-        logger.log(Level.FINEST, "Input parameter escapeInputParameterWhiteSpace type: {0}; value: {1}", new Object[]{"boolean", escapeInputParameterWhiteSpace});
+        logger.finest(String.format("Starting execution of method - getViewingProgram(String program, boolean escapeInputParameterWhiteSpace)"));
+        logger.finest(String.format("Input parameter program type: %s; value: %s", program.getClass(), program));
+        logger.finest(String.format("Input parameter escapeInputParameterWhiteSpace type: %s; value: %s", "boolean", escapeInputParameterWhiteSpace));
 
         if (escapeInputParameterWhiteSpace) {
-            logger.log(Level.FINEST, "Replacing spaces with \"\\ \"");
+            logger.finest(String.format("Replacing spaces with \"\\ \""));
 
             String output = String.format("-po qar::viewing_program=%s", program.replace(" ", "\\ "));
 
-            logger.log(Level.FINEST, "Returning value: {0}", output);
+            logger.finest(String.format("Returning value: %s", output));
 
             return output;
         }
 
         String output = String.format("-po qar::viewing_program=%s", program);
 
-        logger.log(Level.FINEST, "Returning value: {0}", output);
+        logger.finest(String.format("Returning value: %s", output));
 
         return output;
     }
 
     public static String getListReportFiles(String list) {
-        logger.log(Level.FINEST, "Starting execution of method - getListReportFiles");
-        logger.log(Level.FINEST, "Input parameter list type: {0}; value: {1}", new Object[]{list.getClass(), list});
+        logger.finest(String.format("Starting execution of method - getListReportFiles"));
+        logger.finest(String.format("Input parameter list type: %s; value: %s", list.getClass(), list));
 
         String output = String.format("-list \"%s\"", list);
 
-        logger.log(Level.FINEST, "Returning value: {0}", output);
+        logger.finest(String.format("Returning value: %s", output));
 
         return output;
     }
 
     public static String getProjectFile(String file) {
-        logger.log(Level.FINEST, "Starting execution of method - getProjectFile");
-        logger.log(Level.FINEST, "Input parameter file type: {0}; value: {1}", new Object[]{file.getClass(), file});
+        logger.finest(String.format("Starting execution of method - getProjectFile"));
+        logger.finest(String.format("Input parameter file type: %s; value: %s", file.getClass(), file));
 
         String output = String.format("\"%s\"", file);
 
-        logger.log(Level.FINEST, "Returning value: {0}", output);
+        logger.finest(String.format("Returning value: %s", output));
 
         return output;
     }
 
     public static String getProduct(String product) {
-        logger.log(Level.FINEST, "Starting execution of method - getProduct");
-        logger.log(Level.FINEST, "Input parameter product type: {0}; value: {1}", new Object[]{product.getClass(), product});
+        logger.finest(String.format("Starting execution of method - getProduct"));
+        logger.finest(String.format("Input parameter product type: %s; value: %s", product.getClass(), product));
 
-        logger.log(Level.FINEST, "Returning value: {0}", product);
+        logger.finest(String.format("Returning value: %s", product));
 
         return product;
     }

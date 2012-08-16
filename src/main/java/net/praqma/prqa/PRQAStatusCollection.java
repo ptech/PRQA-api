@@ -17,7 +17,7 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading> {
 
 	private Map<StatusCategory, Number> overrideMinimum = new EnumMap<StatusCategory, Number>(StatusCategory.class);
 	private Map<StatusCategory, Number> overrideMaximum = new EnumMap<StatusCategory, Number>(StatusCategory.class);
-	private transient static final Logger logger;
+	private static final Logger logger;
 
 	static {
 		logger = Logger.getLogger(Config.GLOBAL_LOGGER_NAME);
@@ -28,20 +28,20 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading> {
 	}
 
 	public PRQAStatusCollection(ArrayList<PRQAReading> collection) {
-		logger.log(Level.FINEST, "Constructor called for class PRQAStatusCollection(ArrayList<PRQAReading> collection)");
-		logger.log(Level.FINEST, "Input parameter collection type: {0}; value:", new Object[]{collection.getClass()});
+		logger.finest(String.format("Constructor called for class PRQAStatusCollection(ArrayList<PRQAReading> collection)"));
+		logger.finest(String.format("Input parameter collection type: %s; value:", collection.getClass()));
 		for (PRQAReading e : collection) {
-			logger.log(Level.FINEST, "    {0}", e);
+			logger.finest(String.format("    %s", e));
 		}
 
 		this.addAll(collection);
 	}
 
 	public PRQAStatusCollection(PRQAStatusCollection collection) {
-		logger.log(Level.FINEST, "Constructor called for class PRQAStatusCollection(PRQAStatusCollection collection)");
-		logger.log(Level.FINEST, "Input parameter collection type: {0}; value:", new Object[]{collection.getClass()});
+		logger.finest(String.format("Constructor called for class PRQAStatusCollection(PRQAStatusCollection collection)"));
+		logger.finest(String.format("Input parameter collection type: %s; value:", collection.getClass()));
 		for (PRQAReading e : collection) {
-			logger.log(Level.FINEST, "    {0}", e);
+			logger.finest(String.format("    %s", e));
 		}
 		
 		this.addAll(collection);
@@ -55,7 +55,7 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading> {
 	 * @return
 	 */
 	public Number getMax(StatusCategory category) throws PrqaException.PrqaReadingException {
-		logger.finest("Starting execution of method - getMax");
+		logger.finest(String.format("Starting execution of method - getMax"));
 		logger.finest(String.format("Input parameter category type: %s; value: %s", category.getClass(), category));
 
 		if (getOverriddenMax(category) != null) {
@@ -98,7 +98,7 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading> {
 	 * @return a number indicating the smallest given observation for the specified category.
 	 */
 	public Number getMin(StatusCategory category) throws PrqaException.PrqaReadingException {
-		logger.finest("Starting execution of method - getMin");
+		logger.finest(String.format("Starting execution of method - getMin"));
 		logger.finest(String.format("Input parameter category type: %s; value: %s", category.getClass(), category));
 
 		if (getOverriddenMin(category) != null) {
@@ -139,7 +139,7 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading> {
 	 * @param value
 	 */
 	public void overrideMin(StatusCategory category, Number value) {
-		logger.finest("Starting execution of method - overrideMin");
+		logger.finest(String.format("Starting execution of method - overrideMin"));
 		logger.finest(String.format("Input parameter category type: %s; value: %s", category.getClass(), category));
 		logger.finest(String.format("Input parameter value type: %s; value: %s", value.getClass(), value));
 
@@ -147,7 +147,7 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading> {
 	}
 
 	public void overrideMax(StatusCategory category, Number value) {
-		logger.finest("Starting execution of method - overrideMax");
+		logger.finest(String.format("Starting execution of method - overrideMax"));
 		logger.finest(String.format("Input parameter category type: %s; value: %s", category.getClass(), category));
 		logger.finest(String.format("Input parameter value type: %s; value: %s", value.getClass(), value));
 
@@ -155,7 +155,7 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading> {
 	}
 
 	public Number getOverriddenMax(StatusCategory category) {
-		logger.finest("Starting execution of method - getOverriddenMax");
+		logger.finest(String.format("Starting execution of method - getOverriddenMax"));
 		logger.finest(String.format("Input parameter category type: %s; value: %s", category.getClass(), category));
 
 		if (overrideMaximum.containsKey(category)) {
@@ -172,7 +172,7 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading> {
 	}
 
 	public Number getOverriddenMin(StatusCategory category) {
-		logger.finest("Starting execution of method - getOverriddenMin");
+		logger.finest(String.format("Starting execution of method - getOverriddenMin"));
 		logger.finest(String.format("Input parameter category type: %s; value: %s", category.getClass(), category));
 
 		if (overrideMinimum.containsKey(category)) {
@@ -189,11 +189,11 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading> {
 	}
 
 	public void clearOverrides() {
-		logger.finest("Starting execution of method - clearOverrides");
+		logger.finest(String.format("Starting execution of method - clearOverrides"));
 
 		overrideMaximum.clear();
 		overrideMinimum.clear();
 
-		logger.finest("Overrides cleared.");
+		logger.finest(String.format("Overrides cleared."));
 	}
 }

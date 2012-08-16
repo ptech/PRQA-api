@@ -5,7 +5,6 @@
 package net.praqma.prqa.status;
 
 import java.util.logging.Level;
-
 import net.praqma.jenkins.plugin.prqa.PrqaException;
 
 /**
@@ -32,64 +31,64 @@ public class PRQAQualityStatus extends PRQAStatus {
 
 	@Override
 	public Number getReadout(StatusCategory category) throws PrqaException.PrqaReadingException {
-		logger.log(Level.FINEST, "Starting execution of method - getReadout");
-		logger.log(Level.FINEST, "Input parameter category type: {0}; value: {1}", new Object[]{category.getClass(), category});
+		logger.finest(String.format("Starting execution of method - getReadout"));
+		logger.finest(String.format("Input parameter category type: %s; value: %s", category.getClass(), category));
 
 		Number output;
 		switch(category) {
 		case NumberOfFunctionMetrics:
 			output = getNumberOfFunctionMetrics();
 			
-			logger.log(Level.FINEST, "Returning value: {0}", output);
+			logger.finest(String.format("Returning value: %s", output));
 			
 			return output;
 		case NumberOfFunctions:
 			output = getNumberOfFunctions();
 			
-			logger.log(Level.FINEST, "Returning value: {0}", output);
+			logger.finest(String.format("Returning value: %s", output));
 			
 			return output;
 		case NumberOfSourceFiles:
 			output = getNumberOfSourceFiles();
 			
-			logger.log(Level.FINEST, "Returning value: {0}", output);
+			logger.finest(String.format("Returning value: %s", output));
 			
 			return output;
 		case TotalNumberOfFiles:
 			output = getTotalNumberOfFiles();
 			
-			logger.log(Level.FINEST, "Returning value: {0}", output);
+			logger.finest(String.format("Returning value: %s", output));
 			
 			return output;
 		case LinesOfCode:
 			output = getLinesOfCode();
 			
-			logger.log(Level.FINEST, "Returning value: {0}", output);
+			logger.finest(String.format("Returning value: %s", output));
 			
 			return output;
 		case NumberOfFileMetrics:
 			output = getNumberOfFileMetrics();
 			
-			logger.log(Level.FINEST, "Returning value: {0}", output);
+			logger.finest(String.format("Returning value: %s", output));
 			
 			return output;
 		case NumberOfClassMetrics:
 			output = getNumberOfClassMetrics();
 			
-			logger.log(Level.FINEST, "Returning value: {0}", output);
+			logger.finest(String.format("Returning value: %s", output));
 			
 			return output;
 		case NumberOfClasses:
 			output = getNumberOfClasses();
 			
-			logger.log(Level.FINEST, "Returning value: {0}", output);
+			logger.finest(String.format("Returning value: %s", output));
 			
 			return output;
 		default:
 			PrqaException.PrqaReadingException exception;
 			exception = new PrqaException.PrqaReadingException(String.format("Didn't find category %s for class %s", category, this.getClass()));
 
-			logger.log(Level.SEVERE, "Exception thrown type: {0}; message: {1}", new Object[]{exception.getClass(), exception.getMessage()});
+			logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
 
 			throw exception;
 		}
@@ -97,115 +96,115 @@ public class PRQAQualityStatus extends PRQAStatus {
 
 	@Override
 	public void setReadout(StatusCategory category, Number value) throws PrqaException.PrqaReadingException {
-		logger.log(Level.FINEST, "Starting execution of method - setReadout");
-		logger.log(Level.FINEST, "Input parameter category type: {0}; value: {1}", new Object[]{category.getClass(), category});
-		logger.log(Level.FINEST, "Input parameter value type: {0}; value: {1}", new Object[]{value.getClass(), value});
+		logger.finest(String.format("Starting execution of method - setReadout"));
+		logger.finest(String.format("Input parameter category type: %s; value: %s", category.getClass(), category));
+		logger.finest(String.format("Input parameter value type: %s; value: %s", value.getClass(), value));
 
 		switch(category) {
 		case NumberOfFunctionMetrics:
 			setNumberOfFunctionMetrics(value.intValue());
 			
-			logger.log(Level.FINEST, "Setting numberOfFunctionMetrics to: {0}.", value.intValue());
-			logger.log(Level.FINEST, "Ending execution of method - setReadout");
+			logger.finest(String.format("Setting numberOfFunctionMetrics to: %s.", value.intValue()));
+			logger.finest(String.format("Ending execution of method - setReadout"));
 
 			break;
 		case NumberOfFunctions:
 			setNumberOfFunctions(value.intValue());
 
-			logger.log(Level.FINEST, "Setting numberOfFunctions to: {0}.", value.intValue());
-			logger.log(Level.FINEST, "Ending execution of method - setReadout");
+			logger.finest(String.format("Setting numberOfFunctions to: %s.", value.intValue()));
+			logger.finest(String.format("Ending execution of method - setReadout"));
 
 			break;
 		case NumberOfSourceFiles:
 			setNumberOfSourceFiles(value.intValue());
 
-			logger.log(Level.FINEST, "Setting numberOfSourceFiles to: {0}.", value.intValue());
-			logger.log(Level.FINEST, "Ending execution of method - setReadout");
+			logger.finest(String.format("Setting numberOfSourceFiles to: %s.", value.intValue()));
+			logger.finest(String.format("Ending execution of method - setReadout"));
 
 			break;
 		case TotalNumberOfFiles:
 			setTotalNumberOfFiles(value.intValue());
 
-			logger.log(Level.FINEST, "Setting totalNumberOfFiles to: {0}.", value.intValue());
-			logger.log(Level.FINEST, "Ending execution of method - setReadout");
+			logger.finest(String.format("Setting totalNumberOfFiles to: %s.", value.intValue()));
+			logger.finest(String.format("Ending execution of method - setReadout"));
 
 			break;
 		case LinesOfCode:
 			setLinesOfCode(value.intValue());
 
-			logger.log(Level.FINEST, "Setting linesOfCode to: {0}.", value.intValue());
-			logger.log(Level.FINEST, "Ending execution of method - setReadout");
+			logger.finest(String.format("Setting linesOfCode to: %s.", value.intValue()));
+			logger.finest(String.format("Ending execution of method - setReadout"));
 
 			break;
 		case NumberOfFileMetrics:
 			setNumberOfFileMetrics(value.intValue());
 
-			logger.log(Level.FINEST, "Setting numberOfFileMetrics to: {0}.", value.intValue());
-			logger.log(Level.FINEST, "Ending execution of method - setReadout");
+			logger.finest(String.format("Setting numberOfFileMetrics to: %s.", value.intValue()));
+			logger.finest(String.format("Ending execution of method - setReadout"));
 
 			break;
 		case NumberOfClasses:
 			setNumberOfClasses(value.intValue());
 
-			logger.log(Level.FINEST, "Setting numberOfClasses to: {0}.", value.intValue());
-			logger.log(Level.FINEST, "Ending execution of method - setReadout");
+			logger.finest(String.format("Setting numberOfClasses to: %s.", value.intValue()));
+			logger.finest(String.format("Ending execution of method - setReadout"));
 
 			break;
 		case NumberOfClassMetrics:
 			setNumberOfClassMetrics(value.intValue());
 
-			logger.log(Level.FINEST, "Setting numberOfClassMetrics to: {0}.", value.intValue());
-			logger.log(Level.FINEST, "Ending execution of method - setReadout");
+			logger.finest(String.format("Setting numberOfClassMetrics to: %s.", value.intValue()));
+			logger.finest(String.format("Ending execution of method - setReadout"));
 
 			break;
 		default:
 			PrqaException.PrqaReadingException exception;
 			exception = new PrqaException.PrqaReadingException(String.format("Could not set value of %s for category %s in class %s", value, category, this.getClass()));
 
-			logger.log(Level.SEVERE, "Exception thrown type: {0}; message: {1}", new Object[]{exception.getClass(), exception.getMessage()});
+			logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
 
 			throw exception;
 		}
 	}
 
 	public int getNumberOfClasses() {
-		logger.log(Level.FINEST, "Starting execution of method - getNumberOfClasses");
-		logger.log(Level.FINEST, "Returning value: {0}", numberOfClasses);
+		logger.finest(String.format("Starting execution of method - getNumberOfClasses"));
+		logger.finest(String.format("Returning value: %s", numberOfClasses));
 
 		return numberOfClasses;
 	}
 
 	public void setNumberOfClasses(int numberOfClasses) {
-		logger.log(Level.FINEST, "Starting execution of method - setNumberOfClasses");
-		logger.log(Level.FINEST, "Input parameter numberOfClasses type: {0}; value: {1}", new Object[]{"int", numberOfClasses});
+		logger.finest(String.format("Starting execution of method - setNumberOfClasses"));
+		logger.finest(String.format("Input parameter numberOfClasses type: %s; value: %s", "int", numberOfClasses));
 
 		this.numberOfClasses = numberOfClasses;
 
-		logger.log(Level.FINEST, "Ending execution of method - setNumberOfClasses");
+		logger.finest(String.format("Ending execution of method - setNumberOfClasses"));
 	}
 
 	public int getNumberOfClassMetrics() {
-		logger.log(Level.FINEST, "Starting execution of method - getNumberOfClassMetrics");
-		logger.log(Level.FINEST, "Returning value: {0}", this.numberOfClassMetrics);
+		logger.finest(String.format("Starting execution of method - getNumberOfClassMetrics"));
+		logger.finest(String.format("Returning value: %s", this.numberOfClassMetrics));
 
 		return this.numberOfClassMetrics;
 	}
 
 	public void setNumberOfClassMetrics(int numberOfClassMetrics) {
-		logger.log(Level.FINEST, "Starting execution of method - setNumberOfClassMetrics");
-		logger.log(Level.FINEST, "Input parameter numberOfClassMetrics type: {0}; value: {1}", new Object[]{"int", numberOfClassMetrics});
+		logger.finest(String.format("Starting execution of method - setNumberOfClassMetrics"));
+		logger.finest(String.format("Input parameter numberOfClassMetrics type: %s; value: %s", "int", numberOfClassMetrics));
 
 		this.numberOfClassMetrics = numberOfClassMetrics;
 
-		logger.log(Level.FINEST, "Ending execution of method - setNumberOfClassMetrics");
+		logger.finest(String.format("Ending execution of method - setNumberOfClassMetrics"));
 	}
 
 	/**
 	 * @return the totalNumberOfFiles
 	 */
 	public int getTotalNumberOfFiles() {
-		logger.log(Level.FINEST, "Starting execution of method - getTotalNumberOfFiles");
-		logger.log(Level.FINEST, "Returning value: {0}", this.totalNumberOfFiles);
+		logger.finest(String.format("Starting execution of method - getTotalNumberOfFiles"));
+		logger.finest(String.format("Returning value: %s", this.totalNumberOfFiles));
 
 		return totalNumberOfFiles;
 	}
@@ -214,20 +213,20 @@ public class PRQAQualityStatus extends PRQAStatus {
 	 * @param totalNumberOfFiles the totalNumberOfFiles to set
 	 */
 	public void setTotalNumberOfFiles(int totalNumberOfFiles) {
-		logger.log(Level.FINEST, "Starting execution of method - setTotalNumberOfFiles");
-		logger.log(Level.FINEST, "Input parameter totalNumberOfFiles type: {0}; value: {1}", new Object[]{"int", totalNumberOfFiles});
+		logger.finest(String.format("Starting execution of method - setTotalNumberOfFiles"));
+		logger.finest(String.format("Input parameter totalNumberOfFiles type: %s; value: %s", "int", totalNumberOfFiles));
 
 		this.totalNumberOfFiles = totalNumberOfFiles;
 
-		logger.log(Level.FINEST, "Ending execution of method - setTotalNumberOfFiles");
+		logger.finest(String.format("Ending execution of method - setTotalNumberOfFiles"));
 	}
 
 	/**
 	 * @return the linesOfCode
 	 */
 	public int getLinesOfCode() {
-		logger.log(Level.FINEST, "Starting execution of method - getLinesOfCode");
-		logger.log(Level.FINEST, "Returning value: {0}", this.linesOfCode);
+		logger.finest(String.format("Starting execution of method - getLinesOfCode"));
+		logger.finest(String.format("Returning value: %s", this.linesOfCode));
 
 		return linesOfCode;
 	}
@@ -236,20 +235,20 @@ public class PRQAQualityStatus extends PRQAStatus {
 	 * @param linesOfCode the linesOfCode to set
 	 */
 	public void setLinesOfCode(int linesOfCode) {
-		logger.log(Level.FINEST, "Starting execution of method - setLinesOfCode");
-		logger.log(Level.FINEST, "Input parameter linesOfCode type: {0}; value: {1}", new Object[]{"int", linesOfCode});
+		logger.finest(String.format("Starting execution of method - setLinesOfCode"));
+		logger.finest(String.format("Input parameter linesOfCode type: %s; value: %s", "int", linesOfCode));
 
 		this.linesOfCode = linesOfCode;
 
-		logger.log(Level.FINEST, "Ending execution of method - setLinesOfCode");
+		logger.finest(String.format("Ending execution of method - setLinesOfCode"));
 	}
 
 	/**
 	 * @return the numberOfSourceFiles
 	 */
 	public int getNumberOfSourceFiles() {
-		logger.log(Level.FINEST, "Starting execution of method - getNumberOfSourceFiles");
-		logger.log(Level.FINEST, "Returning value: {0}", this.numberOfSourceFiles);
+		logger.finest(String.format("Starting execution of method - getNumberOfSourceFiles"));
+		logger.finest(String.format("Returning value: %s", this.numberOfSourceFiles));
 
 		return numberOfSourceFiles;
 	}
@@ -258,20 +257,20 @@ public class PRQAQualityStatus extends PRQAStatus {
 	 * @param numberOfSourceFiles the numberOfSourceFiles to set
 	 */
 	public void setNumberOfSourceFiles(int numberOfSourceFiles) {
-		logger.log(Level.FINEST, "Starting execution of method - setNumberOfSourceFiles");
-		logger.log(Level.FINEST, "Input parameter numberOfSourceFiles type: {0}; value: {1}", new Object[]{"int", numberOfSourceFiles});
+		logger.finest(String.format("Starting execution of method - setNumberOfSourceFiles"));
+		logger.finest(String.format("Input parameter numberOfSourceFiles type: %s; value: %s", "int", numberOfSourceFiles));
 
 		this.numberOfSourceFiles = numberOfSourceFiles;
 
-		logger.log(Level.FINEST, "Ending execution of method - setNumberOfSourceFiles");
+		logger.finest(String.format("Ending execution of method - setNumberOfSourceFiles"));
 	}
 
 	/**
 	 * @return the numberOfFileMetrics
 	 */
 	public int getNumberOfFileMetrics() {
-		logger.log(Level.FINEST, "Starting execution of method - getNumberOfFileMetrics");
-		logger.log(Level.FINEST, "Returning value: {0}", this.numberOfFileMetrics);
+		logger.finest(String.format("Starting execution of method - getNumberOfFileMetrics"));
+		logger.finest(String.format("Returning value: %s", this.numberOfFileMetrics));
 
 		return numberOfFileMetrics;
 	}
@@ -280,20 +279,20 @@ public class PRQAQualityStatus extends PRQAStatus {
 	 * @param numberOfFileMetrics the numberOfFileMetrics to set
 	 */
 	public void setNumberOfFileMetrics(int numberOfFileMetrics) {
-		logger.log(Level.FINEST, "Starting execution of method - setNumberOfFileMetrics");
-		logger.log(Level.FINEST, "Input parameter numberOfFileMetrics type: {0}; value: {1}", new Object[]{"int", numberOfFileMetrics});
+		logger.finest(String.format("Starting execution of method - setNumberOfFileMetrics"));
+		logger.finest(String.format("Input parameter numberOfFileMetrics type: %s; value: %s", "int", numberOfFileMetrics));
 
 		this.numberOfFileMetrics = numberOfFileMetrics;
 
-		logger.log(Level.FINEST, "Ending execution of method - setNumberOfFileMetrics");
+		logger.finest(String.format("Ending execution of method - setNumberOfFileMetrics"));
 	}
 
 	/**
 	 * @return the numberOfFunctions
 	 */
 	public int getNumberOfFunctions() {
-		logger.log(Level.FINEST, "Starting execution of method - getNumberOfFunctions");
-		logger.log(Level.FINEST, "Returning value: {0}", this.numberOfFunctions);
+		logger.finest(String.format("Starting execution of method - getNumberOfFunctions"));
+		logger.finest(String.format("Returning value: %s", this.numberOfFunctions));
 
 		return numberOfFunctions;
 	}
@@ -302,20 +301,20 @@ public class PRQAQualityStatus extends PRQAStatus {
 	 * @param numberOfFunctions the numberOfFunctions to set
 	 */
 	public void setNumberOfFunctions(int numberOfFunctions) {
-		logger.log(Level.FINEST, "Starting execution of method - setNumberOfFunctions");
-		logger.log(Level.FINEST, "Input parameter numberOfFunctions type: {0}; value: {1}", new Object[]{"int", numberOfFunctions});
+		logger.finest(String.format("Starting execution of method - setNumberOfFunctions"));
+		logger.finest(String.format("Input parameter numberOfFunctions type: %s; value: %s", "int", numberOfFunctions));
 
 		this.numberOfFunctions = numberOfFunctions;
 
-		logger.log(Level.FINEST, "Ending execution of method - setNumberOfFunctions");
+		logger.finest(String.format("Ending execution of method - setNumberOfFunctions"));
 	}
 
 	/**
 	 * @return the numberOfFunctionMetrics
 	 */
 	public int getNumberOfFunctionMetrics() {
-		logger.log(Level.FINEST, "Starting execution of method - getNumberOfFunctionMetrics");
-		logger.log(Level.FINEST, "Returning value: {0}", this.numberOfFunctionMetrics);
+		logger.finest(String.format("Starting execution of method - getNumberOfFunctionMetrics"));
+		logger.finest(String.format("Returning value: %s", this.numberOfFunctionMetrics));
 
 		return numberOfFunctionMetrics;
 	}
@@ -324,12 +323,12 @@ public class PRQAQualityStatus extends PRQAStatus {
 	 * @param numberOfFunctionMetrics the numberOfFunctionMetrics to set
 	 */
 	public void setNumberOfFunctionMetrics(int numberOfFunctionMetrics) {
-		logger.log(Level.FINEST, "Starting execution of method - setNumberOfFunctionMetrics");
-		logger.log(Level.FINEST, "Input parameter numberOfFunctionMetrics type: {0}; value: {1}", new Object[]{"int", numberOfFunctionMetrics});
+		logger.finest(String.format("Starting execution of method - setNumberOfFunctionMetrics"));
+		logger.finest(String.format("Input parameter numberOfFunctionMetrics type: %s; value: %s", "int", numberOfFunctionMetrics));
 
 		this.numberOfFunctionMetrics = numberOfFunctionMetrics;
 
-		logger.log(Level.FINEST, "Ending execution of method - setNumberOfFunctionMetrics");
+		logger.finest(String.format("Ending execution of method - setNumberOfFunctionMetrics"));
 	}
 
 	@Override
