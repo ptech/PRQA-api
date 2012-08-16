@@ -83,8 +83,10 @@ public class QAC extends PRQA {
     public String getProductVersion() {
         String productVersion = "Unknown version";
        
-        //CmdResult res = PRQACommandLineUtility.run(this.toString()+" -version", new File(commandBase));
+        //CmdResult res = PRQACommandLineUtility.run("qac -version", new File(commandBase));
        
+        //productVersion = res.stdoutBuffer.toString();
+        
         return productVersion;
     }
 

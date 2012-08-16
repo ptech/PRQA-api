@@ -5,7 +5,6 @@
 package net.praqma.prqa;
 
 import java.io.File;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.praqma.prqa.logging.Config;
 import net.praqma.util.execute.*;
