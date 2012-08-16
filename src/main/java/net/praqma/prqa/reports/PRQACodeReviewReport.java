@@ -18,22 +18,22 @@ public class PRQACodeReviewReport extends PRQAReport<PRQACodeReviewStatus> {
 
 	public PRQACodeReviewReport(QAR qar) {
 		super(qar);
-        logger.log(Level.FINEST, "Constructor and super constructor called for class PRQACodeReviewReport");
+        logger.finest(String.format("Constructor and super constructor called for class PRQACodeReviewReport"));
         
         this.parser = new CodeReviewReportParser();
         
-        logger.log(Level.FINEST, "Ending execution of constructor - PRQACodeReviewReport");
+        logger.finest(String.format("Ending execution of constructor - PRQACodeReviewReport"));
     }
 
 	@Override
 	public PRQACodeReviewStatus completeTask() throws PrqaException {
-		logger.log(Level.FINEST, "Starting execution of method - completeTask");
+		logger.finest(String.format("Starting execution of method - completeTask"));
 		
         executeQAR();
 		
 		PRQACodeReviewStatus status = new PRQACodeReviewStatus();
 		
-		logger.log(Level.FINEST, "Returning value: {0}", status);
+		logger.finest(String.format("Returning value: %s", status));
 		
 		return status;
 	}

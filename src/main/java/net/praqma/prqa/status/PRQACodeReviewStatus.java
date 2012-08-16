@@ -5,7 +5,6 @@
 package net.praqma.prqa.status;
 
 import java.util.logging.Level;
-
 import net.praqma.jenkins.plugin.prqa.PrqaException;
 
 /**
@@ -16,27 +15,27 @@ public class PRQACodeReviewStatus extends PRQAStatus {
 
 	@Override
 	public boolean isValid() {
-		logger.log(Level.FINEST, "Starting execution of method - isValid");
+		logger.finest(String.format("Starting execution of method - isValid"));
 
 		UnsupportedOperationException exception;
 		exception = new UnsupportedOperationException("Not supported yet.");
 
-		logger.log(Level.SEVERE, "Exception thrown type: {0}; message: {1}", new Object[]{exception.getClass(), exception.getMessage()});
+		logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
 
 		throw exception;
 	}
 
 	@Override
 	public Number getReadout(StatusCategory category) throws PrqaException.PrqaReadingException {
-		logger.log(Level.FINEST, "Starting execution of method - getReadout");
-		logger.log(Level.FINEST, "Input parameter category type: {0}; value: {1}", new Object[]{category.getClass(), category});
+		logger.finest(String.format("Starting execution of method - getReadout"));
+		logger.finest(String.format("Input parameter category type: %s; value: %s", category.getClass(), category));
 
 		switch(category) {
 		default:
 			PrqaException.PrqaReadingException exception;
 			exception = new PrqaException.PrqaReadingException("Not supported yet.");
 
-			logger.log(Level.SEVERE, "Exception thrown type: {0}; message: {1}", new Object[]{exception.getClass(), exception.getMessage()});
+			logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
 
 			throw exception;
 		}
@@ -44,16 +43,16 @@ public class PRQACodeReviewStatus extends PRQAStatus {
 
 	@Override
 	public void setReadout(StatusCategory category, Number value) throws PrqaException.PrqaReadingException {
-		logger.log(Level.FINEST, "Starting execution of method - setReadout");
-		logger.log(Level.FINEST, "Input parameter category type: {0}; value: {1}", new Object[]{category.getClass(), category});
-		logger.log(Level.FINEST, "Input parameter value type: {0}; value: {1}", new Object[]{value.getClass(), value});
+		logger.finest(String.format("Starting execution of method - setReadout"));
+		logger.finest(String.format("Input parameter category type: %s; value: %s", category.getClass(), category));
+		logger.finest(String.format("Input parameter value type: %s; value: %s", value.getClass(), value));
 
 		switch(category) {
 		default:
 			PrqaException.PrqaReadingException exception;
 			exception = new PrqaException.PrqaReadingException(String.format("Could not set value of %s for category %s in class %s",value,category,this.getClass()));
 
-			logger.log(Level.SEVERE, "Exception thrown type: {0}; message: {1}", new Object[]{exception.getClass(), exception.getMessage()});
+			logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
 
 			throw exception;
 		}     

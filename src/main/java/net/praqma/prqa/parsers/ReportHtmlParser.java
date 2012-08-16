@@ -23,7 +23,7 @@ import net.praqma.prqa.logging.Config;
 public abstract class ReportHtmlParser implements Serializable {
 
     protected String fullReportPath;
-    private static final transient Logger logger;
+    private static final Logger logger;
 
     static {
         logger = Logger.getLogger(Config.GLOBAL_LOGGER_NAME);
@@ -40,23 +40,23 @@ public abstract class ReportHtmlParser implements Serializable {
      */
 
     public String getFullReportPath() {
-        logger.finest("Starting execution of method - getFullReportPath");
+        logger.finest(String.format("Starting execution of method - getFullReportPath"));
         logger.finest(String.format("Returning value: %s", this.fullReportPath));
 
         return this.fullReportPath;
     }
 
     public void setFullReportPath(String fullReportPath) {
-        logger.finest("Starting execution of method - setFullReportPath");
+        logger.finest(String.format("Starting execution of method - setFullReportPath"));
         logger.finest(String.format("Input parameter fullReportPath type: %s; value: %s", fullReportPath.getClass(), fullReportPath));
 
         this.fullReportPath = fullReportPath;
 
-        logger.finest("Ending execution of method - setFullReportPath");
+        logger.finest(String.format("Ending execution of method - setFullReportPath"));
     }
 
     public String getResult(Pattern pattern) throws PrqaException {
-        logger.finest("Starting execution of method - getResult");
+        logger.finest(String.format("Starting execution of method - getResult"));
         logger.finest(String.format("Input parameter pattern type: %s; value: %s", pattern.getClass(), pattern));
 
         String output = getFirstResult(parse(this.fullReportPath, pattern));
@@ -67,7 +67,7 @@ public abstract class ReportHtmlParser implements Serializable {
     }
 
     public List<String> parse(String path, Pattern pattern) throws PrqaException {
-        logger.finest("Starting execution of method - parse");
+        logger.finest(String.format("Starting execution of method - parse"));
         logger.finest(String.format("Input parameter path type: %s; value: %s", path.getClass(), path));
         logger.finest(String.format("Input parameter pattern type: %s; value: %s", pattern.getClass(), pattern));
 
@@ -75,7 +75,7 @@ public abstract class ReportHtmlParser implements Serializable {
         File file = new File(path);
         FileInputStream fis;
 
-        logger.finest("Attempting to open filepath: " + file.getAbsolutePath());
+        logger.finest(String.format("Attempting to open filepath: " + file.getAbsolutePath()));
         try {
             fis = new FileInputStream(file);
         } catch (FileNotFoundException ex) {
@@ -85,7 +85,7 @@ public abstract class ReportHtmlParser implements Serializable {
 
             throw exception;
         }
-        logger.finest("File opened successfully!");
+        logger.finest(String.format("File opened successfully!"));
 
         InputStreamReader isr = new InputStreamReader(fis);
         BufferedReader source = new BufferedReader(isr);
@@ -93,7 +93,7 @@ public abstract class ReportHtmlParser implements Serializable {
         String report = "";
         Matcher match = null;
 
-        logger.finest("Attempting to read the file...");
+        logger.finest(String.format("Attempting to read the file..."));
 
         try {
             while ((sourceLine = source.readLine()) != null) {
@@ -102,14 +102,14 @@ public abstract class ReportHtmlParser implements Serializable {
 
                 // TODO: Should this not be an if statement instead?
                 while (match.find()) {
-                    logger.finest("Match found!");
+                    logger.finest(String.format("Match found!"));
 
                     result.add(match.group(1));
 
                     logger.finest(String.format("Returning result:"));
                     // TODO figure out a way to make it so that we only loop through them if logging is enabled
                     for (String s : result) {
-                        logger.log(Level.FINEST, "    {0}", s);
+                        logger.finest(String.format("    %s", s));
                     }
 
                     return result;
@@ -123,7 +123,7 @@ public abstract class ReportHtmlParser implements Serializable {
             throw exception;
         } finally {
 
-            logger.finest("Atempting to close the file");
+            logger.finest(String.format("Atempting to close the file"));
 
             try {
                 source.close();
@@ -135,49 +135,49 @@ public abstract class ReportHtmlParser implements Serializable {
                 throw exception;
             }
 
-            logger.finest("File closed successfully");
+            logger.finest(String.format("File closed successfully"));
 
         }
 
-        logger.finest("File read successfully!");
+        logger.finest(String.format("File read successfully!"));
 
 
         // TODO figure out a way to make it so that we only loop through them if logging is enabled
         logger.finest(String.format("Returning result:"));
         for (String s : result) {
-            logger.log(Level.FINEST, "    {0}", s);
+            logger.finest(String.format("    %s", s));
         }
 
         return result;
     }
 
     public String getFirstResult(List<String> results) {
-        logger.log(Level.FINEST, "Starting execution of method - getFirstResult");
+        logger.finest(String.format("Starting execution of method - getFirstResult"));
 
         if (results.size() > 0) {
             String output = results.get(0);
 
-            logger.log(Level.FINEST, "Returning value: {0}", output);
+            logger.finest(String.format("Returning value: %s", output));
 
             return output;
         }
 
-        logger.log(Level.FINEST, "Collection is empty, returning null.");
+        logger.finest(String.format("Collection is empty, returning null."));
 
         return null;
     }
 
     public int replace(String path, Pattern pattern, String replacement) throws PrqaParserException {
-        logger.log(Level.FINEST, "Starting execution of method - replace");
-        logger.log(Level.FINEST, "Input parameter path type: {0}; value: {1}", new Object[]{path.getClass(), path});
-        logger.log(Level.FINEST, "Input parameter pattern type: {0}; value: {1}", new Object[]{pattern.getClass(), pattern.toString()});
-        logger.log(Level.FINEST, "Input parameter pattern type: {0}; value: {1}", new Object[]{replacement.getClass(), replacement});
+        logger.finest(String.format("Starting execution of method - replace"));
+        logger.finest(String.format("Input parameter path type: %s; value: %s", path.getClass(), path));
+        logger.finest(String.format("Input parameter pattern type: %s; value: %s", pattern.getClass(), pattern.toString()));
+        logger.finest(String.format("Input parameter pattern type: %s; value: %s", replacement.getClass(), replacement));
 
         int numberOfReplacements = 0;
         File file = new File(path);
         FileInputStream fis;
 
-        logger.log(Level.FINEST, "Atempting to open filepath {0}.", file.getAbsolutePath());
+        logger.finest(String.format("Atempting to open filepath %s.", file.getAbsolutePath()));
 
         try {
             fis = new FileInputStream(file);
@@ -189,7 +189,7 @@ public abstract class ReportHtmlParser implements Serializable {
             throw exception;
         }
 
-        logger.log(Level.FINEST, "File opened succssfully.");
+        logger.finest(String.format("File opened succssfully."));
 
         //First read in the entire file. One line at a time. Append this
         InputStreamReader isr = new InputStreamReader(fis);
@@ -198,7 +198,7 @@ public abstract class ReportHtmlParser implements Serializable {
         String sourceLine = "";
         String result = "";
 
-        logger.log(Level.FINEST, "Atempting to read the file...");
+        logger.finest(String.format("Atempting to read the file..."));
         try {
             while ((sourceLine = source.readLine()) != null) {
                 Matcher m = pattern.matcher(sourceLine);
@@ -217,17 +217,17 @@ public abstract class ReportHtmlParser implements Serializable {
 
             throw exception;
         }
-        logger.log(Level.FINEST, "File read successfully!");
+        logger.finest(String.format("File read successfully!"));
 
-        logger.log(Level.FINEST, "Deleting file.");
+        logger.finest(String.format("Deleting file."));
         //Delete original: 
         file.delete();
 
-        logger.log(Level.FINEST, "Creating substitute file.");
+        logger.finest(String.format("Creating substitute file."));
         //Write substituted string to file:
         File fileNew = new File(path);
 
-        logger.log(Level.FINEST, "Attempting to write to substitute file");
+        logger.finest(String.format("Attempting to write to substitute file"));
         try {
             FileOutputStream fos = new FileOutputStream(fileNew);
             PrintWriter pw = new PrintWriter(fos);
@@ -240,9 +240,9 @@ public abstract class ReportHtmlParser implements Serializable {
 
             throw exception;
         }
-        logger.log(Level.FINEST, "Successfully wrote to substitute file!");
+        logger.finest(String.format("Successfully wrote to substitute file!"));
 
-        logger.log(Level.FINEST, "Returning numberOfReplacements: {0}", numberOfReplacements);
+        logger.finest(String.format("Returning numberOfReplacements: %s", numberOfReplacements));
 
         return numberOfReplacements;
     }

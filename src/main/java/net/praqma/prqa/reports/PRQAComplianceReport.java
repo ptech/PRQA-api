@@ -22,11 +22,11 @@ public class PRQAComplianceReport extends PRQAReport<PRQAComplianceStatus> {
      */
     public PRQAComplianceReport(QAR qar) {
     	super(qar);
-        logger.log(Level.FINEST, "Constructor and super constructor called for class PRQAComplianceReport");
+        logger.finest(String.format("Constructor and super constructor called for class PRQAComplianceReport"));
         
         this.parser = new ComplianceReportHtmlParser();
         
-        logger.log(Level.FINEST, "Ending execution of constructor - PRQAComplianceReport");
+        logger.finest(String.format("Ending execution of constructor - PRQAComplianceReport"));
     }
    
     /**
@@ -37,7 +37,7 @@ public class PRQAComplianceReport extends PRQAReport<PRQAComplianceStatus> {
     
     @Override
     public PRQAComplianceStatus completeTask() throws PrqaException {
-    	logger.log(Level.FINEST, "Starting execution of method - completeTask");
+    	logger.finest(String.format("Starting execution of method - completeTask"));
     	
         executeQAR();
         
@@ -47,7 +47,7 @@ public class PRQAComplianceReport extends PRQAReport<PRQAComplianceStatus> {
         status.setProjectCompliance(Double.parseDouble(parser.getResult(ComplianceReportHtmlParser.projectCompliancePattern)));
         status.setFileCompliance(Double.parseDouble(parser.getResult(ComplianceReportHtmlParser.fileCompliancePattern)));
         
-        logger.log(Level.FINEST, "Returning value: {0}", status);
+        logger.finest(String.format("Returning value: %s", status));
         
         return status;
     }

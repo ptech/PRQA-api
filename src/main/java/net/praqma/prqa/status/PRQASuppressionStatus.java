@@ -21,20 +21,20 @@ public class PRQASuppressionStatus extends PRQAStatus {
 
 	@Override
 	public boolean isValid() {
-		logger.log(Level.FINEST, "Starting execution of method - isValid");
+		logger.finest(String.format("Starting execution of method - isValid"));
 
 		UnsupportedOperationException exception;
 		exception = new UnsupportedOperationException("Not supported yet.");
 
-		logger.log(Level.SEVERE, "Exception thrown type: {0}; message: {1}", new Object[]{exception.getClass(), exception.getMessage()});
+		logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
 
 		throw exception;
 	}
 
 	@Override
 	public Number getReadout(StatusCategory category) throws PrqaException.PrqaReadingException {
-		logger.log(Level.FINEST, "Starting execution of method - getReadout");
-		logger.log(Level.FINEST, "Input parameter category type: {0}; value: {1}", new Object[]{category.getClass(), category});
+		logger.finest(String.format("Starting execution of method - getReadout"));
+		logger.finest(String.format("Input parameter category type: %s; value: %s", category.getClass(), category));
 
 		Number output;
 		switch (category) {
@@ -57,45 +57,45 @@ public class PRQASuppressionStatus extends PRQAStatus {
 			PrqaException.PrqaReadingException exception;
 			exception = new PrqaException.PrqaReadingException(String.format("Didn't find category %s for class %s", category, this.getClass()));
 
-					logger.log(Level.SEVERE, "Exception thrown type: {0}; message: {1}", new Object[]{exception.getClass(), exception.getMessage()});
+            logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
 
-					throw exception;
+            throw exception;
 		}
 
-		logger.log(Level.FINEST, "Returning value: {0}", output);
+		logger.finest(String.format("Returning value: %s", output));
 
 		return output;
 	}
 
 	@Override
 	public void setReadout(StatusCategory category, Number value) throws PrqaException.PrqaReadingException {
-		logger.log(Level.FINEST, "Starting execution of method - setReadout");
-		logger.log(Level.FINEST, "Input parameter category type: {0}; value: {1}", new Object[]{category.getClass(), category});
-		logger.log(Level.FINEST, "Input parameter value type: {0}; value: {1}", new Object[]{value.getClass(), value});
+		logger.finest(String.format("Starting execution of method - setReadout"));
+		logger.finest(String.format("Input parameter category type: %s; value: %s", category.getClass(), category));
+		logger.finest(String.format("Input parameter value type: %s; value: %s", value.getClass(), value));
 
 		switch (category) {
 		case TotalNumberOfFiles:
-			logger.log(Level.FINEST, "Setting numberOfFiles to: {0}.", value.intValue());
+			logger.finest(String.format("Setting numberOfFiles to: %s.", value.intValue()));
 
 			setNumberOfFiles(value.intValue());
 			break;
 		case LinesOfCode:
-			logger.log(Level.FINEST, "Setting linesOfCode to: {0}.", value.intValue());
+			logger.finest(String.format("Setting linesOfCode to: %s.", value.intValue()));
 			
 			setLinesOfCode(value.intValue());
 			break;
 		case UniqueMessagesSupperessed:
-			logger.log(Level.FINEST, "Setting uniqueMsgsSuppressed to: {0}.", value.intValue());
+			logger.finest(String.format("Setting uniqueMsgsSuppressed to: %s.", value.intValue()));
 			
 			setUniqueMsgsSuppressed(value.intValue());
 			break;
 		case MessagesSuppressed:
-			logger.log(Level.FINEST, "Setting msgsSuppressed to: {0}.", value.intValue());
+			logger.finest(String.format("Setting msgsSuppressed to: %s.", value.intValue()));
 			
 			setMsgsSuppressed(value.intValue());
 			break;
 		case PercentageMessagesSuppressed:
-			logger.log(Level.FINEST, "Setting pctMsgsSuppressed to: {0}.", value.doubleValue());
+			logger.finest(String.format("Setting pctMsgsSuppressed to: %s.", value.doubleValue()));
 			
 			setPctMsgsSuppressed(value.doubleValue());
 			break;
@@ -103,20 +103,20 @@ public class PRQASuppressionStatus extends PRQAStatus {
 			PrqaException.PrqaReadingException exception;
 			exception = new PrqaException.PrqaReadingException(String.format("Could not set value of %s for category %s in class %s", value, category, this.getClass()));
 
-			logger.log(Level.SEVERE, "Exception thrown type: {0}; message: {1}", new Object[]{exception.getClass(), exception.getMessage()});
+			logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
 
 			throw exception;
 		}
 
-		logger.log(Level.FINEST, "Ending execution of method - setReadout");
+		logger.finest(String.format("Ending execution of method - setReadout"));
 	}
 
 	/**
 	 * @return the numberOfFiles
 	 */
 	public int getNumberOfFiles() {
-		logger.log(Level.FINEST, "Starting execution of method - getNumberOfFiles");
-		logger.log(Level.FINEST, "Returning value: {0}", numberOfFiles);
+		logger.finest(String.format("Starting execution of method - getNumberOfFiles"));
+		logger.finest(String.format("Returning value: %s", numberOfFiles));
 
 		return numberOfFiles;
 	}
@@ -125,20 +125,20 @@ public class PRQASuppressionStatus extends PRQAStatus {
 	 * @param numberOfFiles the numberOfFiles to set
 	 */
 	public void setNumberOfFiles(int numberOfFiles) {
-		logger.log(Level.FINEST, "Starting execution of method - setNumberOfFiles");
-		logger.log(Level.FINEST, "Input parameter numberOfFiles type: {0}; value: {1}", new Object[]{"int", numberOfFiles});
+		logger.finest(String.format("Starting execution of method - setNumberOfFiles"));
+		logger.finest(String.format("Input parameter numberOfFiles type: %s; value: %s", "int", numberOfFiles));
 
 		this.numberOfFiles = numberOfFiles;
 
-		logger.log(Level.FINEST, "Ending execution of method - setNumberOfFiles");
+		logger.finest(String.format("Ending execution of method - setNumberOfFiles"));
 	}
 
 	/**
 	 * @return the linesOfCode
 	 */
 	public int getLinesOfCode() {
-		logger.log(Level.FINEST, "Starting execution of method - getLinesOfCode");
-		logger.log(Level.FINEST, "Returning value: {0}", linesOfCode);
+		logger.finest(String.format("Starting execution of method - getLinesOfCode"));
+		logger.finest(String.format("Returning value: %s", linesOfCode));
 
 		return linesOfCode;
 	}
@@ -147,20 +147,20 @@ public class PRQASuppressionStatus extends PRQAStatus {
 	 * @param linesOfCode the linesOfCode to set
 	 */
 	public void setLinesOfCode(int linesOfCode) {
-		logger.log(Level.FINEST, "Starting execution of method - setLinesOfCode");
-		logger.log(Level.FINEST, "Input parameter linesOfCode type: {0}; value: {1}", new Object[]{"int", linesOfCode});
+		logger.finest(String.format("Starting execution of method - setLinesOfCode"));
+		logger.finest(String.format("Input parameter linesOfCode type: %s; value: %s", "int", linesOfCode));
 
 		this.linesOfCode = linesOfCode;
 
-		logger.log(Level.FINEST, "Ending execution of method - setLinesOfCode");
+		logger.finest(String.format("Ending execution of method - setLinesOfCode"));
 	}
 
 	/**
 	 * @return the uniqueMsgsSuppressed
 	 */
 	public int getUniqueMsgsSuppressed() {
-		logger.log(Level.FINEST, "Starting execution of method - getUniqueMsgsSuppressed");
-		logger.log(Level.FINEST, "Returning value: {0}", uniqueMsgsSuppressed);
+		logger.finest(String.format("Starting execution of method - getUniqueMsgsSuppressed"));
+		logger.finest(String.format("Returning value: %s", uniqueMsgsSuppressed));
 
 		return uniqueMsgsSuppressed;
 	}
@@ -169,20 +169,20 @@ public class PRQASuppressionStatus extends PRQAStatus {
 	 * @param uniqueMsgsSuppressed the uniqueMsgsSuppressed to set
 	 */
 	public void setUniqueMsgsSuppressed(int uniqueMsgsSuppressed) {
-		logger.log(Level.FINEST, "Starting execution of method - setUniqueMsgsSuppressed");
-		logger.log(Level.FINEST, "Input parameter uniqueMsgsSuppressed type: {0}; value: {1}", new Object[]{"int", uniqueMsgsSuppressed});
+		logger.finest(String.format("Starting execution of method - setUniqueMsgsSuppressed"));
+		logger.finest(String.format("Input parameter uniqueMsgsSuppressed type: %s; value: %s", "int", uniqueMsgsSuppressed));
 
 		this.uniqueMsgsSuppressed = uniqueMsgsSuppressed;
 
-		logger.log(Level.FINEST, "Ending execution of method - setUniqueMsgsSuppressed");
+		logger.finest(String.format("Ending execution of method - setUniqueMsgsSuppressed"));
 	}
 
 	/**
 	 * @return the msgsSuppressed
 	 */
 	public int getMsgsSuppressed() {
-		logger.log(Level.FINEST, "Starting execution of method - getMsgsSuppressed");
-		logger.log(Level.FINEST, "Returning value: {0}", msgsSuppressed);
+		logger.finest(String.format("Starting execution of method - getMsgsSuppressed"));
+		logger.finest(String.format("Returning value: %s", msgsSuppressed));
 
 		return msgsSuppressed;
 	}
@@ -191,20 +191,20 @@ public class PRQASuppressionStatus extends PRQAStatus {
 	 * @param msgsSuppressed the msgsSuppressed to set
 	 */
 	public void setMsgsSuppressed(int msgsSuppressed) {
-		logger.log(Level.FINEST, "Starting execution of method - setMsgsSuppressed");
-		logger.log(Level.FINEST, "Input parameter msgsSuppressed type: {0}; value: {1}", new Object[]{"int", msgsSuppressed});
+		logger.finest(String.format("Starting execution of method - setMsgsSuppressed"));
+		logger.finest(String.format("Input parameter msgsSuppressed type: %s; value: %s", "int", msgsSuppressed));
 
 		this.msgsSuppressed = msgsSuppressed;
 
-		logger.log(Level.FINEST, "Ending execution of method - setMsgsSuppressed");
+		logger.finest(String.format("Ending execution of method - setMsgsSuppressed"));
 	}
 
 	/**
 	 * @return the pctMsgsSuppressed
 	 */
 	public double getPctMsgsSuppressed() {
-		logger.log(Level.FINEST, "Starting execution of method - getPctMsgsSuppressed");
-		logger.log(Level.FINEST, "Returning value: {0}", pctMsgsSuppressed);
+		logger.finest(String.format("Starting execution of method - getPctMsgsSuppressed"));
+		logger.finest(String.format("Returning value: %s", pctMsgsSuppressed));
 
 		return pctMsgsSuppressed;
 	}
@@ -213,12 +213,12 @@ public class PRQASuppressionStatus extends PRQAStatus {
 	 * @param pctMsgsSuppressed the pctMsgsSuppressed to set
 	 */
 	public void setPctMsgsSuppressed(double pctMsgsSuppressed) {
-		logger.log(Level.FINEST, "Starting execution of method - setPctMsgsSuppressed");
-		logger.log(Level.FINEST, "Input parameter pctMsgsSuppressed type: {0}; value: {1}", new Object[]{"double", pctMsgsSuppressed});
+		logger.finest(String.format("Starting execution of method - setPctMsgsSuppressed"));
+		logger.finest(String.format("Input parameter pctMsgsSuppressed type: %s; value: %s", "double", pctMsgsSuppressed));
 
 		this.pctMsgsSuppressed = pctMsgsSuppressed;
 
-		logger.log(Level.FINEST, "Ending execution of method - setPctMsgsSuppressed");
+		logger.finest(String.format("Ending execution of method - setPctMsgsSuppressed"));
 	}
 
 	@Override
