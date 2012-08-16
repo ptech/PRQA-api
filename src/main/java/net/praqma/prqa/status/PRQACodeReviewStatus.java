@@ -4,6 +4,7 @@
  */
 package net.praqma.prqa.status;
 
+import java.util.logging.Level;
 import net.praqma.jenkins.plugin.prqa.PrqaException;
 
 /**
@@ -12,37 +13,61 @@ import net.praqma.jenkins.plugin.prqa.PrqaException;
  */
 public class PRQACodeReviewStatus extends PRQAStatus {
 
-    @Override
-    public boolean isValid() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+	@Override
+	public boolean isValid() {
+		logger.finest(String.format("Starting execution of method - isValid"));
 
-    @Override
-    public Number getReadout(StatusCategory category) throws PrqaException.PrqaReadingException {
-        switch(category) {
-            default:
-                throw new PrqaException.PrqaReadingException("Not supported yet.");
-        }
-    }
+		UnsupportedOperationException exception;
+		exception = new UnsupportedOperationException("Not supported yet.");
 
-    @Override
-    public void setReadout(StatusCategory category, Number value) throws PrqaException.PrqaReadingException {
-        switch(category) {
-            default:
-                throw new PrqaException.PrqaReadingException(String.format("Could not set value of %s for category %s in class %s",value,category,this.getClass()));
-        }       
-    }
+		logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
 
-    @Override
-    public String toString() {
-        String res = "";
-        res += "Scanned the following CodeReview values"+"\n";
-        return res;
-    }
+		throw exception;
+	}
 
-    @Override
-    public String toHtml() {
-        StringBuilder sb = new StringBuilder();
-        return sb.toString();
-    }
+	@Override
+	public Number getReadout(StatusCategory category) throws PrqaException.PrqaReadingException {
+		logger.finest(String.format("Starting execution of method - getReadout"));
+		logger.finest(String.format("Input parameter category type: %s; value: %s", category.getClass(), category));
+
+		switch(category) {
+		default:
+			PrqaException.PrqaReadingException exception;
+			exception = new PrqaException.PrqaReadingException("Not supported yet.");
+
+			logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
+
+			throw exception;
+		}
+	}
+
+	@Override
+	public void setReadout(StatusCategory category, Number value) throws PrqaException.PrqaReadingException {
+		logger.finest(String.format("Starting execution of method - setReadout"));
+		logger.finest(String.format("Input parameter category type: %s; value: %s", category.getClass(), category));
+		logger.finest(String.format("Input parameter value type: %s; value: %s", value.getClass(), value));
+
+		switch(category) {
+		default:
+			PrqaException.PrqaReadingException exception;
+			exception = new PrqaException.PrqaReadingException(String.format("Could not set value of %s for category %s in class %s",value,category,this.getClass()));
+
+			logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
+
+			throw exception;
+		}     
+	}
+
+	@Override
+	public String toString() {
+		String res = "";
+		res += "Scanned the following CodeReview values" + System.getProperty("line.separator");
+		return res;
+	}
+
+	@Override
+	public String toHtml() {
+		StringBuilder sb = new StringBuilder();
+		return sb.toString();
+	}
 }

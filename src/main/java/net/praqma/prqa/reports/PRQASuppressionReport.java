@@ -8,8 +8,6 @@ import net.praqma.jenkins.plugin.prqa.PrqaException;
 import net.praqma.prqa.parsers.SuppressionReportParser;
 import net.praqma.prqa.products.QAR;
 import net.praqma.prqa.status.PRQASuppressionStatus;
-import net.praqma.util.execute.AbnormalProcessTerminationException;
-import net.praqma.util.execute.CommandLineException;
 
 /**
  *
@@ -17,37 +15,38 @@ import net.praqma.util.execute.CommandLineException;
  */
 public class PRQASuppressionReport extends PRQAReport<PRQASuppressionStatus> {
     
-    public PRQASuppressionReport(QAR qar) {
-        this.reportTool = qar;
+    public PRQASuppressionReport() {
         this.parser = new SuppressionReportParser();
     }
     
-    public PRQASuppressionReport() {
+    public PRQASuppressionReport(QAR qar) throws PrqaException {
+    	super(qar);
+    	
+        logger.finest(String.format("Constructor and super constructor called for class PRQASuppressionReport"));
+        
         this.parser = new SuppressionReportParser();
+        
+        logger.finest(String.format("Ending execution of constructor - PRQASuppressionReport"));
     }
 
     @Override
     public PRQASuppressionStatus generateReport() throws PrqaException {
-        parser.setFullReportPath(this.getFullReportPath());
-        cmdResult = null;
-        try {
-            cmdResult = reportTool.generateReportFiles();
-        } catch (AbnormalProcessTerminationException ex) {
-            throw new PrqaException.PrqaCommandLineException(reportTool,ex);            
-        } catch (CommandLineException cle) {      
-            throw new PrqaException.PrqaCommandLineException(reportTool,cle);            
-        }
-        
+    	logger.finest(String.format("Starting execution of method - completeTask"));
+    	
+        executeQAR();
         
         PRQASuppressionStatus status = new PRQASuppressionStatus();
         status.setLinesOfCode(Integer.parseInt(parser.getResult(SuppressionReportParser.linesOfCodePattern)));
         status.setNumberOfFiles(Integer.parseInt(parser.getResult(SuppressionReportParser.numberOfFilesPattern)));
         status.setMsgsSuppressed(Integer.parseInt(parser.getResult(SuppressionReportParser.numberOfMessagesSuppressedPattern)));
         status.setPctMsgsSuppressed(Double.parseDouble(parser.getResult(SuppressionReportParser.percentageOfMsgSuppressedPattern)));
-        status.setUniqueMsgsSuppressed(Integer.parseInt(parser.getResult(SuppressionReportParser.uniqueMessagesSuppressedPattern)));        
+        status.setUniqueMsgsSuppressed(Integer.parseInt(parser.getResult(SuppressionReportParser.uniqueMessagesSuppressedPattern)));
+        
+        logger.finest(String.format("Returning value: %s", status));
+        
         return status;
     }
-
+    
     @Override
     public String getDisplayName() {
         return "Suppression";

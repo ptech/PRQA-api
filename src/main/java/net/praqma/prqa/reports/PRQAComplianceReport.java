@@ -4,14 +4,10 @@
  */
 package net.praqma.prqa.reports;
 
-import java.io.File;
 import net.praqma.jenkins.plugin.prqa.PrqaException;
-import net.praqma.prqa.PRQACommandLineUtility;
 import net.praqma.prqa.parsers.ComplianceReportHtmlParser;
 import net.praqma.prqa.products.QAR;
 import net.praqma.prqa.status.PRQAComplianceStatus;
-import net.praqma.util.execute.AbnormalProcessTerminationException;
-import net.praqma.util.execute.CommandLineException;
 
 /**
  *
@@ -21,15 +17,19 @@ public class PRQAComplianceReport extends PRQAReport<PRQAComplianceStatus> {
     /**
      * A compliance report. Takes a command line wrapper for Programming Research QAR tool. Each report must implement their own parser.
      * 
-     * @param reportTool 
+     * @param qar 
      */
-    public PRQAComplianceReport(QAR qar) {
-        this.reportTool = qar;
+    public PRQAComplianceReport() {
         this.parser = new ComplianceReportHtmlParser();
     }
     
-    public PRQAComplianceReport() {
+    public PRQAComplianceReport(QAR qar) {
+    	super(qar);
+        logger.finest(String.format("Constructor and super constructor called for class PRQAComplianceReport"));
+        
         this.parser = new ComplianceReportHtmlParser();
+        
+        logger.finest(String.format("Ending execution of constructor - PRQAComplianceReport"));
     }
    
     /**
@@ -40,24 +40,21 @@ public class PRQAComplianceReport extends PRQAReport<PRQAComplianceStatus> {
     
     @Override
     public PRQAComplianceStatus generateReport() throws PrqaException {
-        parser.setFullReportPath(this.getFullReportPath());
-        cmdResult = null;
-        try {
-            cmdResult = reportTool.generateReportFiles();
-        } catch (AbnormalProcessTerminationException ex) {
-            throw new PrqaException.PrqaCommandLineException(reportTool, ex);            
-        } catch (CommandLineException cle) {      
-            throw new PrqaException.PrqaCommandLineException(reportTool, cle);            
-        }
-               
+    	logger.finest(String.format("Starting execution of method - generateReport"));
+    	
+        executeQAR();
+        
         //Parse it.
-        PRQAComplianceStatus stat = new PRQAComplianceStatus();        
-        stat.setMessages(Integer.parseInt(parser.getResult(ComplianceReportHtmlParser.totalMessagesPattern)));
-        stat.setProjectCompliance(Double.parseDouble(parser.getResult(ComplianceReportHtmlParser.projectCompliancePattern)));
-        stat.setFileCompliance(Double.parseDouble(parser.getResult(ComplianceReportHtmlParser.fileCompliancePattern)));    
-        return stat;
+        PRQAComplianceStatus status = new PRQAComplianceStatus();
+        status.setMessages(Integer.parseInt(parser.getResult(ComplianceReportHtmlParser.totalMessagesPattern)));
+        status.setProjectCompliance(Double.parseDouble(parser.getResult(ComplianceReportHtmlParser.projectCompliancePattern)));
+        status.setFileCompliance(Double.parseDouble(parser.getResult(ComplianceReportHtmlParser.fileCompliancePattern)));
+        
+        logger.finest(String.format("Returning value: %s", status));
+        
+        return status;
     }
-
+    
     @Override
     public String getDisplayName() {
         return "Compliance";
