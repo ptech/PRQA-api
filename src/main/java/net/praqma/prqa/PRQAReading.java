@@ -26,6 +26,9 @@ public interface PRQAReading extends Serializable {
     public void setThresholds(HashMap<StatusCategory, Number> thresholds);
     
     public HashMap<StatusCategory, Number> getReadouts(StatusCategory... categories) throws PrqaException.PrqaReadingException;
+    //createComparison(PRQAContext.ComparisonSettings setting, StatusCategory cat, PRQAReading lastReading) throws PrqaException.PrqaReadingException
+    
+    
     public PRQAStatus.PRQAComparisonMatrix createComparison(PRQAContext.ComparisonSettings setting, StatusCategory cat, PRQAReading lastReading) throws PrqaException.PrqaReadingException;
     public PRQAStatus.PRQAComparisonMatrix createComparison(PRQAContext.ComparisonSettings setting, StatusCategory cat) throws PrqaException.PrqaReadingException;
 }

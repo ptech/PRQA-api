@@ -8,34 +8,32 @@ import net.praqma.jenkins.plugin.prqa.PrqaException;
 import net.praqma.prqa.parsers.QualityReportParser;
 import net.praqma.prqa.products.QAR;
 import net.praqma.prqa.status.PRQAQualityStatus;
-import net.praqma.util.execute.AbnormalProcessTerminationException;
-import net.praqma.util.execute.CommandLineException;
 
 /**
+ *
  * @author Praqma
  */
 public class PRQAQualityReport extends PRQAReport<PRQAQualityStatus> {
     
-    public PRQAQualityReport(QAR qar) {
-        this.reportTool = qar;
-        this.parser = new QualityReportParser();
-    }
-        
     public PRQAQualityReport() {
         this.parser = new QualityReportParser();
+    }
+    
+    public PRQAQualityReport(QAR qar) {
+        
+        super(qar);
+        logger.finest(String.format("Constructor and super constructor called for class PRQAQualityReport"));
+        
+        this.parser = new QualityReportParser();
+        
+        logger.finest(String.format("Ending execution of constructor - PRQAQualityReport"));
     }
 
     @Override
     public PRQAQualityStatus generateReport() throws PrqaException {
-        parser.setFullReportPath(this.getFullReportPath());
-        cmdResult = null;
-        try {
-            cmdResult = reportTool.generateReportFiles();
-        } catch (AbnormalProcessTerminationException ex) {
-            throw new PrqaException.PrqaCommandLineException(reportTool,ex);            
-        } catch (CommandLineException cle) {      
-            throw new PrqaException.PrqaCommandLineException(reportTool,cle);            
-        }
+    	logger.finest(String.format("Starting execution of method - generateReport"));
+    	
+    	executeQAR();
                 
         PRQAQualityStatus status = new PRQAQualityStatus();
         
@@ -46,13 +44,14 @@ public class PRQAQualityReport extends PRQAReport<PRQAQualityStatus> {
         status.setNumberOfSourceFiles(Integer.parseInt(parser.getResult(QualityReportParser.numberOfSourceFilesPattern)));
         status.setTotalNumberOfFiles(Integer.parseInt(parser.getResult(QualityReportParser.totalNumberOfFilesPattern)));
         
-        
+        logger.finest(String.format("Returning value: %s", status));
         
         return status;        
     }
-
+    
     @Override
     public String getDisplayName() {
         return "Quality";
     }
 }
+
