@@ -5,7 +5,6 @@
 package net.praqma.prqa.products;
 
 import java.io.File;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.praqma.prqa.PRQA;
 import net.praqma.prqa.PRQACommandLineUtility;
@@ -81,11 +80,15 @@ public class QAC extends PRQA {
     
     @Override
     public String getProductVersion() {
+        logger.finest(String.format("Starting execution of method - getProductVersion"));
+        
         String productVersion = "Unknown version";
        
         //CmdResult res = PRQACommandLineUtility.run("qac -version", new File(commandBase));
        
         //productVersion = res.stdoutBuffer.toString();
+        
+        logger.finest(String.format("Returning value %s", productVersion));
         
         return productVersion;
     }

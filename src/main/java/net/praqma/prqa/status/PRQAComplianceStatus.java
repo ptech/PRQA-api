@@ -1,9 +1,6 @@
 package net.praqma.prqa.status;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import net.praqma.jenkins.plugin.prqa.PrqaException;
-import net.praqma.prqa.logging.Config;
 
 /**
  * This class represent a compliance status readout. 3 values, file compliance, project compliance and number of messages

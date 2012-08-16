@@ -59,6 +59,8 @@ public class QAV extends PRQA {
      * @param host the host to set
      */
     public void setHost(String host) {
+        logger.finest(String.format("In method setHost(String host) called with parameter %s",host));
+        
         this.host = host;
     }
 
@@ -66,6 +68,7 @@ public class QAV extends PRQA {
      * @return the password
      */
     public String getPassword() {
+        
         return password;
     }
 
@@ -73,6 +76,7 @@ public class QAV extends PRQA {
      * @param password the password to set
      */
     public void setPassword(String password) {
+        logger.finest(String.format("In method setPassword(String password) called with parameter %s",password));
         this.password = password;
     }
 
@@ -87,7 +91,9 @@ public class QAV extends PRQA {
      * @param port the port to set
      */
     public void setPort(Integer port) {
+        logger.finest(String.format("In method setPort(Integer port) called with parameter %s",port));
         this.port = port;
+        logger.exiting(this.getClass().toString(), "setPort");
     }
 
     /**
@@ -101,6 +107,7 @@ public class QAV extends PRQA {
      * @param chosenSnapshotName the chosenSnapshotName to set
      */
     public void setChosenSnapshotName(String chosenSnapshotName) {
+        logger.finest(String.format("In method setChosenSnapshotName(String chosenSnapshotName) called with parameter %s", chosenSnapshotName));
         this.chosenSnapshotName = chosenSnapshotName;
     }
 
@@ -115,6 +122,7 @@ public class QAV extends PRQA {
      * @param vcsXml the vcsXml to set
      */
     public void setVcsXml(String vcsXml) {
+        logger.finest(String.format("In method setVcsXml(String vcsXml) called with parameter %s", vcsXml));
         this.vcsXml = vcsXml;
     }
 
@@ -129,10 +137,12 @@ public class QAV extends PRQA {
      * @param useSingleSnapshotMode the useSingleSnapshotMode to set
      */
     public void setUseSingleSnapshotMode(boolean useSingleSnapshotMode) {
+        logger.finest(String.format("In method setUseSingleSnapshotMode(boolean useSingleSnapshotMode) called with parameter %s", useSingleSnapshotMode));
         this.useSingleSnapshotMode = useSingleSnapshotMode;
     }
     
     public String qavUpload(String path) throws PrqaUploadException {
+        logger.finest(String.format("In method qavUpload(String path) called with parameter %s", path));
         String uploadOperation ="";
 
         String program = PRQACommandBuilder.wrapInQuotationMarks(uploadProgram);
@@ -142,9 +152,11 @@ public class QAV extends PRQA {
         try {
             PRQACommandLineUtility.run(uploadOperation, new File(path));
         } catch (Exception ex) {
-            throw new PrqaException.PrqaUploadException("Upload filed in upload phase!");
+            PrqaException.PrqaUploadException exep = new PrqaUploadException("Upload failed!",ex);
+            logger.severe("PRQA Upload exception thrown!");
+            throw exep;
         }
-
+        logger.finest(String.format("Exiting method qavUpload(String path) called with parameter %s", path));
         return uploadOperation;
     }
     
@@ -160,10 +172,14 @@ public class QAV extends PRQA {
         importCommand += " "+ PRQACommandBuilder.getMaseq(maseqSection, false);
         
         try {
-             PRQACommandLineUtility.run(importCommand, new File(path));
+             PRQACommandLineUtility.run(importCommand, new File(path));             
         } catch (Exception ex) {
-            throw new PrqaException.PrqaUploadException("Upload filed in import phase!");
+            PrqaException.PrqaUploadException imp_ex = new PrqaUploadException("Qav import failed!",ex);
+            logger.severe("PRQA Upload exception thrown!");
+            throw imp_ex;
         }
+        
+        logger.exiting(this.getClass().toString(), "qavImport", importCommand);
 
         return importCommand;
     }
@@ -179,6 +195,7 @@ public class QAV extends PRQA {
      * @param uploadProjectName the uploadProjectName to set
      */
     public void setUploadProjectName(String uploadProjectName) {
+        logger.entering(this.getClass().toString(), "setUploadProjectName", uploadProjectName);
         this.uploadProjectName = uploadProjectName;
     }
 
@@ -193,6 +210,7 @@ public class QAV extends PRQA {
      * @param projectFile the projectFile to set
      */
     public void setProjectFile(String projectFile) {
+        logger.entering(this.getClass().toString(), "setProjectFile", projectFile);
         this.projectFile = projectFile;
     }
 
@@ -207,7 +225,9 @@ public class QAV extends PRQA {
      * @param product the product to set
      */
     public void setProduct(String product) {
+        logger.entering(this.getClass().toString(), "setProduct", product);
         this.product = product;
+        logger.exiting(this.getClass().toString(), "setProduct");
     }
 
     /**
