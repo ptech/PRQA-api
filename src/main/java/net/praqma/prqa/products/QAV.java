@@ -9,7 +9,6 @@ import net.praqma.jenkins.plugin.prqa.PrqaException;
 import net.praqma.jenkins.plugin.prqa.PrqaException.PrqaUploadException;
 import net.praqma.prqa.PRQA;
 import net.praqma.prqa.PRQACommandLineUtility;
-import net.praqma.util.execute.CmdResult;
 
 /**
  *

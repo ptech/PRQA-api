@@ -131,7 +131,7 @@ public class QAR extends PRQA {
 	public String toString() {
 		String out = "";
 		out += "QAR selected project file:\t" + this.projectFile + System.getProperty("line.separator");
-		out += "QAR selected product:\t\t" + this.product + System.getProperty("line.separator");
+		out += "QAR selected product:\t\t" + this.analysisTool + System.getProperty("line.separator");
 		out += "QAR selected report type:\t" + this.type + System.getProperty("line.separator");
 
 		return out;
@@ -162,8 +162,8 @@ public class QAR extends PRQA {
     @Override
     public String getProductVersion() {
         String version = "Unknown"; 
-        //CmdResult res = PRQACommandLineUtility.run("qar -version", new File(commandBase));
-        //TODO; Need to parse the result. 
+        CmdResult res = PRQACommandLineUtility.run("qar -version", new File(commandBase));
+        version = res.stdoutBuffer.toString();
         
         return version;
     }
