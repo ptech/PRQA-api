@@ -323,33 +323,51 @@ public class PRQACommandBuilder implements Serializable {
     }
     
     public static String getHost(String hostname) {
-        return String.format("-host %s", hostname);
+        logger.entering(PRQACommandBuilder.class.getName(), "getHost", hostname);
+        String host = String.format("-host %s", hostname);
+        logger.exiting(PRQACommandBuilder.class.getName(), "getHost", host);
+        return host;
     }
     
     public static String getUser(String user) {
-        return String.format("-user %s", user);
+        logger.entering(PRQACommandBuilder.class.getName(), "getUser", user);
+        String userres = String.format("-user %s", user);
+        logger.exiting(PRQACommandBuilder.class.getName(), "getUser", userres);
+        return userres;
     }
     
     public static String getPassword(String password) {
-        return String.format("-pass %s", password);
+        logger.entering(PRQACommandBuilder.class.getName(), "getPassword", password);
+        String pass = String.format("-pass %s", password);
+        logger.exiting(PRQACommandBuilder.class.getName(), "getPassword", pass);
+        return pass;
     }
     
     public static String getProjectDatabase(String databaseName) {
-        return String.format("-db %s", databaseName);
+        logger.entering(PRQACommandBuilder.class.getName(), "getProjectDatabase", databaseName);
+        String dbname = String.format("-db %s", databaseName);
+        logger.exiting(PRQACommandBuilder.class.getName(), "getProjectDatabase", dbname);
+        return dbname;
     }
     
     public static String getSingle(boolean useSingleSnapshotMode) {
+        logger.entering(PRQACommandBuilder.class.getName(), "getSingle", useSingleSnapshotMode);
         if(useSingleSnapshotMode) {
+            logger.exiting(PRQACommandBuilder.class.getName(), "getSingle", "-single");
             return "-single";
         }
+        logger.exiting(PRQACommandBuilder.class.getName(), "getSingle", "");
         return "";
     }
     
     public static String getSnapshotName(String snapshotName) {
+        logger.entering(PRQACommandBuilder.class.getName(), "getSnapshotName", snapshotName);
+        String ssname = "";
         if(StringUtils.isNotBlank(snapshotName)) {
-            return String.format("-ssname %s", snapshotName);
+            ssname = String.format("-ssname %s", snapshotName);
         }
-        return "";
+        logger.exiting(PRQACommandBuilder.class.getName(), "getSnapshotName", ssname);
+        return ssname;
     }
     
     public static String getCodeAll() {
@@ -373,7 +391,10 @@ public class PRQACommandBuilder implements Serializable {
      */
     
     public static String wrapInQuotationMarks(String string) {
-        return String.format("\""+"%s"+"\"", string);
+        logger.entering(PRQACommandBuilder.class.getName(), "wrapInQuotationMarks", string);
+        String wrapped = String.format("\""+"%s"+"\"", string);
+        logger.exiting(PRQACommandBuilder.class.getName(), "wrapInQuotationMarks", wrapped);
+        return wrapped;
     }
     
     public static String getQavOutPathParameter(String outpath) {
@@ -381,14 +402,22 @@ public class PRQACommandBuilder implements Serializable {
     }
     
     public static String getQavOutPathParameter(String outpath, boolean escapeInputParameterWhiteSpace) {
+        logger.entering(PRQACommandBuilder.class.getName(), "getQavOutPathParameter", escapeInputParameterWhiteSpace);
+        String out = "";
         if(escapeInputParameterWhiteSpace) {
-            return String.format("-po qav::outputh=%s", outpath.replace(" ", "\\ "));        
+            out = String.format("-po qav::outputh=%s", outpath.replace(" ", "\\ "));        
+        } else {
+            out = String.format("-po qav::output=%s", outpath);    
         }
-        return String.format("-po qav::output=%s", outpath);    
+        logger.exiting(PRQACommandBuilder.class.getName(), "getQavOutPathParameter", out);
+        return out;
     }
     
     public static String getVcsXmlString(String vcsXmlPath) {
-        return String.format("-po qav::prqavcs=\\\"%s\\\"", vcsXmlPath);
+        logger.entering(PRQACommandBuilder.class.getName(), "getVcsXmlString", vcsXmlPath);
+        String vcsxml = String.format("-po qav::prqavcs=\\\"%s\\\"", vcsXmlPath);
+        logger.exiting(PRQACommandBuilder.class.getName(), "getVcsXmlString", vcsxml);
+        return vcsxml;
     }
 }
 

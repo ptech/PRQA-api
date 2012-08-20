@@ -150,6 +150,7 @@ public class QAV extends PRQA {
         program+= " " + PRQACommandBuilder.getSnapshotName(chosenSnapshotName);
         uploadOperation+=" "+program;
         try {
+            logger.finest(String.format("QAV upload opration command: %s",uploadOperation));
             PRQACommandLineUtility.run(uploadOperation, new File(path));
         } catch (Exception ex) {
             PrqaException.PrqaUploadException exep = new PrqaUploadException("Upload failed!",ex);
@@ -161,6 +162,7 @@ public class QAV extends PRQA {
     }
     
     public String qavImport(String path) throws PrqaException {
+        logger.entering(this.getClass().getName(), "qavImport", path);
         String outpath = PRQACommandBuilder.getQavOutPathParameter(path);
         String importCommand ="QAW " + product +" "+ PRQACommandBuilder.getProjectFile(projectFile);
         
@@ -172,7 +174,8 @@ public class QAV extends PRQA {
         importCommand += " "+ PRQACommandBuilder.getMaseq(maseqSection, false);
         
         try {
-             PRQACommandLineUtility.run(importCommand, new File(path));             
+            logger.finest(String.format("QAV Import command: %s",importCommand));
+            PRQACommandLineUtility.run(importCommand, new File(path));             
         } catch (Exception ex) {
             PrqaException.PrqaUploadException imp_ex = new PrqaUploadException("Qav import failed!",ex);
             logger.severe("PRQA Upload exception thrown!");
@@ -262,6 +265,7 @@ public class QAV extends PRQA {
      * @return the uploadProgram
      */
     public String getUploadProgram() {
+        logger.entering(this.getClass().getName(), "getUploadProgram");
         return uploadProgram;
     }
 
@@ -269,6 +273,7 @@ public class QAV extends PRQA {
      * @param uploadProgram the uploadProgram to set
      */
     public void setUploadProgram(String uploadProgram) {
+        logger.entering(this.getClass().getName(), "setUploadProgram", uploadProgram);
         this.uploadProgram = uploadProgram;
     }
 }
