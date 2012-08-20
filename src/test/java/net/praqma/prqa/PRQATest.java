@@ -388,7 +388,7 @@ public class PRQATest extends TestCase {
         String projectDatabase ="-db mydb";
         
         assertEquals(codeAll, PRQACommandBuilder.getCodeAll());
-        assertEquals(codeAll, PRQACommandBuilder.getSnapshotName("myname"));
+        assertEquals(snapShotName, PRQACommandBuilder.getSnapshotName("myname"));
         assertEquals("", PRQACommandBuilder.getSingle(false));
         assertEquals("-single", PRQACommandBuilder.getSingle(true));
         assertEquals(projectDatabase, PRQACommandBuilder.getProjectDatabase("mydb"));
