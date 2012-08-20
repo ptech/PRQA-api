@@ -214,6 +214,7 @@ public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
     public abstract String getDisplayName();
     
     public static PRQAReport create(PRQAContext.QARReportType type, QAR reportTool) {
+        logger.finest(String.format("In create(PRQAContext.QARReportType type, QAR reportTool) with args type = %s and reportTool = %s", type, reportTool));
         PRQAReport report = null;
         switch(type) {
             case Compliance:
