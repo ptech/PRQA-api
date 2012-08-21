@@ -25,15 +25,15 @@ public class QAV extends PRQA {
     private Integer port;
     private String projectFile;
     private String product;
-    private String importProgram;
-    private String uploadProgram;
+    //private String importProgram;
+    //private String uploadProgram;
  
-    public QAV(String host, String password, String user, Integer port, String chosenSnapshotName, String vcsXml, boolean useSingleSnapshotMode, String uploadProjectName, String projectFile, String product) {
+    public QAV(String host, String password, String user, Integer port, String vcsXml, boolean useSingleSnapshotMode, String uploadProjectName, String projectFile, String product) {
         this.host = host;
         this.password = password;
         this.user = user;
         this.port = port;
-        this.chosenSnapshotName = chosenSnapshotName;
+        //this.chosenSnapshotName = chosenSnapshotName;
         this.useSingleSnapshotMode = useSingleSnapshotMode;
         this.vcsXml = vcsXml;
         this.uploadProjectName = uploadProjectName;
@@ -144,9 +144,8 @@ public class QAV extends PRQA {
     public String qavUpload(String path) throws PrqaUploadException {
         logger.finest(String.format("In method qavUpload(String path) called with parameter %s", path));
         String uploadOperation ="";
-
-        String program = PRQACommandBuilder.wrapInQuotationMarks(uploadProgram);
-        program+=" " + PRQACommandBuilder.getHost(host)+ " " +PRQACommandBuilder.getUser(user) + " " + PRQACommandBuilder.getPassword(password) + " " + PRQACommandBuilder.getProjectDatabase(uploadProjectName)+ " " + path + " " + PRQACommandBuilder.getSingle(useSingleSnapshotMode);       
+        
+        String program = "upload"+" " + PRQACommandBuilder.getHost(host)+ " " +PRQACommandBuilder.getUser(user) + " " + PRQACommandBuilder.getPassword(password) + " " + PRQACommandBuilder.getProjectDatabase(uploadProjectName)+ " " + path + " " + PRQACommandBuilder.getSingle(useSingleSnapshotMode);       
         program+= " " + PRQACommandBuilder.getSnapshotName(chosenSnapshotName);
         uploadOperation+=" "+program;
         try {
@@ -166,7 +165,7 @@ public class QAV extends PRQA {
         String outpath = PRQACommandBuilder.getQavOutPathParameter(path);
         String importCommand ="QAW " + product +" "+ PRQACommandBuilder.getProjectFile(projectFile);
         
-        String maseqSection = PRQACommandBuilder.escapeWhitespace(importProgram);//"C:\\Program\\ Files\\ (x86)\\PRQA\\QA\\ Verify\\ 1.3\\Client\\qaimport ";
+        String maseqSection = PRQACommandBuilder.escapeWhitespace("qaimport");//"C:\\Program\\ Files\\ (x86)\\PRQA\\QA\\ Verify\\ 1.3\\Client\\qaimport ";
         maseqSection += " "+"%Q %L+ -sop %D ";
         maseqSection += PRQACommandBuilder.getVcsXmlString(vcsXml);
         maseqSection += " " + PRQACommandBuilder.getCodeAll(); 
@@ -245,35 +244,5 @@ public class QAV extends PRQA {
      */
     public void setUser(String user) {
         this.user = user;
-    }
-
-    /**
-     * @return the importProgram
-     */
-    public String getImportProgram() {
-        return importProgram;
-    }
-
-    /**
-     * @param importProgram the importProgram to set
-     */
-    public void setImportProgram(String importProgram) {
-        this.importProgram = importProgram;
-    }
-
-    /**
-     * @return the uploadProgram
-     */
-    public String getUploadProgram() {
-        logger.entering(this.getClass().getName(), "getUploadProgram");
-        return uploadProgram;
-    }
-
-    /**
-     * @param uploadProgram the uploadProgram to set
-     */
-    public void setUploadProgram(String uploadProgram) {
-        logger.entering(this.getClass().getName(), "setUploadProgram", uploadProgram);
-        this.uploadProgram = uploadProgram;
     }
 }

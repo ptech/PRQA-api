@@ -6,9 +6,7 @@ package net.praqma.prqa.reports;
 
 import java.io.File;
 import java.io.Serializable;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import net.praqma.jenkins.plugin.prqa.PrqaException;
 import net.praqma.prqa.PRQAContext;
 import net.praqma.prqa.logging.Config;
@@ -31,6 +29,9 @@ public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
     protected ReportHtmlParser parser;
     protected QAR reportTool;
     private boolean useCrossModuleAnalysis;
+    
+    //RQ-1
+    private boolean enableDependencyMode;
     
     //Store the result of the executed command result.
     protected CmdResult cmdResult;
@@ -169,7 +170,7 @@ public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
 		
 		logger.finest(String.format("Attempting to generate report files..."));
 		try {
-			cmdResult = reportTool.generateReportFiles();
+			cmdResult = reportTool.generateReportFiles();            
 		} catch (AbnormalProcessTerminationException ex) {
 			PrqaException.PrqaCommandLineException exception = new PrqaException.PrqaCommandLineException(reportTool, ex);
 			
@@ -236,6 +237,20 @@ public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
             default:
                 throw new IllegalArgumentException("No valid report type given!");
         }   
+    }
+
+    /**
+     * @return the enableDependencyMode
+     */
+    public boolean isEnableDependencyMode() {
+        return enableDependencyMode;
+    }
+
+    /**
+     * @param enableDependencyMode the enableDependencyMode to set
+     */
+    public void setEnableDependencyMode(boolean enableDependencyMode) {
+        this.enableDependencyMode = enableDependencyMode;
     }
 }
 

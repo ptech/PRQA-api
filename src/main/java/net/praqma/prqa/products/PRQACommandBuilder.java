@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.praqma.prqa.CodeUploadSetting;
 import net.praqma.prqa.PRQA;
 import net.praqma.prqa.logging.Config;
 import org.apache.commons.lang.StringUtils;
@@ -419,5 +420,32 @@ public class PRQACommandBuilder implements Serializable {
         logger.exiting(PRQACommandBuilder.class.getName(), "getVcsXmlString", vcsxml);
         return vcsxml;
     }
+    
+    //RQ-6
+    public static String getPrqaVcs(CodeUploadSetting setting, String repositoyPath) {
+        String res = "";
+        if(!(setting.equals(CodeUploadSetting.AllCode) && StringUtils.isBlank(repositoyPath))) {
+            res = "-po qav::prqavcs";
+        }
+        return res;
+    }
+    
+    public static String getRepositorySetting(String repositoyPath) {
+        String res = "";
+        if(!StringUtils.isBlank(repositoyPath)) {
+            res = String.format("-r %s",repositoyPath);
+        }
+        return res;
+    } 
+    
+    public static String getMessageConfigurationParameter(String projConfigXml) {
+        String res = "";
+        if(!StringUtils.isBlank(projConfigXml)) {
+            res = String.format("-config %s", projConfigXml);
+        }
+        return res;
+    }
+    
+    
 }
 
