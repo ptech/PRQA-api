@@ -120,6 +120,10 @@ public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
         return result;
     }
     
+    public String getNamingTemplate(PRQAContext.QARReportType type, String extension) {
+        return type + " " + extension;
+    }
+    
     /**
      * Provides an alternative extension to the default XHTML extension
      * 
