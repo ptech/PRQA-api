@@ -371,8 +371,17 @@ public class PRQACommandBuilder implements Serializable {
         return ssname;
     }
     
-    public static String getCodeAll() {
-        return "-po qav::code=all";
+    public static String getCodeAll(CodeUploadSetting setting) {
+        switch(setting) {
+            case AllCode:
+                return "-po qav::code=all";
+            case None:
+                return "";
+            case OnlyNew:
+                return "-po qav::code";
+            default:
+                return "";
+        }
     }
     
     /**
@@ -422,10 +431,10 @@ public class PRQACommandBuilder implements Serializable {
     }
     
     //RQ-6
-    public static String getPrqaVcs(CodeUploadSetting setting, String repositoyPath) {
+    public static String getPrqaVcs(CodeUploadSetting setting, String vcsXmlPath) {
         String res = "";
-        if(!(setting.equals(CodeUploadSetting.AllCode) && StringUtils.isBlank(repositoyPath))) {
-            res = "-po qav::prqavcs";
+        if(!(setting.equals(CodeUploadSetting.AllCode) && StringUtils.isBlank(vcsXmlPath))) {
+            res = PRQACommandBuilder.getVcsXmlString(vcsXmlPath);
         }
         return res;
     }
@@ -446,6 +455,48 @@ public class PRQACommandBuilder implements Serializable {
         return res;
     }
     
+    public static String getLogFilePathParameter(String fullLogFilePath) {
+        String res = "";
+        res = String.format("-log=%s", fullLogFilePath);
+        return res;
+    }
+    
+    /**
+     * Method which creates the necessary sfba option. The boolean indicates whether the project has just been analyzed, if that is the case. The -sfba parameter is returned
+     * @param wasAnalyzedBeforeHand
+     * @return 
+     */
+    public static String getSfbaOption(boolean wasAnalyzedBeforeHand) {
+        String res = "";
+        if(wasAnalyzedBeforeHand) {
+           res = "-sfba"; 
+        }
+        return res;
+    }
+    
+    public static String getNumberOfThreads(int number) {
+        String res = "";
+        res = String.format("-po qav::thread==%s", number);
+        return res;
+    }
+    
+    public static String getSop(String topLevelSourceDir) {
+        String res = "";
+        res = String.format("-sop %s",topLevelSourceDir);
+        return res;
+    }
+    
+    public static String getProd(boolean single, String msgConfigSettingsFile) {
+        String res = "";
+        res += "-prod %Q";
+        if(single) {
+            res += PRQACommandBuilder.getSingle(single)+" ";
+            res += msgConfigSettingsFile;
+        } else {
+            res += " "+msgConfigSettingsFile;
+        }
+        return res;
+    }
     
 }
 
