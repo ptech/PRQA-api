@@ -5,11 +5,14 @@
 package net.praqma.prqa.products;
 
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.praqma.jenkins.plugin.prqa.PrqaException;
 import net.praqma.jenkins.plugin.prqa.PrqaException.PrqaUploadException;
 import net.praqma.prqa.CodeUploadSetting;
 import net.praqma.prqa.PRQA;
 import net.praqma.prqa.PRQACommandLineUtility;
+import net.praqma.prqa.logging.Config;
 
 /**
  *
@@ -27,9 +30,11 @@ public class QAV extends PRQA {
     private String product;
     private String repository;
     private CodeUploadSetting codeUploadSettings;
+    private String msgConfigurationXml;
     
     public QAV(String host, String password, String user, Integer port, String vcsXml, boolean useSingleSnapshotMode, 
-            String uploadProjectName, String projectFile, String product, String repository, CodeUploadSetting codeUploadSettings) {
+            String uploadProjectName, String projectFile, String product, String repository, CodeUploadSetting codeUploadSettings,
+            String msgConfigurationXml) {
         this.host = host;
         this.password = password;
         this.user = user;
@@ -41,6 +46,7 @@ public class QAV extends PRQA {
         this.product = product;
         this.repository = repository;
         this.codeUploadSettings = codeUploadSettings;
+        this.msgConfigurationXml = msgConfigurationXml;
     }
     
     public QAV() { }
@@ -128,55 +134,69 @@ public class QAV extends PRQA {
         this.useSingleSnapshotMode = useSingleSnapshotMode;
     }
     
-    public String qavUpload(String importPartCommand, String path) {
-        return "";
+    private String qavUpload(String importPartCommand, String path, boolean addSfba) {
+        
+        String command = "qaw "+getProduct()+ " "+PRQACommandBuilder.wrapInQuotationMarks(getProjectFile());
+        command += " "+ PRQACommandBuilder.getSfbaOption(addSfba)+" ";
+        String uploadPartCommand = "#";
+        uploadPartCommand +="upload %P+ " + "-prqavcs "+getVcsXml();
+        uploadPartCommand +=" "+PRQACommandBuilder.getHost(host);
+        
+        uploadPartCommand +=" "+PRQACommandBuilder.getPort(port);
+        
+        uploadPartCommand +=" "+PRQACommandBuilder.getUser(user);
+        
+        uploadPartCommand +=" "+PRQACommandBuilder.getPassword(password);
+        
+        uploadPartCommand +=" "+PRQACommandBuilder.getProjectDatabase(uploadProjectName);
+        
+        uploadPartCommand +=" "+PRQACommandBuilder.getRepositorySetting(repository);
+        
+        uploadPartCommand +=" "+PRQACommandBuilder.getProd(useSingleSnapshotMode);
+        
+        uploadPartCommand +=" "+PRQACommandBuilder.getMessageConfigurationParameter(msgConfigurationXml);
+                
+        uploadPartCommand +=" "+PRQACommandBuilder.getLogFilePathParameter(path+Config.QAV_UPLOAD_LOG);
+        
+        uploadPartCommand +=" "+path;
+        
+        
+        
+        
+        String commandfinal = "";
+        
+        //Final command. This is the one to execute
+        commandfinal = command + PRQACommandBuilder.getMaseq(importPartCommand+uploadPartCommand); 
+
+        return commandfinal;
     }
     
-    public String qavUpload(String path) throws PrqaUploadException {
+    public String qavUpload(String path, boolean skip) throws PrqaUploadException {
         logger.finest(String.format("In method qavUpload(String path) called with parameter %s", path));
         String uploadOperation ="";
-        
-        String program = "upload"+" " + PRQACommandBuilder.getHost(host)+ " " +PRQACommandBuilder.getUser(user) + " " + PRQACommandBuilder.getPassword(password) + " " + PRQACommandBuilder.getProjectDatabase(uploadProjectName)+ " " + path + " " + PRQACommandBuilder.getSingle(useSingleSnapshotMode);       
-        //program+= " " + PRQACommandBuilder.getSnapshotName(chosenSnapshotName);
-        uploadOperation+=" "+program;
         try {
-            logger.finest(String.format("QAV upload opration command: %s",uploadOperation));
-            PRQACommandLineUtility.run(uploadOperation, new File(path));
-        } catch (Exception ex) {
-            PrqaException.PrqaUploadException exep = new PrqaUploadException("Upload failed!",ex);
-            logger.severe("PRQA Upload exception thrown!");
-            throw exep;
+            uploadOperation = qavUpload(qavImport(path), path, skip);
+        } catch (PrqaException ex) {
+            
         }
-        logger.finest(String.format("Exiting method qavUpload(String path) called with parameter %s", path));
+        
         return uploadOperation;
     }
     
-    public String qavImport(String path) throws PrqaException {
+    private String qavImport(String path) throws PrqaException {
         logger.entering(this.getClass().getName(), "qavImport", path);
         String outpath = PRQACommandBuilder.getQavOutPathParameter(path);
-        //String importCommand ="qaw " + product +" "+ PRQACommandBuilder.getProjectFile(projectFile);
-        String importCommand = "";
         
-        String maseqSection = PRQACommandBuilder.escapeWhitespace("qaimport");//"C:\\Program\\ Files\\ (x86)\\PRQA\\QA\\ Verify\\ 1.3\\Client\\qaimport ";
+        String maseqSection = PRQACommandBuilder.escapeWhitespace("qaimport");
         maseqSection += " "+"%Q %L+ "+PRQACommandBuilder.getNumberOfThreads(3)+" "+PRQACommandBuilder.getSop("") + " ";
-        maseqSection += PRQACommandBuilder.getPrqaVcs(codeUploadSettings, repository);
+        maseqSection += PRQACommandBuilder.getVcsXmlString(vcsXml);
         maseqSection += PRQACommandBuilder.getQavOutPathParameter(path)+" ";
-        maseqSection += PRQACommandBuilder.getLogFilePathParameter(path);
-        //maseqSectopn += PRQACommandBuilder.get
-        //importCommand += " "+ PRQACommandBuilder.getMaseq(maseqSection, false);
-        importCommand = maseqSection;
-        try {
-            logger.finest(String.format("QAV Import command: %s",importCommand));
-            //PRQACommandLineUtility.run(importCommand, new File(path));             
-        } catch (Exception ex) {
-            PrqaException.PrqaUploadException imp_ex = new PrqaUploadException("Qav import failed!",ex);
-            logger.severe("PRQA Upload exception thrown!");
-            throw imp_ex;
-        }
+        maseqSection += PRQACommandBuilder.getLogFilePathParameter(path+Config.QAV_IMPORT_LOG)+" ";
+        maseqSection += PRQACommandBuilder.getCodeAll(codeUploadSettings);
         
-        logger.exiting(this.getClass().toString(), "qavImport", importCommand);
+        logger.exiting(this.getClass().toString(), "qavImport", maseqSection);
 
-        return importCommand;
+        return maseqSection;
     }
 
     /**
