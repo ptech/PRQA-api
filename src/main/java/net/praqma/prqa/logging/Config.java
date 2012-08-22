@@ -4,10 +4,15 @@
  */
 package net.praqma.prqa.logging;
 
+import net.praqma.prqa.PRQACommandLineUtility;
+
 /**
  *
  * @author andrius
  */
 public class Config {
-    public static final String  GLOBAL_LOGGER_NAME = "net.praqma.prqa";    
+    public static final String GLOBAL_LOGGER_NAME = "net.praqma.prqa";
+    public static final String QAV_UPLOAD_LOG = PRQACommandLineUtility.FILE_SEPARATOR+"qavupload.log";
+    public static final String QAV_IMPORT_LOG = PRQACommandLineUtility.FILE_SEPARATOR+"qaimport.log";
+    
 }

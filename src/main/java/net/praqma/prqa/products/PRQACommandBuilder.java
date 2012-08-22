@@ -361,16 +361,6 @@ public class PRQACommandBuilder implements Serializable {
         return "";
     }
     
-    public static String getSnapshotName(String snapshotName) {
-        logger.entering(PRQACommandBuilder.class.getName(), "getSnapshotName", snapshotName);
-        String ssname = "";
-        if(StringUtils.isNotBlank(snapshotName)) {
-            ssname = String.format("-ssname %s", snapshotName);
-        }
-        logger.exiting(PRQACommandBuilder.class.getName(), "getSnapshotName", ssname);
-        return ssname;
-    }
-    
     public static String getCodeAll(CodeUploadSetting setting) {
         switch(setting) {
             case AllCode:
@@ -486,16 +476,17 @@ public class PRQACommandBuilder implements Serializable {
         return res;
     }
     
-    public static String getProd(boolean single, String msgConfigSettingsFile) {
+    public static String getProd(boolean single) {
         String res = "";
-        res += "-prod %Q";
+        res += "-prod %Q ";
         if(single) {
             res += PRQACommandBuilder.getSingle(single)+" ";
-            res += msgConfigSettingsFile;
-        } else {
-            res += " "+msgConfigSettingsFile;
-        }
+        } 
         return res;
+    }
+    
+    public static String getPort(int port) {
+        return String.format("-port %s", port);
     }
     
 }
