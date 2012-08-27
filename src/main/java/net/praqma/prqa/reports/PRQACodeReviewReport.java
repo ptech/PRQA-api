@@ -5,7 +5,7 @@
 package net.praqma.prqa.reports;
 
 import java.util.logging.Level;
-import net.praqma.jenkins.plugin.prqa.PrqaException;
+import net.praqma.prga.excetions.PrqaException;
 import net.praqma.prqa.parsers.CodeReviewReportParser;
 import net.praqma.prqa.products.QAR;
 import net.praqma.prqa.status.PRQACodeReviewStatus;

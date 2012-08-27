@@ -4,7 +4,7 @@
  */
 package net.praqma.prqa.reports;
 
-import net.praqma.jenkins.plugin.prqa.PrqaException;
+import net.praqma.prga.excetions.PrqaException;
 import net.praqma.prqa.parsers.QualityReportParser;
 import net.praqma.prqa.products.QAR;
 import net.praqma.prqa.status.PRQAQualityStatus;

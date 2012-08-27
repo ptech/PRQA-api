@@ -405,16 +405,16 @@ public class PRQACommandBuilder implements Serializable {
         logger.entering(PRQACommandBuilder.class.getName(), "getQavOutPathParameter", escapeInputParameterWhiteSpace);
         String out = "";
         if(escapeInputParameterWhiteSpace) {
-            out = String.format("-po qav::outputh=%s", outpath.replace(" ", "\\ "));        
+            out = String.format("-po qav::outputh=\\\"%s\\\"", outpath.replace(" ", "\\ "));        
         } else {
-            out = String.format("-po qav::output=%s", outpath);    
+            out = String.format("-po qav::output=\\\"%s\\\"", outpath);    
         }
         logger.exiting(PRQACommandBuilder.class.getName(), "getQavOutPathParameter", out);
         return out;
     }
     
     public static String getVcsXmlString(String vcsXmlPath) {
-        logger.entering(PRQACommandBuilder.class.getName(), "getVcsXmlString", vcsXmlPath);
+        logger.entering(PRQACommandBuilder.class.getName(), "getVcsXmlString", new Object[]{ vcsXmlPath});
         String vcsxml = String.format("-po qav::prqavcs=\\\"%s\\\"", vcsXmlPath);
         logger.exiting(PRQACommandBuilder.class.getName(), "getVcsXmlString", vcsxml);
         return vcsxml;
@@ -447,7 +447,13 @@ public class PRQACommandBuilder implements Serializable {
     
     public static String getLogFilePathParameter(String fullLogFilePath) {
         String res = "";
-        res = String.format("-log=%s", fullLogFilePath);
+        res = String.format("-log \\\"%s\\\"", fullLogFilePath);
+        return res;
+    }
+    
+    public static String getImportLogFilePathParameter(String fullLogFilePath) {
+        String res = "";
+        res = String.format("-po qav::log=\\\"%s\\\"", fullLogFilePath);
         return res;
     }
     
@@ -466,13 +472,13 @@ public class PRQACommandBuilder implements Serializable {
     
     public static String getNumberOfThreads(int number) {
         String res = "";
-        res = String.format("-po qav::thread==%s", number);
+        res = String.format("-po qav::thread=%s", number);
         return res;
     }
     
     public static String getSop(String topLevelSourceDir) {
         String res = "";
-        res = String.format("-sop %s",topLevelSourceDir);
+        res = String.format("-sop \\\"%s\\\"",topLevelSourceDir);
         return res;
     }
     
@@ -487,6 +493,10 @@ public class PRQACommandBuilder implements Serializable {
     
     public static String getPort(int port) {
         return String.format("-port %s", port);
+    }
+    
+    public static String wrapInEscapedQuotationMarks(String text) {
+        return String.format("\\\"%s\\\"", text);
     }
     
 }

@@ -4,7 +4,7 @@
  */
 package net.praqma.prqa.reports;
 
-import net.praqma.jenkins.plugin.prqa.PrqaException;
+import net.praqma.prga.excetions.PrqaException;
 import net.praqma.prqa.parsers.ComplianceReportHtmlParser;
 import net.praqma.prqa.products.QAR;
 import net.praqma.prqa.status.PRQAComplianceStatus;
@@ -44,7 +44,6 @@ public class PRQAComplianceReport extends PRQAReport<PRQAComplianceStatus> {
     	
         executeQAR();
         
-        //Parse it.
         PRQAComplianceStatus status = new PRQAComplianceStatus();
         status.setMessages(Integer.parseInt(parser.getResult(ComplianceReportHtmlParser.totalMessagesPattern)));
         status.setProjectCompliance(Double.parseDouble(parser.getResult(ComplianceReportHtmlParser.projectCompliancePattern)));

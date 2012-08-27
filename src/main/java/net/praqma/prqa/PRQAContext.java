@@ -30,7 +30,7 @@ public class PRQAContext {
     }
 
     public enum QARReportType {
-        Compliance, Quality, CodeReview, Suppression;
+        Compliance, CodeReview, Suppression;
 
         @Override
         public String toString() {

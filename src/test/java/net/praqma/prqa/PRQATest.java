@@ -4,8 +4,9 @@ import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 import junit.framework.TestCase;
-import net.praqma.jenkins.plugin.prqa.PrqaException;
-import net.praqma.jenkins.plugin.prqa.PrqaException.PrqaReadingException;
+import net.praqma.prga.excetions.PrqaCommandLineException;
+import net.praqma.prga.excetions.PrqaException;
+import net.praqma.prga.excetions.PrqaReadingException;
 import net.praqma.prqa.parsers.ComplianceReportHtmlParser;
 import net.praqma.prqa.parsers.QualityReportParser;
 import net.praqma.prqa.parsers.SuppressionReportParser;
@@ -67,7 +68,7 @@ public class PRQATest extends TestCase {
         try {
             assertEquals(collection.getMin(StatusCategory.Messages),new Integer(1000));
             assertEquals(collection.getMax(StatusCategory.Messages),new Integer(20000));        
-        } catch (PrqaException.PrqaReadingException ex) {
+        } catch (PrqaException ex) {
             fail();
         }
     }
@@ -80,7 +81,7 @@ public class PRQATest extends TestCase {
             
             assertEquals(collection.getMax(StatusCategory.Messages), 100);
             assertEquals(collection.getMin(StatusCategory.Messages), 0);
-        } catch (PrqaReadingException ex) {
+        } catch (PrqaException ex) {
             fail();
         }
         
@@ -295,7 +296,7 @@ public class PRQATest extends TestCase {
         PRQAQualityStatus stat = new PRQAQualityStatus();
         try {
             stat.setReadout(StatusCategory.Messages, new Integer(40));
-        } catch (PrqaReadingException ex) {
+        } catch (PrqaException ex) {
             assertTrue("Test succeeded, quality status does not have a field with label Messages", true);
         }        
     }
@@ -307,7 +308,7 @@ public class PRQATest extends TestCase {
             for (Number num : status.getReadouts(StatusCategory.FileCompliance,StatusCategory.ProjectCompliance,StatusCategory.Messages).values()){
                 assertNotNull(num);                     
             }
-        } catch (PrqaReadingException ex) {
+        } catch (PrqaException ex) {
             fail();
         }
     }
@@ -320,14 +321,14 @@ public class PRQATest extends TestCase {
             for (Number num : status.getReadouts(StatusCategory.FileCompliance,StatusCategory.ProjectCompliance,StatusCategory.Messages,StatusCategory.NumberOfFunctions).values()){
                 assertNotNull(num);                     
             }
-        } catch (PrqaReadingException ex) {
+        } catch (PrqaException ex) {
             caught = true;
         }
         assertTrue(caught);
     }
 		
     @Test
-    public void testComaprisonForLowerValues() throws PrqaReadingException {
+    public void testComaprisonForLowerValues() throws PrqaException {
         PRQAComplianceStatus status = new PRQAComplianceStatus();
         status.setFileCompliance(new Double(10.0));
         status.setProjectCompliance(new Double(20.22));
@@ -345,7 +346,7 @@ public class PRQATest extends TestCase {
     }
     
     @Test
-    public void testCompareDoubleValues() throws PrqaReadingException {
+    public void testCompareDoubleValues() throws PrqaException {
         PRQAComplianceStatus status = new PRQAComplianceStatus();
         status.setFileCompliance(new Double(10.0));
         status.setProjectCompliance(new Double(20.22));
@@ -366,13 +367,13 @@ public class PRQATest extends TestCase {
     
     @Test
     public void testPrqaExceptionPrint() {
-        PrqaException.PrqaReadingException prqerror = new PrqaException.PrqaReadingException(null, null);
+        PrqaReadingException prqerror = new PrqaReadingException(null, null);
         System.out.println(prqerror);
         
-        PrqaException.PrqaReadingException prqerror2 = new PrqaException.PrqaReadingException("Message", new IOException("IOEX"));
+        PrqaReadingException prqerror2 = new PrqaReadingException("Message", new IOException("IOEX"));
         System.out.println(prqerror2);
         
-        PrqaException.PrqaCommandLineException prqerror3 = new PrqaException.PrqaCommandLineException(new QAR(), new IOException("Ex"));
+        PrqaCommandLineException prqerror3 = new PrqaCommandLineException("Message", new IOException("Ex"),new QAR());
         System.out.println(prqerror3);
     }
     
@@ -384,7 +385,6 @@ public class PRQATest extends TestCase {
     @Test
     public void testPrqaCommandBuilder() {
         String codeAll = "-po qav::code=all";
-        String snapShotName = "-ssname myname";
         String projectDatabase ="-db mydb";
         
         assertEquals(codeAll, PRQACommandBuilder.getCodeAll(CodeUploadSetting.AllCode));

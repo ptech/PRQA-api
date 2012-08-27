@@ -5,7 +5,8 @@
 package net.praqma.prqa.status;
 
 import java.util.logging.Level;
-import net.praqma.jenkins.plugin.prqa.PrqaException;
+import net.praqma.prga.excetions.PrqaException;
+import net.praqma.prga.excetions.PrqaReadingException;
 
 /**
  *
@@ -30,7 +31,7 @@ public class PRQAQualityStatus extends PRQAStatus {
 	}
 
 	@Override
-	public Number getReadout(StatusCategory category) throws PrqaException.PrqaReadingException {
+	public Number getReadout(StatusCategory category) throws PrqaException {
 		logger.finest(String.format("Starting execution of method - getReadout"));
 		logger.finest(String.format("Input parameter category type: %s; value: %s", category.getClass(), category));
 
@@ -85,8 +86,8 @@ public class PRQAQualityStatus extends PRQAStatus {
 			
 			return output;
 		default:
-			PrqaException.PrqaReadingException exception;
-			exception = new PrqaException.PrqaReadingException(String.format("Didn't find category %s for class %s", category, this.getClass()));
+			PrqaReadingException exception;
+			exception = new PrqaReadingException(String.format("Didn't find category %s for class %s", category, this.getClass()));
 
 			logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
 
@@ -95,7 +96,7 @@ public class PRQAQualityStatus extends PRQAStatus {
 	}
 
 	@Override
-	public void setReadout(StatusCategory category, Number value) throws PrqaException.PrqaReadingException {
+	public void setReadout(StatusCategory category, Number value) throws PrqaException {
 		logger.finest(String.format("Starting execution of method - setReadout"));
 		logger.finest(String.format("Input parameter category type: %s; value: %s", category.getClass(), category));
 		logger.finest(String.format("Input parameter value type: %s; value: %s", value.getClass(), value));
@@ -158,8 +159,8 @@ public class PRQAQualityStatus extends PRQAStatus {
 
 			break;
 		default:
-			PrqaException.PrqaReadingException exception;
-			exception = new PrqaException.PrqaReadingException(String.format("Could not set value of %s for category %s in class %s", value, category, this.getClass()));
+			PrqaReadingException exception;
+			exception = new PrqaReadingException(String.format("Could not set value of %s for category %s in class %s", value, category, this.getClass()));
 
 			logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
 

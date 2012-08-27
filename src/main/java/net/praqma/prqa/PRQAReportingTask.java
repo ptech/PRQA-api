@@ -4,7 +4,7 @@
  */
 package net.praqma.prqa;
 
-import net.praqma.jenkins.plugin.prqa.PrqaException;
+import net.praqma.prga.excetions.PrqaException;
 
 /**
  *
