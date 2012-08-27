@@ -5,7 +5,7 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import net.praqma.jenkins.plugin.prqa.PrqaException;
+import net.praqma.prga.excetions.PrqaException;
 import net.praqma.prqa.logging.Config;
 import net.praqma.prqa.status.StatusCategory;
 
@@ -54,7 +54,7 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading> {
 	 * @param category
 	 * @return
 	 */
-	public Number getMax(StatusCategory category) throws PrqaException.PrqaReadingException {
+	public Number getMax(StatusCategory category) throws PrqaException {
 		logger.finest(String.format("Starting execution of method - getMax"));
 		logger.finest(String.format("Input parameter category type: %s; value: %s", category.getClass(), category));
 
@@ -74,7 +74,7 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading> {
 		for (PRQAReading s : this) {
 			try {
 				tmp = s.getReadout(category) == null ? 0 : s.getReadout(category).intValue();
-			} catch (PrqaException.PrqaReadingException iex) {
+			} catch (PrqaException iex) {
 				logger.severe(String.format("Exception thrown type: %s; message: %s", iex.getClass(), iex.getMessage()));
 
 				throw iex;
@@ -97,7 +97,7 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading> {
 	 * @param category
 	 * @return a number indicating the smallest given observation for the specified category.
 	 */
-	public Number getMin(StatusCategory category) throws PrqaException.PrqaReadingException {
+	public Number getMin(StatusCategory category) throws PrqaException {
 		logger.finest(String.format("Starting execution of method - getMin"));
 		logger.finest(String.format("Input parameter category type: %s; value: %s", category.getClass(), category));
 
@@ -117,7 +117,7 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading> {
 		for (PRQAReading s : this) {
 			try {
 				tmp = s.getReadout(category) == null ? 0 : s.getReadout(category).intValue();
-			} catch (PrqaException.PrqaReadingException iex) {
+			} catch (PrqaException iex) {
 				logger.severe(String.format("Exception thrown type: %s; message: %s", iex.getClass(), iex.getMessage()));
 
 				throw iex;

@@ -1,6 +1,7 @@
 package net.praqma.prqa.status;
 
-import net.praqma.jenkins.plugin.prqa.PrqaException;
+import net.praqma.prga.excetions.PrqaException;
+import net.praqma.prga.excetions.PrqaReadingException;
 
 /**
  * This class represent a compliance status readout. 3 values, file compliance, project compliance and number of messages
@@ -77,7 +78,7 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
     }
     
     @Override
-    public Number getReadout(StatusCategory cat) throws PrqaException.PrqaReadingException {
+    public Number getReadout(StatusCategory cat) throws PrqaException {
     	logger.finest(String.format("Starting execution of method - getReadout"));
     	logger.finest(String.format("Input parameter cat type: %s; value: %s", cat.getClass(), cat));
     	
@@ -102,7 +103,7 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
                 
                 return output;
             default:
-            	PrqaException.PrqaReadingException exception = new PrqaException.PrqaReadingException(String.format("Didn't find category %s for class %s", cat, this.getClass()));
+            	PrqaReadingException exception = new PrqaReadingException(String.format("Didn't find category %s for class %s", cat, this.getClass()));
     			
     			logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
     			
@@ -111,7 +112,7 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
     }   
     
     @Override
-    public void setReadout(StatusCategory category, Number value) throws PrqaException.PrqaReadingException {
+    public void setReadout(StatusCategory category, Number value) throws PrqaException {
     	logger.finest(String.format("Starting execution of method - setReadout"));
     	logger.finest(String.format("Input parameter category type: %s; value: %s", category.getClass(), category));
     	logger.finest(String.format("Input parameter value type: %s; value: %s", value.getClass(), value));
@@ -148,7 +149,7 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
                 
                 break;
             default:
-            	PrqaException.PrqaReadingException exception = new PrqaException.PrqaReadingException(String.format("Could not set value of %s for category %s in class %s",value,category,this.getClass()));
+            	PrqaReadingException exception = new PrqaReadingException(String.format("Could not set value of %s for category %s in class %s",value,category,this.getClass()));
     			
     			logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
     			

@@ -7,12 +7,11 @@ package net.praqma.prqa.parsers;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import net.praqma.jenkins.plugin.prqa.PrqaException;
-import net.praqma.jenkins.plugin.prqa.PrqaException.PrqaParserException;
+import net.praqma.prga.excetions.PrqaException;
+import net.praqma.prga.excetions.PrqaParserException;
 import net.praqma.prqa.PRQACommandLineUtility;
 import net.praqma.prqa.logging.Config;
 
@@ -79,7 +78,7 @@ public abstract class ReportHtmlParser implements Serializable {
         try {
             fis = new FileInputStream(file);
         } catch (FileNotFoundException ex) {
-            PrqaException.PrqaParserException exception = new PrqaException.PrqaParserException("Could not find file " + file.getPath(), ex);
+            PrqaParserException exception = new PrqaParserException("Could not find file " + file.getPath(), ex);
 
             logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
 
@@ -116,7 +115,7 @@ public abstract class ReportHtmlParser implements Serializable {
                 }
             }
         } catch (IOException ex) {
-            PrqaException.PrqaParserException exception = new PrqaException.PrqaParserException("Could not read the line after :\n" + sourceLine, ex);
+            PrqaParserException exception = new PrqaParserException("Could not read the line after :\n" + sourceLine, ex);
 
             logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
 
@@ -128,7 +127,7 @@ public abstract class ReportHtmlParser implements Serializable {
             try {
                 source.close();
             } catch (IOException ex) {
-                PrqaException.PrqaParserException exception = new PrqaException.PrqaParserException("Failed to close file after parse!", ex);
+                PrqaParserException exception = new PrqaParserException("Failed to close file after parse!", ex);
 
                 logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
 
@@ -182,7 +181,7 @@ public abstract class ReportHtmlParser implements Serializable {
         try {
             fis = new FileInputStream(file);
         } catch (FileNotFoundException ex) {
-            PrqaException.PrqaParserException exception = new PrqaException.PrqaParserException("Could not find file " + file.getPath(), ex);
+            PrqaParserException exception = new PrqaParserException("Could not find file " + file.getPath(), ex);
 
             logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
 
@@ -211,7 +210,7 @@ public abstract class ReportHtmlParser implements Serializable {
             }
             source.close();
         } catch (IOException ex) {
-            PrqaException.PrqaParserException exception = new PrqaException.PrqaParserException("Could not read the line after :\n" + sourceLine, ex);
+            PrqaParserException exception = new PrqaParserException("Could not read the line after :\n" + sourceLine, ex);
 
             logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
 
@@ -234,7 +233,7 @@ public abstract class ReportHtmlParser implements Serializable {
             pw.print(result);
             pw.close();
         } catch (FileNotFoundException ex) {
-            PrqaException.PrqaParserException exception = new PrqaException.PrqaParserException("Could not file:" + file.getPath(), ex);
+            PrqaParserException exception = new PrqaParserException("Could not file:" + file.getPath(), ex);
 
             logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
 

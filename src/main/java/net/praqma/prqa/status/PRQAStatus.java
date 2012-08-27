@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import net.praqma.jenkins.plugin.prqa.PrqaException;
+import net.praqma.prga.excetions.PrqaException;
+import net.praqma.prga.excetions.PrqaReadingException;
 import net.praqma.prqa.PRQAContext.ComparisonSettings;
 import net.praqma.prqa.PRQAReading;
 import net.praqma.prqa.logging.Config;
@@ -74,7 +74,7 @@ public abstract class PRQAStatus implements PRQAReading, Serializable {
 	 */
 
 	@Override
-	public HashMap<StatusCategory,Number> getReadouts(StatusCategory... categories) throws PrqaException.PrqaReadingException {
+	public HashMap<StatusCategory,Number> getReadouts(StatusCategory... categories) throws PrqaException {
 		logger.finest(String.format("Starting execution of method - getReadouts"));
 		logger.finest(String.format("Input parameter categories type: %s, values:", categories.getClass()));
 		for (StatusCategory category : categories) {
@@ -87,7 +87,7 @@ public abstract class PRQAStatus implements PRQAReading, Serializable {
 			try {
 				Number readout = getReadout(category);
 				map.put(category, readout);
-			} catch (PrqaException.PrqaReadingException ex) {
+			} catch (PrqaReadingException ex) {
 				logger.severe(String.format("Exception thrown type: %s; message: %s", ex.getClass(), ex.getMessage()));
 
 				throw ex;
@@ -129,7 +129,7 @@ public abstract class PRQAStatus implements PRQAReading, Serializable {
 	}
     
 	@Override
-	public PRQAComparisonMatrix createComparison(ComparisonSettings setting, StatusCategory cat, PRQAReading lastReading) throws PrqaException.PrqaReadingException {
+	public PRQAComparisonMatrix createComparison(ComparisonSettings setting, StatusCategory cat, PRQAReading lastReading) throws PrqaException {
         if(lastReading == null) {
             return createComparison(setting,cat);
         } else {
@@ -172,7 +172,7 @@ public abstract class PRQAStatus implements PRQAReading, Serializable {
 			logger.finest(String.format("Ending execution of constructor - PRQAComparisonMatrix(ComparisonSettings setting, StatusCategory category)"));
 		}
 
-		public PRQAComparisonMatrix(ComparisonSettings setting, StatusCategory category, PRQAReading lastReading) throws PrqaException.PrqaReadingException {
+		public PRQAComparisonMatrix(ComparisonSettings setting, StatusCategory category, PRQAReading lastReading) throws PrqaException {
 			logger.finest(String.format("Constructor called for class PRQAComparisonMatrix(ComparisonSettings setting, StatusCategory category, PRQAReading lastReading)"));
 			logger.finest(String.format("Input parameter setting type: %s; value: %s", setting.getClass(), setting));
 			logger.finest(String.format("Input parameter category type: %s; value: %s", category.getClass(), category));
@@ -197,7 +197,7 @@ public abstract class PRQAStatus implements PRQAReading, Serializable {
 		 * @return
 		 * @throws net.praqma.jenkins.plugin.prqa.PrqaException.PrqaReadingException 
 		 */
-		public boolean compareIsEqualOrLower(Number number) throws PrqaException.PrqaReadingException {
+		public boolean compareIsEqualOrLower(Number number) throws PrqaException {
 			logger.finest(String.format("Starting execution of method - compareIsEqualOrLower"));
 			logger.finest(String.format("Input parameter number type: %s; value: %s", number.getClass(), number));
 
@@ -208,7 +208,7 @@ public abstract class PRQAStatus implements PRQAReading, Serializable {
 			return result;
 		}
 
-		public boolean compareIsEqualOrHigher(Number number) throws PrqaException.PrqaReadingException {
+		public boolean compareIsEqualOrHigher(Number number) throws PrqaException {
 			logger.finest(String.format("Starting execution of method - compareIsEqualOrHigher"));
 			logger.finest(String.format("Input parameter number type: %s; value: %s", number.getClass(), number));
 
@@ -226,7 +226,7 @@ public abstract class PRQAStatus implements PRQAReading, Serializable {
 			return compareValue;
 		}
 
-		private boolean compare(Number number, boolean less) throws PrqaException.PrqaReadingException {
+		private boolean compare(Number number, boolean less) throws PrqaException {
 			logger.finest(String.format("Starting execution of method - compare"));
 			logger.finest(String.format("Input parameter number type: %s; value: %s", number.getClass(), number));
 			logger.finest(String.format("Input parameter less type: %s; value: %s", "boolean", less));

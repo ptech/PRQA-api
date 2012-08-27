@@ -5,9 +5,12 @@
 package net.praqma.prqa.reports;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.logging.Logger;
-import net.praqma.jenkins.plugin.prqa.PrqaException;
+import net.praqma.prga.excetions.PrqaCommandLineException;
+import net.praqma.prga.excetions.PrqaException;
 import net.praqma.prqa.PRQAContext;
 import net.praqma.prqa.logging.Config;
 import net.praqma.prqa.parsers.ReportHtmlParser;
@@ -164,6 +167,13 @@ public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
     
     public void executeQAR() throws PrqaException {
     	logger.finest(String.format("Starting execution of method - executeQAR"));
+        
+        /**
+         * Throw an exception if the report does NOT exits on the file system.
+         */
+        if(!(new File(getReportTool().getProjectFile()).exists())) {
+            throw new PrqaCommandLineException("Error in QAR: ", new FileNotFoundException(String.format("Project file %s not found", getReportTool().getProjectFile())), reportTool);
+        }
 		
 		String fullReportPath = this.getFullReportPath();
 		
@@ -176,13 +186,13 @@ public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
 		try {
 			cmdResult = reportTool.generateReportFiles();            
 		} catch (AbnormalProcessTerminationException ex) {
-			PrqaException.PrqaCommandLineException exception = new PrqaException.PrqaCommandLineException(reportTool, ex);
+			PrqaCommandLineException exception = new PrqaCommandLineException("Failed in report generation",ex,reportTool);
 			
 			logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
 			
 			throw exception;
 		} catch (CommandLineException cle) {
-			PrqaException.PrqaCommandLineException exception = new PrqaException.PrqaCommandLineException(reportTool, cle);
+			PrqaCommandLineException exception = new PrqaCommandLineException("Failed in report generation with CLI Exception: ", cle, reportTool);
 			
 			logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
 			
@@ -224,10 +234,6 @@ public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
         switch(type) {
             case Compliance:
                 report = new PRQAComplianceReport();
-                report.reportTool = reportTool;
-                return report;
-            case Quality:
-                report = new PRQAQualityReport();
                 report.reportTool = reportTool;
                 return report;
             case CodeReview:
