@@ -13,6 +13,7 @@ import net.praqma.prqa.PRQACommandLineUtility;
 import net.praqma.prqa.logging.Config;
 import net.praqma.util.execute.AbnormalProcessTerminationException;
 import net.praqma.util.execute.CommandLineException;
+import org.apache.commons.lang.StringUtils;
 
 /**
  *
@@ -27,12 +28,13 @@ public class QAV extends PRQA {
     private boolean useSingleSnapshotMode;
     private Integer port;
     private String projectFile;
-    private String product;    
+    private String product;
+    private String sourceTopLevelDir;
     private CodeUploadSetting codeUploadSettings;
     
     
     public QAV(String host, String password, String user, Integer port, String vcsXml, boolean useSingleSnapshotMode, 
-            String uploadProjectName, String projectFile, String product, CodeUploadSetting codeUploadSettings) {
+            String uploadProjectName, String projectFile, String product, CodeUploadSetting codeUploadSettings, String sourceTopLevelDir) {
         this.host = host;
         this.password = password;
         this.user = user;
@@ -42,7 +44,8 @@ public class QAV extends PRQA {
         this.uploadProjectName = uploadProjectName;
         this.projectFile = projectFile;
         this.product = product;        
-        this.codeUploadSettings = codeUploadSettings;        
+        this.codeUploadSettings = codeUploadSettings;
+        this.sourceTopLevelDir = sourceTopLevelDir;
     }
     
     public QAV() { }
@@ -187,9 +190,12 @@ public class QAV extends PRQA {
         logger.entering(this.getClass().getName(), "qavImport", path);
         String outpath = PRQACommandBuilder.getQavOutPathParameter(path);
         
+        /**
+         * Construct the import part of the command. If sourceTopLevelDir is left blank, Jenkins workspace root is used in the command.
+         */
         String maseqSection = PRQACommandBuilder.escapeWhitespace("qaimport.exe");
-        maseqSection += " "+"%Q &P+ %L+ "+PRQACommandBuilder.getNumberOfThreads(3)+" "+PRQACommandBuilder.getSop(path) + " ";
-        maseqSection += PRQACommandBuilder.getVcsXmlString(vcsXml)+" ";
+        maseqSection += " "+"%Q &P+ %L+ "+PRQACommandBuilder.getNumberOfThreads(3)+" "+PRQACommandBuilder.getSop(StringUtils.isBlank(sourceTopLevelDir) ? path : sourceTopLevelDir) + " ";
+        maseqSection += PRQACommandBuilder.getPrqaVcs(codeUploadSettings, vcsXml)+" ";
         maseqSection += PRQACommandBuilder.getQavOutPathParameter(path)+" ";
         maseqSection += PRQACommandBuilder.getImportLogFilePathParameter(path+Config.QAV_IMPORT_LOG)+" ";
         maseqSection += PRQACommandBuilder.getCodeAll(codeUploadSettings);
@@ -257,5 +263,19 @@ public class QAV extends PRQA {
      */
     public void setUser(String user) {
         this.user = user;
+    }
+
+    /**
+     * @return the sourceTopLevelDir
+     */
+    public String getSourceTopLevelDir() {
+        return sourceTopLevelDir;
+    }
+
+    /**
+     * @param sourceTopLevelDir the sourceTopLevelDir to set
+     */
+    public void setSourceTopLevelDir(String sourceTopLevelDir) {
+        this.sourceTopLevelDir = sourceTopLevelDir;
     }
 }

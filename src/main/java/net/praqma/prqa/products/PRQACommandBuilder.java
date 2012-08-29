@@ -423,7 +423,9 @@ public class PRQACommandBuilder implements Serializable {
     //RQ-6
     public static String getPrqaVcs(CodeUploadSetting setting, String vcsXmlPath) {
         String res = "";
-        if(!(setting.equals(CodeUploadSetting.AllCode) && StringUtils.isBlank(vcsXmlPath))) {
+        if((setting.equals(CodeUploadSetting.AllCode) && StringUtils.isBlank(vcsXmlPath))) {
+            return res;
+        } else {
             res = PRQACommandBuilder.getVcsXmlString(vcsXmlPath);
         }
         return res;
