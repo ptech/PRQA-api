@@ -133,7 +133,8 @@ public class QAV extends PRQA {
         this.useSingleSnapshotMode = useSingleSnapshotMode;
     }
     
-    private String qavUpload(String importPartCommand, String path, boolean addSfba) throws PrqaException {        
+    private String qavUpload(String importPartCommand, String path, boolean addSfba) throws PrqaException {
+        logger.entering(this.getClass().getSimpleName(), "qavUpload(String importPartCommand, String path, boolean addSfba)", new Object[] { importPartCommand,path,addSfba });
         String command = "qaw "+getProduct()+ " "+PRQACommandBuilder.wrapInQuotationMarks(getProjectFile());
         command += " "+ PRQACommandBuilder.getSfbaOption(addSfba)+" ";
         String uploadPartCommand = "#";
@@ -154,22 +155,31 @@ public class QAV extends PRQA {
         
         uploadPartCommand +=" "+path;
         
-        //Final command. This is the one to execute
+        /**
+         * We have to catch every possible exception when running the command line.
+         * 
+         * This exception is in turn wrapped in an IOException when used together with FileCallable<T> which has a checked IOException. 
+         */
+        
         String commandfinal = command + PRQACommandBuilder.getMaseq(importPartCommand+uploadPartCommand); 
         try {
             logger.finest(String.format("QAV upload path argument: %s", path));
             logger.finest(String.format("QAV upload command: ", commandfinal));
             PRQACommandLineUtility.run(commandfinal, new File(path));
         } catch (AbnormalProcessTerminationException abnormex) {
-            logger.finest(String.format("Failed QAV Upload with exception"));
+            logger.finest(String.format("Failed QAV Upload with AbnormalProcessTerminationException"));
             logger.finest(abnormex.toString());
             throw new PrqaUploadException("Failed QAV upload", abnormex);
         } catch (CommandLineException cliex) {
-            logger.finest("Failed QAV Upload with exception");
+            logger.finest("Failed QAV Upload with CommandLineException");
             logger.finest(cliex.toString());
             throw new PrqaUploadException("Failed QAV upload", cliex);
+        } catch (Exception ex) {
+            logger.finest("Failed QAV Upload with Exception");
+            logger.finest(ex.toString());
+            throw new PrqaUploadException("Failed QAV upload", ex);
         }
-
+        logger.exiting(this.getClass().getSimpleName(), "qavUpload(String importPartCommand, String path, boolean addSfba)",commandfinal);
         return commandfinal;
     }
     
@@ -216,7 +226,7 @@ public class QAV extends PRQA {
      * @param uploadProjectName the uploadProjectName to set
      */
     public void setUploadProjectName(String uploadProjectName) {
-        logger.entering(this.getClass().toString(), "setUploadProjectName", uploadProjectName);
+        logger.entering(this.getClass().toString(), "setUploadProjectName(String uploadProjectName)", uploadProjectName);
         this.uploadProjectName = uploadProjectName;
     }
 
@@ -231,7 +241,7 @@ public class QAV extends PRQA {
      * @param projectFile the projectFile to set
      */
     public void setProjectFile(String projectFile) {
-        logger.entering(this.getClass().toString(), "setProjectFile", projectFile);
+        logger.entering(this.getClass().toString(), "setProjectFile(String projectFile)", projectFile);
         this.projectFile = projectFile;
     }
 
@@ -246,9 +256,9 @@ public class QAV extends PRQA {
      * @param product the product to set
      */
     public void setProduct(String product) {
-        logger.entering(this.getClass().toString(), "setProduct", product);
+        logger.entering(this.getClass().toString(), "setProduct(String product)", product);
         this.product = product;
-        logger.exiting(this.getClass().toString(), "setProduct");
+        logger.exiting(this.getClass().toString(), "setProduct(String product)");
     }
 
     /**
