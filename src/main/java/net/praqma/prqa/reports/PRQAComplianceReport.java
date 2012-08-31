@@ -40,8 +40,8 @@ public class PRQAComplianceReport extends PRQAReport<PRQAComplianceStatus> {
     
     @Override
     public PRQAComplianceStatus generateReport() throws PrqaException {
-    	logger.finest(String.format("Starting execution of method - generateReport"));
-    	
+        
+        logger.entering(this.getClass().getSimpleName(), "generateReport()");
         executeQAR();
         
         PRQAComplianceStatus status = new PRQAComplianceStatus();
