@@ -155,17 +155,16 @@ public class QAV extends PRQA {
         
         uploadPartCommand +=" "+path;
         
-        /**
-         * We have to catch every possible exception when running the command line.
-         * 
-         * This exception is in turn wrapped in an IOException when used together with FileCallable<T> which has a checked IOException. 
-         */
+        String commandfinal = command + PRQACommandBuilder.getMaseq(importPartCommand+uploadPartCommand);
+        return commandfinal;
+    }
+    public boolean generateUpload(String command, String path, boolean skip) throws PrqaUploadException {
+        boolean res = false;
         
-        String commandfinal = command + PRQACommandBuilder.getMaseq(importPartCommand+uploadPartCommand); 
         try {
             logger.finest(String.format("QAV upload path argument: %s", path));
-            logger.finest(String.format("QAV upload command: ", commandfinal));
-            PRQACommandLineUtility.run(commandfinal, new File(path));
+            logger.finest(String.format("QAV upload command: ", command));
+            PRQACommandLineUtility.run(command, new File(path));
         } catch (AbnormalProcessTerminationException abnormex) {
             logger.finest(String.format("Failed QAV Upload with AbnormalProcessTerminationException"));
             logger.finest(abnormex.toString());
@@ -179,20 +178,14 @@ public class QAV extends PRQA {
             logger.finest(ex.toString());
             throw new PrqaUploadException("Failed QAV upload", ex);
         }
-        logger.exiting(this.getClass().getSimpleName(), "qavUpload(String importPartCommand, String path, boolean addSfba)",commandfinal);
-        return commandfinal;
+        
+        return res;
     }
     
     public String qavUpload(String path, boolean skip) throws PrqaException {
         logger.finest(String.format("In method qavUpload(String path) called with parameter %s", path));
         String uploadOperation ="";
-        try {
-            uploadOperation = qavUpload(qavImport(path), path, skip);
-        } catch (PrqaException ex) {
-            logger.finest("qavUpload(path, skip) caught exception with cause (Propagating exception): "+ ex.getCause() != null ? ex.getCause().toString() : "no cause specified");
-            throw ex;
-        }
-        
+        uploadOperation = qavUpload(qavImport(path), path, skip);
         return uploadOperation;
     }
     
@@ -204,7 +197,7 @@ public class QAV extends PRQA {
          * Construct the import part of the command. If sourceTopLevelDir is left blank, Jenkins workspace root is used in the command.
          */
         String maseqSection = PRQACommandBuilder.escapeWhitespace("qaimport.exe");
-        maseqSection += " "+"%Q &P+ %L+ "+PRQACommandBuilder.getNumberOfThreads(3)+" "+PRQACommandBuilder.getSop(StringUtils.isBlank(sourceTopLevelDir) ? path : sourceTopLevelDir) + " ";
+        maseqSection += " "+"%Q %P+ %L+ "+PRQACommandBuilder.getNumberOfThreads(3)+" "+PRQACommandBuilder.getSop(StringUtils.isBlank(sourceTopLevelDir) ? path : sourceTopLevelDir) + " ";
         maseqSection += PRQACommandBuilder.getPrqaVcs(codeUploadSettings, vcsXml)+" ";
         maseqSection += PRQACommandBuilder.getQavOutPathParameter(path)+" ";
         maseqSection += PRQACommandBuilder.getImportLogFilePathParameter(path+Config.QAV_IMPORT_LOG)+" ";

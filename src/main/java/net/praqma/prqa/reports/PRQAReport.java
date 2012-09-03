@@ -83,7 +83,7 @@ public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
     	
         return this.reportTool;
     }
-    
+
     public void setReportTool(QAR reportTool) {
     	logger.finest(String.format("Starting execution of method - setQar"));
 		logger.finest(String.format("Input parameter qar type: %s; value: %s", reportTool.getClass(), reportTool));
