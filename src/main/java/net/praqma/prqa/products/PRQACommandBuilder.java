@@ -480,7 +480,11 @@ public class PRQACommandBuilder implements Serializable {
     
     public static String getSop(String topLevelSourceDir) {
         String res = "";
-        res = String.format("-sop \\\"%s\\\"",topLevelSourceDir);
+        String sourceDir = topLevelSourceDir;
+        if(topLevelSourceDir.endsWith("\\")) {
+            sourceDir = topLevelSourceDir.substring(0, sourceDir.length()-1);
+        }
+        res = String.format("-sop \\\"%s\\\"",sourceDir);
         return res;
     }
     
