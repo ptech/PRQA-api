@@ -395,4 +395,19 @@ public class PRQATest extends TestCase {
         
         
     }
+    
+    @Test
+    public void testSopRemoveTrailingSlash() {
+        String stringWithSlash = "C:\\slashed\\";
+        String stringUnSlashed = "-sop \\\"C:\\slashed\\\"";
+        String result = PRQACommandBuilder.getSop(stringWithSlash);
+        
+        String withOutSlash = "C:\\slashed";
+        String result2 = PRQACommandBuilder.getSop(withOutSlash);
+        
+        assertEquals(stringUnSlashed, result);
+        assertEquals(result, result2);
+        
+        
+    }
 }

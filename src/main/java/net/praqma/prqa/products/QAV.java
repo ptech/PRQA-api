@@ -153,7 +153,7 @@ public class QAV extends PRQA {
                
         uploadPartCommand +=" "+PRQACommandBuilder.getLogFilePathParameter(path+Config.QAV_UPLOAD_LOG);
         
-        uploadPartCommand +=" "+path;
+        uploadPartCommand +=" "+PRQACommandBuilder.wrapInEscapedQuotationMarks(path);
         
         String commandfinal = command + PRQACommandBuilder.getMaseq(importPartCommand+uploadPartCommand);
         return commandfinal;
