@@ -1,5 +1,8 @@
 package net.praqma.prqa;
 
+import java.util.EnumSet;
+import net.praqma.prqa.products.QAR;
+
 /**
  *
  * @author jes
@@ -40,5 +43,11 @@ public class PRQAContext {
                 return this.name();
             }            
         }
+        
+        public static final EnumSet<QARReportType> OPTIONAL_TYPES = EnumSet.of(CodeReview, Suppression);
+        
+        public static final EnumSet<QARReportType> REQUIRED_TYPES = EnumSet.of(Compliance);
     }
+    
+    
 }

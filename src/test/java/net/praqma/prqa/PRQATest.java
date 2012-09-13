@@ -3,6 +3,7 @@ package net.praqma.prqa;
 import java.io.*;
 import java.util.Arrays;
 import java.util.List;
+import javax.xml.ws.ServiceMode;
 import junit.framework.TestCase;
 import net.praqma.prga.excetions.PrqaCommandLineException;
 import net.praqma.prga.excetions.PrqaException;
@@ -17,6 +18,7 @@ import net.praqma.prqa.products.QAV;
 import net.praqma.prqa.status.PRQAComplianceStatus;
 import net.praqma.prqa.status.PRQAQualityStatus;
 import net.praqma.prqa.status.StatusCategory;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 /**
@@ -24,6 +26,10 @@ import org.junit.Test;
  * @author Praqma
  */
 public class PRQATest extends TestCase {
+    private String dummyTestProjectFile = "C:/MyProject/project.prj";
+    private String dummyTestOutputFoldder = "C:/Workspace/myproject/jobs/test";
+    
+    
     private static PRQAStatusCollection collection = null;
     //private static InputStream stream;
     private static File copyResourceToTestFile(Class clazz, String file) throws IOException {
@@ -44,6 +50,11 @@ public class PRQATest extends TestCase {
         return f;
     }
     
+    @Before
+    public void initialize() {
+        
+    }
+    
     @BeforeClass 
     public static void testCreateMockCollection () {
         collection = new PRQAStatusCollection();
@@ -60,7 +71,7 @@ public class PRQATest extends TestCase {
         collection.add(statusTwo);
         collection.add(status);
     }
-     
+         
     @Test
     public void testClearOverridesVerification() {
         assertNotNull(collection);
@@ -407,7 +418,19 @@ public class PRQATest extends TestCase {
         
         assertEquals(stringUnSlashed, result);
         assertEquals(result, result2);
+    }
+    
+    
+    /**
+     * Testing specific requirements specifications
+     */
+    @Test
+    public void testCommandConstruction() {
         
-        
+    }
+    
+    @Test public void testPrqaContext() {
+        int expectedCount = PRQAContext.QARReportType.OPTIONAL_TYPES.size();        
+        assertEquals(2, expectedCount);
     }
 }
