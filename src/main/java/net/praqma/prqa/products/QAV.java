@@ -196,8 +196,11 @@ public class QAV extends PRQA {
         /**
          * Construct the import part of the command. If sourceTopLevelDir is left blank, Jenkins workspace root is used in the command.
          */
-        String maseqSection = PRQACommandBuilder.escapeWhitespace("qaimport.exe");
-        maseqSection += " "+"%Q %P+ %L+ "+PRQACommandBuilder.getNumberOfThreads(3)+" "+PRQACommandBuilder.getSop(StringUtils.isBlank(sourceTopLevelDir) ? path : sourceTopLevelDir) + " ";
+        String maseqSection = PRQACommandBuilder.escapeWhitespace("qaimport");
+        
+        int availableProcessors = Runtime.getRuntime().availableProcessors(); 
+        
+        maseqSection += " "+"%Q %P+ %L+ "+PRQACommandBuilder.getNumberOfThreads(availableProcessors)+" "+PRQACommandBuilder.getSop(StringUtils.isBlank(sourceTopLevelDir) ? path : sourceTopLevelDir) + " ";
         maseqSection += PRQACommandBuilder.getPrqaVcs(codeUploadSettings, vcsXml)+" ";
         maseqSection += PRQACommandBuilder.getQavOutPathParameter(path)+" ";
         maseqSection += PRQACommandBuilder.getImportLogFilePathParameter(path+Config.QAV_IMPORT_LOG)+" ";

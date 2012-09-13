@@ -6,11 +6,9 @@ package net.praqma.prqa.products;
 
 import java.io.Serializable;
 import java.util.LinkedList;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.praqma.prqa.CodeUploadSetting;
 import net.praqma.prqa.PRQA;
-import net.praqma.prqa.logging.Config;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -24,16 +22,17 @@ public class PRQACommandBuilder implements Serializable {
     private static final Logger logger;
 
     static {
-        logger = Logger.getLogger(Config.GLOBAL_LOGGER_NAME);
+        logger = Logger.getLogger(PRQACommandBuilder.class.getName());
     }
 
     public PRQACommandBuilder(String executable) {
-    	logger.finest(String.format("Constructor called for class PRQACommandBuilder"));
-    	logger.finest(String.format("Input parameter executable type: %s; value: %s", executable.getClass(), executable));
+        logger.finest("Hallo there!");
+        logger.finest(String.format("Constructor called for class PRQACommandBuilder()"));
+        logger.finest(String.format("Input parameter executable type: %s; value: %s", executable.getClass(), executable));
 
-    	this.executable = executable;
-        
-        logger.finest(String.format("Ending execution of constructor - PRQACommandBuilder"));
+        this.executable = executable;
+
+        logger.finest(String.format("Ending execution of constructor - PRQACommandBuilder()"));
     }
 
     public PRQACommandBuilder appendArgument(String argument) {
@@ -339,7 +338,13 @@ public class PRQACommandBuilder implements Serializable {
     
     public static String getPassword(String password) {
         logger.entering(PRQACommandBuilder.class.getName(), "getPassword", password);
-        String pass = String.format("-pass %s", password);
+      
+        String pass;
+        if(StringUtils.isBlank(password)) {
+            pass = "";
+        } else {
+            pass = String.format("-pass %s", password);
+        }
         logger.exiting(PRQACommandBuilder.class.getName(), "getPassword", pass);
         return pass;
     }

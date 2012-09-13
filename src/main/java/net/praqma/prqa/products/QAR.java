@@ -5,11 +5,9 @@
 package net.praqma.prqa.products;
 
 import java.io.File;
-import java.util.logging.Logger;
 import net.praqma.prqa.PRQA;
 import net.praqma.prqa.PRQACommandLineUtility;
 import net.praqma.prqa.PRQAContext.QARReportType;
-import net.praqma.prqa.logging.Config;
 import net.praqma.util.execute.CmdResult;
 
 /**
@@ -26,15 +24,13 @@ public class QAR extends PRQA {
 	private PRQACommandBuilder builder;
 	private QARReportType type;
 	public static final String QAW_WRAPPER = "qaw";
-	private static final Logger logger;
+	//private static final Logger logger;
 
 	/**
 	 * QAR is invoked using QAW where this is taken as parameter in the QAW command.
 	 *
 	 */
-	static {
-		logger = Logger.getLogger(Config.GLOBAL_LOGGER_NAME);
-	}
+
 
 	public QAR() {
 		logger.finest(String.format("Constructor called for class QAR()"));
@@ -74,6 +70,18 @@ public class QAR extends PRQA {
 		
 		return output;
 	}
+    
+    @Override
+    public void setCommandBase(String commandBase) {
+        logger.finest(String.format("Starting execution of method - setCommandBase"));
+        logger.finest(String.format("Input parameter commandBase type: %s; value: %s", commandBase.getClass(), commandBase));
+
+        this.commandBase = commandBase;
+        this.analysisTool.setCommandBase(commandBase);
+
+        logger.finest(String.format("Ending execution of method - setProductExecutable"));
+    }
+    
 
 	public void setReportOutputPath(String reportOutputPath) {
 		logger.finest(String.format("Starting execution of method - setReportOutputPath"));

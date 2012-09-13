@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.EnumSet;
 import java.util.logging.Logger;
 import net.praqma.prga.excetions.PrqaCommandLineException;
 import net.praqma.prga.excetions.PrqaException;
@@ -27,7 +28,8 @@ import net.praqma.util.execute.CommandLineException;
  */
 public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
     
-	protected static final Logger logger = Logger.getLogger(Config.GLOBAL_LOGGER_NAME); 
+	protected static final Logger logger = Logger.getLogger(Config.GLOBAL_LOGGER_NAME);
+    private EnumSet<PRQAContext.QARReportType> chosenReports;
 	
     protected ReportHtmlParser parser;
     protected QAR reportTool;
@@ -194,10 +196,12 @@ public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
 		} catch (CommandLineException cle) {
 			PrqaCommandLineException exception = new PrqaCommandLineException("Failed in report generation with CLI Exception: ", cle, reportTool);
 			
-			logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
+			logger.severe(String.format("Exception thrown type: %s message: %s", exception.getClass(), exception.getMessage()));
 			
 			throw exception;
-		}
+		} catch (Exception ex) {
+            PrqaCommandLineException prqaclex = new PrqaCommandLineException(String.format("Exception thrown type: %s",ex.getClass()), ex, reportTool);
+        }
 		logger.finest(String.format("qar executed successfully!"));
 		
 		logger.finest(String.format("Ending execution of method - executeQAR"));
@@ -261,6 +265,20 @@ public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
      */
     public void setEnableDependencyMode(boolean enableDependencyMode) {
         this.enableDependencyMode = enableDependencyMode;
+    }
+
+    /**
+     * @return the chosenReports
+     */
+    public EnumSet<PRQAContext.QARReportType> getChosenReports() {
+        return chosenReports;
+    }
+
+    /**
+     * @param chosenReports the chosenReports to set
+     */
+    public void setChosenReports(EnumSet<PRQAContext.QARReportType> chosenReports) {
+        this.chosenReports = chosenReports;
     }
 }
 
