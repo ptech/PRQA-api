@@ -76,7 +76,7 @@ public class QAC extends PRQA {
     public String getProductVersion() {
         logger.finest(String.format("Starting execution of method - getProductVersion()"));
         
-        String productVersion = "Unknown version";
+        String productVersion = "Unknown";
         CmdResult res = null;
         File f = null;
         

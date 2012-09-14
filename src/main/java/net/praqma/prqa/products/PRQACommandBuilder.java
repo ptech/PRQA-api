@@ -517,5 +517,13 @@ public class PRQACommandBuilder implements Serializable {
         }
         return res;
     }
+    
+    public static String getDependencyModeParameter(boolean enabled) {
+        String res = "";
+        if(enabled) {
+            res = "-mode depend";
+        }
+        return res;
+    }
 }
 
