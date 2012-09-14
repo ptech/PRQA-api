@@ -37,6 +37,7 @@ public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
     
     //RQ-1
     private boolean enableDependencyMode;
+    private boolean enableDataFlowAnalysis;
     
     //Store the result of the executed command result.
     protected CmdResult cmdResult;
@@ -279,6 +280,20 @@ public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
      */
     public void setChosenReports(EnumSet<PRQAContext.QARReportType> chosenReports) {
         this.chosenReports = chosenReports;
+    }
+
+    /**
+     * @return the enableDataFlowAnalysis
+     */
+    public boolean isEnableDataFlowAnalysis() {
+        return enableDataFlowAnalysis;
+    }
+
+    /**
+     * @param enableDataFlowAnalysis the enableDataFlowAnalysis to set
+     */
+    public void setEnableDataFlowAnalysis(boolean enableDataFlowAnalysis) {
+        this.enableDataFlowAnalysis = enableDataFlowAnalysis;
     }
 }
 

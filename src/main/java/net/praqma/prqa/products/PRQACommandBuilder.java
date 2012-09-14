@@ -510,5 +510,12 @@ public class PRQACommandBuilder implements Serializable {
         return String.format("\\\"%s\\\"", text);
     }
     
+    public static String getDataFlowAnanlysisParameter(boolean enabled) {
+        String res = "";
+        if(enabled) {
+            res = "-ed+";
+        }
+        return res;
+    }
 }
 
