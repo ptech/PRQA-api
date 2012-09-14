@@ -3,7 +3,6 @@ package net.praqma.prqa;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.praqma.prga.excetions.PrqaException;
 import net.praqma.prqa.logging.Config;
