@@ -4,8 +4,6 @@
  */
 package net.praqma.prga.excetions;
 
-import java.io.IOException;
-
 /**
  *
  * @author Praqma
