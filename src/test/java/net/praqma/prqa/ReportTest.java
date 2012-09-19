@@ -9,7 +9,9 @@ import net.praqma.prga.excetions.PrqaCommandLineException;
 import net.praqma.prga.excetions.PrqaException;
 import net.praqma.prqa.products.QAC;
 import net.praqma.prqa.products.QAR;
+import net.praqma.prqa.reports.PRQACodeReviewReport;
 import net.praqma.prqa.reports.PRQAComplianceReport;
+import net.praqma.prqa.reports.PRQASuppressionReport;
 import org.junit.*;
 import static org.junit.Assert.*;
 
@@ -17,10 +19,16 @@ import static org.junit.Assert.*;
  *
  * @author Praqma
  */
-public class ReportTests {
+public class ReportTest {
     @Test public void testReportFileNotFoundProject() {
         PRQAComplianceReport report = new PRQAComplianceReport();
-        assertNotNull(report.getReportTool());
+        assertNull(report.getReportTool());
+        
+        PRQASuppressionReport report3 = new PRQASuppressionReport();
+        assertNull(report3.getReportTool());
+        
+        PRQACodeReviewReport report4 = new PRQACodeReviewReport();
+        assertNull(report4.getReportTool());
         
         QAR qar = new QAR(new QAC(), "C:/not/exists/project", PRQAContext.QARReportType.Compliance);
         
@@ -34,7 +42,7 @@ public class ReportTests {
             }
             
             if(!(ex.getCause() instanceof FileNotFoundException)) {
-                fail();
+                fail("This should not happen");
             }
         }
     }
@@ -45,7 +53,7 @@ public class ReportTests {
      */
     @Test public void testReportDefaultValues() {
         PRQAComplianceReport report = new PRQAComplianceReport();
-        assertNotNull(report.getReportTool());
+        assertNull(report.getReportTool());
         
         assertFalse(report.isUseCrossModuleAnalysis());
         assertFalse(report.isEnableDependencyMode());
