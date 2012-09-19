@@ -45,5 +45,4 @@ public class PRQAContext {
         public static final EnumSet<QARReportType> REQUIRED_TYPES = EnumSet.of(Compliance);
     }
     
-    
 }
