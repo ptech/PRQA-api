@@ -52,7 +52,7 @@ public class QAV extends PRQA {
 
     @Override
     public String getProductVersion() {
-        return "Unknown version";
+        return "Unknown";
     }
 
     /**

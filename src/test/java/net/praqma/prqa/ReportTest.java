@@ -5,19 +5,16 @@
 package net.praqma.prqa;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import net.praqma.prga.excetions.PrqaCommandLineException;
 import net.praqma.prga.excetions.PrqaException;
 import net.praqma.prqa.parsers.CodeReviewReportParser;
-import net.praqma.prqa.parsers.QualityReportParser;
 import net.praqma.prqa.parsers.SuppressionReportParser;
 import net.praqma.prqa.products.QAC;
 import net.praqma.prqa.products.QAR;
 import net.praqma.prqa.reports.PRQACodeReviewReport;
 import net.praqma.prqa.reports.PRQAComplianceReport;
-import net.praqma.prqa.reports.PRQAQualityReport;
 import net.praqma.prqa.reports.PRQAReport;
 import net.praqma.prqa.reports.PRQASuppressionReport;
 import net.praqma.prqa.status.PRQAStatus;
@@ -42,26 +39,27 @@ public class ReportTest {
         assertNull(report4.getReportTool());
         assertTrue(report4.getParser() instanceof CodeReviewReportParser);
         
-        PRQAQualityReport report5 = new PRQAQualityReport();
-        assertNull(report5.getReportTool());
-        assertTrue(report5.getParser() instanceof QualityReportParser);
         
         
         QAR qar = new QAR(new QAC(), "C:/not/exists/project", PRQAContext.QARReportType.Compliance);
+        QAR qar3 = new QAR(new QAC(), "C:/not/exists/project", PRQAContext.QARReportType.Suppression);
+        QAR qar4 = new QAR(new QAC(), "C:/not/exists/project", PRQAContext.QARReportType.CodeReview);
+        
         
         PRQAComplianceReport report2 = new PRQAComplianceReport(qar);
         report.setReportTool(qar);
-        report3.setReportTool(qar);
-        report4.setReportTool(qar);
-        report5.setReportTool(qar);
+        report3.setReportTool(qar3);
+        report4.setReportTool(qar4);
         
-        List<PRQAReport<? extends PRQAStatus>> reports = Arrays.asList(report,report2,report3,report4,report5);
+        List<PRQAReport<? extends PRQAStatus>> reports = Arrays.asList(report,report2,report3,report4);
         
           
         try {
             
             for(PRQAReport<? extends PRQAStatus> rep : reports) {
                 assertNotNull(rep.getReportTool());
+                assertTrue(rep.getNamingTemplate().endsWith(PRQAReport.XHTML_REPORT_EXTENSION));
+                assertTrue(report.getNamingTemplate().equals(report.getNamingTemplate(rep.getReportTool().getType(), PRQAReport.XHTML_REPORT_EXTENSION)));
                 rep.generateReport();    
             }
             
@@ -88,6 +86,13 @@ public class ReportTest {
         assertFalse(report.isEnableDependencyMode());
         assertFalse(report.isEnableDataFlowAnalysis());
         
+    }
+    
+    @Test public void testConstants() {
+        assertTrue(PRQAContext.QARReportType.values().length == 3);
+        assertTrue(PRQAContext.QARReportType.REQUIRED_TYPES.size() == 1);
+        assertTrue(PRQAContext.QARReportType.OPTIONAL_TYPES.size() == 2);
+        assertTrue(PRQAContext.QARReportType.REQUIRED_TYPES.contains(PRQAContext.QARReportType.Compliance));
     }
        
 }
