@@ -191,8 +191,7 @@ public class QAV extends PRQA {
     
     private String qavImport(String path) throws PrqaException {
         logger.entering(this.getClass().getName(), "qavImport", path);
-        String outpath = PRQACommandBuilder.getQavOutPathParameter(path);
-        
+    
         /**
          * Construct the import part of the command. If sourceTopLevelDir is left blank, Jenkins workspace root is used in the command.
          */

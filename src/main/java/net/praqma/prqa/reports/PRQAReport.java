@@ -20,6 +20,7 @@ import net.praqma.prqa.status.PRQAStatus;
 import net.praqma.util.execute.AbnormalProcessTerminationException;
 import net.praqma.util.execute.CmdResult;
 import net.praqma.util.execute.CommandLineException;
+import org.apache.commons.io.FileUtils;
 
 /**
  *Class defining a report. The report holds a commmand line too. (The QAR object) and also holds a result, 
@@ -174,6 +175,7 @@ public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
         /**
          * Throw an exception if the report does NOT exits on the file system.
          */
+       
         if(!(new File(getReportTool().getProjectFile()).exists())) {
             throw new PrqaCommandLineException("Error in QAR: ", new FileNotFoundException(String.format("Project file %s not found", getReportTool().getProjectFile())), reportTool);
         }
@@ -233,6 +235,12 @@ public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
     
     public abstract String getDisplayName();
     
+    /**
+     * Factory method used to create the report. Currently only the compliance report is used.
+     * @param type
+     * @param reportTool
+     * @return 
+     */
     public static PRQAReport create(PRQAContext.QARReportType type, QAR reportTool) {
         logger.finest(String.format("In create(PRQAContext.QARReportType type, QAR reportTool) with args type = %s and reportTool = %s", type, reportTool));
         PRQAReport report = null;
