@@ -38,28 +38,28 @@ public class PRQASuppressionStatus extends PRQAStatus {
 
 		Number output;
 		switch (category) {
-		case TotalNumberOfFiles:
-			output = getNumberOfFiles();
-			break;
-		case LinesOfCode:
-			output = getLinesOfCode();
-			break;
-		case UniqueMessagesSuppressed:
-			output = getUniqueMsgsSuppressed();
-			break;
-		case MessagesSuppressed:
-			output = getMsgsSuppressed();
-			break;
-		case PercentageMessagesSuppressed:
-			output = getMsgsSuppressed();
-			break;
-		default:
-			PrqaReadingException exception;
-			exception = new PrqaReadingException(String.format("Didn't find category %s for class %s", category, this.getClass()));
+            case TotalNumberOfFiles:
+                output = getNumberOfFiles();
+                break;
+            case LinesOfCode:
+                output = getLinesOfCode();
+                break;
+            case UniqueMessagesSuppressed:
+                output = getUniqueMsgsSuppressed();
+                break;
+            case MessagesSuppressed:
+                output = getMsgsSuppressed();
+                break;
+            case PercentageMessagesSuppressed:
+                output = getMsgsSuppressed();
+                break;
+            default:
+                PrqaReadingException exception;
+                exception = new PrqaReadingException(String.format("Didn't find category %s for class %s", category, this.getClass()));
 
-            logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
+                logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
 
-            throw exception;
+                throw exception;
 		}
 
 		logger.finest(String.format("Returning value: %s", output));
