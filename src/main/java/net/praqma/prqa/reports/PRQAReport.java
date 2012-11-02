@@ -6,13 +6,13 @@ package net.praqma.prqa.reports;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.EnumSet;
 import java.util.logging.Logger;
 import net.praqma.prga.excetions.PrqaCommandLineException;
 import net.praqma.prga.excetions.PrqaException;
 import net.praqma.prqa.PRQAContext;
+import net.praqma.prqa.analyzer.PRQAanalyzer;
 import net.praqma.prqa.logging.Config;
 import net.praqma.prqa.parsers.ReportHtmlParser;
 import net.praqma.prqa.products.QAR;
@@ -20,7 +20,6 @@ import net.praqma.prqa.status.PRQAStatus;
 import net.praqma.util.execute.AbnormalProcessTerminationException;
 import net.praqma.util.execute.CmdResult;
 import net.praqma.util.execute.CommandLineException;
-import org.apache.commons.io.FileUtils;
 
 /**
  *Class defining a report. The report holds a commmand line too. (The QAR object) and also holds a result, 
@@ -86,6 +85,10 @@ public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
     	logger.finest(String.format("Returning value: %s", this.reportTool));
     	
         return this.reportTool;
+    }
+    
+    public PRQAanalyzer getAnalysisTool() {
+        return this.reportTool.getAnalysisTool();
     }
 
     public void setReportTool(QAR reportTool) {
@@ -189,7 +192,8 @@ public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
 		
 		logger.finest(String.format("Attempting to generate report files..."));
 		try {
-			cmdResult = reportTool.generateReportFiles();            
+            reportTool.getAnalysisTool().analyze();
+			cmdResult = reportTool.report();            
 		} catch (AbnormalProcessTerminationException ex) {
 			PrqaCommandLineException exception = new PrqaCommandLineException("Failed in report generation",ex,reportTool);
 			
@@ -231,7 +235,7 @@ public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
      * @return
      * @throws PrqaException 
      */
-    public abstract <T> T generateReport() throws PrqaException;
+    public abstract <T> T generateReport() throws PrqaException;        
     
     public abstract String getDisplayName();
     

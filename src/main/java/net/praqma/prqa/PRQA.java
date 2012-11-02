@@ -2,10 +2,11 @@ package net.praqma.prqa;
 
 import java.io.Serializable;
 import java.util.logging.Logger;
+import net.praqma.prqa.analyzer.PRQAanalyzer;
 import net.praqma.prqa.logging.Config;
+import net.praqma.prqa.products.PRQACommandBuilder;
 import net.praqma.prqa.products.QAC;
 import net.praqma.prqa.products.QACpp;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
 
@@ -26,10 +27,7 @@ public abstract class PRQA implements Serializable {
     protected String commandBase;
     protected String productExecutable;
     protected String command;
-
-        
-    public abstract String getProductVersion();
-    
+    protected PRQACommandBuilder builder;
 
     protected static final Logger logger;
 
@@ -86,18 +84,18 @@ public abstract class PRQA implements Serializable {
 
     } 
     /**
-     * Factory methods. Takes a string input parameter fromt the Gui and converts it to a concrete PRQA product.
+     * Factory methods. Takes a string input parameter fromt the Gui and converts it to a concrete PRQA product. 
      * @param productname
      * @return 
      */
-    public static PRQA create(String productname) {
-        PRQA product = null;
+    public static PRQAanalyzer create(String productname) {
+        PRQAanalyzer product = null;
         if(productname.equalsIgnoreCase("qac")) {
             product = new QAC();
         } else if (productname.equalsIgnoreCase("qacpp")) {
             product = new QACpp();
-        } else if (productname.equalsIgnoreCase("java")) {
-            throw new NotImplementedException();
+        } else {
+            
         }
         return product;
     } 

@@ -6,8 +6,10 @@ package net.praqma.prqa.products;
 
 import java.io.File;
 import java.io.FileFilter;
+import net.praqma.prga.excetions.PrqaException;
 import net.praqma.prqa.PRQA;
 import net.praqma.prqa.PRQACommandLineUtility;
+import net.praqma.prqa.analyzer.PRQAanalyzer;
 import net.praqma.util.execute.CmdResult;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 
@@ -15,20 +17,14 @@ import org.apache.commons.io.filefilter.WildcardFileFilter;
  *
  * @author jes, man
  */
-public class QAC extends PRQA {
+public class QAC extends PRQA implements PRQAanalyzer {
 
-    public QAC() {}
-    
-    public QAC(String command) {
-    	logger.finest(String.format("Constructor called for class QAC(String command)"));
-    	logger.finest(String.format("Input parameter command type: %s; value: %s", command.getClass(), command));
-    	
-        this.command = command;
-        
-        logger.finest(String.format("Ending execution of constructor - QAC"));
+    public QAC() {
+        builder = new PRQACommandBuilder(QAR.QAW_WRAPPER);
     }
-
+    
     public QAC(String commandBase, String command) {
+        super();
     	logger.finest(String.format("Constructor called for class QAC(String commandBase, String command)"));
     	logger.finest(String.format("Input parameter commandBase type: %s; value: %s", commandBase.getClass(), commandBase));
     	logger.finest(String.format("Input parameter command type: %s; value: %s", command.getClass(), command));
@@ -37,39 +33,6 @@ public class QAC extends PRQA {
         this.commandBase = commandBase;
         
         logger.finest(String.format("Ending execution of constructor - QAC"));
-    }
-
-    public CmdResult execute(String command, File dir) {
-        logger.finest(String.format("Starting execution of method - execute(String command, File dir)"));
-        logger.finest(String.format("Input parameter command type: %s; value: %s", command.getClass(), command));
-        logger.finest(String.format("Input parameter dir type: %s; value: %s", dir.getClass(), dir));
-
-        CmdResult output = PRQACommandLineUtility.run(command, dir);
-        
-        logger.finest(String.format("Returning value: %s", output));
-        
-        return output;
-    }
-
-    public CmdResult execute(String command) {
-        logger.finest(String.format("Starting execution of method - execute(String command)"));
-        logger.finest(String.format("Input parameter command type: %s; value: %s", command.getClass(), command));
-
-        CmdResult output = PRQACommandLineUtility.run(command, new File(commandBase));
-        
-        logger.finest(String.format("Returning value: %s", output));
-        
-        return output;
-    }
-
-    public CmdResult generateReportFiles() {
-        logger.finest(String.format("Starting execution of method - generateReportFiles()"));
-
-        CmdResult output = PRQACommandLineUtility.run(command, new File(commandBase));
-        
-        logger.finest(String.format("Returning value: %s", output));
-        
-        return output; 
     }
     
     @Override
@@ -126,6 +89,16 @@ public class QAC extends PRQA {
     @Override
     public String toString() {
         return "qac";
+    }
+
+    @Override
+    public CmdResult analyze() throws PrqaException {
+        return PRQACommandLineUtility.run(getBuilder().getCommand(), new File(commandBase)); 
+    }
+
+    @Override
+    public PRQACommandBuilder getBuilder() {
+        return builder;
     }
     
 }
