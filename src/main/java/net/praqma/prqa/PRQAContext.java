@@ -9,7 +9,7 @@ import java.util.EnumSet;
 public class PRQAContext {
 
     public enum ComparisonSettings {
-        None, Threshold, Improvement;// Greaterorequaltolast, Lessorequaltolast;
+        None, Threshold, Improvement;
 
         @Override
         public String toString() {

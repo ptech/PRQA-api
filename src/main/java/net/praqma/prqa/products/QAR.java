@@ -5,9 +5,12 @@
 package net.praqma.prqa.products;
 
 import java.io.File;
+import net.praqma.prga.excetions.PrqaException;
 import net.praqma.prqa.PRQA;
 import net.praqma.prqa.PRQACommandLineUtility;
 import net.praqma.prqa.PRQAContext.QARReportType;
+import net.praqma.prqa.analyzer.PRQAReporter;
+import net.praqma.prqa.analyzer.PRQAanalyzer;
 import net.praqma.util.execute.CmdResult;
 
 /**
@@ -15,23 +18,20 @@ import net.praqma.util.execute.CmdResult;
  *
  * @author jes
  */
-public class QAR extends PRQA {
+public class QAR extends PRQA implements PRQAReporter {
 
 	private String reportOutputPath;
 	private String projectFile;
-    private PRQA analysisTool;
+    private PRQAanalyzer analysisTool;
 	private String product;
-	private PRQACommandBuilder builder;
+	
 	private QARReportType type;
 	public static final String QAW_WRAPPER = "qaw";
-	//private static final Logger logger;
 
 	/**
 	 * QAR is invoked using QAW where this is taken as parameter in the QAW command.
-	 *
 	 */
-
-
+    
 	public QAR() {
 		logger.finest(String.format("Constructor called for class QAR()"));
 
@@ -40,7 +40,7 @@ public class QAR extends PRQA {
 		logger.finest(String.format("Ending execution of constructor - QAR()"));
 	}
     
-	public QAR(PRQA analysisTool, String projectFile, QARReportType type) {
+	public QAR(PRQAanalyzer analysisTool, String projectFile, QARReportType type) {
 		logger.finest(String.format("Constructor called for class QAR(String product, String projectFile, QARReportType type)"));
 		logger.finest(String.format("Input parameter product type: %s; value: %s", analysisTool.getClass(), analysisTool));
 		logger.finest(String.format("Input parameter projectFile type: %s; value: %s", projectFile.getClass(), projectFile));
@@ -53,22 +53,13 @@ public class QAR extends PRQA {
 
 		logger.finest(String.format("Ending execution of constructor - QAR(String product, String projectFile, QARReportType type)"));
 	}
-
+    
+    @Override
 	public PRQACommandBuilder getBuilder() {
 		logger.finest(String.format("Starting execution of method - getBuilder"));
 		logger.finest(String.format("Returning value: %s", builder));
 
 		return builder;
-	}
-
-	public CmdResult generateReportFiles() {
-		logger.finest(String.format("Starting execution of method - execute()"));
-
-		CmdResult output = PRQACommandLineUtility.run(getBuilder().getCommand(), new File(commandBase));
-		
-		logger.finest(String.format("Returning value: %s", output));
-		
-		return output;
 	}
     
     @Override
@@ -99,9 +90,15 @@ public class QAR extends PRQA {
 		return this.reportOutputPath;
 	}
     
-    public PRQA getAnalysisTool() {
+    @Override
+    public PRQAanalyzer getAnalysisTool() {
         return this.analysisTool;
     }
+    
+    @Override
+    public void setAnalysisTool(PRQAanalyzer analysisTool) {
+        this.analysisTool = analysisTool;
+    }    
 
 	public String getProduct() {
 		logger.finest(String.format("Starting execution of method - getProduct"));
@@ -182,5 +179,11 @@ public class QAR extends PRQA {
         logger.finest(String.format("Returning value %s", version));
         
         return version;
+    }
+
+    @Override
+    public CmdResult report() throws PrqaException {
+        CmdResult output = PRQACommandLineUtility.run(getBuilder().getCommand(), new File(commandBase));
+        return output;
     }
 }

@@ -50,11 +50,6 @@ public class QAV extends PRQA {
     
     public QAV() { }
 
-    @Override
-    public String getProductVersion() {
-        return "Unknown";
-    }
-
     /**
      * @return the host
      */

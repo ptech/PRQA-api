@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.logging.Logger;
 import net.praqma.prqa.CodeUploadSetting;
-import net.praqma.prqa.PRQA;
+import net.praqma.prqa.analyzer.PRQAExcutable;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -26,7 +26,6 @@ public class PRQACommandBuilder implements Serializable {
     }
 
     public PRQACommandBuilder(String executable) {
-        logger.finest("Hallo there!");
         logger.finest(String.format("Constructor called for class PRQACommandBuilder()"));
         logger.finest(String.format("Input parameter executable type: %s; value: %s", executable.getClass(), executable));
 
@@ -36,10 +35,11 @@ public class PRQACommandBuilder implements Serializable {
     }
 
     public PRQACommandBuilder appendArgument(String argument) {
-        logger.finest(String.format("Starting execution of method - appendArgument"));
-        logger.finest(String.format("Input parameter argument type: %s; value: %s", argument.getClass(), argument));
-
-        arguments.addLast(argument);
+        if(!StringUtils.isBlank(argument)) {
+            logger.finest(String.format("Starting execution of method - appendArgument"));
+            logger.finest(String.format("Input parameter argument type: %s; value: %s", argument.getClass(), argument));
+            arguments.addLast(argument);
+        }
 
         logger.finest(String.format("Returning %s", this));
 
@@ -47,11 +47,12 @@ public class PRQACommandBuilder implements Serializable {
     }
 
     public PRQACommandBuilder prependArgument(String argument) {
-        logger.finest(String.format("Starting execution of method - prependArgument"));
-        logger.finest(String.format("Input parameter argument type: %s; value: %s", argument.getClass(), argument));
+        if(!StringUtils.isBlank(argument)) {
+            logger.finest(String.format("Starting execution of method - prependArgument"));
+            logger.finest(String.format("Input parameter argument type: %s; value: %s", argument.getClass(), argument));
 
-        arguments.addFirst(argument);
-
+            arguments.addFirst(argument);
+        }
         logger.finest(String.format("Returning %s", this));
 
         return this;
@@ -313,7 +314,7 @@ public class PRQACommandBuilder implements Serializable {
         return output;
     }
 
-    public static String getProduct(PRQA product) {
+    public static String getProduct(PRQAExcutable product) {
         logger.finest(String.format("Starting execution of method - getProduct"));
         logger.finest(String.format("Input parameter product type: %s; value: %s", product.getClass(), product));
 
@@ -522,6 +523,22 @@ public class PRQACommandBuilder implements Serializable {
         String res = "";
         if(enabled) {
             res = "-mode depend";
+        }
+        return res;
+    }
+    
+    public static String getDebugOutputParameter(boolean enabled) {
+        String res = "";
+        if(enabled) {
+            res = "-plog";
+        }
+        return res;
+    }
+    
+    public static String getCrossModuleAnalysisParameter(boolean enabled) {
+        String res = "";
+        if(enabled) {
+            res = "pal %Q %P+ %L+#";
         }
         return res;
     }
