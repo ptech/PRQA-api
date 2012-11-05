@@ -93,7 +93,11 @@ public class QACpp extends PRQA implements PRQAanalyzer {
 
     @Override
     public CmdResult analyze() throws PrqaException {
-        return PRQACommandLineUtility.run(getBuilder().getCommand(), new File(commandBase)); 
+        try {
+            return PRQACommandLineUtility.run(getBuilder().getCommand(), new File(commandBase)); 
+        } catch (Exception ex) {
+            throw new PrqaException("Failed in QAC.analyze() with exception", ex);
+        }
     }
 
     @Override
