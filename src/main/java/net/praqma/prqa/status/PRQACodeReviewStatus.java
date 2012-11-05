@@ -4,7 +4,6 @@
  */
 package net.praqma.prqa.status;
 
-import java.util.logging.Level;
 import net.praqma.prga.excetions.PrqaException;
 import net.praqma.prga.excetions.PrqaReadingException;
 

@@ -47,6 +47,7 @@ public abstract class PRQAStatus implements PRQAReading, Serializable {
 		logger.finest(String.format("Ending execution of method - addNotification"));
 	}
 
+    @Override
 	public HashMap<StatusCategory, Number> getThresholds() {
 		logger.finest(String.format("Starting execution of method - getThresholds"));
 		logger.finest(String.format("Returning HashMap<StatusCategory, Number> thresholds:"));
@@ -57,6 +58,7 @@ public abstract class PRQAStatus implements PRQAReading, Serializable {
 		return thresholds;
 	}
 
+    @Override
 	public void setThresholds(HashMap<StatusCategory,Number> thresholds) {
 		logger.finest(String.format("Starting execution of method - setThresholds"));
 		logger.finest(String.format("Input parameter thresholds type: %s, values:", thresholds.getClass()));

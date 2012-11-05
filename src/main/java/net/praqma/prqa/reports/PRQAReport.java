@@ -208,6 +208,7 @@ public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
 			throw exception;
 		} catch (Exception ex) {
             PrqaCommandLineException prqaclex = new PrqaCommandLineException(String.format("Exception thrown type: %s",ex.getClass()), ex, reportTool);
+            throw prqaclex;
         }
 		logger.finest(String.format("qar executed successfully!"));
 		

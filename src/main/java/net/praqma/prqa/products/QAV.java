@@ -128,10 +128,10 @@ public class QAV extends PRQA {
         this.useSingleSnapshotMode = useSingleSnapshotMode;
     }
     
-    private String qavUpload(String importPartCommand, String path, boolean addSfba) throws PrqaException {
-        logger.entering(this.getClass().getSimpleName(), "qavUpload(String importPartCommand, String path, boolean addSfba)", new Object[] { importPartCommand,path,addSfba });
+    private String qavUpload(String importPartCommand, String path) throws PrqaException {
+        logger.entering(this.getClass().getSimpleName(), "qavUpload(String importPartCommand, String path, boolean addSfba)", new Object[] { importPartCommand,path});
         String command = "qaw "+getProduct()+ " "+PRQACommandBuilder.wrapInQuotationMarks(getProjectFile());
-        command += " "+ PRQACommandBuilder.getSfbaOption(addSfba)+" ";
+        command += " "+ PRQACommandBuilder.getSfbaOption(true)+" ";
         String uploadPartCommand = "#";
         uploadPartCommand +="upload %P+ " + "-prqavcs "+PRQACommandBuilder.wrapInEscapedQuotationMarks(getVcsXml());
         uploadPartCommand +=" "+PRQACommandBuilder.getHost(host);
@@ -177,10 +177,10 @@ public class QAV extends PRQA {
         return res;
     }
     
-    public String qavUpload(String path, boolean skip) throws PrqaException {
+    public String qavUpload(String path) throws PrqaException {
         logger.finest(String.format("In method qavUpload(String path) called with parameter %s", path));
         String uploadOperation ="";
-        uploadOperation = qavUpload(qavImport(path), path, skip);
+        uploadOperation = qavUpload(qavImport(path), path);
         return uploadOperation;
     }
     
