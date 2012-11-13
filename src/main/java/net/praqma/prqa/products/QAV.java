@@ -128,10 +128,11 @@ public class QAV extends PRQA {
         this.useSingleSnapshotMode = useSingleSnapshotMode;
     }
     
-    private String qavUpload(String importPartCommand, String path) throws PrqaException {
+    private String qavUpload(String importPartCommand, String path, boolean cmaEnabled) throws PrqaException {
         logger.entering(this.getClass().getSimpleName(), "qavUpload(String importPartCommand, String path, boolean addSfba)", new Object[] { importPartCommand,path});
         String command = "qaw "+getProduct()+ " "+PRQACommandBuilder.wrapInQuotationMarks(getProjectFile());
         command += " "+ PRQACommandBuilder.getSfbaOption(true)+" ";
+        command += " " + PRQACommandBuilder.getDependencyModeParameter(true) + " ";
         String uploadPartCommand = "#";
         uploadPartCommand +="upload %P+ " + "-prqavcs "+PRQACommandBuilder.wrapInEscapedQuotationMarks(getVcsXml());
         uploadPartCommand +=" "+PRQACommandBuilder.getHost(host);
@@ -149,11 +150,11 @@ public class QAV extends PRQA {
         uploadPartCommand +=" "+PRQACommandBuilder.getLogFilePathParameter(path+Config.QAV_UPLOAD_LOG);
         
         uploadPartCommand +=" "+PRQACommandBuilder.wrapInEscapedQuotationMarks(path);
-        
-        String commandfinal = command + PRQACommandBuilder.getMaseq(importPartCommand+uploadPartCommand);
+                
+        String commandfinal = command + PRQACommandBuilder.getMaseq(PRQACommandBuilder.getCrossModuleAnalysisParameter(cmaEnabled)+importPartCommand+uploadPartCommand);
         return commandfinal;
     }
-    public boolean generateUpload(String command, String path, boolean skip) throws PrqaUploadException {
+    public boolean generateUpload(String command, String path) throws PrqaUploadException {
         boolean res = false;
         
         try {
@@ -177,10 +178,10 @@ public class QAV extends PRQA {
         return res;
     }
     
-    public String qavUpload(String path) throws PrqaException {
+    public String qavUpload(String path, boolean cmaEnabled) throws PrqaException {
         logger.finest(String.format("In method qavUpload(String path) called with parameter %s", path));
         String uploadOperation ="";
-        uploadOperation = qavUpload(qavImport(path), path);
+        uploadOperation = qavUpload(qavImport(path), path, cmaEnabled);
         return uploadOperation;
     }
     
@@ -190,6 +191,8 @@ public class QAV extends PRQA {
         /**
          * Construct the import part of the command. If sourceTopLevelDir is left blank, Jenkins workspace root is used in the command.
          */
+        
+        
         String maseqSection = PRQACommandBuilder.escapeWhitespace("qaimport");
         
         int availableProcessors = Runtime.getRuntime().availableProcessors(); 
