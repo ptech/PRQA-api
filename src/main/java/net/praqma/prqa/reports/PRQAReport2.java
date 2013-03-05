@@ -98,7 +98,9 @@ public class PRQAReport2 implements Serializable {
         PRQACommandBuilder builder = new PRQACommandBuilder(QAR.QAW_WRAPPER);        
         builder.prependArgument(settings.product);
         builder.appendArgument(PRQACommandBuilder.getProjectFile(settings.projectFile));
-        builder.appendArgument("-mode depend");
+        if(settings.enableDependencyMode) {
+            builder.appendArgument("-mode depend");
+        }
         builder.appendArgument(PRQACommandBuilder.getDataFlowAnanlysisParameter(settings.enableDataFlowAnalysis));
         builder.appendArgument(PRQACommandBuilder.getSfbaOption(true));
         
