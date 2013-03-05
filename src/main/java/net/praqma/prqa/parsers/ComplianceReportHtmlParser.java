@@ -14,6 +14,15 @@ public class ComplianceReportHtmlParser extends ReportHtmlParser {
     public static Pattern fileCompliancePattern;
     public static Pattern projectCompliancePattern;
     
+    public ComplianceReportHtmlParser() {
+        
+    }
+           
+    
+    public ComplianceReportHtmlParser(String fullReportPath) {
+        super(fullReportPath);
+    }
+    
     static {       
         totalMessagesPattern = Pattern.compile("<td align=\"left\">Total Number of Messages</td>\\r?\\n<td align=\"right\">(\\d*)</td>");
         fileCompliancePattern = Pattern.compile("<td align=\"left\">File Compliance Index</td>\\r?\\n<td align=\"right\">(\\S*)%</td>");

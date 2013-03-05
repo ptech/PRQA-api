@@ -18,4 +18,5 @@ public interface PRQAExcutable {
     public void setCommandBase(String base);
     public void setCommand(String cmd);
     public String getProductVersion() throws PrqaException;
+    
 }

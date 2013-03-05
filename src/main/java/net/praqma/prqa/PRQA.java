@@ -1,6 +1,7 @@
 package net.praqma.prqa;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.logging.Logger;
 import net.praqma.prqa.analyzer.PRQAanalyzer;
 import net.praqma.prqa.logging.Config;
@@ -28,12 +29,13 @@ public abstract class PRQA implements Serializable {
     protected String productExecutable;
     protected String command;
     protected PRQACommandBuilder builder;
-
+    private HashMap<String,String> environment;
     protected static final Logger logger;
+    
 
     static {
-        logger = Logger.getLogger(Config.GLOBAL_LOGGER_NAME);
-    }
+        logger = Logger.getLogger(PRQA.class.getName());
+    }    
 
     public String getCommandBase() {
         logger.finest(String.format("Starting execution of method - getCommandBase"));
@@ -78,10 +80,8 @@ public abstract class PRQA implements Serializable {
     public void setCommand(String command) {
         logger.finest(String.format("Starting execution of method - setCommand"));
         logger.finest(String.format("Input parameter command type: %s; value: %s", command.getClass(), command));
-
         this.command = command;
         logger.finest(String.format("Ending execution of method - setCommand"));
-
     } 
     /**
      * Factory methods. Takes a string input parameter fromt the Gui and converts it to a concrete PRQA product. 
@@ -99,4 +99,18 @@ public abstract class PRQA implements Serializable {
         }
         return product;
     } 
+
+    /**
+     * @return the environment
+     */
+    public HashMap<String,String> getEnvironment() {
+        return environment;
+    }
+
+    /**
+     * @param environment the environment to set
+     */
+    public void setEnvironment(HashMap<String,String> environment) {
+        this.environment = environment;
+    }
 }
