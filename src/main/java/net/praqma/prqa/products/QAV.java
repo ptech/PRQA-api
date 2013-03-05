@@ -160,7 +160,7 @@ public class QAV extends PRQA {
         try {
             logger.finest(String.format("QAV upload path argument: %s", path));
             logger.finest(String.format("QAV upload command: ", command));
-            PRQACommandLineUtility.run(command, new File(path));
+            PRQACommandLineUtility.getInstance(getEnvironment()).run(command, new File(path));
         } catch (AbnormalProcessTerminationException abnormex) {
             logger.finest(String.format("Failed QAV Upload with AbnormalProcessTerminationException"));
             logger.finest(abnormex.toString());

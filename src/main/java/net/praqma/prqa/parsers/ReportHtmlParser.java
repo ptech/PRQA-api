@@ -13,7 +13,6 @@ import java.util.regex.Pattern;
 import net.praqma.prga.excetions.PrqaException;
 import net.praqma.prga.excetions.PrqaParserException;
 import net.praqma.prqa.PRQACommandLineUtility;
-import net.praqma.prqa.logging.Config;
 
 /**
  *
@@ -21,12 +20,23 @@ import net.praqma.prqa.logging.Config;
  */
 public abstract class ReportHtmlParser implements Serializable {
 
+    
+    
     protected String fullReportPath;
     private static final Logger logger;
 
     static {
-        logger = Logger.getLogger(Config.GLOBAL_LOGGER_NAME);
+        logger = Logger.getLogger(ReportHtmlParser.class.getName());
     }
+    
+    public ReportHtmlParser() {
+        
+    }
+    
+    public ReportHtmlParser(String fullReportPath) {
+        this.fullReportPath = fullReportPath;
+    }
+    
 
     /**
      * *

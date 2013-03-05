@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.Serializable;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.logging.Logger;
 import net.praqma.prga.excetions.PrqaCommandLineException;
 import net.praqma.prga.excetions.PrqaException;
@@ -27,9 +28,10 @@ import net.praqma.util.execute.CommandLineException;
  * @author Praqma
  */
 public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
-    
-	protected static final Logger logger = Logger.getLogger(Config.GLOBAL_LOGGER_NAME);
+        
+	protected static final Logger logger = Logger.getLogger(PRQAReport.class.getName());
     private EnumSet<PRQAContext.QARReportType> chosenReports;
+    private HashMap<String, String> environment;
 	
     protected ReportHtmlParser parser;
     protected QAR reportTool;
@@ -51,8 +53,6 @@ public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
     public static String HTML_REPORT_EXTENSION = "Report."+PRQAReport.HTML;
     
     public PRQAReport() {
-        logger.finest(String.format("Constructor called for class PRQAReport()"));
-        logger.finest(String.format("Ending execution of constructor - PRQAReport"));
     }
     
     public PRQAReport(QAR reportTool) {
@@ -254,14 +254,6 @@ public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
                 report = new PRQAComplianceReport();
                 report.reportTool = reportTool;
                 return report;
-            case CodeReview:
-                report = new PRQACodeReviewReport();                
-                report.reportTool = reportTool;
-                return report;
-            case Suppression:
-                report = new PRQASuppressionReport();
-                report.reportTool = reportTool;
-                return report;
             default:
                 throw new IllegalArgumentException("No valid report type given!");
         }   
@@ -307,6 +299,20 @@ public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
      */
     public void setEnableDataFlowAnalysis(boolean enableDataFlowAnalysis) {
         this.enableDataFlowAnalysis = enableDataFlowAnalysis;
+    }
+
+    /**
+     * @return the environment
+     */
+    public HashMap<String, String> getEnvironment() {
+        return environment;
+    }
+
+    /**
+     * @param environment the environment to set
+     */
+    public void setEnvironment(HashMap<String, String> environment) {
+        this.environment = environment;
     }
 }
 

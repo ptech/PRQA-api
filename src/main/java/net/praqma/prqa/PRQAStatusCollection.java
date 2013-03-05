@@ -19,7 +19,7 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading> {
 	private static final Logger logger;
 
 	static {
-		logger = Logger.getLogger(Config.GLOBAL_LOGGER_NAME);
+		logger = Logger.getLogger(PRQAStatusCollection.class.getName());
 	}
 
 	public PRQAStatusCollection() {

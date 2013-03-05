@@ -38,7 +38,7 @@ public class QAC extends PRQA implements PRQAanalyzer {
     @Override
     public String getProductVersion() {
         logger.finest(String.format("Starting execution of method - getProductVersion()"));
-        
+            
         String productVersion = "Unknown";
         CmdResult res = null;
         File f = null;
@@ -46,7 +46,7 @@ public class QAC extends PRQA implements PRQAanalyzer {
         try {
             f = File.createTempFile("test_prqa_file", ".c");
             
-            res = PRQACommandLineUtility.run(String.format("qac -version \"%s\"", f.getAbsolutePath()), new File(commandBase));
+            res = PRQACommandLineUtility.getInstance(getEnvironment()).run(String.format("qac -version \"%s\"", f.getAbsolutePath()), new File(commandBase));
   
         } catch (Exception ex) {
              logger.warning("Failed to get qac version");
@@ -93,9 +93,8 @@ public class QAC extends PRQA implements PRQAanalyzer {
 
     @Override
     public CmdResult analyze() throws PrqaException {
-        try
-        {
-            return PRQACommandLineUtility.run(getBuilder().getCommand(), new File(commandBase)); 
+        try {
+            return PRQACommandLineUtility.getInstance(getEnvironment()).run(getBuilder().getCommand(), new File(commandBase)); 
         } catch (Exception ex) {
             throw new PrqaException("Failed in QAC.analyze() with exception", ex);
         }

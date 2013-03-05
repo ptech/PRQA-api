@@ -170,7 +170,7 @@ public class QAR extends PRQA implements PRQAReporter {
         
         String version = "Unknown";
         try {
-        CmdResult res = PRQACommandLineUtility.run("qar -version", new File(commandBase));
+        CmdResult res = PRQACommandLineUtility.getInstance(getEnvironment()).run("qar -version", new File(commandBase));
         version = res.stdoutBuffer.toString();
         } catch (Exception ex) {
             logger.warning("Failed to obtains QAR product version");
@@ -183,7 +183,7 @@ public class QAR extends PRQA implements PRQAReporter {
 
     @Override
     public CmdResult report() throws PrqaException {
-        CmdResult output = PRQACommandLineUtility.run(getBuilder().getCommand(), new File(commandBase));
+        CmdResult output = PRQACommandLineUtility.getInstance(getEnvironment()).run(getBuilder().getCommand(), new File(commandBase));
         return output;
     }
 }
