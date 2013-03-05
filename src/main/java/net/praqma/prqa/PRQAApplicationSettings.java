@@ -28,5 +28,13 @@ public class PRQAApplicationSettings implements Serializable {
             return "qar";
         }
     }
+    
+    public static String addSlash(String value, String pathSeperator) {
+        if(value.endsWith(pathSeperator)) {
+            return value;
+        } else {
+            return value+pathSeperator;
+        }
+    }
 
 }

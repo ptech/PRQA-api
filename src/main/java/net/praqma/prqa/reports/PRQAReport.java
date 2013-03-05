@@ -55,6 +55,10 @@ public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
     public PRQAReport() {
     }
     
+    public static String getNamingTemplate(PRQAContext.QARReportType type, String extension) {
+        return type.toString()+extension;
+    }
+    
     public PRQAReport(QAR reportTool) {
     	logger.finest(String.format("Constructor called for class PRQAReport(QAR reportTool)"));
     	logger.finest(String.format("Input parameter qar type: %s; value: %s", reportTool.getClass(), reportTool));
@@ -129,10 +133,7 @@ public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
     	
         return result;
     }
-    
-    public String getNamingTemplate(PRQAContext.QARReportType type, String extension) {
-        return type + " " + extension;
-    }
+   
     
     /**
      * Provides an alternative extension to the default XHTML extension
