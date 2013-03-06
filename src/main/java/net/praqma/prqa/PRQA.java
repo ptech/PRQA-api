@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.logging.Logger;
 import net.praqma.prqa.analyzer.PRQAanalyzer;
-import net.praqma.prqa.logging.Config;
 import net.praqma.prqa.products.PRQACommandBuilder;
 import net.praqma.prqa.products.QAC;
 import net.praqma.prqa.products.QACpp;

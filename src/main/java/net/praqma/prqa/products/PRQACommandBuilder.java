@@ -135,7 +135,6 @@ public class PRQACommandBuilder implements Serializable {
      */
     public static String getMaseq(String commandSequence) {
         logger.finest(String.format("Starting execution of method - getMaseq(String commandSequence)"));
-        logger.finest(String.format("Input parameter commandSequence type: %s; value: %s", commandSequence.getClass(), commandSequence));
 
         String output = String.format("-maseq \"%s\"", commandSequence);
 
@@ -146,7 +145,6 @@ public class PRQACommandBuilder implements Serializable {
 
     public static String getReportFormatParameter(String reportFormat) {
         logger.finest(String.format("Starting execution of method - getReportFormatParameter(String reportFormat)"));
-        logger.finest(String.format("Input parameter reportFormat type: %s; value: %s", reportFormat.getClass(), reportFormat));
 
         String output = PRQACommandBuilder.getReportFormatParameter(reportFormat, false);
 
@@ -157,8 +155,6 @@ public class PRQACommandBuilder implements Serializable {
 
     public static String getReportFormatParameter(String reportFormat, boolean escapeinInputParameterWhiteSpace) {
         logger.finest(String.format("Starting execution of method - getReportFormatParameter(String reportFormat, boolean escapeinInputParameterWhiteSpace)"));
-        logger.finest(String.format("Input parameter reportFormat type: %s; value: %s", reportFormat.getClass(), reportFormat));
-        logger.finest(String.format("Input parameter escapeinInputParameterWhiteSpace type: %s; value: %s", "boolean", escapeinInputParameterWhiteSpace));
 
         if (escapeinInputParameterWhiteSpace) {
             logger.finest(String.format("Replacing spaces with \"\\ \""));
@@ -190,8 +186,6 @@ public class PRQACommandBuilder implements Serializable {
 
     public static String getReportTypeParameter(String reportType, boolean escapeInputParameterWhiteSpace) {
         logger.finest(String.format("Starting execution of method - getReportTypeParameter(String reportType, boolean escapeInputParameterWhiteSpace)"));
-        logger.finest(String.format("Input parameter reportType type: %s; value: %s", reportType.getClass(), reportType));
-        logger.finest(String.format("Input parameter escapeInputParameterWhiteSpace type: %s; value: %s", "boolean", escapeInputParameterWhiteSpace));
 
         if (escapeInputParameterWhiteSpace) {
             logger.finest(String.format("Replacing spaces with \"\\ \""));
@@ -212,7 +206,6 @@ public class PRQACommandBuilder implements Serializable {
 
     public static String getOutputPathParameter(String outpath) {
         logger.finest(String.format("Starting execution of method - getOutputPathParameter(String outpath)"));
-        logger.finest(String.format("Input parameter outpath type: %s; value: %s", outpath.getClass(), outpath));
 
         String output = PRQACommandBuilder.getOutputPathParameter(outpath, false);
 
@@ -223,8 +216,6 @@ public class PRQACommandBuilder implements Serializable {
 
     public static String getOutputPathParameter(String outpath, boolean escapeInputParameterWhiteSpace) {
         logger.finest(String.format("Starting execution of method - getOutputPathParameter(String outpath, boolean escapeInputParameterWhiteSpace)"));
-        logger.finest(String.format("Input parameter outpath type: %s; value: %s", outpath.getClass(), outpath));
-        logger.finest(String.format("Input parameter escapeInputParameterWhiteSpace type: %s; value: %s", "boolean", escapeInputParameterWhiteSpace));
 
 
         if (escapeInputParameterWhiteSpace) {
@@ -261,8 +252,6 @@ public class PRQACommandBuilder implements Serializable {
 
     public static String getViewingProgram(String program) {
         logger.finest(String.format("Starting execution of method - getViewingProgram(String program)"));
-        logger.finest(String.format("Input parameter program type: %s; value: %s", program.getClass(), program));
-
         String output = PRQACommandBuilder.getViewingProgram(program, false);
 
         logger.finest(String.format("Returning value: %s", output));
@@ -272,8 +261,6 @@ public class PRQACommandBuilder implements Serializable {
 
     public static String getViewingProgram(String program, boolean escapeInputParameterWhiteSpace) {
         logger.finest(String.format("Starting execution of method - getViewingProgram(String program, boolean escapeInputParameterWhiteSpace)"));
-        logger.finest(String.format("Input parameter program type: %s; value: %s", program.getClass(), program));
-        logger.finest(String.format("Input parameter escapeInputParameterWhiteSpace type: %s; value: %s", "boolean", escapeInputParameterWhiteSpace));
 
         if (escapeInputParameterWhiteSpace) {
             logger.finest(String.format("Replacing spaces with \"\\ \""));

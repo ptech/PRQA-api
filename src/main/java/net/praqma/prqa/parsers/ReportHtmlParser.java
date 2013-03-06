@@ -49,36 +49,25 @@ public abstract class ReportHtmlParser implements Serializable {
      */
 
     public String getFullReportPath() {
-        logger.finest(String.format("Starting execution of method - getFullReportPath"));
         logger.finest(String.format("Returning value: %s", this.fullReportPath));
-
         return this.fullReportPath;
     }
 
     public void setFullReportPath(String fullReportPath) {
         logger.finest(String.format("Starting execution of method - setFullReportPath"));
-        logger.finest(String.format("Input parameter fullReportPath type: %s; value: %s", fullReportPath.getClass(), fullReportPath));
-
         this.fullReportPath = fullReportPath;
-
         logger.finest(String.format("Ending execution of method - setFullReportPath"));
     }
 
     public String getResult(Pattern pattern) throws PrqaException {
         logger.finest(String.format("Starting execution of method - getResult"));
-        logger.finest(String.format("Input parameter pattern type: %s; value: %s", pattern.getClass(), pattern));
-
         String output = getFirstResult(parse(this.fullReportPath, pattern));
-
         logger.finest(String.format("Returning value: %s", output));
-
         return output;
     }
 
     public List<String> parse(String path, Pattern pattern) throws PrqaException {
         logger.finest(String.format("Starting execution of method - parse"));
-        logger.finest(String.format("Input parameter path type: %s; value: %s", path.getClass(), path));
-        logger.finest(String.format("Input parameter pattern type: %s; value: %s", pattern.getClass(), pattern));
 
         List<String> result = new ArrayList<String>();
         File file = new File(path);
@@ -178,9 +167,6 @@ public abstract class ReportHtmlParser implements Serializable {
 
     public int replace(String path, Pattern pattern, String replacement) throws PrqaParserException {
         logger.finest(String.format("Starting execution of method - replace"));
-        logger.finest(String.format("Input parameter path type: %s; value: %s", path.getClass(), path));
-        logger.finest(String.format("Input parameter pattern type: %s; value: %s", pattern.getClass(), pattern.toString()));
-        logger.finest(String.format("Input parameter pattern type: %s; value: %s", replacement.getClass(), replacement));
 
         int numberOfReplacements = 0;
         File file = new File(path);
@@ -249,7 +235,6 @@ public abstract class ReportHtmlParser implements Serializable {
 
             throw exception;
         }
-        logger.finest(String.format("Successfully wrote to substitute file!"));
 
         logger.finest(String.format("Returning numberOfReplacements: %s", numberOfReplacements));
 

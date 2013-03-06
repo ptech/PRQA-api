@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
 import net.praqma.prga.excetions.PrqaException;
+import net.praqma.prga.excetions.PrqaParserException;
+import net.praqma.prga.excetions.PrqaSetupException;
 import net.praqma.prqa.PRQAApplicationSettings;
 import net.praqma.prqa.PRQAContext;
 import net.praqma.prqa.PRQAReportSettings;
@@ -20,6 +22,7 @@ import net.praqma.prqa.parsers.ComplianceReportHtmlParser;
 import net.praqma.prqa.products.PRQACommandBuilder;
 import net.praqma.prqa.products.QAR;
 import net.praqma.prqa.status.PRQAComplianceStatus;
+import net.praqma.util.execute.AbnormalProcessTerminationException;
 import net.praqma.util.execute.CmdResult;
 import net.praqma.util.execute.CommandLine;
 import org.apache.commons.lang.StringUtils;
@@ -55,17 +58,16 @@ public class PRQAReport2 implements Serializable {
         this.appSettings = appSettings;
     }
     
-    public String createAnalysisCommand() {
+    public String createAnalysisCommand(boolean isUnix) {
         String finalCommand = "";
         
-        PRQACommandBuilder builder = new PRQACommandBuilder(QAR.QAW_WRAPPER);
-        //TODO: QAC should not be hardcoded (use settings!)
+        PRQACommandBuilder builder = new PRQACommandBuilder(appSettings != null ? appSettings.resolveQawExe(isUnix) : "qaw");        
         builder.prependArgument(settings.product);
         
         //TODO: Either project or file list
         builder.appendArgument(PRQACommandBuilder.getProjectFile(settings.projectFile));
         
-        if(settings.enableDataFlowAnalysis) {
+        if(settings.enableDependencyMode) {
             builder.appendArgument("-mode depend");
         }
         builder.appendArgument(PRQACommandBuilder.getDataFlowAnanlysisParameter(settings.enableDataFlowAnalysis));
@@ -82,8 +84,8 @@ public class PRQAReport2 implements Serializable {
         return finalCommand;
     }
     
-    public CmdResult analyze() {
-        String finalCommand = createAnalysisCommand();
+    public CmdResult analyze(boolean isUnix) {
+        String finalCommand = createAnalysisCommand(isUnix);
  
         CmdResult res = null;
         if(getEnvironment() == null) {
@@ -94,8 +96,8 @@ public class PRQAReport2 implements Serializable {
         return res;
     }
     
-    public String createReportCommand() {
-        PRQACommandBuilder builder = new PRQACommandBuilder(QAR.QAW_WRAPPER);        
+    public String createReportCommand(boolean isUnix) {
+        PRQACommandBuilder builder = new PRQACommandBuilder(appSettings != null ? appSettings.resolveQawExe(isUnix) : "qaw");        
         builder.prependArgument(settings.product);
         builder.appendArgument(PRQACommandBuilder.getProjectFile(settings.projectFile));
         if(settings.enableDependencyMode) {
@@ -105,8 +107,9 @@ public class PRQAReport2 implements Serializable {
         builder.appendArgument(PRQACommandBuilder.getSfbaOption(true));
         
         String reports = "";
+        String qar = appSettings != null ? appSettings.resolveQarExe(isUnix) : "qar"; 
         for (PRQAContext.QARReportType type : settings.chosenReportTypes) {
-            reports += appSettings.resolveQarExe(false)+" %Q %P+ %L+ " + PRQACommandBuilder.getReportTypeParameter(type.toString(), true)+ " ";
+            reports += qar +" %Q %P+ %L+ " + PRQACommandBuilder.getReportTypeParameter(type.toString(), true)+ " ";
             reports += PRQACommandBuilder.getViewingProgram("noviewer")+ " ";
             reports += PRQACommandBuilder.getReportFormatParameter(PRQAReport.XHTML, false)+ " ";
             reports += PRQACommandBuilder.getProjectName()+ " ";
@@ -133,9 +136,17 @@ public class PRQAReport2 implements Serializable {
         return res.stdoutList;
     }
     
+    /**
+     * This method should be responsible for checking if the environment has been correctly set up.
+     * @param isUnix
+     * @return 
+     */
+    public void checkSetup(boolean isUnix) throws PrqaSetupException {
+    }
     
-    public CmdResult report() {      
-        String finalCommand = createReportCommand();
+    
+    public CmdResult report(boolean isUnix) {      
+        String finalCommand = createReportCommand(isUnix);
 
         CmdResult res = null;
         if(getEnvironment() == null) {
@@ -148,8 +159,10 @@ public class PRQAReport2 implements Serializable {
     
     public String createUploadCommand() {
         if(settings.publishToQAV) {
-            int availableProcessors = Runtime.getRuntime().availableProcessors(); 
-            String importCommand = " " +  "%Q %P+ %L+ "+PRQACommandBuilder.getNumberOfThreads(availableProcessors)+" "+PRQACommandBuilder.getSop(StringUtils.isBlank(upSettings.sourceOrigin) ? workspace.getPath() : upSettings.sourceOrigin) + " ";
+            int availableProcessors = Runtime.getRuntime().availableProcessors();
+            String importCommand = PRQACommandBuilder.escapeWhitespace("qaimport");
+            
+            importCommand += " " +  "%Q %P+ %L+ "+PRQACommandBuilder.getNumberOfThreads(availableProcessors)+" "+PRQACommandBuilder.getSop(StringUtils.isBlank(upSettings.sourceOrigin) ? workspace.getPath() : upSettings.sourceOrigin) + " ";
             importCommand += PRQACommandBuilder.getPrqaVcs(upSettings.codeUploadSetting, upSettings.vcsConfigXml)+" ";
             importCommand += PRQACommandBuilder.getQavOutPathParameter(workspace.getPath())+" ";
             importCommand += PRQACommandBuilder.getImportLogFilePathParameter(workspace.getPath()+Config.QAV_IMPORT_LOG)+" ";
@@ -168,7 +181,7 @@ public class PRQAReport2 implements Serializable {
 
             //Step3: Finalize
             //TODO hardcoding to QAC to begin with
-            String mainCommand = "qaw " + "qac " +PRQACommandBuilder.wrapInQuotationMarks(settings.projectFile);
+            String mainCommand = "qaw" + " " + settings.product +  " "+PRQACommandBuilder.wrapInQuotationMarks(settings.projectFile);
             mainCommand += " "+ PRQACommandBuilder.getSfbaOption(true)+" ";
             mainCommand += PRQACommandBuilder.getDependencyModeParameter(true) + " ";
 
@@ -183,15 +196,12 @@ public class PRQAReport2 implements Serializable {
         if(finalCommand == null) {
             return null;
         }
-        CmdResult res = null;
-        //Step 1: The import part
-
-        log.fine("Executing command:\n"+finalCommand);
-
         
+        CmdResult res = null;
+
         if(getEnvironment() == null) {
             res = CommandLine.getInstance().run(finalCommand, workspace, true, true);
-        } else {
+        } else {            
             res = CommandLine.getInstance().run(finalCommand, workspace, true, true, getEnvironment());
         }
         
@@ -200,17 +210,25 @@ public class PRQAReport2 implements Serializable {
     
     public PRQAComplianceStatus getComplianceStatus() throws PrqaException {                        
         //TODO (Cross-platform file path)
-        ComplianceReportHtmlParser parser = new ComplianceReportHtmlParser(getWorkspace().getPath()+"\\Compliance Report.xhtml");
+        ComplianceReportHtmlParser parser = new ComplianceReportHtmlParser(getWorkspace().getPath()+ System.getProperty("file.separator") + "Compliance Report.xhtml");
         PRQAComplianceStatus status = new PRQAComplianceStatus();
         Double fileCompliance = Double.parseDouble(parser.getResult(ComplianceReportHtmlParser.fileCompliancePattern));
         Double projectCompliance =  Double.parseDouble(parser.getResult(ComplianceReportHtmlParser.projectCompliancePattern));
-        int messages = Integer.parseInt(parser.getResult(ComplianceReportHtmlParser.totalMessagesPattern));
+        int messages = Integer.parseInt(parser.getResult(ComplianceReportHtmlParser.totalMessagesPattern));                
+        
+        for(int i=0; i<10; i++) {
+            try {
+                int result = Integer.parseInt(parser.getResult(ComplianceReportHtmlParser.levelNMessages[i]));
+                status.getMessagesByLevel().put(i, result);
+            } catch (NumberFormatException nfe) {
+                status.getMessagesByLevel().put(i, 0);
+            }
+        }
         
         status.setFileCompliance(fileCompliance);
         status.setProjectCompliance(projectCompliance);
         status.setMessages(messages);
-       
-        
+               
         return status;
     }           
 

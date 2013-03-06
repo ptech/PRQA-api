@@ -29,6 +29,14 @@ public class PRQAApplicationSettings implements Serializable {
         }
     }
     
+    public String resolveQawExe(boolean isUnix) {
+        if(isUnix) {
+            return "qaw";
+        } else {
+            return "qaw";
+        }
+    }
+    
     public static String addSlash(String value, String pathSeperator) {
         if(value.endsWith(pathSeperator)) {
             return value;

@@ -9,8 +9,6 @@ import java.util.EnumSet;
  */
 public class PRQAReportSettings implements Serializable {    
     public final String chosenServer;
-    public final String chosenQacInstallation;
-    public final String chosenQacppInstallation;
     public final EnumSet<PRQAContext.QARReportType> chosenReportTypes;
 
     public final String projectFile;
@@ -25,7 +23,6 @@ public class PRQAReportSettings implements Serializable {
     
     public PRQAReportSettings(final String chosenServer, final String projectFile, final boolean performCrossModuleAnalysis,
             final boolean publishToQAV, final boolean enableDependencyMode, final boolean enableDataFlowAnalysis, 
-            final String chosenQacInstallation, final String chosenQacppInstallation,
             final EnumSet<PRQAContext.QARReportType> chosenReportTypes, final String product) {
         this.chosenServer = chosenServer;
         this.projectFile = projectFile;
@@ -33,8 +30,6 @@ public class PRQAReportSettings implements Serializable {
         this.publishToQAV = publishToQAV;
         this.enableDependencyMode = enableDependencyMode;
         this.enableDataFlowAnalysis = enableDataFlowAnalysis;
-        this.chosenQacInstallation = chosenQacInstallation;
-        this.chosenQacppInstallation = chosenQacppInstallation;
         this.chosenReportTypes = chosenReportTypes;
         this.product = product;
     }
@@ -48,8 +43,6 @@ public class PRQAReportSettings implements Serializable {
         builder.append( String.format( "Publish to QAVerify: %s+\n", publishToQAV) );
         builder.append( String.format( "Dependency Analysis: %s+\n", enableDependencyMode) );
         builder.append( String.format( "Data flow analysis: %s+\n", enableDataFlowAnalysis) );
-        builder.append( String.format( "Chosen QAC installation: %s+\n", chosenQacInstallation) );
-        builder.append( String.format( "Chosen QACpp installaton: %s+\n", chosenQacppInstallation ) );
         return builder.toString();
     }
 }

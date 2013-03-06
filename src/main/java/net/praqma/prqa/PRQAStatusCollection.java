@@ -27,8 +27,7 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading> {
 	}
 
 	public PRQAStatusCollection(ArrayList<PRQAReading> collection) {
-		logger.finest(String.format("Constructor called for class PRQAStatusCollection(ArrayList<PRQAReading> collection)"));
-		logger.finest(String.format("Input parameter collection type: %s; value:", collection.getClass()));
+		logger.finest(String.format("Constructor called for class PRQAStatusCollection(ArrayList<PRQAReading> collection)"));		
 		for (PRQAReading e : collection) {
 			logger.finest(String.format("    %s", e));
 		}
@@ -37,8 +36,7 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading> {
 	}
 
 	public PRQAStatusCollection(PRQAStatusCollection collection) {
-		logger.finest(String.format("Constructor called for class PRQAStatusCollection(PRQAStatusCollection collection)"));
-		logger.finest(String.format("Input parameter collection type: %s; value:", collection.getClass()));
+		logger.finest(String.format("Constructor called for class PRQAStatusCollection(PRQAStatusCollection collection)"));		
 		for (PRQAReading e : collection) {
 			logger.finest(String.format("    %s", e));
 		}
