@@ -3,14 +3,11 @@ package net.praqma.prqa;
 import java.io.*;
 import java.util.Arrays;
 import java.util.List;
-import javax.xml.ws.ServiceMode;
 import junit.framework.TestCase;
 import net.praqma.prga.excetions.PrqaCommandLineException;
 import net.praqma.prga.excetions.PrqaException;
 import net.praqma.prga.excetions.PrqaReadingException;
 import net.praqma.prqa.parsers.ComplianceReportHtmlParser;
-import net.praqma.prqa.parsers.QualityReportParser;
-import net.praqma.prqa.parsers.SuppressionReportParser;
 import net.praqma.prqa.products.PRQACommandBuilder;
 import net.praqma.prqa.products.QACpp;
 import net.praqma.prqa.products.QAR;
@@ -180,122 +177,7 @@ public class PRQATest extends TestCase {
          
         String fileName = f.getAbsolutePath();
         System.out.println(String.format("Deleted file %s : %s", fileName, f.delete()));           
-    }
-    
-    @Test
-    public void testParseQualityReport() throws IOException, PrqaException {
-        InputStream is = this.getClass().getResourceAsStream("Quality_Report_LARGE.xhtml");
-        assertNotNull(is);
-        InputStreamReader isr = new InputStreamReader(is);
-        BufferedReader br = new BufferedReader(isr);
-        
-        File f = File.createTempFile("testParse", ".xhtml");
-        FileWriter fw = new FileWriter(f);
-        
-        String line;
-        while((line = br.readLine()) != null ) {
-            fw.write(line+System.getProperty("line.separator"));
-        }
-        
-        fw.close();
-       
-        ComplianceReportHtmlParser parser = new ComplianceReportHtmlParser();
-        parser.setFullReportPath(f.getPath());
-        
-        List<String> totalNumFiles = parser.parse(f.getPath(), QualityReportParser.totalNumberOfFilesPattern);
-        List<String> linesOfCode = parser.parse(f.getPath(), QualityReportParser.linesOfCodePattern);
-        List<String> sourceFiles = parser.parse(f.getPath(), QualityReportParser.numberOfSourceFilesPattern);
-        List<String> numFunctions = parser.parse(f.getPath(), QualityReportParser.numberOfFunctionsPattern);
-        List<String> numFileMetrics = parser.parse(f.getPath(), QualityReportParser.numberOfFileMetricsPattern);
-        List<String> numFunctionMetrics = parser.parse(f.getPath(), QualityReportParser.numberOfFunctionsMetricPattern);
-        System.out.println(f.getPath().toString());
-        
-        assertNotNull(totalNumFiles);
-        assertNotNull(linesOfCode);
-        assertNotNull(sourceFiles);
-        assertNotNull(numFunctions);
-        assertNotNull(numFileMetrics);
-        assertNotNull(numFunctionMetrics);
-       
-                
-        assertEquals(1, totalNumFiles.size());
-        assertEquals(1, linesOfCode.size());
-        assertEquals(1, sourceFiles.size());
-        assertEquals(1, numFunctions.size());
-        assertEquals(1, numFileMetrics.size());
-        assertEquals(1, numFunctionMetrics.size());
-        
-        String res1 = parser.getResult(QualityReportParser.totalNumberOfFilesPattern);
-        String res2 = parser.getResult(QualityReportParser.linesOfCodePattern);
-        String res3 = parser.getResult(QualityReportParser.numberOfSourceFilesPattern);
-        String res4 = parser.getResult(QualityReportParser.numberOfFunctionsPattern);
-        
-        System.out.println(res1);
-        System.out.println(res2);
-        System.out.println(res3);
-        System.out.println(res4);
-        
-        assertNotNull(res1);
-        assertNotNull(res2);
-        assertNotNull(res3);
-        assertNotNull(res4);
-        
-        System.out.println(f.getPath().toString());
-        String fileName = f.getAbsolutePath();
-        System.out.println(String.format("Deleted file %s : %s", fileName, f.delete()));
-    }
-    
-    @Test
-    public void testParseSupressionReport() throws IOException, PrqaException {
-        InputStream is = this.getClass().getResourceAsStream("Suppression_Report.xhtml");
-        assertNotNull(is);
-        InputStreamReader isr = new InputStreamReader(is);
-        BufferedReader br = new BufferedReader(isr);
-        
-        File f = File.createTempFile("testParse", ".xhtml");
-        FileWriter fw = new FileWriter(f);
-        
-        String line;
-        while((line = br.readLine()) != null ) {
-            fw.write(line+System.getProperty("line.separator"));
-        }
-        
-        fw.close();
-       
-        SuppressionReportParser parser = new SuppressionReportParser();
-        parser.setFullReportPath(f.getPath());
-        
-        String totalNumFiles = parser.getResult(SuppressionReportParser.numberOfFilesPattern);
-        String linesOfCode = parser.getResult(SuppressionReportParser.linesOfCodePattern);
-        String numSupMsg = parser.getResult(SuppressionReportParser.numberOfMessagesSuppressedPattern);
-        String pctSupMsg = parser.getResult(SuppressionReportParser.percentageOfMsgSuppressedPattern);
-        String uniSupMsg = parser.getResult(SuppressionReportParser.uniqueMessagesSuppressedPattern);
-        
-        
-        
-        assertNotNull(totalNumFiles);
-        assertNotNull(linesOfCode);
-        assertNotNull(numSupMsg);
-        assertNotNull(pctSupMsg);
-        assertNotNull(uniSupMsg);
-       
-        int restNumFiles = Integer.parseInt(totalNumFiles);
-        int resLinesCode = Integer.parseInt(linesOfCode);
-        int resNumSupMsg = Integer.parseInt(numSupMsg);
-        double resPctSupMsg = Double.parseDouble(pctSupMsg);
-        int resUniSupMsg = Integer.parseInt(uniSupMsg);
-        
-        assertTrue(restNumFiles >= 0);
-        assertTrue(resLinesCode >= 0);
-        assertTrue(resNumSupMsg >= 0);
-        assertTrue(resPctSupMsg >= 0);
-        assertTrue(resUniSupMsg >= 0);
-        
-        System.out.println(f.getPath().toString());
-        String fileName = f.getAbsolutePath();
-        System.out.println(String.format("Deleted file %s : %s", fileName, f.delete()));
-    }
-    
+    }    
         
     @Test
     public void testParserMethods() {

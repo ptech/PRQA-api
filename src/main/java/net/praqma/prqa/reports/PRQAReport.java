@@ -56,7 +56,7 @@ public abstract class PRQAReport<T extends PRQAStatus> implements Serializable {
     }
     
     public static String getNamingTemplate(PRQAContext.QARReportType type, String extension) {
-        return type.toString()+extension;
+        return type.toString()+ " "+extension;
     }
     
     public PRQAReport(QAR reportTool) {

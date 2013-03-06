@@ -4,14 +4,12 @@
  */
 package net.praqma.prga.excetions;
 
-import java.io.IOException;
-
 /**
  *
  * @author Praqma
  */
 public class PrqaParserException extends PrqaException {
-    public PrqaParserException(String message, IOException originalException) {         
+    public PrqaParserException(String message, Exception originalException) {         
         super(originalException);
         
     }

@@ -1,5 +1,6 @@
 package net.praqma.prqa.status;
 
+import java.util.HashMap;
 import net.praqma.prga.excetions.PrqaException;
 import net.praqma.prga.excetions.PrqaReadingException;
 
@@ -12,11 +13,16 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
     private int messages;
     private Double fileCompliance;
     private Double projectCompliance;
+    private HashMap<Integer,Integer> messagesByLevel = new HashMap<Integer,Integer>();
     
-    public PRQAComplianceStatus() {}
+    public PRQAComplianceStatus() {
+        for(int i=0; i<10; i++) {
+            messagesByLevel.put(i,0);
+        }
+    }
     
     public PRQAComplianceStatus(int messages, Double fileCompliance, Double projectCompliance) {
- 
+        this();
     	logger.finest(String.format("Constructor called for class PRQAComplianceStatus"));
     	logger.finest(String.format("Input parameter messages type: %s; value: %s", "int", messages));
     	logger.finest(String.format("Input parameter fileCompliance type: %s; value: %s", fileCompliance.getClass(), fileCompliance));
@@ -168,6 +174,11 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
         out += "File Compliance Index : " + fileCompliance + "%" + System.getProperty("line.separator");
         out += "Messages : " + messages + System.getProperty("line.separator") ;
         
+        out += "Messages by level:\n";
+        for(int i=0; i<10; i++) {
+            out += String.format("Level %s messages (%s)\n", i, getMessagesByLevel().get(i)); 
+        }
+        
         if(notifications != null) {
             for(String note : notifications) {
                 out += "Notify: " + note + System.getProperty("line.separator");
@@ -244,5 +255,28 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
         sb.append("</tbody>");
         sb.append("</table>");               
         return sb.toString();
+    }   
+
+    /**
+     * @return the messagesByLevel
+     */
+    public HashMap<Integer,Integer> getMessagesByLevel() {
+        return messagesByLevel;
+    }
+
+    /**
+     * @param messagesByLevel the messagesByLevel to set
+     */
+    public void setMessagesByLevel(HashMap<Integer,Integer> messagesByLevel) {
+        this.messagesByLevel = messagesByLevel;
+    }
+    
+    
+    public int getMessageCount(int threshold) {
+        int cnt = 0;
+        for (int i=threshold; i<=9; i++) {
+            cnt += getMessagesByLevel().get(i);
+        }
+        return cnt;
     }
 }
