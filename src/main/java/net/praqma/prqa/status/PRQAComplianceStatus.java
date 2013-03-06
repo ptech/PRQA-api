@@ -271,11 +271,17 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
         this.messagesByLevel = messagesByLevel;
     }
     
+    public boolean allEmpty() {
+        return getMessagesByLevel() == null || getMessageCount(9) == 0;
+    }
     
     public int getMessageCount(int threshold) {
         int cnt = 0;
+        
         for (int i=threshold; i<=9; i++) {
-            cnt += getMessagesByLevel().get(i);
+            if(getMessagesByLevel() != null && getMessagesByLevel().containsKey(i)) {
+                cnt += getMessagesByLevel().get(i);
+            }
         }
         return cnt;
     }
