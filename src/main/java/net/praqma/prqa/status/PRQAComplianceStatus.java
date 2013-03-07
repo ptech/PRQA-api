@@ -175,9 +175,13 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
         out += "File Compliance Index : " + fileCompliance + "%" + System.getProperty("line.separator");
         out += "Messages : " + messages + System.getProperty("line.separator") ;
         
-        out += "Messages by level:\n";
-        for(int i=0; i<10; i++) {
-            out += String.format("Level %s messages (%s)\n", i, getMessagesByLevel().get(i)); 
+        if(getMessagesByLevel() != null ) {
+            out += "Messages by level:\n";
+            for(int i=0; i<10; i++) {
+                if(getMessagesByLevel().containsKey(i)) {
+                    out += String.format("Level %s messages (%s)\n", i, getMessagesByLevel().get(i)); 
+                }
+            }
         }
         
         if(notifications != null) {

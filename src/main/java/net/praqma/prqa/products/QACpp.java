@@ -6,11 +6,16 @@ package net.praqma.prqa.products;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.logging.Logger;
 import net.praqma.prqa.exceptions.PrqaException;
 import net.praqma.prqa.PRQA;
 import net.praqma.prqa.PRQACommandLineUtility;
+import net.praqma.prqa.exceptions.PrqaSetupException;
+import net.praqma.util.execute.AbnormalProcessTerminationException;
 import net.praqma.util.execute.CmdResult;
+import net.praqma.util.execute.CommandLine;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 
 /**
@@ -22,7 +27,7 @@ public class QACpp implements Product{
     private static final Logger logger = Logger.getLogger(QACpp.class.getName());
     
     @Override
-    public String getProductVersion() {
+    public String getProductVersion(HashMap<String,String> environment, File workspace) throws PrqaSetupException {
         logger.finest(String.format("Starting execution of method - getProductVersion"));
         
         String version = "Unknown";
@@ -31,14 +36,13 @@ public class QACpp implements Product{
         File f = null;
         try {
             f = File.createTempFile("test_prqa_file", ".c");
-            
-            res = null;
-            
-            //TODO: Implement
-            //res = PRQACommandLineUtility.getInstance(getEnvironment()).run(String.format("qacpp -version \"%s\"", f.getAbsolutePath()), new File(commandBase));
-  
-        } catch (Exception ex) {
+            res = CommandLine.getInstance().run(String.format("qacpp -version \"%s\"", f.getAbsolutePath()), workspace, true, false, environment);
+        
+        } catch (AbnormalProcessTerminationException ex) {
             logger.warning("Failed to get qacpp-version");
+            throw new PrqaSetupException(String.format( "Failed to detect QAcpp version with command %s returned code %s\nMessage was:\n%s", ex.getCommand(), ex.getExitValue(), ex.getMessage()), ex);
+        } catch (IOException ex) {
+            logger.warning("Failed to create file");
         } finally {
             if(f != null) {
                 try {
@@ -64,10 +68,9 @@ public class QACpp implements Product{
         }
         
         if(res != null) {
-            for(String s: res.stdoutList) {
-                    version = s;
-                    break;
-                }
+            if(res.stdoutList.size() > 0) {
+                version = res.stdoutList.get(0);
+            }
         }
         
         logger.finest(String.format("Returning value %s", version));

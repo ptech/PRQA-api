@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.praqma.prqa.PRQAApplicationSettings;
 import net.praqma.prqa.PRQAContext;
@@ -16,10 +17,12 @@ import net.praqma.prqa.PRQAUploadSettings;
 import net.praqma.prqa.QAVerifyServerSettings;
 import net.praqma.prqa.exceptions.PrqaException;
 import net.praqma.prqa.exceptions.PrqaSetupException;
+import net.praqma.prqa.exceptions.PrqaUploadException;
 import net.praqma.prqa.parsers.ComplianceReportHtmlParser;
 import net.praqma.prqa.products.PRQACommandBuilder;
 import net.praqma.prqa.products.QAV;
 import net.praqma.prqa.status.PRQAComplianceStatus;
+import net.praqma.util.execute.AbnormalProcessTerminationException;
 import net.praqma.util.execute.CmdResult;
 import net.praqma.util.execute.CommandLine;
 import org.apache.commons.lang.StringUtils;
@@ -28,7 +31,7 @@ import org.apache.commons.lang.StringUtils;
  *
  * @author Praqma
  */
-public class PRQAReport2 implements Serializable {
+public class PRQAReport implements Serializable {
    
     public static String XHTML = "xhtml";
     public static String XML = "xml";
@@ -39,7 +42,7 @@ public class PRQAReport2 implements Serializable {
     public static String HTML_REPORT_EXTENSION = "Report."+HTML;
     
     
-    private static final Logger log = Logger.getLogger(PRQAReport2.class.getName());
+    private static final Logger log = Logger.getLogger(PRQAReport.class.getName());
     private PRQAReportSettings settings;
     private QAVerifyServerSettings qavSettings;
     private PRQAUploadSettings upSettings;
@@ -47,7 +50,7 @@ public class PRQAReport2 implements Serializable {
     private HashMap<String,String> environment;
     private PRQAApplicationSettings appSettings;
     
-    public PRQAReport2(PRQAReportSettings settings, QAVerifyServerSettings qavSettings, PRQAUploadSettings upSettings, PRQAApplicationSettings appSettings) {
+    public PRQAReport(PRQAReportSettings settings, QAVerifyServerSettings qavSettings, PRQAUploadSettings upSettings, PRQAApplicationSettings appSettings) {
         this.settings = settings;
         this.qavSettings = qavSettings;
         this.upSettings = upSettings;
@@ -55,7 +58,7 @@ public class PRQAReport2 implements Serializable {
                
     }
     
-    public PRQAReport2(PRQAReportSettings settings, QAVerifyServerSettings qavSettings, PRQAUploadSettings upSettings, PRQAApplicationSettings appSettings, HashMap<String,String> environment) {
+    public PRQAReport(PRQAReportSettings settings, QAVerifyServerSettings qavSettings, PRQAUploadSettings upSettings, PRQAApplicationSettings appSettings, HashMap<String,String> environment) {
         this.settings = settings;
         this.environment = environment;
         this.qavSettings = qavSettings;
@@ -98,9 +101,9 @@ public class PRQAReport2 implements Serializable {
  
         CmdResult res = null;
         if(getEnvironment() == null) {
-            res = CommandLine.getInstance().run(finalCommand, workspace, true, true);
+            res = CommandLine.getInstance().run(finalCommand, workspace, true, false);
         } else {
-            res = CommandLine.getInstance().run(finalCommand, workspace, true, true, getEnvironment());
+            res = CommandLine.getInstance().run(finalCommand, workspace, true, false, getEnvironment());
         }
         return res;
     }
@@ -116,11 +119,11 @@ public class PRQAReport2 implements Serializable {
         builder.appendArgument(PRQACommandBuilder.getSfbaOption(true));
         
         String reports = "";
-        String qar = appSettings != null ? appSettings.resolveQarExe(isUnix) : "qar"; 
+        String qar = appSettings != null ? PRQAApplicationSettings.resolveQarExe(isUnix) : "qar"; 
         for (PRQAContext.QARReportType type : settings.chosenReportTypes) {
             reports += qar +" %Q %P+ %L+ " + PRQACommandBuilder.getReportTypeParameter(type.toString(), true)+ " ";
             reports += PRQACommandBuilder.getViewingProgram("noviewer")+ " ";
-            reports += PRQACommandBuilder.getReportFormatParameter(PRQAReport2.XHTML, false)+ " ";
+            reports += PRQACommandBuilder.getReportFormatParameter(PRQAReport.XHTML, false)+ " ";
             reports += PRQACommandBuilder.getProjectName()+ " ";
             reports += PRQACommandBuilder.getOutputPathParameter(workspace.getPath(), true);
             reports += "#";
@@ -137,31 +140,22 @@ public class PRQAReport2 implements Serializable {
         CmdResult res = null;
         String finalCommand = "set";
         if(getEnvironment() == null) {
-            res = CommandLine.getInstance().run(finalCommand, workspace, true, true);
+            res = CommandLine.getInstance().run(finalCommand, workspace, true, false);
         } else {
-            res = CommandLine.getInstance().run(finalCommand, workspace, true, true, getEnvironment());
+            res = CommandLine.getInstance().run(finalCommand, workspace, true, false, getEnvironment());
         }
         
         return res.stdoutList;
     }
-    
-    /**
-     * This method should be responsible for checking if the environment has been correctly set up.
-     * @param isUnix
-     * @return 
-     */
-    public void checkSetup(boolean isUnix) throws PrqaSetupException {
-    }
-    
     
     public CmdResult report(boolean isUnix) {      
         String finalCommand = createReportCommand(isUnix);
 
         CmdResult res = null;
         if(getEnvironment() == null) {
-            res = CommandLine.getInstance().run(finalCommand, workspace, true, true);
+            res = CommandLine.getInstance().run(finalCommand, workspace, true, false);
         } else {
-            res = CommandLine.getInstance().run(finalCommand, workspace, true, true, getEnvironment());
+            res = CommandLine.getInstance().run(finalCommand, workspace, true, false, getEnvironment());
         }
         return res;
     }
@@ -200,18 +194,22 @@ public class PRQAReport2 implements Serializable {
         return null;
     }
     
-    public CmdResult upload() {
+    public CmdResult upload() throws PrqaUploadException {
+        CmdResult res = null;
         String finalCommand = createUploadCommand();
         if(finalCommand == null) {
             return null;
         }
         
-        CmdResult res = null;
-
-        if(getEnvironment() == null) {
-            res = CommandLine.getInstance().run(finalCommand, workspace, true, true);
-        } else {            
-            res = CommandLine.getInstance().run(finalCommand, workspace, true, true, getEnvironment());
+        try {
+            if(getEnvironment() == null) {
+                res = CommandLine.getInstance().run(finalCommand, workspace, true, false);
+            } else {            
+                res = CommandLine.getInstance().run(finalCommand, workspace, true, false, getEnvironment());
+            }
+        } catch (AbnormalProcessTerminationException abnex) {
+            log.logp(Level.SEVERE, this.getClass().getName(), "upload()", "Logged error with upload", abnex);
+            throw new PrqaUploadException(String.format("Upload failed with message:\n%s", abnex.getMessage()), abnex);
         }
         
         return res;

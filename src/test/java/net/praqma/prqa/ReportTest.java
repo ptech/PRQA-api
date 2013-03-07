@@ -14,7 +14,6 @@ import static org.junit.Assert.*;
 public class ReportTest {
     @Test public void testReportFileNotFoundProject() {
     }
-
     
     @Test public void testConstants() {
         assertTrue(PRQAContext.QARReportType.values().length == 3);
