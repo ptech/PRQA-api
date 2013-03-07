@@ -5,12 +5,11 @@
 package net.praqma.prqa.products;
 
 import java.io.File;
-import net.praqma.prqa.exceptions.PrqaException;
-import net.praqma.prqa.exceptions.PrqaUploadException;
 import net.praqma.prqa.CodeUploadSetting;
 import net.praqma.prqa.PRQA;
 import net.praqma.prqa.PRQACommandLineUtility;
-import net.praqma.prqa.logging.Config;
+import net.praqma.prqa.exceptions.PrqaException;
+import net.praqma.prqa.exceptions.PrqaUploadException;
 import net.praqma.util.execute.AbnormalProcessTerminationException;
 import net.praqma.util.execute.CommandLineException;
 import org.apache.commons.lang.StringUtils;
@@ -31,6 +30,8 @@ public class QAV extends PRQA {
     private String product;
     private String sourceTopLevelDir;
     private CodeUploadSetting codeUploadSettings;
+    public static final String QAV_UPLOAD_LOG = PRQACommandLineUtility.FILE_SEPARATOR+"qavupload.log";
+    public static final String QAV_IMPORT_LOG = PRQACommandLineUtility.FILE_SEPARATOR+"qaimport.log";
     
     
     public QAV(String host, String password, String user, Integer port, String vcsXml, boolean useSingleSnapshotMode, 
@@ -147,7 +148,7 @@ public class QAV extends PRQA {
         
         uploadPartCommand +=" "+PRQACommandBuilder.getProd(useSingleSnapshotMode);
                
-        uploadPartCommand +=" "+PRQACommandBuilder.getLogFilePathParameter(path+Config.QAV_UPLOAD_LOG);
+        uploadPartCommand +=" "+PRQACommandBuilder.getLogFilePathParameter(path+QAV_UPLOAD_LOG);
         
         uploadPartCommand +=" "+PRQACommandBuilder.wrapInEscapedQuotationMarks(path);
                 
@@ -200,7 +201,7 @@ public class QAV extends PRQA {
         maseqSection += " "+"%Q %P+ %L+ "+PRQACommandBuilder.getNumberOfThreads(availableProcessors)+" "+PRQACommandBuilder.getSop(StringUtils.isBlank(sourceTopLevelDir) ? path : sourceTopLevelDir) + " ";
         maseqSection += PRQACommandBuilder.getPrqaVcs(codeUploadSettings, vcsXml)+" ";
         maseqSection += PRQACommandBuilder.getQavOutPathParameter(path)+" ";
-        maseqSection += PRQACommandBuilder.getImportLogFilePathParameter(path+Config.QAV_IMPORT_LOG)+" ";
+        maseqSection += PRQACommandBuilder.getImportLogFilePathParameter(path+QAV.QAV_IMPORT_LOG)+" ";
         maseqSection += PRQACommandBuilder.getCodeAll(codeUploadSettings);
         
         logger.exiting(this.getClass().toString(), "qavImport", maseqSection);

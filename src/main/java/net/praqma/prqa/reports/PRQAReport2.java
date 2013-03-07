@@ -9,20 +9,17 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
-import net.praqma.prqa.exceptions.PrqaException;
-import net.praqma.prqa.exceptions.PrqaParserException;
-import net.praqma.prqa.exceptions.PrqaSetupException;
 import net.praqma.prqa.PRQAApplicationSettings;
 import net.praqma.prqa.PRQAContext;
 import net.praqma.prqa.PRQAReportSettings;
 import net.praqma.prqa.PRQAUploadSettings;
 import net.praqma.prqa.QAVerifyServerSettings;
-import net.praqma.prqa.logging.Config;
+import net.praqma.prqa.exceptions.PrqaException;
+import net.praqma.prqa.exceptions.PrqaSetupException;
 import net.praqma.prqa.parsers.ComplianceReportHtmlParser;
 import net.praqma.prqa.products.PRQACommandBuilder;
-import net.praqma.prqa.products.QAR;
+import net.praqma.prqa.products.QAV;
 import net.praqma.prqa.status.PRQAComplianceStatus;
-import net.praqma.util.execute.AbnormalProcessTerminationException;
 import net.praqma.util.execute.CmdResult;
 import net.praqma.util.execute.CommandLine;
 import org.apache.commons.lang.StringUtils;
@@ -165,7 +162,7 @@ public class PRQAReport2 implements Serializable {
             importCommand += " " +  "%Q %P+ %L+ "+PRQACommandBuilder.getNumberOfThreads(availableProcessors)+" "+PRQACommandBuilder.getSop(StringUtils.isBlank(upSettings.sourceOrigin) ? workspace.getPath() : upSettings.sourceOrigin) + " ";
             importCommand += PRQACommandBuilder.getPrqaVcs(upSettings.codeUploadSetting, upSettings.vcsConfigXml)+" ";
             importCommand += PRQACommandBuilder.getQavOutPathParameter(workspace.getPath())+" ";
-            importCommand += PRQACommandBuilder.getImportLogFilePathParameter(workspace.getPath()+Config.QAV_IMPORT_LOG)+" ";
+            importCommand += PRQACommandBuilder.getImportLogFilePathParameter(workspace.getPath()+QAV.QAV_IMPORT_LOG)+" ";
             importCommand += PRQACommandBuilder.getCodeAll(upSettings.codeUploadSetting);
 
             //Step2: The upload part
@@ -176,7 +173,7 @@ public class PRQAReport2 implements Serializable {
             uploadPart +=" "+PRQACommandBuilder.getPassword(qavSettings.password); 
             uploadPart +=" "+PRQACommandBuilder.getProjectDatabase(upSettings.qaVerifyProjectName);
             uploadPart +=" "+PRQACommandBuilder.getProd(upSettings.singleSnapshotMode);     
-            uploadPart +=" "+PRQACommandBuilder.getLogFilePathParameter(workspace.getPath()+Config.QAV_UPLOAD_LOG);
+            uploadPart +=" "+PRQACommandBuilder.getLogFilePathParameter(workspace.getPath()+QAV.QAV_UPLOAD_LOG);
             uploadPart +=" "+PRQACommandBuilder.wrapInEscapedQuotationMarks(workspace.getPath());
 
             //Step3: Finalize
