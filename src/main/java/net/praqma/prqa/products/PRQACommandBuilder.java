@@ -8,7 +8,6 @@ import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.logging.Logger;
 import net.praqma.prqa.CodeUploadSetting;
-import net.praqma.prqa.analyzer.PRQAExcutable;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -299,15 +298,6 @@ public class PRQACommandBuilder implements Serializable {
         logger.finest(String.format("Returning value: %s", output));
 
         return output;
-    }
-
-    public static String getProduct(PRQAExcutable product) {
-        logger.finest(String.format("Starting execution of method - getProduct"));
-        logger.finest(String.format("Input parameter product type: %s; value: %s", product.getClass(), product));
-
-        logger.finest(String.format("Returning value: %s", product));
-
-        return product.toString();
     }
     
     public static String getHost(String hostname) {
