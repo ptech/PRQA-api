@@ -6,7 +6,7 @@ package net.praqma.prqa;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import net.praqma.prga.excetions.PrqaException;
+import net.praqma.prqa.exceptions.PrqaException;
 import net.praqma.prqa.status.StatusCategory;
 
 /**

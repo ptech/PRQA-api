@@ -4,7 +4,7 @@
  */
 package net.praqma.prqa.analyzer;
 
-import net.praqma.prga.excetions.PrqaException;
+import net.praqma.prqa.exceptions.PrqaException;
 import net.praqma.util.execute.CmdResult;
 
 /**

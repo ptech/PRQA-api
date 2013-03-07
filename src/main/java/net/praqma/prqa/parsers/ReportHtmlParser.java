@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import net.praqma.prga.excetions.PrqaException;
-import net.praqma.prga.excetions.PrqaParserException;
+import net.praqma.prqa.exceptions.PrqaException;
+import net.praqma.prqa.exceptions.PrqaParserException;
 import net.praqma.prqa.PRQACommandLineUtility;
 
 /**

@@ -5,8 +5,8 @@
 package net.praqma.prqa.products;
 
 import java.io.File;
-import net.praqma.prga.excetions.PrqaException;
-import net.praqma.prga.excetions.PrqaUploadException;
+import net.praqma.prqa.exceptions.PrqaException;
+import net.praqma.prqa.exceptions.PrqaUploadException;
 import net.praqma.prqa.CodeUploadSetting;
 import net.praqma.prqa.PRQA;
 import net.praqma.prqa.PRQACommandLineUtility;
