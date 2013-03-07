@@ -4,10 +4,15 @@
  */
 package net.praqma.prqa.products;
 
+import java.io.File;
+import java.io.Serializable;
+import java.util.HashMap;
+import net.praqma.prqa.exceptions.PrqaSetupException;
+
 /**
  *
  * @author Praqma
  */
-public interface Product {
-    public String getProductVersion();
+public interface Product extends Serializable {
+    public String getProductVersion(HashMap<String,String> environment, File currentDirectory) throws PrqaSetupException;
 }

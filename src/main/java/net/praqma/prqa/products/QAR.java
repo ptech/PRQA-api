@@ -4,8 +4,12 @@
  */
 package net.praqma.prqa.products;
 
+import java.io.File;
+import java.util.HashMap;
 import java.util.logging.Logger;
 import net.praqma.prqa.PRQAContext.QARReportType;
+import net.praqma.prqa.exceptions.PrqaSetupException;
+import net.praqma.util.execute.AbnormalProcessTerminationException;
 import net.praqma.util.execute.CmdResult;
 import net.praqma.util.execute.CommandLine;
 
@@ -14,20 +18,18 @@ import net.praqma.util.execute.CommandLine;
  *
  * @author jes
  */
-public class QAR implements Product{
+public class QAR implements Product {
 
     private static final Logger logger = Logger.getLogger(QAR.class.getName());
 	public final String projectFile;
 	public final String product;	
-	private QARReportType type;
-    
+	private QARReportType type;    
 	public static final String QAW_WRAPPER = "qaw";
     
 
 	/**
 	 * QAR is invoked using QAW where this is taken as parameter in the QAW command.
 	 */
-   
     
     public QAR(String product, String projectFile, QARReportType type) {
         this.product = product;
@@ -45,15 +47,15 @@ public class QAR implements Product{
 	}
     
     @Override
-    public String getProductVersion() {
+    public String getProductVersion(HashMap<String,String> environment, File workspace) throws PrqaSetupException {
         logger.finest(String.format("Starting execution of method - getProductVersion"));
         
         String version = "Unknown";
         try {
-            CmdResult res = CommandLine.getInstance().run("qar -version");            
+            CmdResult res = CommandLine.getInstance().run("qar -version", workspace, true, false, environment);            
             version = res.stdoutBuffer.toString();
-        } catch (Exception ex) {
-            logger.warning("Failed to obtains QAR product version");
+        } catch (AbnormalProcessTerminationException ex) {
+            throw new PrqaSetupException( String.format("Failed to detect QAR running this command %s, exit code was %s\nMessage was:\n%s", ex.getCommand(),ex.getExitValue(),ex.getMessage()), ex );
         }
         
         logger.finest(String.format("Returning value %s", version));

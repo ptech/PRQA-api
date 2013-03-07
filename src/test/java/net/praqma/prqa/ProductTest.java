@@ -19,14 +19,12 @@ public class ProductTest {
         String unknown = "Unknown";
         
         
-        QAR qar = new QAR("unknow", "unknown", PRQAContext.QARReportType.Compliance);
-        assertEquals(qar.getProductVersion(), unknown);
+        QAR qar = new QAR("unknown", "unknown", PRQAContext.QARReportType.Compliance);
         
         QAC qac = new QAC();
-        assertEquals(qac.getProductVersion(), unknown);
+
         
         QACpp qacpp = new QACpp();
-        assertEquals(qacpp.getProductVersion(), unknown);
         
     }
     

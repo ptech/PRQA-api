@@ -6,11 +6,16 @@ package net.praqma.prqa.products;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.logging.Logger;
 import net.praqma.prqa.PRQA;
 import net.praqma.prqa.PRQACommandLineUtility;
 import net.praqma.prqa.exceptions.PrqaException;
+import net.praqma.prqa.exceptions.PrqaSetupException;
+import net.praqma.util.execute.AbnormalProcessTerminationException;
 import net.praqma.util.execute.CmdResult;
+import net.praqma.util.execute.CommandLine;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 
 /**
@@ -20,9 +25,9 @@ import org.apache.commons.io.filefilter.WildcardFileFilter;
 public class QAC implements Product {
     
     private static final Logger logger = Logger.getLogger(QAC.class.getName());
-    
+       
     @Override
-    public String getProductVersion() {
+    public String getProductVersion(HashMap<String,String> environment, File workspace) throws PrqaSetupException {
         logger.finest(String.format("Starting execution of method - getProductVersion()"));
             
         String productVersion = "Unknown";
@@ -32,13 +37,13 @@ public class QAC implements Product {
         try {
             f = File.createTempFile("test_prqa_file", ".c");
             
-            res = null;
-            
-            //TODO: Implement
-            //res = PRQACommandLineUtility.getInstance(getEnvironment()).run(String.format("qac -version \"%s\"", f.getAbsolutePath()), new File(commandBase));
+            res = CommandLine.getInstance().run(String.format("qac -version \"%s\"", f.getAbsolutePath()), workspace, true, false, environment);
   
-        } catch (Exception ex) {
-             logger.warning("Failed to get qac version");
+        } catch (AbnormalProcessTerminationException abnex) {
+             logger.warning("Failed to get qac version");             
+             throw new PrqaSetupException(String.format( "Failed to detect QAC version with command %s returned code %s\nMessage was:\n%s", abnex.getCommand(),abnex.getExitValue(),abnex.getMessage()), abnex);
+        } catch (IOException ioex) {
+            logger.warning("IOException...failed to delete");
         } finally {
             if(f != null) {
                 try {

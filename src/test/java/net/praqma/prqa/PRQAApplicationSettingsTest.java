@@ -19,10 +19,10 @@ public class PRQAApplicationSettingsTest {
         String slashedValue = "Slash"+System.getProperty("file.separator");
         String nonSlashedValue = "Slash";
         PRQAApplicationSettings settings = new PRQAApplicationSettings(null, null, null);
-        assertEquals(qarPl, settings.resolveQarExe(true));
-        assertEquals(qar, settings.resolveQarExe(false));
-        assertEquals(qaw, settings.resolveQawExe(true));
-        assertEquals(qaw, settings.resolveQawExe(false));
+        assertEquals(qarPl, PRQAApplicationSettings.resolveQarExe(true));
+        assertEquals(qar, PRQAApplicationSettings.resolveQarExe(false));
+        assertEquals(qaw, PRQAApplicationSettings.resolveQawExe(true));
+        assertEquals(qaw, PRQAApplicationSettings.resolveQawExe(false));
         assertEquals(slashedValue, PRQAApplicationSettings.addSlash(slashedValue, System.getProperty("file.separator")));
         assertEquals(slashedValue, PRQAApplicationSettings.addSlash(nonSlashedValue, System.getProperty("file.separator")));
                 

@@ -21,7 +21,7 @@ public class PRQAApplicationSettings implements Serializable {
         this.qawHome = qawHome;
     }
     
-    public String resolveQarExe(boolean isUnix) {
+    public static String resolveQarExe(boolean isUnix) {
         if(isUnix) {
             return "qar.pl";
         } else {
@@ -29,7 +29,7 @@ public class PRQAApplicationSettings implements Serializable {
         }
     }
     
-    public String resolveQawExe(boolean isUnix) {
+    public static String resolveQawExe(boolean isUnix) {
         if(isUnix) {
             return "qaw";
         } else {
