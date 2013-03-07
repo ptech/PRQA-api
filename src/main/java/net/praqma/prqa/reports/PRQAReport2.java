@@ -30,6 +30,14 @@ import org.apache.commons.lang.StringUtils;
  */
 public class PRQAReport2 implements Serializable {
    
+    public static String XHTML = "xhtml";
+    public static String XML = "xml";
+    public static String HTML = "html";
+    
+    public static String XHTML_REPORT_EXTENSION = "Report."+XHTML;
+    public static String XML_REPORT_EXTENSION = "Report."+XML;
+    public static String HTML_REPORT_EXTENSION = "Report."+HTML;
+    
     
     private static final Logger log = Logger.getLogger(PRQAReport2.class.getName());
     private PRQAReportSettings settings;
@@ -53,6 +61,10 @@ public class PRQAReport2 implements Serializable {
         this.qavSettings = qavSettings;
         this.upSettings = upSettings;
         this.appSettings = appSettings;
+    }
+    
+    public static String getNamingTemplate(PRQAContext.QARReportType type, String extension) {
+        return type.toString()+ " "+extension;
     }
     
     public String createAnalysisCommand(boolean isUnix) {
@@ -108,7 +120,7 @@ public class PRQAReport2 implements Serializable {
         for (PRQAContext.QARReportType type : settings.chosenReportTypes) {
             reports += qar +" %Q %P+ %L+ " + PRQACommandBuilder.getReportTypeParameter(type.toString(), true)+ " ";
             reports += PRQACommandBuilder.getViewingProgram("noviewer")+ " ";
-            reports += PRQACommandBuilder.getReportFormatParameter(PRQAReport.XHTML, false)+ " ";
+            reports += PRQACommandBuilder.getReportFormatParameter(PRQAReport2.XHTML, false)+ " ";
             reports += PRQACommandBuilder.getProjectName()+ " ";
             reports += PRQACommandBuilder.getOutputPathParameter(workspace.getPath(), true);
             reports += "#";
