@@ -13,7 +13,6 @@ import net.praqma.prqa.products.QACpp;
 import net.praqma.prqa.products.QAR;
 import net.praqma.prqa.products.QAV;
 import net.praqma.prqa.status.PRQAComplianceStatus;
-import net.praqma.prqa.status.PRQAQualityStatus;
 import net.praqma.prqa.status.StatusCategory;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -185,16 +184,6 @@ public class PRQATest extends TestCase {
     }
     
     @Test
-    public void testSetReading() {
-        PRQAQualityStatus stat = new PRQAQualityStatus();
-        try {
-            stat.setReadout(StatusCategory.Messages, new Integer(40));
-        } catch (PrqaException ex) {
-            assertTrue("Test succeeded, quality status does not have a field with label Messages", true);
-        }        
-    }
-    
-    @Test
     public void testGetReadings() {
         PRQAComplianceStatus status = new PRQAComplianceStatus(100, 100d, 34.5d);
         try {
@@ -219,44 +208,7 @@ public class PRQATest extends TestCase {
         }
         assertTrue(caught);
     }
-		
-    @Test
-    public void testComaprisonForLowerValues() throws PrqaException {
-        PRQAComplianceStatus status = new PRQAComplianceStatus();
-        status.setFileCompliance(new Double(10.0));
-        status.setProjectCompliance(new Double(20.22));
-        status.setMessages(1000);
-
-        PRQAComplianceStatus statusTwo = new PRQAComplianceStatus();
-        statusTwo.setFileCompliance(new Double(67.45));
-        statusTwo.setMessages(1000);
-        statusTwo.setProjectCompliance(new Double(56.09));
-
-        boolean res = status.createComparison(PRQAContext.ComparisonSettings.Threshold, StatusCategory.Messages).compareIsEqualOrLower(1000);
-        boolean res2 = status.createComparison(PRQAContext.ComparisonSettings.Improvement, StatusCategory.Messages, statusTwo).compareIsEqualOrLower(1000);
-        assertTrue(res2);
-        assertTrue(res);
-    }
     
-    @Test
-    public void testCompareDoubleValues() throws PrqaException {
-        PRQAComplianceStatus status = new PRQAComplianceStatus();
-        status.setFileCompliance(new Double(10.0));
-        status.setProjectCompliance(new Double(20.22));
-        status.setMessages(1000);
-        
-        PRQAComplianceStatus statusTwo = new PRQAComplianceStatus();
-        statusTwo.setFileCompliance(new Double(10.00));
-        statusTwo.setMessages(1000);
-        statusTwo.setProjectCompliance(new Double(56.09));
-        boolean res = status.createComparison(PRQAContext.ComparisonSettings.Threshold, StatusCategory.FileCompliance).compareIsEqualOrLower(10);
-        boolean res2 = status.createComparison(PRQAContext.ComparisonSettings.Threshold, StatusCategory.FileCompliance).compareIsEqualOrHigher(10);
-        assertTrue(res);
-        assertTrue(res2);
-        
-        boolean res3 = status.createComparison(PRQAContext.ComparisonSettings.Threshold, StatusCategory.FileCompliance).compareIsEqualOrHigher(10.1);
-        assertFalse(res3);
-    }
     
     @Test
     public void testPrqaExceptionPrint() {
