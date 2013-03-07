@@ -21,7 +21,7 @@ public class QAV implements Product {
     public QAV() { }
 
     @Override
-    public String getProductVersion(HashMap<String,String> environment, File workspace) throws PrqaSetupException {
+    public String getProductVersion(HashMap<String,String> environment, File workspace, boolean isUnix) throws PrqaSetupException {
         return "Works fine";
     }
 }

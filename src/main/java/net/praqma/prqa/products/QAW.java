@@ -18,7 +18,7 @@ import net.praqma.util.execute.CommandLine;
 public class QAW implements Product {
 
     @Override
-    public String getProductVersion(HashMap<String,String> environment, File currentDirectory) throws PrqaSetupException {
+    public String getProductVersion(HashMap<String,String> environment, File currentDirectory, boolean isUnix) throws PrqaSetupException {
         CmdResult res = null;
         try {
             res = CommandLine.getInstance().run("qaw -version", currentDirectory, true, false, environment);       
