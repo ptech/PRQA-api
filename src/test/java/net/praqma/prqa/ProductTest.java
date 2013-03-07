@@ -19,7 +19,7 @@ public class ProductTest {
         String unknown = "Unknown";
         
         
-        QAR qar = new QAR();
+        QAR qar = new QAR("unknow", "unknown", PRQAContext.QARReportType.Compliance);
         assertEquals(qar.getProductVersion(), unknown);
         
         QAC qac = new QAC();
@@ -29,18 +29,5 @@ public class ProductTest {
         assertEquals(qacpp.getProductVersion(), unknown);
         
     }
-    
-    @Test public void testProductFactory() {
-        String qacpp = "qaCpP";
-        String qac = "qAc";
-        
-        boolean isQacpp = PRQA.create(qacpp) instanceof QACpp;
-        boolean isQac = PRQA.create(qac) instanceof QAC;
-        
-        assertTrue(isQacpp);
-        assertTrue(isQac);
-    }
-    
-    
     
 }

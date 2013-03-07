@@ -107,19 +107,6 @@ public class PRQATest extends TestCase {
 
     }
     
-    @Test 
-    public void testCreateQARCommand() {
-        QAR qar = new QAR();
-        QACpp qacpp = new QACpp();
-        qar.getBuilder().prependArgument(PRQACommandBuilder.getProduct(qacpp));
-        String qarString = "qar %Q %P+ %L+ "+ PRQACommandBuilder.getReportTypeParameter("Compliance") + " " +
-                PRQACommandBuilder.getProjectName() + " " + PRQACommandBuilder.getOutputPathParameter("C:\\Program\\ Files\\") + " " + PRQACommandBuilder.getViewingProgram("dummy");
-        qar.getBuilder().appendArgument(PRQACommandBuilder.getMaseq(qarString));
-        System.out.println(qar.getBuilder().getCommand());
-        assertTrue(true);
-        
-    }
-    
     @Test
     public void testResultComparison() {
         PRQAComplianceStatus stat = PRQAComplianceStatus.createEmptyResult();
@@ -207,19 +194,6 @@ public class PRQATest extends TestCase {
             caught = true;
         }
         assertTrue(caught);
-    }
-    
-    
-    @Test
-    public void testPrqaExceptionPrint() {
-        PrqaReadingException prqerror = new PrqaReadingException(null, null);
-        System.out.println(prqerror);
-        
-        PrqaReadingException prqerror2 = new PrqaReadingException("Message", new IOException("IOEX"));
-        System.out.println(prqerror2);
-        
-        PrqaCommandLineException prqerror3 = new PrqaCommandLineException("Message", new IOException("Ex"),new QAR());
-        System.out.println(prqerror3);
     }
     
     @Test

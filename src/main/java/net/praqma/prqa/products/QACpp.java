@@ -6,10 +6,10 @@ package net.praqma.prqa.products;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.util.logging.Logger;
 import net.praqma.prqa.exceptions.PrqaException;
 import net.praqma.prqa.PRQA;
 import net.praqma.prqa.PRQACommandLineUtility;
-import net.praqma.prqa.analyzer.PRQAanalyzer;
 import net.praqma.util.execute.CmdResult;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 
@@ -17,23 +17,9 @@ import org.apache.commons.io.filefilter.WildcardFileFilter;
  *
  * @author jes
  */
-public class QACpp extends PRQA implements PRQAanalyzer {
+public class QACpp implements Product{
 
-    public QACpp() {
-        builder = new PRQACommandBuilder(QAR.QAW_WRAPPER);
-    }
-
-    public QACpp(String commandBase, String command) {
-        super();
-    	logger.finest(String.format("Constructor called for class QACpp(String commandBase, String command)"));
-    	logger.finest(String.format("Input parameter commandBase type: %s; value: %s", commandBase.getClass(), commandBase));
-    	logger.finest(String.format("Input parameter command type: %s; value: %s", command.getClass(), command));
-    	
-        this.command = command;
-        this.commandBase = commandBase;
-        
-        logger.finest(String.format("Ending execution of constructor - QACpp(String commandBase, String command)"));
-    }
+    private static final Logger logger = Logger.getLogger(QACpp.class.getName());
     
     @Override
     public String getProductVersion() {
@@ -46,7 +32,10 @@ public class QACpp extends PRQA implements PRQAanalyzer {
         try {
             f = File.createTempFile("test_prqa_file", ".c");
             
-            res = PRQACommandLineUtility.getInstance(getEnvironment()).run(String.format("qacpp -version \"%s\"", f.getAbsolutePath()), new File(commandBase));
+            res = null;
+            
+            //TODO: Implement
+            //res = PRQACommandLineUtility.getInstance(getEnvironment()).run(String.format("qacpp -version \"%s\"", f.getAbsolutePath()), new File(commandBase));
   
         } catch (Exception ex) {
             logger.warning("Failed to get qacpp-version");
@@ -89,19 +78,5 @@ public class QACpp extends PRQA implements PRQAanalyzer {
     @Override
     public String toString() {
         return "qacpp";
-    }
-
-    @Override
-    public CmdResult analyze() throws PrqaException {
-        try {
-            return PRQACommandLineUtility.getInstance(getEnvironment()).run(getBuilder().getCommand(), new File(commandBase)); 
-        } catch (Exception ex) {
-            throw new PrqaException("Failed in QAC.analyze() with exception", ex);
-        }
-    }
-
-    @Override
-    public PRQACommandBuilder getBuilder() {
-        return builder;
     }
 }

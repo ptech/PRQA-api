@@ -14,11 +14,5 @@ import static org.junit.Assert.*;
 public class QAVTest {
     @Test public void testQAVContruction() {
         QAV qav = new QAV();
-        
-        assertFalse(qav.isUseSingleSnapshotMode());
-        assertNull(qav.getPort());
-        assertNull(qav.getUser());
-        assertNull(qav.getPassword());
-        assertNull(qav.getSourceTopLevelDir());
     }
 }
