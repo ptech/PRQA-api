@@ -4,7 +4,7 @@
  */
 package net.praqma.prqa.reports;
 
-import net.praqma.prga.excetions.PrqaException;
+import net.praqma.prqa.exceptions.PrqaException;
 import net.praqma.prqa.parsers.ComplianceReportHtmlParser;
 import net.praqma.prqa.products.QAR;
 import net.praqma.prqa.status.PRQAComplianceStatus;

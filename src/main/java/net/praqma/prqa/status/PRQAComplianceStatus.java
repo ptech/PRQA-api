@@ -1,8 +1,8 @@
 package net.praqma.prqa.status;
 
 import java.util.HashMap;
-import net.praqma.prga.excetions.PrqaException;
-import net.praqma.prga.excetions.PrqaReadingException;
+import net.praqma.prqa.exceptions.PrqaException;
+import net.praqma.prqa.exceptions.PrqaReadingException;
 
 /**
  * This class represent a compliance status readout. 3 values, file compliance, project compliance and number of messages

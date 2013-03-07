@@ -1,4 +1,4 @@
-package net.praqma.prga.excetions;
+package net.praqma.prqa.exceptions;
 
 import java.util.HashMap;
 

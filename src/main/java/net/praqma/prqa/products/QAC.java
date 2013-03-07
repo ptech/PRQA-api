@@ -6,7 +6,7 @@ package net.praqma.prqa.products;
 
 import java.io.File;
 import java.io.FileFilter;
-import net.praqma.prga.excetions.PrqaException;
+import net.praqma.prqa.exceptions.PrqaException;
 import net.praqma.prqa.PRQA;
 import net.praqma.prqa.PRQACommandLineUtility;
 import net.praqma.prqa.analyzer.PRQAanalyzer;
