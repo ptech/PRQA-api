@@ -11,6 +11,7 @@ import net.praqma.prga.excetions.PrqaReadingException;
 public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAComplianceStatus> {
 
     private int messages;
+    private int messagesWithinThreshold = -1;
     private Double fileCompliance;
     private Double projectCompliance;
     private HashMap<Integer,Integer> messagesByLevel = new HashMap<Integer,Integer>();
@@ -253,7 +254,24 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
         sb.append("<td>").append(getFileCompliance()).append("%</td>");
         sb.append("</tr>");
         sb.append("</tbody>");
-        sb.append("</table>");               
+        sb.append("</table>");
+        
+        if(getMessagesByLevel() != null && getMessagesByLevel().size() > 0) {
+            sb.append("<table style=\"border:solid;border-width:1px;padding:15px;margin:10px;\">");
+            sb.append("<h2>Messages Summary</h2>");
+            sb.append("<thead>");
+            sb.append("<tr>");
+            sb.append("<th>Level</th>");
+            sb.append("<th>Number of messages</th>");
+            sb.append("</tr>");
+            sb.append("</thead>");
+            sb.append("<tbody>");
+            for(int i : getMessagesByLevel().keySet()) {
+                sb.append(String.format("<tr><td>%s</td><td>%s</td></tr>",i, getMessagesByLevel().get(i)));
+            }
+            sb.append("</tbody>");
+            sb.append("</table>");
+        }
         return sb.toString();
     }   
 
@@ -284,5 +302,22 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
             }
         }
         return cnt;
+    }
+
+    /**
+     * @return the messagesWithinThreshold
+     */
+    public int getMessagesWithinThreshold() {
+        if(messagesWithinThreshold == -1) {
+            return messages;
+        }
+        return messagesWithinThreshold;
+    }
+
+    /**
+     * @param messagesWithinThreshold the messagesWithinThreshold to set
+     */
+    public void setMessagesWithinThreshold(int messagesWithinThreshold) {        
+        this.messagesWithinThreshold = messagesWithinThreshold;
     }
 }
