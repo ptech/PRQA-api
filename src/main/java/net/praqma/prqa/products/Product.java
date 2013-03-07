@@ -14,5 +14,5 @@ import net.praqma.prqa.exceptions.PrqaSetupException;
  * @author Praqma
  */
 public interface Product extends Serializable {
-    public String getProductVersion(HashMap<String,String> environment, File currentDirectory) throws PrqaSetupException;
+    public String getProductVersion(HashMap<String,String> environment, File currentDirectory, boolean isUnix) throws PrqaSetupException;
 }

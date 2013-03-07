@@ -27,7 +27,7 @@ public class QACpp implements Product{
     private static final Logger logger = Logger.getLogger(QACpp.class.getName());
     
     @Override
-    public String getProductVersion(HashMap<String,String> environment, File workspace) throws PrqaSetupException {
+    public String getProductVersion(HashMap<String,String> environment, File workspace, boolean isUnix) throws PrqaSetupException {
         logger.finest(String.format("Starting execution of method - getProductVersion"));
         
         String version = "Unknown";
