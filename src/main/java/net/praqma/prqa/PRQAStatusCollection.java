@@ -5,7 +5,6 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.logging.Logger;
 import net.praqma.prqa.exceptions.PrqaException;
-import net.praqma.prqa.logging.Config;
 import net.praqma.prqa.status.StatusCategory;
 
 /**

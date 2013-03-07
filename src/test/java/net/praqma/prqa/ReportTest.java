@@ -15,11 +15,7 @@ import static org.junit.Assert.*;
 public class ReportTest {
     @Test public void testReportFileNotFoundProject() {
     }
-    
-    
-    /*
-     * 
-     */
+
     @Test public void testReportDefaultValues() {
         PRQAComplianceReport report = new PRQAComplianceReport();
         assertNull(report.getReportTool());
