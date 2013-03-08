@@ -66,7 +66,7 @@ public abstract class ReportHtmlParser implements Serializable {
         return output;
     }
 
-    public List<String> parse(String path, Pattern pattern) throws PrqaException {
+    public List<String> parse(String path, Pattern pattern) throws PrqaParserException {
         logger.finest(String.format("Starting execution of method - parse"));
 
         List<String> result = new ArrayList<String>();

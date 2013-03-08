@@ -70,11 +70,16 @@ public class PRQAReport implements Serializable {
         return type.toString()+ " "+extension;
     }
     
-    public String createAnalysisCommand(boolean isUnix) {
+    public String createAnalysisCommand(boolean isUnix) throws PrqaException {
         String finalCommand = "";
         
         PRQACommandBuilder builder = new PRQACommandBuilder(appSettings != null ? appSettings.resolveQawExe(isUnix) : "qaw");        
         builder.prependArgument(settings.product);
+        
+        File pFile = new File(settings.projectFile);
+        if(!pFile.exists()) {
+            throw new PrqaException( String.format("The project file %s does not exist.",settings.projectFile) );
+        }
         
         //TODO: Either project or file list
         builder.appendArgument(PRQACommandBuilder.getProjectFile(settings.projectFile));
