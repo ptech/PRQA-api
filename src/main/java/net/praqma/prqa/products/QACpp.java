@@ -51,7 +51,7 @@ public class QACpp implements Product{
 
                     FileFilter  ff = new WildcardFileFilter("test_prqa_file*");                
 
-                    for(File deleteme : tempFolder.listFiles(ff)) {
+                    for(File deleteme : workspace.listFiles(ff)) {
                         logger.finest(String.format("Starting to delete file: %s",deleteme.getAbsolutePath()));
                         if(deleteme.delete()) {
                             logger.finest(String.format("Succesfully deleted file: %s",deleteme.getAbsolutePath()));
