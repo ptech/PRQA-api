@@ -9,9 +9,6 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.logging.Logger;
-import net.praqma.prqa.exceptions.PrqaException;
-import net.praqma.prqa.PRQA;
-import net.praqma.prqa.PRQACommandLineUtility;
 import net.praqma.prqa.exceptions.PrqaSetupException;
 import net.praqma.util.execute.AbnormalProcessTerminationException;
 import net.praqma.util.execute.CmdResult;
@@ -25,6 +22,7 @@ import org.apache.commons.io.filefilter.WildcardFileFilter;
 public class QACpp implements Product{
 
     private static final Logger logger = Logger.getLogger(QACpp.class.getName());
+    public static String[] envVarsForTool = { "QACPPBIN" , "QACPPPATH" , "QACPPOUTPATH" , "QACPPHELPFILES" , "QACPPTEMP" };
     
     @Override
     public String getProductVersion(HashMap<String,String> environment, File workspace, boolean isUnix) throws PrqaSetupException {

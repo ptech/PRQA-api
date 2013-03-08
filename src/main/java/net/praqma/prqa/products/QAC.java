@@ -25,6 +25,7 @@ import org.apache.commons.io.filefilter.WildcardFileFilter;
 public class QAC implements Product {
     
     private static final Logger logger = Logger.getLogger(QAC.class.getName());
+    public static String[] envVarsForTool = { "QACBIN" , "QACPATH" , "QACOUTPATH" , "QACHELPFILES" , "QACTEMP" };
        
     @Override
     public String getProductVersion(HashMap<String,String> environment, File workspace, boolean isUnix) throws PrqaSetupException {
@@ -37,6 +38,7 @@ public class QAC implements Product {
         try {
             f = File.createTempFile("test_prqa_file", ".c");
             
+            //Check if QACBIN points to a real directory            
             res = CommandLine.getInstance().run(String.format("qac -version \"%s\"", f.getAbsolutePath()), workspace, true, false, environment);
   
         } catch (AbnormalProcessTerminationException abnex) {

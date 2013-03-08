@@ -98,14 +98,12 @@ public abstract class ReportHtmlParser implements Serializable {
                 report += sourceLine + PRQACommandLineUtility.LINE_SEPARATOR;
                 match = pattern.matcher(report);
 
-                // TODO: Should this not be an if statement instead?
                 while (match.find()) {
                     logger.finest(String.format("Match found!"));
 
                     result.add(match.group(1));
 
                     logger.finest(String.format("Returning result:"));
-                    // TODO figure out a way to make it so that we only loop through them if logging is enabled
                     for (String s : result) {
                         logger.finest(String.format("    %s", s));
                     }
@@ -138,9 +136,7 @@ public abstract class ReportHtmlParser implements Serializable {
         }
 
         logger.finest(String.format("File read successfully!"));
-
-
-        // TODO figure out a way to make it so that we only loop through them if logging is enabled
+        
         logger.finest(String.format("Returning result:"));
         for (String s : result) {
             logger.finest(String.format("    %s", s));

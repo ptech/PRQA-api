@@ -90,20 +90,21 @@ public class PRQAReport implements Serializable {
             builder.appendArgument(PRQACommandBuilder.getMaseq(pal));
         }
         
-        //TODO: Analysis command done...ANALYZE
-        
         finalCommand = builder.getCommand();
         return finalCommand;
     }
     
-    public CmdResult analyze(boolean isUnix) {
+    public CmdResult analyze(boolean isUnix) throws PrqaException {
         String finalCommand = createAnalysisCommand(isUnix);
- 
         CmdResult res = null;
-        if(getEnvironment() == null) {
-            res = CommandLine.getInstance().run(finalCommand, workspace, true, false);
-        } else {
-            res = CommandLine.getInstance().run(finalCommand, workspace, true, false, getEnvironment());
+        try {            
+            if(getEnvironment() == null) {
+                res = CommandLine.getInstance().run(finalCommand, workspace, true, false);
+            } else {
+                res = CommandLine.getInstance().run(finalCommand, workspace, true, false, getEnvironment());
+            }
+        } catch (AbnormalProcessTerminationException abnex) {
+            throw new PrqaException(String.format( "Failed to analyze, message was:\n %s",abnex.getMessage()), abnex);
         }
         return res;
     }
@@ -183,7 +184,6 @@ public class PRQAReport implements Serializable {
             uploadPart +=" "+PRQACommandBuilder.wrapInEscapedQuotationMarks(workspace.getPath());
 
             //Step3: Finalize
-            //TODO hardcoding to QAC to begin with
             String mainCommand = "qaw" + " " + settings.product +  " "+PRQACommandBuilder.wrapInQuotationMarks(settings.projectFile);
             mainCommand += " "+ PRQACommandBuilder.getSfbaOption(true)+" ";
             mainCommand += PRQACommandBuilder.getDependencyModeParameter(true) + " ";
@@ -216,7 +216,6 @@ public class PRQAReport implements Serializable {
     }
     
     public PRQAComplianceStatus getComplianceStatus() throws PrqaException {                        
-        //TODO (Cross-platform file path)
         ComplianceReportHtmlParser parser = new ComplianceReportHtmlParser(getWorkspace().getPath()+ System.getProperty("file.separator") + "Compliance Report.xhtml");
         PRQAComplianceStatus status = new PRQAComplianceStatus();
         Double fileCompliance = Double.parseDouble(parser.getResult(ComplianceReportHtmlParser.fileCompliancePattern));
