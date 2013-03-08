@@ -312,12 +312,12 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
      * @return the messagesWithinThreshold
      */
     public int getMessagesWithinThreshold() {
-        if(messagesWithinThreshold == -1) {
+        if(messagesWithinThreshold == -1 || messagesWithinThreshold  == 0) {
             return messages;
         }
         return messagesWithinThreshold;
     }
-
+    
     /**
      * @param messagesWithinThreshold the messagesWithinThreshold to set
      */
