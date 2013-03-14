@@ -94,17 +94,6 @@ public class PRQACommandBuilder implements Serializable {
         return output;
     }
 
-    public static String getCmaf(String path) {
-        logger.finest(String.format("Starting execution of method - getCmaf(String path)"));
-        logger.finest(String.format("Input parameter path type: %s; value: %s", path.getClass(), path));
-
-        String output = PRQACommandBuilder.getCmaf(path, false);
-
-        logger.finest(String.format("Returning value: %s", output));
-
-        return output;
-    }
-
     public static String getMaseq(String commandSequence, boolean escapeInputParameterWhiteSpace) {
         logger.finest(String.format("Starting execution of method - getMaseq(String commandSequence, boolean escapeInputParameterWhiteSpace)"));
         logger.finest(String.format("Input parameter commandSequence type: %s; value: %s", commandSequence.getClass(), commandSequence));
@@ -142,16 +131,6 @@ public class PRQACommandBuilder implements Serializable {
         return output;
     }
 
-    public static String getReportFormatParameter(String reportFormat) {
-        logger.finest(String.format("Starting execution of method - getReportFormatParameter(String reportFormat)"));
-
-        String output = PRQACommandBuilder.getReportFormatParameter(reportFormat, false);
-
-        logger.finest(String.format("Returning value: %s", output));
-
-        return output;
-    }
-
     public static String getReportFormatParameter(String reportFormat, boolean escapeinInputParameterWhiteSpace) {
         logger.finest(String.format("Starting execution of method - getReportFormatParameter(String reportFormat, boolean escapeinInputParameterWhiteSpace)"));
 
@@ -172,17 +151,6 @@ public class PRQACommandBuilder implements Serializable {
         return output;
     }
 
-    public static String getReportTypeParameter(String reportType) {
-        logger.finest(String.format("Starting execution of method - getReportTypeParameter(String reportType)"));
-        logger.finest(String.format("Input parameter reportType type: %s; value: %s", reportType.getClass(), reportType));
-
-        String output = String.format("-po qar::report_type=%s\\ Report", reportType);
-
-        logger.finest(String.format("Returning value: %s", output));
-
-        return output;
-    }
-
     public static String getReportTypeParameter(String reportType, boolean escapeInputParameterWhiteSpace) {
         logger.finest(String.format("Starting execution of method - getReportTypeParameter(String reportType, boolean escapeInputParameterWhiteSpace)"));
 
@@ -197,16 +165,6 @@ public class PRQACommandBuilder implements Serializable {
         }
 
         String output = String.format("-po qar::report_type=%s\\ Report", reportType);
-
-        logger.finest(String.format("Returning value: %s", output));
-
-        return output;
-    }
-
-    public static String getOutputPathParameter(String outpath) {
-        logger.finest(String.format("Starting execution of method - getOutputPathParameter(String outpath)"));
-
-        String output = PRQACommandBuilder.getOutputPathParameter(outpath, false);
 
         logger.finest(String.format("Returning value: %s", output));
 
@@ -249,15 +207,6 @@ public class PRQACommandBuilder implements Serializable {
         return output;
     }
 
-    public static String getViewingProgram(String program) {
-        logger.finest(String.format("Starting execution of method - getViewingProgram(String program)"));
-        String output = PRQACommandBuilder.getViewingProgram(program, false);
-
-        logger.finest(String.format("Returning value: %s", output));
-
-        return output;
-    }
-
     public static String getViewingProgram(String program, boolean escapeInputParameterWhiteSpace) {
         logger.finest(String.format("Starting execution of method - getViewingProgram(String program, boolean escapeInputParameterWhiteSpace)"));
 
@@ -272,17 +221,6 @@ public class PRQACommandBuilder implements Serializable {
         }
 
         String output = String.format("-po qar::viewing_program=%s", program);
-
-        logger.finest(String.format("Returning value: %s", output));
-
-        return output;
-    }
-
-    public static String getListReportFiles(String list) {
-        logger.finest(String.format("Starting execution of method - getListReportFiles"));
-        logger.finest(String.format("Input parameter list type: %s; value: %s", list.getClass(), list));
-
-        String output = String.format("-list \"%s\"", list);
 
         logger.finest(String.format("Returning value: %s", output));
 
@@ -431,14 +369,12 @@ public class PRQACommandBuilder implements Serializable {
     }
     
     public static String getLogFilePathParameter(String fullLogFilePath) {
-        String res = "";
-        res = String.format("-log \\\"%s\\\"", fullLogFilePath);
+        String res = String.format("-log \\\"%s\\\"", fullLogFilePath);
         return res;
     }
     
     public static String getImportLogFilePathParameter(String fullLogFilePath) {
-        String res = "";
-        res = String.format("-po qav::log=\\\"%s\\\"", fullLogFilePath);
+        String res = String.format("-po qav::log=\\\"%s\\\"", fullLogFilePath);
         return res;
     }
     
@@ -455,19 +391,18 @@ public class PRQACommandBuilder implements Serializable {
         return res;
     }
     
-    public static String getNumberOfThreads(int number) {
-        String res = "";
-        res = String.format("-po qav::thread=%s", number);
+    public static String getNumberOfThreads(int number) {        
+        String res = String.format("-po qav::thread=%s", number);
         return res;
     }
     
     public static String getSop(String topLevelSourceDir) {
-        String res = "";
         String sourceDir = topLevelSourceDir;
         if(topLevelSourceDir.endsWith("\\")) {
             sourceDir = topLevelSourceDir.substring(0, sourceDir.length()-1);
         }
-        res = String.format("-sop \\\"%s\\\"",sourceDir);
+        
+        String res = String.format("-sop \\\"%s\\\"",sourceDir);
         return res;
     }
     
@@ -500,14 +435,6 @@ public class PRQACommandBuilder implements Serializable {
         String res = "";
         if(enabled) {
             res = "-mode depend";
-        }
-        return res;
-    }
-    
-    public static String getDebugOutputParameter(boolean enabled) {
-        String res = "";
-        if(enabled) {
-            res = "-plog";
         }
         return res;
     }

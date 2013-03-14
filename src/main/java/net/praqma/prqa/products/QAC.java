@@ -9,9 +9,6 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.logging.Logger;
-import net.praqma.prqa.PRQA;
-import net.praqma.prqa.PRQACommandLineUtility;
-import net.praqma.prqa.exceptions.PrqaException;
 import net.praqma.prqa.exceptions.PrqaSetupException;
 import net.praqma.util.execute.AbnormalProcessTerminationException;
 import net.praqma.util.execute.CmdResult;
@@ -43,7 +40,7 @@ public class QAC implements Product {
   
         } catch (AbnormalProcessTerminationException abnex) {
              logger.warning("Failed to get qac version");             
-             throw new PrqaSetupException(String.format( "Failed to detect QAC version with command %s returned code %s\nMessage was:\n%s", abnex.getCommand(),abnex.getExitValue(),abnex.getMessage()), abnex);
+             throw new PrqaSetupException(String.format( "Failed to detect QA·C version with command %s returned code %s\nMessage was:\n%s", abnex.getCommand(),abnex.getExitValue(),abnex.getMessage()), abnex);
         } catch (IOException ioex) {
             logger.warning("IOException...failed to delete");
         } finally {

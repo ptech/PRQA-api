@@ -37,11 +37,10 @@ public class PRQAReport implements Serializable {
     public static String XML = "xml";
     public static String HTML = "html";
     
-    public static String XHTML_REPORT_EXTENSION = "Report."+XHTML;
-    public static String XML_REPORT_EXTENSION = "Report."+XML;
-    public static String HTML_REPORT_EXTENSION = "Report."+HTML;
-    
-    
+    public static String XHTML_REPORT_EXTENSION = "Report."+PRQAReport.XHTML;
+    public static String XML_REPORT_EXTENSION = "Report."+PRQAReport.XML;
+    public static String HTML_REPORT_EXTENSION = "Report."+PRQAReport.HTML;
+        
     private static final Logger log = Logger.getLogger(PRQAReport.class.getName());
     private PRQAReportSettings settings;
     private QAVerifyServerSettings qavSettings;
@@ -54,8 +53,7 @@ public class PRQAReport implements Serializable {
         this.settings = settings;
         this.qavSettings = qavSettings;
         this.upSettings = upSettings;
-        this.appSettings = appSettings;
-               
+        this.appSettings = appSettings;               
     }
     
     public PRQAReport(PRQAReportSettings settings, QAVerifyServerSettings qavSettings, PRQAUploadSettings upSettings, PRQAApplicationSettings appSettings, HashMap<String,String> environment) {
@@ -70,33 +68,45 @@ public class PRQAReport implements Serializable {
         return type.toString()+ " "+extension;
     }
     
-    public String createAnalysisCommand(boolean isUnix) throws PrqaException {
-        String finalCommand = "";
-        
-        PRQACommandBuilder builder = new PRQACommandBuilder(appSettings != null ? appSettings.resolveQawExe(isUnix) : "qaw");        
-        builder.prependArgument(settings.product);
-        
-        File pFile = new File(settings.projectFile);
-        if(!pFile.exists()) {
-            throw new PrqaException( String.format("The project file %s does not exist.",settings.projectFile) );
+    /**
+     * Resolves the project file location. This can be either absolute or relative to the current workspace
+     * @param workspaceRoot
+     * @param projectFilePath
+     * @return
+     * @throws PrqaException 
+     */
+    public String resolveAbsOrRelativePath(File workspaceRoot, String projectFilePath) throws PrqaException {
+        File pFile = new File(projectFilePath);
+        if(pFile.isAbsolute()) {
+            if(!pFile.exists()) {
+                throw new PrqaException( String.format("The project file %s does not exist.", projectFilePath) );
+            } else {
+                return projectFilePath;
+            }
+        } else {
+           File relative = new File(workspaceRoot, projectFilePath);
+           if(relative.exists()) {
+                return relative.getPath();
+           } else {
+                throw new PrqaException( String.format("The project file %s does not exist.",relative.getPath()) );
+           }
         }
-        
+    }
+    
+    public String createAnalysisCommand(boolean isUnix) throws PrqaException {        
+        PRQACommandBuilder builder = new PRQACommandBuilder(appSettings != null ? PRQAApplicationSettings.resolveQawExe(isUnix) : "qaw");        
+        builder.prependArgument(settings.product);
         //TODO: Either project or file list
-        builder.appendArgument(PRQACommandBuilder.getProjectFile(settings.projectFile));
-        
+        builder.appendArgument(PRQACommandBuilder.getProjectFile(resolveAbsOrRelativePath(workspace, settings.projectFile)));        
         if(settings.enableDependencyMode) {
             builder.appendArgument("-mode depend");
         }
-        builder.appendArgument(PRQACommandBuilder.getDataFlowAnanlysisParameter(settings.enableDataFlowAnalysis));
-        
-        String pal = (settings.performCrossModuleAnalysis ? "pal %Q %P+ %L+" : "");
-        
+        builder.appendArgument(PRQACommandBuilder.getDataFlowAnanlysisParameter(settings.enableDataFlowAnalysis));        
+        String pal = (settings.performCrossModuleAnalysis ? "pal %Q %P+ %L+" : "");        
         if(!StringUtils.isEmpty(pal)) {
             builder.appendArgument(PRQACommandBuilder.getMaseq(pal));
-        }
-        
-        finalCommand = builder.getCommand();
-        return finalCommand;
+        }        
+        return builder.getCommand();
     }
     
     public CmdResult analyze(boolean isUnix) throws PrqaException {
@@ -114,10 +124,10 @@ public class PRQAReport implements Serializable {
         return res;
     }
     
-    public String createReportCommand(boolean isUnix) {
-        PRQACommandBuilder builder = new PRQACommandBuilder(appSettings != null ? appSettings.resolveQawExe(isUnix) : "qaw");        
+    public String createReportCommand(boolean isUnix) throws PrqaException {
+        PRQACommandBuilder builder = new PRQACommandBuilder(appSettings != null ? PRQAApplicationSettings.resolveQawExe(isUnix) : "qaw");        
         builder.prependArgument(settings.product);
-        builder.appendArgument(PRQACommandBuilder.getProjectFile(settings.projectFile));
+        builder.appendArgument(PRQACommandBuilder.getProjectFile(resolveAbsOrRelativePath(workspace, settings.projectFile)));
         if(settings.enableDependencyMode) {
             builder.appendArgument("-mode depend");
         }
@@ -128,7 +138,7 @@ public class PRQAReport implements Serializable {
         String qar = appSettings != null ? PRQAApplicationSettings.resolveQarExe(isUnix) : "qar"; 
         for (PRQAContext.QARReportType type : settings.chosenReportTypes) {
             reports += qar +" %Q %P+ %L+ " + PRQACommandBuilder.getReportTypeParameter(type.toString(), true)+ " ";
-            reports += PRQACommandBuilder.getViewingProgram("noviewer")+ " ";
+            reports += PRQACommandBuilder.getViewingProgram("noviewer", false)+ " ";
             reports += PRQACommandBuilder.getReportFormatParameter(PRQAReport.XHTML, false)+ " ";
             reports += PRQACommandBuilder.getProjectName()+ " ";
             reports += PRQACommandBuilder.getOutputPathParameter(workspace.getPath(), true);
@@ -154,19 +164,16 @@ public class PRQAReport implements Serializable {
         return res.stdoutList;
     }
     
-    public CmdResult report(boolean isUnix) {      
+    public CmdResult report(boolean isUnix) throws PrqaException {      
         String finalCommand = createReportCommand(isUnix);
-
-        CmdResult res = null;
         if(getEnvironment() == null) {
-            res = CommandLine.getInstance().run(finalCommand, workspace, true, false);
+            return CommandLine.getInstance().run(finalCommand, workspace, true, false);
         } else {
-            res = CommandLine.getInstance().run(finalCommand, workspace, true, false, getEnvironment());
+            return CommandLine.getInstance().run(finalCommand, workspace, true, false, getEnvironment());
         }
-        return res;
     }
     
-    public String createUploadCommand() {
+    public String createUploadCommand() throws PrqaException {
         if(settings.publishToQAV) {
             int availableProcessors = Runtime.getRuntime().availableProcessors();
             String importCommand = PRQACommandBuilder.escapeWhitespace("qaimport");
@@ -189,7 +196,7 @@ public class PRQAReport implements Serializable {
             uploadPart +=" "+PRQACommandBuilder.wrapInEscapedQuotationMarks(workspace.getPath());
 
             //Step3: Finalize
-            String mainCommand = "qaw" + " " + settings.product +  " "+PRQACommandBuilder.wrapInQuotationMarks(settings.projectFile);
+            String mainCommand = "qaw" + " " + settings.product +  " "+PRQACommandBuilder.wrapInQuotationMarks(resolveAbsOrRelativePath(workspace, settings.projectFile));
             mainCommand += " "+ PRQACommandBuilder.getSfbaOption(true)+" ";
             mainCommand += PRQACommandBuilder.getDependencyModeParameter(true) + " ";
 
@@ -199,7 +206,7 @@ public class PRQAReport implements Serializable {
         return null;
     }
     
-    public CmdResult upload() throws PrqaUploadException {
+    public CmdResult upload() throws PrqaUploadException,PrqaException {
         CmdResult res = null;
         String finalCommand = createUploadCommand();
         if(finalCommand == null) {

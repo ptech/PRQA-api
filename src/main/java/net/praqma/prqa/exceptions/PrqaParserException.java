@@ -11,6 +11,5 @@ package net.praqma.prqa.exceptions;
 public class PrqaParserException extends PrqaException {
     public PrqaParserException(String message, Exception originalException) {         
         super(originalException);
-        
     }
 }
