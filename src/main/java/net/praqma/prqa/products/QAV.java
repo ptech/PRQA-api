@@ -6,7 +6,6 @@ package net.praqma.prqa.products;
 
 import java.io.File;
 import java.util.HashMap;
-import net.praqma.prqa.PRQACommandLineUtility;
 import net.praqma.prqa.exceptions.PrqaSetupException;
 
 /**
@@ -15,8 +14,9 @@ import net.praqma.prqa.exceptions.PrqaSetupException;
  */
 public class QAV implements Product {
     
-    public static final String QAV_UPLOAD_LOG = PRQACommandLineUtility.FILE_SEPARATOR+"qavupload.log";
-    public static final String QAV_IMPORT_LOG = PRQACommandLineUtility.FILE_SEPARATOR+"qaimport.log";
+    public static final String FILE_SEPARATOR = System.getProperty("file.separator");
+    public static final String QAV_UPLOAD_LOG = QAV.FILE_SEPARATOR+"qavupload.log";
+    public static final String QAV_IMPORT_LOG = QAV.FILE_SEPARATOR+"qaimport.log";
 
     public QAV() { }
 

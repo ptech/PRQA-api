@@ -23,6 +23,5 @@ public class PRQAUploadSettings implements Serializable {
         this.codeUploadSetting = codeUploadSetting;
         this.sourceOrigin = sourceOrigin;
         this.qaVerifyProjectName = qaVerifyProjectName;
-    }
-    
+    }    
 }

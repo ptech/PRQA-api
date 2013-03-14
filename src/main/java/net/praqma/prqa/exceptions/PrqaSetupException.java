@@ -12,6 +12,7 @@ public class PrqaSetupException extends PrqaException {
     public PrqaSetupException(String message) {
         super(message);
     }
+    
     public PrqaSetupException(String message, Exception ex) {
         super(message,ex);
     }

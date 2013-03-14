@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import net.praqma.prqa.PRQACommandLineUtility;
 import net.praqma.prqa.exceptions.PrqaException;
 import net.praqma.prqa.exceptions.PrqaParserException;
 
@@ -24,6 +23,7 @@ public abstract class ReportHtmlParser implements Serializable {
     
     protected String fullReportPath;
     private static final Logger logger;
+    public static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
     static {
         logger = Logger.getLogger(ReportHtmlParser.class.getName());
@@ -95,7 +95,7 @@ public abstract class ReportHtmlParser implements Serializable {
 
         try {
             while ((sourceLine = source.readLine()) != null) {
-                report += sourceLine + PRQACommandLineUtility.LINE_SEPARATOR;
+                report += sourceLine + ReportHtmlParser.LINE_SEPARATOR;
                 match = pattern.matcher(report);
 
                 while (match.find()) {
