@@ -45,8 +45,6 @@ public class QACpp implements Product {
             if(f != null) {
                 try {
                     logger.finest(String.format("Setting up filter for files to delete"));
-                    String tempDir = f.getAbsolutePath().substring(0, f.getAbsolutePath().lastIndexOf(File.separator));
-                    logger.finest(String.format("Found temp dir: %s", tempDir));
                     FileFilter  ff = new WildcardFileFilter("test_prqa_file*");                
 
                     for(File deleteme : workspace.listFiles(ff)) {
