@@ -19,7 +19,7 @@ import org.apache.commons.io.filefilter.WildcardFileFilter;
  *
  * @author jes
  */
-public class QACpp implements Product{
+public class QACpp implements Product {
 
     private static final Logger logger = Logger.getLogger(QACpp.class.getName());
     public static String[] envVarsForTool = { "QACPPBIN" , "QACPPPATH" , "QACPPOUTPATH" , "QACPPHELPFILES" , "QACPPTEMP" };
@@ -38,25 +38,23 @@ public class QACpp implements Product{
         
         } catch (AbnormalProcessTerminationException ex) {
             logger.warning("Failed to get qacpp-version");
-            throw new PrqaSetupException(String.format( "Failed to detect QAcpp version with command %s returned code %s\nMessage was:\n%s", ex.getCommand(), ex.getExitValue(), ex.getMessage()), ex);
+            throw new PrqaSetupException(String.format( "Failed to detect QA·C++ version with command %s returned code %s\nMessage was:\n%s", ex.getCommand(), ex.getExitValue(), ex.getMessage()), ex);
         } catch (IOException ex) {
             logger.warning("Failed to create file");
         } finally {
             if(f != null) {
                 try {
                     logger.finest(String.format("Setting up filter for files to delete"));
-                    String tempDir = f.getAbsolutePath().substring(0,f.getAbsolutePath().lastIndexOf(File.separator));
-                    logger.finest(String.format("Found temp dir: %s",tempDir));
-                    File tempFolder = new File(tempDir);
-
+                    String tempDir = f.getAbsolutePath().substring(0, f.getAbsolutePath().lastIndexOf(File.separator));
+                    logger.finest(String.format("Found temp dir: %s", tempDir));
                     FileFilter  ff = new WildcardFileFilter("test_prqa_file*");                
 
                     for(File deleteme : workspace.listFiles(ff)) {
-                        logger.finest(String.format("Starting to delete file: %s",deleteme.getAbsolutePath()));
+                        logger.finest(String.format("Starting to delete file: %s", deleteme.getAbsolutePath()));
                         if(deleteme.delete()) {
-                            logger.finest(String.format("Succesfully deleted file: %s",deleteme.getAbsolutePath()));
+                            logger.finest(String.format("Succesfully deleted file: %s", deleteme.getAbsolutePath()));
                         } else {
-                            logger.warning(String.format("Failed to delete: %s",deleteme.getAbsolutePath()));
+                            logger.warning(String.format("Failed to delete: %s", deleteme.getAbsolutePath()));
                         }
                     }
                 } catch (Exception ex) {

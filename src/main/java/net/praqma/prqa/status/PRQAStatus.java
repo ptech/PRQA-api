@@ -11,10 +11,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.logging.Logger;
+import net.praqma.prqa.PRQAReading;
 import net.praqma.prqa.exceptions.PrqaException;
 import net.praqma.prqa.exceptions.PrqaReadingException;
-import net.praqma.prqa.PRQAContext.ComparisonSettings;
-import net.praqma.prqa.PRQAReading;
 
 /**
  * Base class for all status objects.

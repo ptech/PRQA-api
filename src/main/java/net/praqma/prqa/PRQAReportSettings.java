@@ -12,6 +12,8 @@ public class PRQAReportSettings implements Serializable {
     public final EnumSet<PRQAContext.QARReportType> chosenReportTypes;
 
     public final String projectFile;
+    public final String settingsFile;
+    
     public final boolean performCrossModuleAnalysis;
     public final boolean publishToQAV;
     
@@ -32,6 +34,21 @@ public class PRQAReportSettings implements Serializable {
         this.enableDataFlowAnalysis = enableDataFlowAnalysis;
         this.chosenReportTypes = chosenReportTypes;
         this.product = product;
+        this.settingsFile = null;
+    }
+    
+    public PRQAReportSettings(final String chosenServer, final String fileList, final boolean performCrossModuleAnalysis,
+            final boolean publishToQAV, final boolean enableDependencyMode, final boolean enableDataFlowAnalysis, 
+            final EnumSet<PRQAContext.QARReportType> chosenReportTypes, final String product, final String settingsFile) {
+        this.chosenServer = chosenServer;
+        this.projectFile = null;
+        this.performCrossModuleAnalysis = performCrossModuleAnalysis;
+        this.publishToQAV = publishToQAV;
+        this.enableDependencyMode = enableDependencyMode;
+        this.enableDataFlowAnalysis = enableDataFlowAnalysis;
+        this.chosenReportTypes = chosenReportTypes;
+        this.product = product;
+        this.settingsFile = settingsFile;
     }
 
     @Override

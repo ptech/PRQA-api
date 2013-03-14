@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import net.praqma.prqa.PRQACommandLineUtility;
 import net.praqma.prqa.exceptions.PrqaException;
 import net.praqma.prqa.exceptions.PrqaParserException;
-import net.praqma.prqa.PRQACommandLineUtility;
 
 /**
  *
@@ -159,81 +159,5 @@ public abstract class ReportHtmlParser implements Serializable {
         logger.finest(String.format("Collection is empty, returning null."));
 
         return null;
-    }
-
-    public int replace(String path, Pattern pattern, String replacement) throws PrqaParserException {
-        logger.finest(String.format("Starting execution of method - replace"));
-
-        int numberOfReplacements = 0;
-        File file = new File(path);
-        FileInputStream fis;
-
-        logger.finest(String.format("Atempting to open filepath %s.", file.getAbsolutePath()));
-
-        try {
-            fis = new FileInputStream(file);
-        } catch (FileNotFoundException ex) {
-            PrqaParserException exception = new PrqaParserException("Could not find file " + file.getPath(), ex);
-
-            logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
-
-            throw exception;
-        }
-
-        logger.finest(String.format("File opened succssfully."));
-
-        //First read in the entire file. One line at a time. Append this
-        InputStreamReader isr = new InputStreamReader(fis);
-        BufferedReader source = new BufferedReader(isr);
-
-        String sourceLine = "";
-        String result = "";
-
-        logger.finest(String.format("Atempting to read the file..."));
-        try {
-            while ((sourceLine = source.readLine()) != null) {
-                Matcher m = pattern.matcher(sourceLine);
-
-                if (m.matches()) {
-                    sourceLine = m.replaceFirst(replacement);
-                }
-
-                result += sourceLine + System.getProperty("line.separator");
-            }
-            source.close();
-        } catch (IOException ex) {
-            PrqaParserException exception = new PrqaParserException("Could not read the line after :\n" + sourceLine, ex);
-
-            logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
-
-            throw exception;
-        }
-        logger.finest(String.format("File read successfully!"));
-
-        logger.finest(String.format("Deleting file."));
-        //Delete original: 
-        file.delete();
-
-        logger.finest(String.format("Creating substitute file."));
-        //Write substituted string to file:
-        File fileNew = new File(path);
-
-        logger.finest(String.format("Attempting to write to substitute file"));
-        try {
-            FileOutputStream fos = new FileOutputStream(fileNew);
-            PrintWriter pw = new PrintWriter(fos);
-            pw.print(result);
-            pw.close();
-        } catch (FileNotFoundException ex) {
-            PrqaParserException exception = new PrqaParserException("Could not file:" + file.getPath(), ex);
-
-            logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
-
-            throw exception;
-        }
-
-        logger.finest(String.format("Returning numberOfReplacements: %s", numberOfReplacements));
-
-        return numberOfReplacements;
     }
 }

@@ -42,7 +42,8 @@ public class QAR implements Product {
 	public String toString() {
 		String out = "";
 		out += "QAR selected project file:\t" + this.projectFile + System.getProperty("line.separator");
-		out += "QAR selected product:\t\t" + product + System.getProperty("line.separator");
+        String productDotified = product.equalsIgnoreCase("qac") ? "QA·C" : "QA·C++";
+		out += "QAR selected product:\t\t" + productDotified + System.getProperty("line.separator");
 		out += "QAR selected report type:\t" + this.type + System.getProperty("line.separator");
 		return out;
 	}

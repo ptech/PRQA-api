@@ -19,15 +19,6 @@ public class PRQAContext {
             }
         }
     }
-    
-    public enum AnalysisTools {
-        QAC, QACPP
-    }
-
-    public enum ReportingTools {
-        QAV, QAR
-    }
-
     public enum QARReportType {
         Compliance, CodeReview, Suppression;
 
