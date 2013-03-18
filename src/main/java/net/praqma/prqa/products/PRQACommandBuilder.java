@@ -106,7 +106,8 @@ public class PRQACommandBuilder implements Serializable {
 
             logger.finest(String.format("Returning value: %s", output));
 
-            return output;
+            
+            return String.format("-maseq \"%s\"", output);
         }
 
         String output = String.format("-maseq \"%s\"", commandSequence);
@@ -122,13 +123,7 @@ public class PRQACommandBuilder implements Serializable {
      * Constructs a valid secondary analysis command parameter for PRQA. Use this to wrap all your secondary analysis commands.
      */
     public static String getMaseq(String commandSequence) {
-        logger.finest(String.format("Starting execution of method - getMaseq(String commandSequence)"));
-
-        String output = String.format("-maseq \"%s\"", commandSequence);
-
-        logger.finest(String.format("Returning value: %s", output));
-
-        return output;
+        return PRQACommandBuilder.getMaseq(commandSequence, false);
     }
 
     public static String getReportFormatParameter(String reportFormat, boolean escapeinInputParameterWhiteSpace) {
@@ -326,7 +321,7 @@ public class PRQACommandBuilder implements Serializable {
         logger.entering(PRQACommandBuilder.class.getName(), "getQavOutPathParameter", escapeInputParameterWhiteSpace);
         String out = "";
         if(escapeInputParameterWhiteSpace) {
-            out = String.format("-po qav::outputh=\\\"%s\\\"", outpath.replace(" ", "\\ "));        
+            out = String.format("-po qav::output=\\\"%s\\\"", outpath.replace(" ", "\\ "));        
         } else {
             out = String.format("-po qav::output=\\\"%s\\\"", outpath);    
         }

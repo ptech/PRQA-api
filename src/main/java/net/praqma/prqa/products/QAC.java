@@ -33,8 +33,7 @@ public class QAC implements Product {
         File f = null;
         
         try {
-            f = File.createTempFile("test_prqa_file", ".c");
-            
+            f = File.createTempFile("test_prqa_file", ".c", workspace);            
             //Check if QACBIN points to a real directory            
             res = CommandLine.getInstance().run(String.format("qac -version \"%s\"", f.getAbsolutePath()), workspace, true, false, environment);
   
@@ -47,13 +46,12 @@ public class QAC implements Product {
             if(f != null) {
                 try {
                     FileFilter  ff = new WildcardFileFilter("test_prqa_file*");                
-
                     for(File deleteme : workspace.listFiles(ff)) {
-                        logger.finest(String.format("Starting to delete file: %s",deleteme.getAbsolutePath()));
+                        logger.finest(String.format("Starting to delete file: %s", deleteme.getAbsolutePath()));
                         if(deleteme.delete()) {
-                            logger.finest(String.format("Succesfully deleted file: %s",deleteme.getAbsolutePath()));
+                            logger.finest(String.format("Succesfully deleted file: %s", deleteme.getAbsolutePath()));
                         } else {
-                            logger.warning(String.format("Failed to delete: %s",deleteme.getAbsolutePath()));
+                            logger.warning(String.format("Failed to delete: %s", deleteme.getAbsolutePath()));
                         }
                     }
                 } catch (Exception ex) {

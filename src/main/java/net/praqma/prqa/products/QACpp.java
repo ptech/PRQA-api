@@ -33,7 +33,7 @@ public class QACpp implements Product {
         CmdResult res = null;
         File f = null;
         try {
-            f = File.createTempFile("test_prqa_file", ".c");
+            f = File.createTempFile("test_prqa_file", ".c", workspace);
             res = CommandLine.getInstance().run(String.format("qacpp -version \"%s\"", f.getAbsolutePath()), workspace, true, false, environment);
         
         } catch (AbnormalProcessTerminationException ex) {
