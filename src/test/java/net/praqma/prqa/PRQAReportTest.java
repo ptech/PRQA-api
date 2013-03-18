@@ -24,12 +24,16 @@ public class PRQAReportTest {
     static QAVerifyServerSettings serverSettings;
     static PRQAUploadSettings uploadSettings;
     static PRQAApplicationSettings appSettings;
+    static File tmpDir;
+    static boolean isUnix;
     
     @BeforeClass public static void setup() {
         repSettings = new PRQAReportSettings(null, null, true, false, true, true, PRQAContext.QARReportType.REQUIRED_TYPES, "qac");
         serverSettings = new QAVerifyServerSettings("localhost", 8080, "http", "admin", "admin");
         appSettings = new PRQAApplicationSettings(null, null, null);
         uploadSettings = new PRQAUploadSettings(null, false, CodeUploadSetting.AllCode, null, "projectName");
+        tmpDir = new File(System.getProperty("java.io.tmpdir"));
+        isUnix = System.getProperty("os.name").startsWith("Windows");
     }
     
     @Test public void testPrqaReport() {
@@ -42,21 +46,30 @@ public class PRQAReportTest {
     
     @Test(expected=PrqaException.class) public void testProjectFileNotFoundResolution() throws PrqaException {
         PRQAReport report = new PRQAReport(repSettings, serverSettings, uploadSettings, appSettings);
-        report.resolveAbsOrRelativePath(new File(System.getProperty("java.io.tmpdir")), "notFound.prj");
+        report.resolveAbsOrRelativePath(tmpDir, "notFound.prj");                
+    }
+    
+    @Test(expected=PrqaException.class) public void testProjectFileNotFoundAbsResolution() throws PrqaException {
+        PRQAReport report = new PRQAReport(repSettings, serverSettings, uploadSettings, appSettings);
+        File absFile = new File(tmpDir,"notFound.prj");
+        report.resolveAbsOrRelativePath(tmpDir, absFile.getAbsolutePath());                
     }
     
     @Test public void testProjectFileFound() throws PrqaException, IOException {
         PRQAReport report = new PRQAReport(repSettings, serverSettings, uploadSettings, appSettings);
-        File tmpFileToCreate = new File(new File(System.getProperty("java.io.tmpdir")),"found.prj");
+        File tmpFileToCreate = new File(tmpDir,"found.prj");
         tmpFileToCreate.createNewFile();
         
-        report.resolveAbsOrRelativePath(new File(System.getProperty("java.io.tmpdir")), "found.prj");
+        report.resolveAbsOrRelativePath(tmpDir, "found.prj");
         report.resolveAbsOrRelativePath(null, tmpFileToCreate.getPath());
         tmpFileToCreate.deleteOnExit();
     }
     
     //TODO: Implement me!
-    @Test public void testProjectCommandGenerator() {
-        PRQAReport report = new PRQAReport(repSettings, serverSettings, uploadSettings, appSettings);        
+    @Test public void testProjectCommandGenerator() throws PrqaException {
+        PRQAReport report = new PRQAReport(repSettings, serverSettings, uploadSettings, appSettings);
+        String command = report.createAnalysisCommand(isUnix);
+        assertNotNull(command);
+        
     }
 }
