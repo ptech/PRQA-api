@@ -16,7 +16,6 @@ import net.praqma.prqa.PRQAReportSettings;
 import net.praqma.prqa.PRQAUploadSettings;
 import net.praqma.prqa.QAVerifyServerSettings;
 import net.praqma.prqa.exceptions.PrqaException;
-import net.praqma.prqa.exceptions.PrqaSetupException;
 import net.praqma.prqa.exceptions.PrqaUploadException;
 import net.praqma.prqa.parsers.ComplianceReportHtmlParser;
 import net.praqma.prqa.products.PRQACommandBuilder;
