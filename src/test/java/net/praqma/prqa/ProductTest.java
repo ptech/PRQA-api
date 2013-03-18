@@ -26,11 +26,17 @@ public class ProductTest {
         assertNotNull(version);    
     }
     
-    @Test public void testGetQacppVersion() throws PrqaSetupException {
+    
+    
+    /**
+     * Our testbed does not have QACpp installed
+     * @throws PrqaSetupException 
+     */
+    @Test(expected=PrqaSetupException.class) public void testGetQacppVersionWithoutInjection() throws PrqaSetupException {
         QACpp qacpp = new QACpp();
         String version = qacpp.getProductVersion(null, new File(System.getProperty("java.io.tmpdir")), !System.getProperty("os.name").startsWith("Windows"));        
         assertNotNull(version);        
-    }
+    }        
     
     @Test public void testGetQarVersion() throws PrqaSetupException {
         QAR qar = new QAR("unknown", "unknown", PRQAContext.QARReportType.Compliance);       
@@ -42,12 +48,11 @@ public class ProductTest {
         QAW qaw = new QAW();
         String version = qaw.getProductVersion(null, new File(System.getProperty("java.io.tmpdir")), !System.getProperty("os.name").startsWith("Windows"));        
         assertNotNull(version);
-    }
+    }    
     
     @Test public void testQAVVersion() throws PrqaSetupException {
         QAV qav = new QAV();
         String version = qav.getProductVersion(null, new File(System.getProperty("java.io.tmpdir")), !System.getProperty("os.name").startsWith("Windows"));        
         assertNotNull(version);
-    }
-    
+    }    
 }
