@@ -22,31 +22,31 @@ public class ProductTest {
     
     @Test public void testGetQacVersion() throws PrqaSetupException {
         QAC qac = new QAC();
-        String version = qac.getProductVersion(null, new File(System.getProperty("java.io.tempdir")), !System.getProperty("os.name").startsWith("Windows"));        
+        String version = qac.getProductVersion(null, new File(System.getProperty("java.io.tmpdir")), !System.getProperty("os.name").startsWith("Windows"));        
         assertNotNull(version);    
     }
     
     @Test public void testGetQacppVersion() throws PrqaSetupException {
         QACpp qacpp = new QACpp();
-        String version = qacpp.getProductVersion(null, new File(System.getProperty("java.io.tempdir")), !System.getProperty("os.name").startsWith("Windows"));        
+        String version = qacpp.getProductVersion(null, new File(System.getProperty("java.io.tmpdir")), !System.getProperty("os.name").startsWith("Windows"));        
         assertNotNull(version);        
     }
     
     @Test public void testGetQarVersion() throws PrqaSetupException {
         QAR qar = new QAR("unknown", "unknown", PRQAContext.QARReportType.Compliance);       
-        String version = qar.getProductVersion(null, new File(System.getProperty("java.io.tempdir")), !System.getProperty("os.name").startsWith("Windows"));        
+        String version = qar.getProductVersion(null, new File(System.getProperty("java.io.tmpdir")), !System.getProperty("os.name").startsWith("Windows"));        
         assertNotNull(version);
     }
     
     @Test public void testGetQawVersion() throws PrqaSetupException {
         QAW qaw = new QAW();
-        String version = qaw.getProductVersion(null, new File(System.getProperty("java.io.tempdir")), !System.getProperty("os.name").startsWith("Windows"));        
+        String version = qaw.getProductVersion(null, new File(System.getProperty("java.io.tmpdir")), !System.getProperty("os.name").startsWith("Windows"));        
         assertNotNull(version);
     }
     
     @Test public void testQAVVersion() throws PrqaSetupException {
         QAV qav = new QAV();
-        String version = qav.getProductVersion(null, new File(System.getProperty("java.io.tempdir")), !System.getProperty("os.name").startsWith("Windows"));        
+        String version = qav.getProductVersion(null, new File(System.getProperty("java.io.tmpdir")), !System.getProperty("os.name").startsWith("Windows"));        
         assertNotNull(version);
     }
     
