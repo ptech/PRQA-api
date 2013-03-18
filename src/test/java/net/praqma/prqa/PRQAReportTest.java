@@ -92,11 +92,17 @@ public class PRQAReportTest {
     }
     
     @Test public void testUploadCommandGenerator() throws IOException, PrqaException {
+        PRQAReportSettings repSettings = new PRQAReportSettings(null, mockProjectFile, true, true, true, true, PRQAContext.QARReportType.REQUIRED_TYPES, "qac");
         PRQAReport report = new PRQAReport(repSettings, serverSettings, uploadSettings, appSettings);
         report.setWorkspace(tmpDir);
         new File(mockProjectFile).createNewFile();
         String command = report.createUploadCommand();
-        assertNotNull(command);
+        assertNull(command);
+        PRQAReportSettings enableUpload = new PRQAReportSettings(null, mockProjectFile, true, true, true, true, PRQAContext.QARReportType.REQUIRED_TYPES, "qac");
+        report = new PRQAReport(enableUpload, serverSettings, uploadSettings, appSettings);
+        report.setWorkspace(tmpDir);
+        String command2 = report.createUploadCommand();
+        assertNotNull(command2);
         new File(mockProjectFile).deleteOnExit();  
     }
 }
