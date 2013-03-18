@@ -92,7 +92,6 @@ public class PRQAReportTest {
     }
     
     @Test public void testUploadCommandGenerator() throws IOException, PrqaException {
-        PRQAReportSettings repSettings = new PRQAReportSettings(null, mockProjectFile, true, true, true, true, PRQAContext.QARReportType.REQUIRED_TYPES, "qac");
         PRQAReport report = new PRQAReport(repSettings, serverSettings, uploadSettings, appSettings);
         report.setWorkspace(tmpDir);
         new File(mockProjectFile).createNewFile();
