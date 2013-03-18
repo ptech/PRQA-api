@@ -4,8 +4,11 @@
  */
 package net.praqma.prqa;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.EnumSet;
 import java.util.HashSet;
+import net.praqma.prqa.exceptions.PrqaException;
 import net.praqma.prqa.reports.PRQAReport;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -34,7 +37,22 @@ public class PRQAReportTest {
     }
     
     @Test public void testProjectFilePathResolution() {
-        PRQAReport report = new PRQAReport(repSettings, serverSettings, uploadSettings, appSettings);        
+        PRQAReport report = new PRQAReport(repSettings, serverSettings, uploadSettings, appSettings);
+    }
+    
+    @Test(expected=PrqaException.class) public void testProjectFileNotFoundResolution() throws PrqaException {
+        PRQAReport report = new PRQAReport(repSettings, serverSettings, uploadSettings, appSettings);
+        report.resolveAbsOrRelativePath(new File(System.getProperty("java.io.tmpdir")), "notFound.prj");
+    }
+    
+    @Test public void testProjectFileFound() throws PrqaException, IOException {
+        PRQAReport report = new PRQAReport(repSettings, serverSettings, uploadSettings, appSettings);
+        File tmpFileToCreate = new File(new File(System.getProperty("java.io.tmpdir")),"found.prj");
+        tmpFileToCreate.createNewFile();
+        
+        report.resolveAbsOrRelativePath(new File(System.getProperty("java.io.tmpdir")), "found.prj");
+        report.resolveAbsOrRelativePath(null, tmpFileToCreate.getPath());
+        tmpFileToCreate.deleteOnExit();
     }
     
     //TODO: Implement me!
