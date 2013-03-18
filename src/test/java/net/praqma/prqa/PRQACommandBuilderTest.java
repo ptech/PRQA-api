@@ -133,4 +133,50 @@ public class PRQACommandBuilderTest {
         
     }
     
+    @Test public void getCmafAndTestGetCommand() {
+        String res = "-cmaf \"test\\ cmaf\"";
+        assertEquals(res, PRQACommandBuilder.getCmaf("test cmaf", true));
+        res = "-cmaf \"test cmaf\"";
+        assertEquals(res, PRQACommandBuilder.getCmaf("test cmaf", false));
+        
+        PRQACommandBuilder builder = new PRQACommandBuilder("qac");
+        builder.appendArgument(PRQACommandBuilder.getCmaf("test cmaf", false));
+        String resQac = "qac "+res+" ";
+        System.out.println(resQac);
+        String bCommand = builder.getCommand();
+        System.out.println(bCommand);
+        assertEquals(resQac, bCommand);
+    }
+    
+    @Test public void testGetMaseq() {
+        String maseqEmptyEscaped = "-maseq \"\\ \"";
+        String maseqEmpty =        "-maseq \" \"";
+        String expectedNotEscaped = PRQACommandBuilder.getMaseq(" ");
+        String expected = PRQACommandBuilder.getMaseq(" ", true);
+        System.out.println("What....: "+expected);
+        assertEquals(maseqEmpty, expectedNotEscaped);
+        assertEquals(maseqEmptyEscaped, expected);        
+    }
+    
+    @Test public void testGetReportFormatParameter() {
+        String result = PRQACommandBuilder.getReportFormatParameter("XHTML", true);
+        String expected = "-po qar::report_format=XHTML";
+        assertEquals(expected, result);
+    }
+    
+    @Test public void testGetReportTypeParameter() {
+        String result = PRQACommandBuilder.getReportTypeParameter("Compliance", true);
+        String expected = "-po qar::report_type=Compliance\\ Report";
+        assertEquals(expected, result);
+    }
+    
+    @Test public void testGetQavOutputPath() {
+        String result = PRQACommandBuilder.getQavOutPathParameter("test file");
+        String expected = "-po qav::output=\\\"test file\\\"";
+        assertEquals(expected, result);
+        
+        String result2 = PRQACommandBuilder.getQavOutPathParameter("test file",true);
+        String expected2= "-po qav::output=\\\"test\\ file\\\"";
+        assertEquals(expected2, result2);
+    }
 }

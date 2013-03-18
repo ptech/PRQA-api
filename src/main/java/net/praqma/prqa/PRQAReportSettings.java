@@ -13,6 +13,7 @@ public class PRQAReportSettings implements Serializable {
 
     public final String projectFile;
     public final String settingsFile;
+    public final String fileList;
     
     public final boolean performCrossModuleAnalysis;
     public final boolean publishToQAV;
@@ -35,6 +36,7 @@ public class PRQAReportSettings implements Serializable {
         this.chosenReportTypes = chosenReportTypes;
         this.product = product;
         this.settingsFile = null;
+        this.fileList = null;
     }
     
     public PRQAReportSettings(final String chosenServer, final String fileList, final boolean performCrossModuleAnalysis,
@@ -42,6 +44,7 @@ public class PRQAReportSettings implements Serializable {
             final EnumSet<PRQAContext.QARReportType> chosenReportTypes, final String product, final String settingsFile) {
         this.chosenServer = chosenServer;
         this.projectFile = null;
+        this.fileList = fileList;
         this.performCrossModuleAnalysis = performCrossModuleAnalysis;
         this.publishToQAV = publishToQAV;
         this.enableDependencyMode = enableDependencyMode;

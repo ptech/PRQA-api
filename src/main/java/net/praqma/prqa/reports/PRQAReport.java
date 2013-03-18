@@ -127,7 +127,18 @@ public class PRQAReport implements Serializable {
     public String createReportCommand(boolean isUnix) throws PrqaException {
         PRQACommandBuilder builder = new PRQACommandBuilder(appSettings != null ? PRQAApplicationSettings.resolveQawExe(isUnix) : "qaw");        
         builder.prependArgument(settings.product);
-        builder.appendArgument(PRQACommandBuilder.getProjectFile(resolveAbsOrRelativePath(workspace, settings.projectFile)));
+        
+        if(settings.projectFile != null) {
+            builder.appendArgument(PRQACommandBuilder.getProjectFile(resolveAbsOrRelativePath(workspace, settings.projectFile)));
+        } else if(settings.fileList != null) {
+            builder.appendArgument("-via "+PRQACommandBuilder.getProjectFile(resolveAbsOrRelativePath(workspace, settings.fileList)));
+            if(settings.settingsFile != null) {
+                builder.appendArgument("-via "+PRQACommandBuilder.getProjectFile(resolveAbsOrRelativePath(workspace, settings.settingsFile)));
+            } 
+        } else {
+            throw new PrqaException("Neither filelist or project file has been set, this should not be happening");
+        }
+        
         if(settings.enableDependencyMode) {
             builder.appendArgument("-mode depend");
         }
@@ -196,7 +207,21 @@ public class PRQAReport implements Serializable {
             uploadPart +=" "+PRQACommandBuilder.wrapInEscapedQuotationMarks(workspace.getPath());
 
             //Step3: Finalize
-            String mainCommand = "qaw" + " " + settings.product +  " "+PRQACommandBuilder.wrapInQuotationMarks(resolveAbsOrRelativePath(workspace, settings.projectFile));
+            
+            String source = "";
+            if(settings.projectFile != null) {
+                source = PRQACommandBuilder.wrapInQuotationMarks(resolveAbsOrRelativePath(workspace, settings.projectFile));
+            } else if(settings.fileList != null) {
+                source = "-via "+PRQACommandBuilder.wrapInQuotationMarks(resolveAbsOrRelativePath(workspace, settings.fileList));
+                if(settings.settingsFile != null) {
+                    source += " " + "-via "+PRQACommandBuilder.wrapInQuotationMarks(resolveAbsOrRelativePath(workspace, settings.settingsFile));
+                } 
+            } else {
+                throw new PrqaException("Neither filelist or project file has been set, this should not be happening");
+            }
+            
+            
+            String mainCommand = "qaw" + " " + settings.product +  " "+source;
             mainCommand += " "+ PRQACommandBuilder.getSfbaOption(true)+" ";
             mainCommand += PRQACommandBuilder.getDependencyModeParameter(true) + " ";
 
