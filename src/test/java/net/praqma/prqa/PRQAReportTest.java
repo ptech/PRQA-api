@@ -84,6 +84,7 @@ public class PRQAReportTest {
     
     @Test public void testReportCommandGenerator() throws IOException, PrqaException {
         PRQAReport report = new PRQAReport(repSettings, serverSettings, uploadSettings, appSettings);        
+        report.setWorkspace(tmpDir);
         new File(mockProjectFile).createNewFile();
         String command = report.createReportCommand(isUnix);                
         assertNotNull(command);
@@ -91,7 +92,8 @@ public class PRQAReportTest {
     }
     
     @Test public void testUploadCommandGenerator() throws IOException, PrqaException {
-        PRQAReport report = new PRQAReport(repSettings, serverSettings, uploadSettings, appSettings);        
+        PRQAReport report = new PRQAReport(repSettings, serverSettings, uploadSettings, appSettings);
+        report.setWorkspace(tmpDir);
         new File(mockProjectFile).createNewFile();
         String command = report.createUploadCommand();
         assertNotNull(command);
