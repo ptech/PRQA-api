@@ -10,6 +10,7 @@ import java.util.EnumSet;
 import java.util.HashSet;
 import net.praqma.prqa.exceptions.PrqaException;
 import net.praqma.prqa.reports.PRQAReport;
+import org.junit.AfterClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.BeforeClass;
@@ -26,14 +27,17 @@ public class PRQAReportTest {
     static PRQAApplicationSettings appSettings;
     static File tmpDir;
     static boolean isUnix;
+    static String mockProjectFile;
     
     @BeforeClass public static void setup() {
-        repSettings = new PRQAReportSettings(null, null, true, false, true, true, PRQAContext.QARReportType.REQUIRED_TYPES, "qac");
+        mockProjectFile = new File(tmpDir,"mock.prj").getAbsolutePath();
+        repSettings = new PRQAReportSettings(null, mockProjectFile, true, false, true, true, PRQAContext.QARReportType.REQUIRED_TYPES, "qac");
         serverSettings = new QAVerifyServerSettings("localhost", 8080, "http", "admin", "admin");
         appSettings = new PRQAApplicationSettings(null, null, null);
         uploadSettings = new PRQAUploadSettings(null, false, CodeUploadSetting.AllCode, null, "projectName");
         tmpDir = new File(System.getProperty("java.io.tmpdir"));
         isUnix = System.getProperty("os.name").startsWith("Windows");
+        
     }
     
     @Test public void testPrqaReport() {
@@ -65,11 +69,16 @@ public class PRQAReportTest {
         tmpFileToCreate.deleteOnExit();
     }
     
-    //TODO: Implement me!
-    @Test public void testProjectCommandGenerator() throws PrqaException {
+    @Test(expected=PrqaException.class) public void testProjectCommandNoProjectFileGenerator() throws PrqaException {
         PRQAReport report = new PRQAReport(repSettings, serverSettings, uploadSettings, appSettings);
-        String command = report.createAnalysisCommand(isUnix);
+        String command = report.createAnalysisCommand(isUnix);                
+    }
+    
+    @Test public void testProjectCommandGenerator() throws PrqaException, IOException {
+        PRQAReport report = new PRQAReport(repSettings, serverSettings, uploadSettings, appSettings);        
+        new File(mockProjectFile).createNewFile();
+        String command = report.createAnalysisCommand(isUnix);                
         assertNotNull(command);
-        
+        new File(mockProjectFile).deleteOnExit();        
     }
 }
