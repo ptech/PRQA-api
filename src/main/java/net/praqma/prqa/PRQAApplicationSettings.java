@@ -14,11 +14,13 @@ public class PRQAApplicationSettings implements Serializable {
     public final String qarHome;
     public final String qavClientHome;
     public final String qawHome;
+    public final String productHome;
 
-    public PRQAApplicationSettings(final String qarHome, final String qavClientHome, final String qawHome) {
+    public PRQAApplicationSettings(final String qarHome, final String qavClientHome, final String qawHome, final String productHome) {
         this.qarHome = qarHome;
         this.qavClientHome = qavClientHome;
         this.qawHome = qawHome;
+        this.productHome = productHome;
     }
     
     public static String resolveQarExe(boolean isUnix) {
