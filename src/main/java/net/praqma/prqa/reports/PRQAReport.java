@@ -74,7 +74,7 @@ public class PRQAReport implements Serializable {
      * @return
      * @throws PrqaException 
      */
-    public String resolveAbsOrRelativePath(File workspaceRoot, String projectFilePath) throws PrqaException {
+    public String resolveAbsOrRelativePath(File workspaceRoot, String projectFilePath) throws PrqaException {        
         File pFile = new File(projectFilePath);
         if(pFile.isAbsolute()) {
             if(!pFile.exists()) {
@@ -126,16 +126,15 @@ public class PRQAReport implements Serializable {
     public String createReportCommand(boolean isUnix) throws PrqaException {
         PRQACommandBuilder builder = new PRQACommandBuilder(appSettings != null ? PRQAApplicationSettings.resolveQawExe(isUnix) : "qaw");        
         builder.prependArgument(settings.product);
-        
-        if(settings.projectFile != null) {
+        if(!StringUtils.isBlank(settings.projectFile)) {
             builder.appendArgument(PRQACommandBuilder.getProjectFile(resolveAbsOrRelativePath(workspace, settings.projectFile)));
-        } else if(settings.fileList != null) {
+        } else if(!StringUtils.isBlank(settings.fileList))  {
             builder.appendArgument("-via "+PRQACommandBuilder.getProjectFile(resolveAbsOrRelativePath(workspace, settings.fileList)));
-            if(settings.settingsFile != null) {
+            if(!StringUtils.isBlank(settings.settingsFile)) {
                 builder.appendArgument("-via "+PRQACommandBuilder.getProjectFile(resolveAbsOrRelativePath(workspace, settings.settingsFile)));
             } 
         } else {
-            throw new PrqaException("Neither filelist or project file has been set, this should not be happening");
+            throw new PrqaException("Report source not confiured (Project File/File List)");
         }
         
         if(settings.enableDependencyMode) {
