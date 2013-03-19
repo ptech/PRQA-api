@@ -33,7 +33,7 @@ public class PRQAReportTest {
         mockProjectFile = new File(tmpDir,"mock.prj").getAbsolutePath();
         repSettings = new PRQAReportSettings(null, mockProjectFile, true, false, true, true, PRQAContext.QARReportType.REQUIRED_TYPES, "qac");
         serverSettings = new QAVerifyServerSettings("localhost", 8080, "http", "admin", "admin");
-        appSettings = new PRQAApplicationSettings(null, null, null);
+        appSettings = new PRQAApplicationSettings(null, null, null, null);
         uploadSettings = new PRQAUploadSettings(null, false, CodeUploadSetting.AllCode, null, "projectName");
         tmpDir = new File(System.getProperty("java.io.tmpdir"));
         isUnix = System.getProperty("os.name").startsWith("Windows");
