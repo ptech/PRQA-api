@@ -41,12 +41,12 @@ public class QAR implements Product {
 	@Override
 	public String toString() {
 		String out = "";
-		out += "QAR selected project file:\t" + this.projectFile + System.getProperty("line.separator");
+		out += "QAR project file or file list:\t" + this.projectFile + System.getProperty("line.separator");
         String productDotified = product.equalsIgnoreCase("qac") ? "QA·C" : "QA·C++";
 		out += "QAR selected product:\t\t" + productDotified + System.getProperty("line.separator");
 		out += "QAR selected report type:\t" + this.type + System.getProperty("line.separator");
 		return out;
-	}
+	}        
     
     @Override
     public String getProductVersion(HashMap<String,String> environment, File workspace, boolean isUnix) throws PrqaSetupException {

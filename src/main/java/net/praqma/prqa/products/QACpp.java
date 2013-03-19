@@ -24,6 +24,15 @@ public class QACpp implements Product {
     private static final Logger logger = Logger.getLogger(QACpp.class.getName());
     public static String[] envVarsForTool = { "QACPPBIN" , "QACPPPATH" , "QACPPOUTPATH" , "QACPPHELPFILES" , "QACPPTEMP" };
     
+    public QACpp() {
+        
+    }
+    
+      
+    public QACpp(String installationDir) {
+        
+    }
+    
     @Override
     public String getProductVersion(HashMap<String,String> environment, File workspace, boolean isUnix) throws PrqaSetupException {
         logger.finest(String.format("Starting execution of method - getProductVersion"));
