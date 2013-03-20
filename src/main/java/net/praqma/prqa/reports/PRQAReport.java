@@ -31,9 +31,9 @@ import org.apache.commons.lang.StringUtils;
  */
 public class PRQAReport implements Serializable {
    
-    public static String XHTML = "xhtml";
-    public static String XML = "xml";
-    public static String HTML = "html";
+    public static final String XHTML = "xhtml";
+    public static final String XML = "xml";
+    public static final String HTML = "html";
     
     public static String XHTML_REPORT_EXTENSION = "Report."+PRQAReport.XHTML;
     public static String XML_REPORT_EXTENSION = "Report."+PRQAReport.XML;
@@ -190,7 +190,6 @@ public class PRQAReport implements Serializable {
             uploadPart +=" "+PRQACommandBuilder.wrapInEscapedQuotationMarks(workspace.getPath());
 
             //Step3: Finalize
-            
             String source = "";
             if(settings.projectFile != null) {
                 source = PRQACommandBuilder.wrapInQuotationMarks(resolveAbsOrRelativePath(workspace, settings.projectFile));
