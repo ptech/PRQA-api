@@ -246,13 +246,15 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
         sb.append("<h2>Compliance Summary</h2>");
         sb.append("<thead>");
         sb.append("<tr>");
-        sb.append("<th>Max Messages</th>");
+        sb.append("<th>Messages within threshold</th>");
+        sb.append("<th>All messages</th>");
         sb.append("<th>Project Compliance</th>");
         sb.append("<th>File Compliance</th>");
         sb.append("</tr>");
         sb.append("</thead>");
         sb.append("<tbody>");
         sb.append("<tr>");
+        sb.append("<td>").append(getMessagesWithinThreshold()).append("</td>");
         sb.append("<td>").append(getMessages()).append("</td>");
         sb.append("<td>").append(getProjectCompliance()).append("%</td>");
         sb.append("<td>").append(getFileCompliance()).append("%</td>");
