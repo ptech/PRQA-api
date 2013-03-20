@@ -10,5 +10,9 @@
  <suppress checks="LineLengthCheck"
            files=".java" />		   
 <suppress checks="JavadocMethodCheck"
+files=".java" />
+<suppress checks="FileTabCharacterCheck"
 files=".java" />	
+
+FileTabCharacterCheck
 </suppressions>
