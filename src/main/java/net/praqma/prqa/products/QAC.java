@@ -40,7 +40,7 @@ public class QAC implements Product {
   
         } catch (AbnormalProcessTerminationException abnex) {
              logger.warning(String.format( "Failed to detect QA·C version with command %s returned code %s%nMessage was:%n%s", abnex.getCommand(), abnex.getExitValue(),abnex.getMessage()));             
-             throw new PrqaSetupException(String.format( "Failed to detect QA·C version\n%s",abnex.getMessage() ));
+             throw new PrqaSetupException(String.format( "Failed to detect QA·C version%n%s",abnex.getMessage() ));
              
         } catch (IOException ioex) {
             logger.warning("IOException...failed to delete");

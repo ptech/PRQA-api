@@ -20,7 +20,7 @@ public class PrqaException extends Exception {
 
     @Override
     public String toString() {
-        return String.format("Caught exception with message:\n\t%s\nCaused by:\n\t%s", getMessage(),getCause());
+        return String.format("Caught exception with message:%n\t%s\nCaused by:%n\t%s", getMessage(),getCause());
     }
 }
 

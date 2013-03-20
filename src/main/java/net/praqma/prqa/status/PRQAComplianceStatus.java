@@ -179,7 +179,7 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
             out += "Messages by level:\n";
             for(int i=0; i<10; i++) {
                 if(getMessagesByLevel().containsKey(i)) {
-                    out += String.format("Level %s messages (%s)\n", i, getMessagesByLevel().get(i)); 
+                    out += String.format("Level %s messages (%s)%n", i, getMessagesByLevel().get(i)); 
                 }
             }
         }
