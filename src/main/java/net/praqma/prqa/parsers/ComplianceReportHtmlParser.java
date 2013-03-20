@@ -13,8 +13,9 @@ public class ComplianceReportHtmlParser extends ReportHtmlParser {
     public static final Pattern totalMessagesPattern;
     public static final Pattern fileCompliancePattern;
     public static final Pattern projectCompliancePattern;    
-    public static final Pattern[] levelNMessages; 
+    public static final Pattern[] levelNMessages;  
 
+    
     public ComplianceReportHtmlParser() { }
            
     public ComplianceReportHtmlParser(String fullReportPath) {
