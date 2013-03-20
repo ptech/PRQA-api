@@ -14,5 +14,5 @@ files=".java" />
 <suppress checks="FileTabCharacterCheck"
 files=".java" />	
 
-FileTabCharacterCheck
+
 </suppressions>
