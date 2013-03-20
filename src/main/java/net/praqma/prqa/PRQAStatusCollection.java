@@ -13,12 +13,12 @@ import net.praqma.prqa.status.StatusCategory;
  */
 public class PRQAStatusCollection extends ArrayList<PRQAReading> {
 
-	private Map<StatusCategory, Number> overrideMinimum = new EnumMap<StatusCategory, Number>(StatusCategory.class);
-	private Map<StatusCategory, Number> overrideMaximum = new EnumMap<StatusCategory, Number>(StatusCategory.class);
+	private Map<StatusCategory,Number> overrideMinimum = new EnumMap<StatusCategory,Number>(StatusCategory.class);
+	private Map<StatusCategory,Number> overrideMaximum = new EnumMap<StatusCategory,Number>(StatusCategory.class);
 	private static final Logger logger;
 
 	static {
-		logger = Logger.getLogger(PRQAStatusCollection.class.getName());
+        logger = Logger.getLogger(PRQAStatusCollection.class.getName());
 	}
 
 	public PRQAStatusCollection() {
@@ -50,7 +50,7 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading> {
 	 * @param category
 	 * @return
 	 */
-	public Number getMax(StatusCategory category) throws PrqaException {
+	public final Number getMax(StatusCategory category) throws PrqaException {
 		logger.finest(String.format("Starting execution of method - getMax"));
 		logger.finest(String.format("Input parameter category type: %s; value: %s", category.getClass(), category));
 
@@ -93,7 +93,7 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading> {
 	 * @param category
 	 * @return a number indicating the smallest given observation for the specified category.
 	 */
-	public Number getMin(StatusCategory category) throws PrqaException {
+	public final Number getMin(StatusCategory category) throws PrqaException {
 		logger.finest(String.format("Starting execution of method - getMin"));
 		logger.finest(String.format("Input parameter category type: %s; value: %s", category.getClass(), category));
 
@@ -170,21 +170,16 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading> {
 	public Number getOverriddenMin(StatusCategory category) {
 		logger.finest(String.format("Starting execution of method - getOverriddenMin"));
 		logger.finest(String.format("Input parameter category type: %s; value: %s", category.getClass(), category));
-
 		if (overrideMinimum.containsKey(category)) {
 			Number output = overrideMinimum.get(category);
-
 			logger.finest(String.format("Returning overridden min for StatusCategory %s, value: %s", category, output));
-
 			return output;
 		}
-
 		logger.finest(String.format("Maximum for StatusCategory %s isn't set, returning null", category));
-
 		return null;
-	}
+    }
 
-	public void clearOverrides() {
+	public final void clearOverrides() {
 		logger.finest(String.format("Starting execution of method - clearOverrides"));
 
 		overrideMaximum.clear();

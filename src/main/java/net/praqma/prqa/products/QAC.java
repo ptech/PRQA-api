@@ -24,13 +24,7 @@ public class QAC implements Product {
     private static final Logger logger = Logger.getLogger(QAC.class.getName());
     public static String[] envVarsForTool = { "QACBIN" , "QACPATH" , "QACOUTPATH" , "QACHELPFILES" , "QACTEMP" };
     
-    public QAC() {
-        
-    }
-    
-    public QAC(String installationDir) {
-        
-    }
+    public QAC() { }
        
     @Override
     public String getProductVersion(HashMap<String,String> environment, File workspace, boolean isUnix) throws PrqaSetupException {
