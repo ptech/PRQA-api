@@ -49,7 +49,7 @@ public class QAR implements Product {
 	}        
     
     @Override
-    public String getProductVersion(HashMap<String,String> environment, File workspace, boolean isUnix) throws PrqaSetupException {
+    public final String getProductVersion(HashMap<String,String> environment, File workspace, boolean isUnix) throws PrqaSetupException {
         logger.finest(String.format("Starting execution of method - getProductVersion"));
         
         String version = "Unknown";
