@@ -17,10 +17,10 @@ import net.praqma.prqa.status.StatusCategory;
  * @author Praqma
  */
 public interface PRQAReading extends Serializable {
-    public Number getReadout(StatusCategory category) throws PrqaException;
-    public void setReadout(StatusCategory category, Number value) throws PrqaException;
-    public void addNotification(String notificaction);
-    public HashMap<StatusCategory, Number> getThresholds();
-    public void setThresholds(HashMap<StatusCategory, Number> thresholds);
-    public HashMap<StatusCategory, Number> getReadouts(StatusCategory... categories) throws PrqaException;
+    Number getReadout(StatusCategory category) throws PrqaException;
+    void setReadout(StatusCategory category, Number value) throws PrqaException;
+    void addNotification(String notificaction);
+    HashMap<StatusCategory, Number> getThresholds();
+    void setThresholds(HashMap<StatusCategory, Number> thresholds);
+    HashMap<StatusCategory, Number> getReadouts(StatusCategory... categories) throws PrqaException;
 }
