@@ -65,3 +65,4 @@ public class QAR implements Product {
         return version;
     }
 }
+

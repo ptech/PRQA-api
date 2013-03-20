@@ -23,3 +23,4 @@ public class PrqaException extends Exception {
         return String.format("Caught exception with message:\n\t%s\nCaused by:\n\t%s", getMessage(),getCause());
     }
 }
+

@@ -24,3 +24,4 @@ public interface PRQAReading extends Serializable {
     void setThresholds(HashMap<StatusCategory, Number> thresholds);
     HashMap<StatusCategory, Number> getReadouts(StatusCategory... categories) throws PrqaException;
 }
+

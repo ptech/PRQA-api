@@ -46,5 +46,5 @@ public class PRQAApplicationSettings implements Serializable {
             return value+pathSeperator;
         }
     }
-
 }
+

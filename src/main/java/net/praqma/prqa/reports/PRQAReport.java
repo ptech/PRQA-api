@@ -7,7 +7,6 @@ package net.praqma.prqa.reports;
 import java.io.File;
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.praqma.prqa.PRQAApplicationSettings;
@@ -100,7 +99,7 @@ public class PRQAReport implements Serializable {
             builder.appendArgument("-mode depend");
         }
         builder.appendArgument(PRQACommandBuilder.getDataFlowAnanlysisParameter(settings.enableDataFlowAnalysis));        
-        String pal = (settings.performCrossModuleAnalysis ? "pal %Q %P+ %L+" : "");        
+        String pal = settings.performCrossModuleAnalysis ? "pal %Q %P+ %L+" : "";        
         if(!StringUtils.isEmpty(pal)) {
             builder.appendArgument(PRQACommandBuilder.getMaseq(pal));
         }        
@@ -314,6 +313,6 @@ public class PRQAReport implements Serializable {
     public void setAppSettings(PRQAApplicationSettings appSettings) {
         this.appSettings = appSettings;
     }
-
 }
+
 

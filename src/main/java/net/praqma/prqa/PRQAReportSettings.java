@@ -66,3 +66,4 @@ public class PRQAReportSettings implements Serializable {
         return builder.toString();
     }
 }
+

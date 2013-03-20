@@ -24,6 +24,6 @@ public class QAVerifyServerSettings implements Serializable{
         this.protocol = protocol;
         this.password = password;
         this.user = user;
-    }
-    
+    }    
 }
+

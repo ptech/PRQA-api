@@ -63,15 +63,11 @@ public class QAC implements Product {
             }
         }
         
-        if(res != null) {
-            for(String s: res.stdoutList) {
-                productVersion = s;
-                break;
-            }
-        }
-       
-        logger.finest(String.format("Returning value %s", productVersion));
-        
+        if(res != null && !res.stdoutList.isEmpty()) {            
+            productVersion = res.stdoutList.get(0);
+        }       
+        logger.finest(String.format("Returning value %s", productVersion));        
         return productVersion;
     }
 }
+

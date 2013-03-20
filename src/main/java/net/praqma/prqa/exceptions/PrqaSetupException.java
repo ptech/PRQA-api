@@ -17,3 +17,4 @@ public class PrqaSetupException extends PrqaException {
         super(message,ex);
     }
 }
+

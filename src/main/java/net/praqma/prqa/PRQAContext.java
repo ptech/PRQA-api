@@ -19,6 +19,7 @@ public class PRQAContext {
             }
         }
     }
+    
     public enum QARReportType {
         Compliance, CodeReview, Suppression;
 
@@ -32,8 +33,7 @@ public class PRQAContext {
         }
         
         public static final EnumSet<QARReportType> OPTIONAL_TYPES = EnumSet.of(CodeReview, Suppression);
-        
         public static final EnumSet<QARReportType> REQUIRED_TYPES = EnumSet.of(Compliance);
     }
-    
 }
+
