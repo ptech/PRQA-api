@@ -27,7 +27,7 @@ public class QACpp implements Product {
     public QACpp() { }
     
     @Override
-    public String getProductVersion(HashMap<String,String> environment, File workspace, boolean isUnix) throws PrqaSetupException {
+    public final String getProductVersion(HashMap<String,String> environment, File workspace, boolean isUnix) throws PrqaSetupException {
         logger.finest(String.format("Starting execution of method - getProductVersion"));
         
         String version = "Unknown";
@@ -62,13 +62,10 @@ public class QACpp implements Product {
                 }
             }
         }
-        
         if(res != null && !res.stdoutList.isEmpty()) {            
             version = res.stdoutList.get(0);            
         }
-        
         logger.finest(String.format("Returning value %s", version));
-        
         return version;
     }
 
