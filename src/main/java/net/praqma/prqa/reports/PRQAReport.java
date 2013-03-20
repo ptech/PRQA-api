@@ -95,7 +95,6 @@ public class PRQAReport implements Serializable {
     public String createAnalysisCommand(boolean isUnix) throws PrqaException {        
         PRQACommandBuilder builder = new PRQACommandBuilder(appSettings != null ? PRQAApplicationSettings.resolveQawExe(isUnix) : "qaw");        
         builder.prependArgument(settings.product);
-        //TODO: Either project or file list
         builder.appendArgument(PRQACommandBuilder.getProjectFile(resolveAbsOrRelativePath(workspace, settings.projectFile)));        
         if(settings.enableDependencyMode) {
             builder.appendArgument("-mode depend");
@@ -158,19 +157,6 @@ public class PRQAReport implements Serializable {
         String qarEmbedded = (settings.performCrossModuleAnalysis ? "pal %Q %P+ %L+#" : "")+reports;
         builder.appendArgument(PRQACommandBuilder.getMaseq(qarEmbedded));
         return builder.getCommand();
-    }
-    
-    //TODO: Delete this method before release!
-    public List<String> printEnvironmentAsFromPJUTils() {
-        CmdResult res = null;
-        String finalCommand = "set";
-        if(getEnvironment() == null) {
-            res = CommandLine.getInstance().run(finalCommand, workspace, true, false);
-        } else {
-            res = CommandLine.getInstance().run(finalCommand, workspace, true, false, getEnvironment());
-        }
-        
-        return res.stdoutList;
     }
     
     public CmdResult report(boolean isUnix) throws PrqaException {      
