@@ -77,7 +77,7 @@ public abstract class ReportHtmlParser implements Serializable {
         try {
             fis = new FileInputStream(file);
         } catch (FileNotFoundException ex) {
-            PrqaParserException exception = new PrqaParserException("Could not find file " + file.getPath(), ex);
+            PrqaParserException exception = new PrqaParserException(ex);
 
             logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
 
@@ -112,7 +112,7 @@ public abstract class ReportHtmlParser implements Serializable {
                 }
             }
         } catch (IOException ex) {
-            PrqaParserException exception = new PrqaParserException("Could not read the line after :\n" + sourceLine, ex);
+            PrqaParserException exception = new PrqaParserException(ex);
 
             logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
 
@@ -124,10 +124,8 @@ public abstract class ReportHtmlParser implements Serializable {
             try {
                 source.close();
             } catch (IOException ex) {
-                PrqaParserException exception = new PrqaParserException("Failed to close file after parse!", ex);
-
+                PrqaParserException exception = new PrqaParserException(ex);
                 logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
-
                 throw exception;
             }
 

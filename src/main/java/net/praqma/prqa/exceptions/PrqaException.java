@@ -17,10 +17,6 @@ public class PrqaException extends Exception {
     public PrqaException(String msg, Throwable cause) {
         super(msg, cause);
     }
-    
-    public PrqaException(String msg, Throwable cause, int returnCode) {
-        super(msg, cause);
-    }
 
     @Override
     public String toString() {

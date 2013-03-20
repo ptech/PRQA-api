@@ -9,7 +9,7 @@ package net.praqma.prqa.exceptions;
  * @author Praqma
  */
 public class PrqaParserException extends PrqaException {
-    public PrqaParserException(String message, Exception originalException) {         
+    public PrqaParserException(Exception originalException) {         
         super(originalException);
     }
 }
