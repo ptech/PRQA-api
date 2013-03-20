@@ -9,12 +9,10 @@ package net.praqma.prqa.exceptions;
  * @author Praqma
  */
 public class PrqaUploadException extends PrqaException {
-    public PrqaUploadException(String message) {
-        super(message);
-    }
 
     public PrqaUploadException(String message, Exception ex) {
         super(message, ex);
     }
 }
+
 

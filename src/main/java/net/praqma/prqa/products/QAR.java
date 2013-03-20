@@ -57,7 +57,7 @@ public class QAR implements Product {
             CmdResult res = CommandLine.getInstance().run(PRQAApplicationSettings.resolveQarExe(isUnix)+" -version", workspace, true, false, environment);            
             version = res.stdoutBuffer.toString();
         } catch (AbnormalProcessTerminationException ex) {
-            throw new PrqaSetupException( String.format("Failed to detect QAR running this command %s, exit code was %s\nMessage was:\n%s", ex.getCommand(),ex.getExitValue(),ex.getMessage()), ex );
+            throw new PrqaSetupException( String.format("Failed to detect QAR running this command %s, exit code was %s%nMessage was:%n%s", ex.getCommand(),ex.getExitValue(),ex.getMessage()), ex );
         }
         
         logger.finest(String.format("Returning value %s", version));

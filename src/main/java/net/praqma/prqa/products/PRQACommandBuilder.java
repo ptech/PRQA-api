@@ -58,18 +58,24 @@ public class PRQACommandBuilder implements Serializable {
     }
 
     public String getCommand() {
+        StringBuilder builder = new StringBuilder();
         logger.finest(String.format("Starting execution of method - getCommand"));
 
-        String output = "";
-        output += executable + " ";
+        //String output = "";
+        builder.append(executable).append(" ");
+        //output += executable + " ";
 
         for (String s : arguments) {
-            output += s + " ";
+            //output += s + " ";
+            builder.append(s).append(" ");
+            
         }
 
-        logger.finest(String.format("Returning value: %s", output));
+        //logger.finest(String.format("Returning value: %s", output));
+        logger.finest(String.format("Returning value: %s", builder.toString()));
 
-        return output;
+        //return output;
+        return builder.toString();
     }
 
     public static String getCmaf(String path, boolean escapeInputParameterWhiteSpace) {
