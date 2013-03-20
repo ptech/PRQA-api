@@ -25,3 +25,4 @@ public class PRQAUploadSettings implements Serializable {
         this.qaVerifyProjectName = qaVerifyProjectName;
     }    
 }
+

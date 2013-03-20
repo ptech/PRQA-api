@@ -38,6 +38,6 @@ public enum CodeUploadSetting {
         } else {
             return OnlyNew;
         }
-    }
-    
+    }    
 }
+

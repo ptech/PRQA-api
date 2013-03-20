@@ -18,3 +18,4 @@ public class PrqaReadingException extends PrqaException {
         super(message,ex);
     }
 }
+

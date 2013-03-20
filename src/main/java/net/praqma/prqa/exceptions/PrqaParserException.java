@@ -13,3 +13,4 @@ public class PrqaParserException extends PrqaException {
         super(originalException);
     }
 }
+

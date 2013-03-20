@@ -145,17 +145,14 @@ public abstract class ReportHtmlParser implements Serializable {
 
     public String getFirstResult(List<String> results) {
         logger.finest(String.format("Starting execution of method - getFirstResult"));
-
         if (results.size() > 0) {
             String output = results.get(0);
-
             logger.finest(String.format("Returning value: %s", output));
-
             return output;
         }
 
         logger.finest(String.format("Collection is empty, returning null."));
-
         return null;
     }
 }
+

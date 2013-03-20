@@ -17,3 +17,4 @@ public class PrqaUploadException extends PrqaException {
         super(message, ex);
     }
 }
+
