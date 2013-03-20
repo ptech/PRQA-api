@@ -46,8 +46,8 @@ public class QACpp implements Product {
             res = CommandLine.getInstance().run(String.format("qacpp -version \"%s\"", f.getAbsolutePath()), workspace, true, false, environment);
         
         } catch (AbnormalProcessTerminationException ex) {
-            logger.warning("Failed to get qacpp-version");
-            throw new PrqaSetupException(String.format( "Failed to detect QA·C++ version with command %s returned code %s\nMessage was:\n%s", ex.getCommand(), ex.getExitValue(), ex.getMessage()), ex);
+             logger.warning(String.format( "Failed to detect QA·C++ version with command %s returned code %s\nMessage was:\n%s", ex.getCommand(), ex.getExitValue(),ex.getMessage()));             
+             throw new PrqaSetupException(String.format( "Failed to detect QA·C++ version\n%s", ex.getMessage() ));
         } catch (IOException ex) {
             logger.warning("Failed to create file");
         } finally {
