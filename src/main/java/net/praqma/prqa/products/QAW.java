@@ -23,7 +23,7 @@ public class QAW implements Product {
         try {
             res = CommandLine.getInstance().run("qaw -version", currentDirectory, true, false, environment);
         } catch (AbnormalProcessTerminationException abnex) {
-            throw new PrqaSetupException(String.format("Failed to obtain QAW version running this command %s, return code was %s\nMessage was:\n%s",abnex.getCommand(), abnex.getExitValue(), abnex.getMessage()), abnex);
+            throw new PrqaSetupException(String.format("Failed to obtain QAW version running this command %s, return code was %s%nMessage was:%n%s",abnex.getCommand(), abnex.getExitValue(), abnex.getMessage()), abnex);
         }
         if(res.stdoutList != null && !res.stdoutList.isEmpty()) {
             return res.stdoutList.get(0);

@@ -35,12 +35,11 @@ public class QAC implements Product {
         File f = null;
         
         try {
-            f = File.createTempFile("test_prqa_file", ".c", workspace);            
-            //Check if QACBIN points to a real directory            
+            f = File.createTempFile("test_prqa_file", ".c", workspace);                         
             res = CommandLine.getInstance().run(String.format("qac -version \"%s\"", f.getAbsolutePath()), workspace, true, false, environment);
   
         } catch (AbnormalProcessTerminationException abnex) {
-             logger.warning(String.format( "Failed to detect QA·C version with command %s returned code %s\nMessage was:\n%s", abnex.getCommand(), abnex.getExitValue(),abnex.getMessage()));             
+             logger.warning(String.format( "Failed to detect QA·C version with command %s returned code %s%nMessage was:%n%s", abnex.getCommand(), abnex.getExitValue(),abnex.getMessage()));             
              throw new PrqaSetupException(String.format( "Failed to detect QA·C version\n%s",abnex.getMessage() ));
              
         } catch (IOException ioex) {
@@ -48,6 +47,7 @@ public class QAC implements Product {
         } finally {
             if(f != null) {
                 try {
+                    //TODO: Consider refactoring this by using an abstract class with a base method instead of an interface
                     FileFilter  ff = new WildcardFileFilter("test_prqa_file*");                
                     for(File deleteme : workspace.listFiles(ff)) {
                         logger.finest(String.format("Starting to delete file: %s", deleteme.getAbsolutePath()));

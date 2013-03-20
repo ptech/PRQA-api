@@ -10,17 +10,13 @@ import java.util.regex.Pattern;
  */
 public class ComplianceReportHtmlParser extends ReportHtmlParser {
     
-    public static Pattern totalMessagesPattern;
-    public static Pattern fileCompliancePattern;
-    public static Pattern projectCompliancePattern;    
-    public static Pattern[] levelNMessages; 
-    
-    
-    public ComplianceReportHtmlParser() {
-        
-    }
+    public static final Pattern totalMessagesPattern;
+    public static final Pattern fileCompliancePattern;
+    public static final Pattern projectCompliancePattern;    
+    public static final Pattern[] levelNMessages; 
+
+    public ComplianceReportHtmlParser() { }
            
-    
     public ComplianceReportHtmlParser(String fullReportPath) {
         super(fullReportPath);
     }

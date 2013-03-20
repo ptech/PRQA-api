@@ -57,12 +57,12 @@ public class PRQAReportSettings implements Serializable {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append( String.format( "Chosen qaverify server: %s+\n", chosenServer) );
-        builder.append( String.format( "Project file: %s+\n", projectFile) );
-        builder.append( String.format( "Perform CMO: %s+\n", performCrossModuleAnalysis) );
-        builder.append( String.format( "Publish to QAVerify: %s+\n", publishToQAV) );
-        builder.append( String.format( "Dependency Analysis: %s+\n", enableDependencyMode) );
-        builder.append( String.format( "Data flow analysis: %s+\n", enableDataFlowAnalysis) );
+        builder.append( String.format( "Chosen qaverify server: %s%n", chosenServer) );
+        builder.append( String.format( "Project file: %s%n", projectFile) );
+        builder.append( String.format( "Perform CMA: %s%n", performCrossModuleAnalysis) );
+        builder.append( String.format( "Publish to QAVerify: %s%n", publishToQAV) );
+        builder.append( String.format( "Dependency Analysis: %s%n", enableDependencyMode) );
+        builder.append( String.format( "Data flow analysis: %s%n", enableDataFlowAnalysis) );
         return builder.toString();
     }
 }

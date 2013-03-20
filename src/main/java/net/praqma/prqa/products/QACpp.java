@@ -28,19 +28,17 @@ public class QACpp implements Product {
     
     @Override
     public final String getProductVersion(HashMap<String,String> environment, File workspace, boolean isUnix) throws PrqaSetupException {
-        logger.finest(String.format("Starting execution of method - getProductVersion"));
-        
+        logger.finest(String.format("Starting execution of method - getProductVersion"));        
         String version = "Unknown";
         
         CmdResult res = null;
         File f = null;
         try {
             f = File.createTempFile("test_prqa_file", ".c", workspace);
-            res = CommandLine.getInstance().run(String.format("qacpp -version \"%s\"", f.getAbsolutePath()), workspace, true, false, environment);
-        
+            res = CommandLine.getInstance().run(String.format("qacpp -version \"%s\"", f.getAbsolutePath()), workspace, true, false, environment);        
         } catch (AbnormalProcessTerminationException ex) {
-             logger.warning(String.format( "Failed to detect QA·C++ version with command %s returned code %s\nMessage was:\n%s", ex.getCommand(), ex.getExitValue(),ex.getMessage()));             
-             throw new PrqaSetupException(String.format( "Failed to detect QA·C++ version\n%s", ex.getMessage() ));
+             logger.warning(String.format( "Failed to detect QA·C++ version with command %s returned code %s%nMessage was:%n%s", ex.getCommand(), ex.getExitValue(),ex.getMessage()));             
+             throw new PrqaSetupException(String.format( "Failed to detect QA·C++ version%n%s", ex.getMessage() ));
         } catch (IOException ex) {
             logger.warning("Failed to create file");
         } finally {
