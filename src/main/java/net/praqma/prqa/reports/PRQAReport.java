@@ -7,6 +7,7 @@ package net.praqma.prqa.reports;
 import java.io.File;
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.praqma.prqa.PRQAApplicationSettings;
@@ -127,7 +128,8 @@ public class PRQAReport implements Serializable {
         if(!StringUtils.isBlank(settings.projectFile)) {
             builder.appendArgument(PRQACommandBuilder.getProjectFile(resolveAbsOrRelativePath(workspace, settings.projectFile)));
         } else if(!StringUtils.isBlank(settings.fileList))  {
-            builder.appendArgument("-via "+PRQACommandBuilder.getProjectFile(resolveAbsOrRelativePath(workspace, settings.fileList)));
+            //builder.appendArgument("-via "+PRQACommandBuilder.getProjectFile(resolveAbsOrRelativePath(workspace, settings.fileList)));            
+            builder.appendArgument("-via "+PRQACommandBuilder.wrapInQuotationMarks(settings.fileList));
             if(!StringUtils.isBlank(settings.settingsFile)) {
                 builder.appendArgument("-via "+PRQACommandBuilder.getProjectFile(resolveAbsOrRelativePath(workspace, settings.settingsFile)));
             } 
@@ -158,13 +160,31 @@ public class PRQAReport implements Serializable {
         return builder.getCommand();
     }
     
-    public CmdResult report(boolean isUnix) throws PrqaException {      
-        String finalCommand = createReportCommand(isUnix);
-        if(getEnvironment() == null) {
-            return CommandLine.getInstance().run(finalCommand, workspace, true, false);
-        } else {
-            return CommandLine.getInstance().run(finalCommand, workspace, true, false, getEnvironment());
+    private void _logEnv(String location, Map<String,String> env) {
+        log.fine(String.format( "%s", location));
+        if(env != null) {
+            for(String key : env.keySet()) {
+                log.fine(String.format("%s=%s",key, env.get(key)));
+            }
         }
+    }
+    
+    public CmdResult report(boolean isUnix) throws PrqaException {
+        String finalCommand = createReportCommand(isUnix);
+        try {            
+            if(getEnvironment() == null) {                
+                _logEnv("Environment not modified, this is how it is percived by the plugin:", System.getenv());
+                return CommandLine.getInstance().run(finalCommand, workspace, true, false);
+            } else {
+                _logEnv("Environment is getting modified modified these are the inherited environemt vars:", System.getenv());
+                _logEnv("Environment is getting modified modified with these new values:", getEnvironment());
+                return CommandLine.getInstance().run(finalCommand, workspace, true, false, getEnvironment());
+            }
+        } catch (AbnormalProcessTerminationException abnex) {
+            log.severe(String.format("Failed to execute report generation command: %s%n%s", finalCommand,abnex.getMessage()));
+            log.logp(Level.SEVERE, this.getClass().getName(), "report()", "Failed to execute report generation command", abnex);
+            throw new PrqaException(String.format("Failed to execute report generation command: %s%n%s", finalCommand,abnex.getMessage()), abnex);
+        } 
     }
     
     public String createUploadCommand() throws PrqaException {

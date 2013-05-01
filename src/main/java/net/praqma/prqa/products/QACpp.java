@@ -55,6 +55,28 @@ public class QACpp implements Product {
                             logger.warning(String.format("Failed to delete: %s", deleteme.getAbsolutePath()));
                         }
                     }
+                    
+                    /**
+                     * Delete temporary metric files created in the process of determining product versions.
+                     */
+                    String qacppTemp = null;
+                    
+                    if(environment != null && environment.containsKey("QACPPTEMP")) {
+                        qacppTemp = environment.get("QACPPTEMP");
+                    } else if(System.getenv("QACPPTEMP") != null) {
+                        qacppTemp = System.getenv("QACPPTEMP");
+                    }                    
+                    
+                    File tempDir = new File(qacppTemp);
+                    for(File deleteme : tempDir.listFiles(ff)) {
+                        logger.finest(String.format("Starting to delete file: %s", deleteme.getAbsolutePath()));
+                        if(deleteme.delete()) {
+                            logger.finest(String.format("Succesfully deleted file: %s", deleteme.getAbsolutePath()));
+                        } else {
+                            logger.warning(String.format("Failed to delete: %s", deleteme.getAbsolutePath()));
+                        }
+                    }  
+                    
                 } catch (Exception ex) {
                     logger.warning("Something went wrong in getProductVersion() when attempting to delete created files");
                 }

@@ -21,10 +21,15 @@ import static org.junit.Assert.*;
 public class ProductTest {
     
     
-    @Test public void testGetQacVersion() throws PrqaSetupException {
-        QAC qac = new QAC();
-        String version = qac.getProductVersion(null, new File(System.getProperty("java.io.tmpdir")), !System.getProperty("os.name").startsWith("Windows"));        
-        assertNotNull(version);    
+    @Test public void testGetQacVersion() throws PrqaSetupException {        
+        String version = null;
+        try {
+            QAC qac = new QAC();
+            version = qac.getProductVersion(null, new File(System.getProperty("java.io.tmpdir")), !System.getProperty("os.name").startsWith("Windows"));        
+            assertNotNull(version);    
+        } catch (PrqaSetupException ex) {
+            assertNull(version);
+        }
     }
     
     
@@ -35,29 +40,50 @@ public class ProductTest {
      */
     @Test(expected=PrqaSetupException.class) public void testGetQacppVersionWithoutInjection() throws PrqaSetupException {
         QACpp qacpp = new QACpp();
-        String version = qacpp.getProductVersion(null, new File(System.getProperty("java.io.tmpdir")), !System.getProperty("os.name").startsWith("Windows"));        
-        assertNotNull(version);        
+        String version = null;
+        try {
+            version = qacpp.getProductVersion(null, new File(System.getProperty("java.io.tmpdir")), !System.getProperty("os.name").startsWith("Windows"));
+            assertNotNull(version);        
+        } catch (PrqaSetupException ex) {
+            assertNull(version);
+        }        
     }        
     
     
     @Test public void testGetQarVersion() throws PrqaSetupException {
-        QAR qar = new QAR("unknown", "unknown", PRQAContext.QARReportType.Compliance);       
-        String version = qar.getProductVersion(null, new File(System.getProperty("java.io.tmpdir")), !System.getProperty("os.name").startsWith("Windows"));        
-        assertNotNull(version);
+        String version = null;
+        try {
+            QAR qar = new QAR("unknown", "unknown", PRQAContext.QARReportType.Compliance);       
+            version = qar.getProductVersion(null, new File(System.getProperty("java.io.tmpdir")), !System.getProperty("os.name").startsWith("Windows"));
+            assertNotNull(version);
+        } catch (PrqaSetupException ex) {
+            assertNull(version);
+        }        
     }
     
     
    
     @Test public void testGetQawVersion() throws PrqaSetupException {
-        QAW qaw = new QAW();
-        String version = qaw.getProductVersion(null, new File(System.getProperty("java.io.tmpdir")), !System.getProperty("os.name").startsWith("Windows"));        
-        assertNotNull(version);
+        String version = null;
+        try {
+            QAW qaw = new QAW();
+            version = qaw.getProductVersion(null, new File(System.getProperty("java.io.tmpdir")), !System.getProperty("os.name").startsWith("Windows"));
+            assertNotNull(version);
+        } catch (PrqaSetupException ex) {
+            assertNull(version);
+        }
+        
     } 
     
     
     @Test public void testQAVVersion() throws PrqaSetupException {
-        QAV qav = new QAV();
-        String version = qav.getProductVersion(null, new File(System.getProperty("java.io.tmpdir")), !System.getProperty("os.name").startsWith("Windows"));        
-        assertNotNull(version);
+        String version = null;
+        try {
+            QAV qav = new QAV();        
+            version = qav.getProductVersion(null, new File(System.getProperty("java.io.tmpdir")), !System.getProperty("os.name").startsWith("Windows"));        
+            assertNotNull(version);
+        } catch (PrqaSetupException ex) {
+            assertNull(version);
+        }
     }    
 }
