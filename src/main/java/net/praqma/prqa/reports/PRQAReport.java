@@ -161,12 +161,13 @@ public class PRQAReport implements Serializable {
     }
     
     private void _logEnv(String location, Map<String,String> env) {
-        log.fine(String.format( "%s", location));
+        log.fine(String.format( "===%s===", location));
         if(env != null) {
             for(String key : env.keySet()) {
                 log.fine(String.format("%s=%s",key, env.get(key)));
             }
         }
+        log.fine(String.format( "==========================================", location));
     }
     
     public CmdResult report(boolean isUnix) throws PrqaException {
