@@ -46,6 +46,7 @@ public class ProductTest {
             assertNotNull(version);        
         } catch (PrqaSetupException ex) {
             assertNull(version);
+            throw ex;
         }        
     }        
     
