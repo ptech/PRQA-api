@@ -65,8 +65,9 @@ public class QACpp implements Product {
                         qacppTemp = environment.get("QACPPTEMP");
                     } else if(System.getenv("QACPPTEMP") != null) {
                         qacppTemp = System.getenv("QACPPTEMP");
-                    }                    
+                    }
                     
+                    logger.finest(String.format("Cleaning up stale analysis files in %s", qacppTemp));
                     File tempDir = new File(qacppTemp);
                     for(File deleteme : tempDir.listFiles(ff)) {
                         logger.finest(String.format("Starting to delete file: %s", deleteme.getAbsolutePath()));
