@@ -35,7 +35,8 @@ public class QAC implements Product {
         File f = null;
         
         try {
-            f = File.createTempFile("test_prqa_file", ".c", workspace);                         
+            f = File.createTempFile("test_prqa_file", ".c", workspace);
+            logger.fine( String.format( "Created dummy test file for version detection: %s",f.getAbsolutePath() ) );
             res = CommandLine.getInstance().run(String.format("qac -version \"%s\"", f.getAbsolutePath()), workspace, true, false, environment);
   
         } catch (AbnormalProcessTerminationException abnex) {
@@ -56,7 +57,27 @@ public class QAC implements Product {
                         } else {
                             logger.warning(String.format("Failed to delete: %s", deleteme.getAbsolutePath()));
                         }
-                    }
+                    }                                        
+                    /**
+                     * Delete temporary metric files created in the process of determining product versions.
+                     */
+                    String qacTemp = null;
+                    
+                    if(environment != null && environment.containsKey("QACTEMP")) {
+                        qacTemp = environment.get("QACTEMP");
+                    } else if(System.getenv("QACTEMP") != null) {
+                        qacTemp = System.getenv("QACTEMP");
+                    }                    
+                    
+                    File tempDir = new File(qacTemp);
+                    for(File deleteme : tempDir.listFiles(ff)) {
+                        logger.finest(String.format("Starting to delete file: %s", deleteme.getAbsolutePath()));
+                        if(deleteme.delete()) {
+                            logger.finest(String.format("Succesfully deleted file: %s", deleteme.getAbsolutePath()));
+                        } else {
+                            logger.warning(String.format("Failed to delete: %s", deleteme.getAbsolutePath()));
+                        }
+                    }                                        
                 } catch (Exception ex) {
                     logger.warning("Something went wrong in getProductVersion() when attempting to delete created files");
                 }
