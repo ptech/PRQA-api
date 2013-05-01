@@ -69,6 +69,7 @@ public class QAC implements Product {
                         qacTemp = System.getenv("QACTEMP");
                     }                    
                     
+                    logger.finest(String.format("Cleaning up stale analysis files in %s", qacTemp));
                     File tempDir = new File(qacTemp);
                     for(File deleteme : tempDir.listFiles(ff)) {
                         logger.finest(String.format("Starting to delete file: %s", deleteme.getAbsolutePath()));
@@ -77,7 +78,8 @@ public class QAC implements Product {
                         } else {
                             logger.warning(String.format("Failed to delete: %s", deleteme.getAbsolutePath()));
                         }
-                    }                                        
+                    }
+                    logger.finest("Done cleaning up stale analysis files");
                 } catch (Exception ex) {
                     logger.warning("Something went wrong in getProductVersion() when attempting to delete created files");
                 }
