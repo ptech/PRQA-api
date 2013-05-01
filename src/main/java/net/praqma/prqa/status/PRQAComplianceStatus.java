@@ -242,38 +242,43 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
     @Override
     public String toHtml() {        
         StringBuilder sb = new StringBuilder();
-        sb.append("<table style=\"border:solid;border-width:1px;padding:15px;margin:10px;\">");
+        sb.append("<table cellpadding=\"0\" style=\"border-style:none;margin:10px;border-collapse:collapse;border-spacing:0px\">");
         sb.append("<h2>Compliance Summary</h2>");
         sb.append("<thead>");
         sb.append("<tr>");
-        sb.append("<th>Messages within threshold</th>");
-        sb.append("<th>All messages</th>");
-        sb.append("<th>Project Compliance</th>");
-        sb.append("<th>File Compliance</th>");
+        sb.append("<th style=\"padding:10px 10px 0px;font-weight:700\">Messages within threshold</th>");
+        sb.append("<th style=\"padding:10px 10px 0px;font-weight:700\">All messages</th>");
+        sb.append("<th style=\"padding:10px 10px 0px;font-weight:700\">Project Compliance</th>");
+        sb.append("<th style=\"padding:10px 10px 0px;font-weight:700\">File Compliance</th>");
         sb.append("</tr>");
         sb.append("</thead>");
         sb.append("<tbody>");
         sb.append("<tr>");
-        sb.append("<td>").append(getMessagesWithinThreshold()).append("</td>");
-        sb.append("<td>").append(getMessages()).append("</td>");
-        sb.append("<td>").append(getProjectCompliance()).append("%</td>");
-        sb.append("<td>").append(getFileCompliance()).append("%</td>");
+        sb.append("<td style=\"padding:10px;font-weight:400\">").append(getMessagesWithinThreshold()).append("</td>");
+        sb.append("<td style=\"padding:10px;font-weight:400;\">").append(getMessages()).append("</td>");
+        sb.append("<td style=\"padding:10px;font-weight:400;\">").append(getProjectCompliance()).append("%</td>");
+        sb.append("<td style=\"padding:10px;;font-weight:400\">").append(getFileCompliance()).append("%</td>");
         sb.append("</tr>");
         sb.append("</tbody>");
         sb.append("</table>");
         
         if(getMessagesByLevel() != null && getMessagesByLevel().size() > 0) {
-            sb.append("<table style=\"border:solid;border-width:1px;padding:15px;margin:10px;\">");
+            sb.append("<table cellpadding=\"0\" style=\"border-style:none;margin:10px;border-collapse:collapse\">");
             sb.append("<h2>Messages Summary</h2>");
             sb.append("<thead>");
             sb.append("<tr>");
-            sb.append("<th>Level</th>");
-            sb.append("<th>Number of messages</th>");
+            sb.append("<th style=\"padding-right:5px;\">Level</th>");
+            sb.append("<th style=\"padding-right:5px;\">Number of messages</th>");
             sb.append("</tr>");
             sb.append("</thead>");
             sb.append("<tbody>");
             for(int i : getMessagesByLevel().keySet()) {
-                sb.append(String.format("<tr><td>%s</td><td>%s</td></tr>",i, getMessagesByLevel().get(i)));
+                if(i%2 == 0) {
+                    sb.append(String.format("<tr><td style=\"background-color:#CCCCCC\">%s</td><td style=\"background-color:#CCCCCC\">%s</td></tr>",i, getMessagesByLevel().get(i)));
+                } else {
+                    sb.append(String.format("<tr><td style=\"background-color:#FFFFFF\">%s</td><td style=\"background-color:#FFFFFF\">%s</td></tr>",i, getMessagesByLevel().get(i)));
+                }
+                
             }
             sb.append("</tbody>");
             sb.append("</table>");

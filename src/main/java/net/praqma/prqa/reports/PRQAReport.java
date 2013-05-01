@@ -109,11 +109,16 @@ public class PRQAReport implements Serializable {
     
     public CmdResult analyze(boolean isUnix) throws PrqaException {
         String finalCommand = createAnalysisCommand(isUnix);
+        Map<String,String> systemVars = new HashMap<String, String>();
+        systemVars.putAll(System.getenv());
         CmdResult res = null;
         try {            
             if(getEnvironment() == null) {
+                PRQAReport._logEnv("Current analysis execution environment", systemVars);
                 res = CommandLine.getInstance().run(finalCommand, workspace, true, false);
             } else {
+                systemVars.putAll(getEnvironment());
+                PRQAReport._logEnv("Current modified analysis execution environment", systemVars);
                 res = CommandLine.getInstance().run(finalCommand, workspace, true, false, getEnvironment());
             }
         } catch (AbnormalProcessTerminationException abnex) {
@@ -160,25 +165,29 @@ public class PRQAReport implements Serializable {
         return builder.getCommand();
     }
     
-    private void _logEnv(String location, Map<String,String> env) {
-        log.fine(String.format( "===%s===", location));
+    public static void _logEnv(String location, Map<String,String> env) {
+        log.fine(String.format( "%s", location));
+        log.fine("==========================================");
         if(env != null) {
             for(String key : env.keySet()) {
                 log.fine(String.format("%s=%s",key, env.get(key)));
             }
         }
-        log.fine(String.format( "==========================================", location));
+        log.fine("==========================================");
     }
     
     public CmdResult report(boolean isUnix) throws PrqaException {
+        Map<String,String> systemVars = new HashMap<String, String>();
+        systemVars.putAll(System.getenv());
+        
         String finalCommand = createReportCommand(isUnix);
         try {            
             if(getEnvironment() == null) {                
-                _logEnv("Environment not modified, this is how it is percived by the plugin:", System.getenv());
+                PRQAReport._logEnv("Current report generation execution environment", System.getenv());
                 return CommandLine.getInstance().run(finalCommand, workspace, true, false);
             } else {
-                _logEnv("Environment is getting modified modified these are the inherited environemt vars:", System.getenv());
-                _logEnv("Environment is getting modified modified with these new values:", getEnvironment());
+                systemVars.putAll(getEnvironment());
+                PRQAReport._logEnv("Current modified report generation execution environment", systemVars);
                 return CommandLine.getInstance().run(finalCommand, workspace, true, false, getEnvironment());
             }
         } catch (AbnormalProcessTerminationException abnex) {

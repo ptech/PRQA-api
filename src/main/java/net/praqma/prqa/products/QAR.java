@@ -6,10 +6,12 @@ package net.praqma.prqa.products;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 import net.praqma.prqa.PRQAApplicationSettings;
 import net.praqma.prqa.PRQAContext.QARReportType;
 import net.praqma.prqa.exceptions.PrqaSetupException;
+import net.praqma.prqa.reports.PRQAReport;
 import net.praqma.util.execute.AbnormalProcessTerminationException;
 import net.praqma.util.execute.CmdResult;
 import net.praqma.util.execute.CommandLine;
@@ -52,11 +54,19 @@ public class QAR implements Product {
     public final String getProductVersion(HashMap<String,String> environment, File workspace, boolean isUnix) throws PrqaSetupException {
         logger.finest(String.format("Starting execution of method - getProductVersion"));
         
-        String version = "Unknown";
+        String version = null;
         try {
             CmdResult res = CommandLine.getInstance().run(PRQAApplicationSettings.resolveQarExe(isUnix)+" -version", workspace, true, false, environment);            
             version = res.stdoutBuffer.toString();
         } catch (AbnormalProcessTerminationException ex) {
+            Map<String, String> systemVars = new HashMap<String, String>();
+            systemVars.putAll(System.getenv());
+            
+            if(environment != null) {
+                systemVars.putAll(environment);
+            }
+            PRQAReport._logEnv("Error in QAR.getProductVersion() - Printing environment", systemVars);
+            
             throw new PrqaSetupException( String.format("Failed to detect QAR running this command %s, exit code was %s%nMessage was:%n%s", ex.getCommand(),ex.getExitValue(),ex.getMessage()), ex );
         }
         
