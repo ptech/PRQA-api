@@ -139,7 +139,7 @@ public class PRQAReport implements Serializable {
                 builder.appendArgument("-via "+PRQACommandBuilder.getProjectFile(resolveAbsOrRelativePath(workspace, settings.settingsFile)));
             } 
         } else {
-            throw new PrqaException("Report source not confiured (Project File/File List)");
+            throw new PrqaException("Report source not configured (Project File/File List)");
         }
         
         if(settings.enableDependencyMode) {
