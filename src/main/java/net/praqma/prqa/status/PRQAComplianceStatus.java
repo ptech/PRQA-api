@@ -301,7 +301,7 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
     }
     
     public boolean allEmpty() {
-        return getMessagesByLevel() == null || getMessageCount(9) == 0;
+        return getMessagesByLevel() == null || getMessageCount(0) == 0;
     }
     
     public int getMessageCount(int threshold) {
