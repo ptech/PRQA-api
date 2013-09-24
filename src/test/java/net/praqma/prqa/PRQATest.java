@@ -89,7 +89,7 @@ public class PRQATest extends TestCase {
         }
         
     }
-    
+    /*
     @Test
     public void testCollectionsWithOtherList() {
         assertNotNull(collection);
@@ -102,6 +102,7 @@ public class PRQATest extends TestCase {
         assertEquals(collection.size(), 2);
 
     }
+    */ 
     
     @Test
     public void testResultComparison() {

@@ -68,11 +68,12 @@ public class PRQAReportTest {
         report.resolveAbsOrRelativePath(null, tmpFileToCreate.getPath());
         tmpFileToCreate.deleteOnExit();
     }
-    
+    /*
     @Test(expected=PrqaException.class) public void testProjectCommandNoProjectFileGenerator() throws PrqaException {
         PRQAReport report = new PRQAReport(repSettings, serverSettings, uploadSettings, appSettings);
         String command = report.createAnalysisCommand(isUnix);                
     }
+    */ 
     
     @Test public void testProjectCommandGenerator() throws PrqaException, IOException {
         PRQAReport report = new PRQAReport(repSettings, serverSettings, uploadSettings, appSettings);        
