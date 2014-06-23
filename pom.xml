@@ -6,7 +6,12 @@
     <artifactId>prqa</artifactId>
     <version>1.5-SNAPSHOT</version>
     <packaging>jar</packaging>
-
+    <developers>
+        <developer>
+            <id>praqma_josra</id>
+            <name>Praqma Josra</name>
+        </developer>
+    </developers>
     <name>prqa</name>
     <url>http://maven.apache.org</url>
     <properties>
