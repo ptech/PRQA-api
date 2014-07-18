@@ -5,9 +5,10 @@
 package net.praqma.prqa.products;
 
 import java.io.File;
+import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
+
 import net.praqma.prqa.exceptions.PrqaSetupException;
 import net.praqma.prqa.reports.PRQAReport;
 import net.praqma.util.execute.AbnormalProcessTerminationException;
@@ -21,7 +22,7 @@ import net.praqma.util.execute.CommandLine;
 public class QAW implements Product {
     
     @Override
-    public final String getProductVersion(HashMap<String,String> environment, File currentDirectory, boolean isUnix) throws PrqaSetupException {        
+    public final String getProductVersion(Map<String,String> environment, File currentDirectory, boolean isUnix) throws PrqaSetupException {        
         CmdResult res = null;
         try {
             res = CommandLine.getInstance().run("qaw -version", currentDirectory, true, false, environment);

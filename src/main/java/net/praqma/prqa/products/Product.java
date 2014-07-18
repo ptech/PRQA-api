@@ -5,8 +5,10 @@
 package net.praqma.prqa.products;
 
 import java.io.File;
+import java.io.PrintStream;
 import java.io.Serializable;
-import java.util.HashMap;
+import java.util.Map;
+
 import net.praqma.prqa.exceptions.PrqaSetupException;
 
 /**
@@ -14,5 +16,5 @@ import net.praqma.prqa.exceptions.PrqaSetupException;
  * @author Praqma
  */
 public interface Product extends Serializable {
-    String getProductVersion(HashMap<String,String> environment, File currentDirectory, boolean isUnix) throws PrqaSetupException;
+    String getProductVersion(Map<String,String> environment, File currentDirectory, boolean isUnix) throws PrqaSetupException;
 }

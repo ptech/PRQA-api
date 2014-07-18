@@ -4,15 +4,19 @@
  */
 package net.praqma.prqa;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
 import java.io.File;
+
 import net.praqma.prqa.exceptions.PrqaSetupException;
 import net.praqma.prqa.products.QAC;
 import net.praqma.prqa.products.QACpp;
 import net.praqma.prqa.products.QAR;
 import net.praqma.prqa.products.QAV;
 import net.praqma.prqa.products.QAW;
-import org.junit.*;
-import static org.junit.Assert.*;
+
+import org.junit.Test;
 
 /**
  *

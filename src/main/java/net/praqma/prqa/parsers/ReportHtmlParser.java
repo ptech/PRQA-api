@@ -14,145 +14,145 @@ import net.praqma.prqa.exceptions.PrqaException;
 import net.praqma.prqa.exceptions.PrqaParserException;
 
 /**
- *
+ * 
  * @author Praqma
  */
 public abstract class ReportHtmlParser implements Serializable {
 
-    
-    
-    protected String fullReportPath;
-    private static final Logger logger;
-    public static final String LINE_SEPARATOR = System.getProperty("line.separator");
+	protected String fullReportPath;
+	private static final Logger logger;
+	public static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
-    static {
-        logger = Logger.getLogger(ReportHtmlParser.class.getName());
-    }
-    
-    public ReportHtmlParser() {
-        
-    }
-    
-    public ReportHtmlParser(String fullReportPath) {
-        this.fullReportPath = fullReportPath;
-    }
-    
+	static {
+		logger = Logger.getLogger(ReportHtmlParser.class.getName());
+	}
 
-    /**
-     * *
-     * Parse method. Takes a path to a file, and a pattern for which to scan for.
-     *
-     * @param path
-     * @param pattern
-     * @return
-     * @throws PrqaException
-     */
+	public ReportHtmlParser() {
 
-    public String getFullReportPath() {
-        logger.finest(String.format("Returning value: %s", this.fullReportPath));
-        return this.fullReportPath;
-    }
+	}
 
-    public void setFullReportPath(String fullReportPath) {
-        logger.finest(String.format("Starting execution of method - setFullReportPath"));
-        this.fullReportPath = fullReportPath;
-        logger.finest(String.format("Ending execution of method - setFullReportPath"));
-    }
+	public ReportHtmlParser(String fullReportPath) {
+		this.fullReportPath = fullReportPath;
+	}
 
-    public String getResult(Pattern pattern) throws PrqaException {
-        logger.finest(String.format("Starting execution of method - getResult"));
-        String output = getFirstResult(parse(this.fullReportPath, pattern));
-        logger.finest(String.format("Returning value: %s", output));
-        return output;
-    }
+	/**
+	 * * Parse method. Takes a path to a file, and a pattern for which to scan
+	 * for.
+	 * 
+	 * @param path
+	 * @param pattern
+	 * @return
+	 * @throws PrqaException
+	 */
 
-    public List<String> parse(String path, Pattern pattern) throws PrqaParserException {
-        logger.finest(String.format("Starting execution of method - parse"));
+	public String getFullReportPath() {
+		logger.finest(String.format("Returning value: %s", this.fullReportPath));
+		return this.fullReportPath;
+	}
 
-        List<String> result = new ArrayList<String>();
-        File file = new File(path);
-        FileInputStream fis;
+	public void setFullReportPath(String fullReportPath) {
+		logger.finest(String.format("Starting execution of method - setFullReportPath"));
+		this.fullReportPath = fullReportPath;
+		logger.finest(String.format("Ending execution of method - setFullReportPath"));
+	}
 
-        logger.finest(String.format("Attempting to open filepath: " + file.getAbsolutePath()));
-        try {
-            fis = new FileInputStream(file);
-        } catch (FileNotFoundException ex) {
-            PrqaParserException exception = new PrqaParserException(ex);
+	public String getParseFirstResult(Pattern pattern) throws PrqaException {
+		logger.finest(String.format("Starting execution of method - getResult"));
+		String output = getFirstResult(parse(this.fullReportPath, pattern));
+		logger.finest(String.format("Returning value: %s", output));
+		return output;
+	}
 
-            logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
+	public List<String> getParseResults(Pattern pattern) throws PrqaException {
+		logger.finest(String.format("Starting execution of method - getResult"));
+		return parse(this.fullReportPath, pattern);
+	}
 
-            throw exception;
-        }
-        logger.finest(String.format("File opened successfully!"));
+	public List<String> parse(String path, Pattern pattern) throws PrqaParserException {
+		logger.finest(String.format("Starting execution of method - parse"));
 
-        InputStreamReader isr = new InputStreamReader(fis);
-        BufferedReader source = new BufferedReader(isr);
-        String sourceLine = "";
-        String report = "";
-        Matcher match = null;
+		List<String> result = new ArrayList<String>();
+		File file = new File(path);
+		FileInputStream fis;
 
-        logger.finest(String.format("Attempting to read the file..."));
+		logger.finest(String.format("Attempting to open filepath: " + file.getAbsolutePath()));
+		try {
+			fis = new FileInputStream(file);
+		} catch (FileNotFoundException ex) {
+			PrqaParserException exception = new PrqaParserException(ex);
 
-        try {
-            while ((sourceLine = source.readLine()) != null) {
-                report += sourceLine + ReportHtmlParser.LINE_SEPARATOR;
-                match = pattern.matcher(report);
+			logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
 
-                while (match.find()) {
-                    logger.finest(String.format("Match found!"));
+			throw exception;
+		}
+		logger.finest(String.format("File opened successfully!"));
 
-                    result.add(match.group(1));
+		InputStreamReader isr = new InputStreamReader(fis);
+		BufferedReader source = new BufferedReader(isr);
+		String sourceLine = "";
+		Matcher match = null;
+		String report = "";
 
-                    logger.finest(String.format("Returning result:"));
-                    for (String s : result) {
-                        logger.finest(String.format("    %s", s));
-                    }
+		logger.finest(String.format("Attempting to read the file..."));
 
-                    return result;
-                }
-            }
-        } catch (IOException ex) {
-            PrqaParserException exception = new PrqaParserException(ex);
+		try {
+			while ((sourceLine = source.readLine()) != null) {
+				report += sourceLine + ReportHtmlParser.LINE_SEPARATOR;
+				match = pattern.matcher(report);
 
-            logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
+				while (match.find()) {
+					logger.finest(String.format("Match found!"));
 
-            throw exception;
-        } finally {
+					result.add(match.group(1));
 
-            logger.finest(String.format("Atempting to close the file"));
+					logger.finest(String.format("Returning result:"));
+					for (String s : result) {
+						logger.finest(String.format("    %s", s));
+					}
+					return result;
+				}
+			}
+		} catch (IOException ex) {
+			PrqaParserException exception = new PrqaParserException(ex);
 
-            try {
-                source.close();
-            } catch (IOException ex) {
-                PrqaParserException exception = new PrqaParserException(ex);
-                logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
-                throw exception;
-            }
+			logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
 
-            logger.finest(String.format("File closed successfully"));
+			throw exception;
+		} finally {
 
-        }
+			logger.finest(String.format("Atempting to close the file"));
 
-        logger.finest(String.format("File read successfully!"));
-        
-        logger.finest(String.format("Returning result:"));
-        for (String s : result) {
-            logger.finest(String.format("    %s", s));
-        }
+			try {
+				source.close();
+			} catch (IOException ex) {
+				PrqaParserException exception = new PrqaParserException(ex);
+				logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
+				throw exception;
+			}
 
-        return result;
-    }
+			logger.finest(String.format("File closed successfully"));
 
-    public String getFirstResult(List<String> results) {
-        logger.finest(String.format("Starting execution of method - getFirstResult"));
-        if (results.size() > 0) {
-            String output = results.get(0);
-            logger.finest(String.format("Returning value: %s", output));
-            return output;
-        }
+		}
 
-        logger.finest(String.format("Collection is empty, returning null."));
-        return null;
-    }
+		logger.finest(String.format("File read successfully!"));
+
+		logger.finest(String.format("Returning result:"));
+		for (String s : result) {
+			logger.finest(String.format("    %s", s));
+		}
+
+		return result;
+	}
+
+	public String getFirstResult(List<String> results) {
+		logger.finest(String.format("Starting execution of method - getFirstResult"));
+		if (results.size() > 0) {
+			String output = results.get(0);
+			logger.finest(String.format("Returning value: %s", output));
+			return output;
+		}
+
+		logger.finest(String.format("Collection is empty, returning null."));
+		return null;
+	}
 }
-

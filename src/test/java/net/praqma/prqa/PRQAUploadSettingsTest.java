@@ -11,6 +11,6 @@ import static org.junit.Assert.*;
  */
 public class PRQAUploadSettingsTest {
     @Test public void testInitialization() {
-        PRQAUploadSettings settings = new PRQAUploadSettings("vcs.xml", false, CodeUploadSetting.AllCode, ".", "MyProjectName");
+        PRQAToolUploadSettings settings = new PRQAToolUploadSettings("vcs.xml", false, CodeUploadSetting.AllCode, ".", "MyProjectName");
     }
 }
