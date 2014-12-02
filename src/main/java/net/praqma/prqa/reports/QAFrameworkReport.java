@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 import net.praqma.prqa.PRQAApplicationSettings;
 import net.praqma.prqa.PRQAContext;
 import net.praqma.prqa.QAVerifyServerSettings;
+import net.praqma.prqa.QaFrameworkVersion;
 import net.praqma.prqa.exceptions.PrqaException;
 import net.praqma.prqa.exceptions.PrqaUploadException;
 import net.praqma.prqa.parsers.ComplianceReportHtmlParser;
@@ -59,36 +60,25 @@ public class QAFrameworkReport implements Serializable {
 	private File workspace;
 	private Map<String, String> environment;
 	private PRQAApplicationSettings appSettings;
+	private QaFrameworkVersion qaFrameworkVersion;
 
-	public QAFrameworkReport(QaFrameworkReportSettings settings, QAVerifyServerSettings qaVerifySettings, PRQAApplicationSettings appSettings) {
+	public QAFrameworkReport(QaFrameworkReportSettings settings, QAVerifyServerSettings qaVerifySettings,
+			PRQAApplicationSettings appSettings) {
 		this.settings = settings;
 		this.appSettings = appSettings;
 		this.qaVerifySettings = qaVerifySettings;
 	}
 
-	public QAFrameworkReport(QaFrameworkReportSettings settings, QAVerifyServerSettings qaVerifySettings, PRQAApplicationSettings appSettings,
-			HashMap<String, String> environment) {
+	public QAFrameworkReport(QaFrameworkReportSettings settings, QAVerifyServerSettings qaVerifySettings,
+			PRQAApplicationSettings appSettings, HashMap<String, String> environment) {
 		this.settings = settings;
 		this.environment = environment;
 		this.appSettings = appSettings;
 		this.qaVerifySettings = qaVerifySettings;
 	}
 
-	private String createAnalysisCommandForQacli(boolean isUnix) throws PrqaException {
-		PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
-		builder.appendArgument("analyze");
-		String analyzeOptions = "-fc";
-		if (settings.qaEnableDependencyMode) {
-			analyzeOptions = analyzeOptions.replace("c", "");
-		}
-		builder.appendArgument(analyzeOptions);
-		builder.appendArgument("-P");
-		builder.appendArgument(PRQACommandBuilder.getProjectFile(resolveAbsOrRelativePath(workspace, settings.qaProject)));
-		return builder.getCommand();
-	}
-
 	public CmdResult analyzeQacli(boolean isUnix, PrintStream out) throws PrqaException {
-		String finalCommand = createAnalysisCommandForQacli(isUnix);
+		String finalCommand = createAnalysisCommandForQacli(isUnix, out);
 		out.println("Analysis command:");
 		out.println(finalCommand);
 		Map<String, String> systemVars = new HashMap<String, String>();
@@ -109,80 +99,107 @@ public class QAFrameworkReport implements Serializable {
 		return res;
 	}
 
-	private String createCmaAnalysisCommand(boolean isUnix) throws PrqaException {
-
-		if (StringUtils.isBlank(settings.cmaProjectName)) {
-			throw new PrqaException("Perform Cross-Module analysis was selected but no CMA project was provided. The analysis project was aborted.");
-		}
+	private String createAnalysisCommandForQacli(boolean isUnix, PrintStream out) throws PrqaException {
 		PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
 		builder.appendArgument("analyze");
-		builder.appendArgument("-C");
-		builder.appendArgument(settings.cmaProjectName);
+		String analyzeOptions = "-fc";
+		if (settings.isQaEnableDependencyMode()) {
+			analyzeOptions = analyzeOptions.replace("c", "");
+		}
+		builder.appendArgument(analyzeOptions);
+		builder.appendArgument("-P");
+		builder.appendArgument(PRQACommandBuilder.getProjectFile(resolveAbsOrRelativePath(workspace,
+				settings.getQaProject(), out)));
 		return builder.getCommand();
 	}
 
 	public CmdResult cmaAnalysisQacli(boolean isUnix, PrintStream out) throws PrqaException {
 		CmdResult res = null;
-		if (settings.qaCrossModuleAnalysis) {
+		if (settings.isQaCrossModuleAnalysis()) {
 			String command = createCmaAnalysisCommand(isUnix);
 			out.println("Perform Cross-Module analysis command:");
 			out.println(command);
 			try {
 				res = CommandLine.getInstance().run(command, workspace, true, false);
 			} catch (AbnormalProcessTerminationException abnex) {
-				throw new PrqaException(String.format("Failed to analyze, message was:\n %s", abnex.getMessage()), abnex);
+				throw new PrqaException(String.format("Failed to analyze, message was:\n %s", abnex.getMessage()),
+						abnex);
 			}
 		}
 		return res;
 	}
 
-	public List<CmdResult> reportQacli(boolean isUnix, PrintStream out) throws PrqaException {
-		List<String> reportCommands = createReportCommandForQacli(isUnix);
+	private String createCmaAnalysisCommand(boolean isUnix) throws PrqaException {
+
+		if (StringUtils.isBlank(settings.getCmaProjectName())) {
+			throw new PrqaException(
+					"Perform Cross-Module analysis was selected but no CMA project was provided. The analysis project was aborted.");
+		}
+		PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
+		builder.appendArgument("analyze");
+		builder.appendArgument("-C");
+		builder.appendArgument(settings.getCmaProjectName());
+		return builder.getCommand();
+	}
+
+	public CmdResult reportQacli(boolean isUnix, PrintStream out) throws PrqaException {
+
+		String reportCommand = createReportCommandForQacli(isUnix, out);
 		Map<String, String> systemVars = new HashMap<String, String>();
 		systemVars.putAll(System.getenv());
 		systemVars.putAll(getEnvironment());
-		List<CmdResult> cmdResults = new ArrayList<CmdResult>();
-		for (String finalCommand : reportCommands) {
-			out.println("Report command :" + finalCommand);
-			try {
-				PRQAReport._logEnv("Current report generation execution environment", systemVars);
-				cmdResults.add(CommandLine.getInstance().run(finalCommand, workspace, true, false, systemVars));
-			} catch (AbnormalProcessTerminationException abnex) {
-				log.severe(String.format("Failed to execute report generation command: %s%n%s", finalCommand, abnex.getMessage()));
-				log.logp(Level.SEVERE, this.getClass().getName(), "report()", "Failed to execute report generation command", abnex);
-				out.println(String.format("Failed to execute report generation command: %s%n%s", finalCommand, abnex.getMessage()));
-				// throw new
-				// PrqaException(String.format("Failed to execute report generation command: %s%n%s",
-				// finalCommand, abnex.getMessage()), abnex);
-			}
+
+		out.println("Report command :" + reportCommand);
+		try {
+			PRQAReport._logEnv("Current report generation execution environment", systemVars);
+			return CommandLine.getInstance().run(reportCommand, workspace, true, false, systemVars);
+		} catch (AbnormalProcessTerminationException abnex) {
+			log.severe(String.format("Failed to execute report generation command: %s%n%s", reportCommand,
+					abnex.getMessage()));
+			log.logp(Level.SEVERE, this.getClass().getName(), "report()",
+					"Failed to execute report generation command", abnex);
+			out.println(String.format("Failed to execute report generation command: %s%n%s", reportCommand,
+					abnex.getMessage()));
 		}
-		return cmdResults;
+		return new CmdResult();
 	}
 
-	private List<String> createReportCommandForQacli(boolean isUnix) throws PrqaException {
+	private String createReportCommandForQacli(boolean isUnix, PrintStream out) throws PrqaException {
+		out.println("Create report command");
+		out.println("settings.getQaProject():" + settings.getQaProject());
 		String projectLocation;
-		if (!StringUtils.isBlank(settings.qaProject)) {
-			projectLocation = PRQACommandBuilder.getProjectFile(resolveAbsOrRelativePath(workspace, settings.qaProject));
-		} else {
-			throw new PrqaException("Report source not configured (Project File/File List)");
-		}
+
+		projectLocation = PRQACommandBuilder.getProjectFile(resolveAbsOrRelativePath(workspace,
+				settings.getQaProject(), out));
+		out.println("PROJECT LOCATION: " + projectLocation);
+
 		removeOldReports(projectLocation.replace(QUOTE, "").trim());
-		List<String> reportCommands = new ArrayList<String>();
-		List<String> reportTypes = new ArrayList<String>();
-		if (settings.generateReport) {
-			reportTypes.add("C");
-			reportTypes.add("CPP");
+		out.println("After remove old reports");
+		return createReportCommand(projectLocation, out);
+	}
+
+	private boolean isQaFrameworkVersionPriorToVersion4(PrintStream out) {
+		String qafVersion = qaFrameworkVersion.getQaFrameworkVersion();
+		qafVersion = qafVersion.substring(0, qafVersion.lastIndexOf("."));
+		out.println("Version: " + qafVersion);
+		if (Integer.parseInt(qafVersion.substring(qafVersion.lastIndexOf(".") + 1, qafVersion.length())) < 4) {
+			out.println("Is before 0.4: ");
+			return true;
 		}
-		for (String reportType : reportTypes) {
-			PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
-			builder.appendArgument("report -P");
-			builder.appendArgument(projectLocation);
-			builder.appendArgument("-l");
-			builder.appendArgument(reportType);
-			builder.appendArgument("-t RCR");
-			reportCommands.add(builder.getCommand());
+		out.println("Is after 0.4: ");
+		return false;
+	}
+
+	private String createReportCommand(String projectLocation, PrintStream out) {
+		out.println("Create report command");
+		PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
+		builder.appendArgument("report -P");
+		builder.appendArgument(projectLocation);
+		if (isQaFrameworkVersionPriorToVersion4(out)) {
+			builder.appendArgument("-l C");
 		}
-		return reportCommands;
+		builder.appendArgument("-t RCR");
+		return builder.getCommand();
 	}
 
 	private void removeOldReports(String projectLocation) {
@@ -196,10 +213,11 @@ public class QAFrameworkReport implements Serializable {
 		}
 	}
 
-	private String createUploadCommandQacli() throws PrqaException {
+	private String createUploadCommandQacli(PrintStream out) throws PrqaException {
 		String projectLocation;
-		if (!StringUtils.isBlank(settings.qaProject)) {
-			projectLocation = PRQACommandBuilder.wrapInQuotationMarks(resolveAbsOrRelativePath(workspace, settings.qaProject));
+		if (!StringUtils.isBlank(settings.getQaProject())) {
+			projectLocation = PRQACommandBuilder.wrapInQuotationMarks(resolveAbsOrRelativePath(workspace,
+					settings.getQaProject(), out));
 		} else {
 			throw new PrqaException("Neither filelist or project file has been set, this should not be happening");
 		}
@@ -210,23 +228,26 @@ public class QAFrameworkReport implements Serializable {
 		return builder.getCommand();
 	}
 
-	private String createAddUploadConfigurationFilesToProjectCommand() throws PrqaException {
+	private String createAddUploadConfigurationFilesToProjectCommand(PrintStream out) throws PrqaException {
 		PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
 		builder.appendArgument("admin --qaf-project-config -P");
-		builder.appendArgument(PRQACommandBuilder.wrapInQuotationMarks(resolveAbsOrRelativePath(workspace, settings.qaProject)));
+		builder.appendArgument(PRQACommandBuilder.wrapInQuotationMarks(resolveAbsOrRelativePath(workspace,
+				settings.getQaProject(), out)));
 		builder.appendArgument("-Q");
-		builder.appendArgument(PRQACommandBuilder.wrapInQuotationMarks(resolveAbsOrRelativePath(workspace, settings.qaVerifyConfigFile)));
+		builder.appendArgument(PRQACommandBuilder.wrapInQuotationMarks(resolveAbsOrRelativePath(workspace,
+				settings.getQaVerifyConfigFile(), out)));
 		builder.appendArgument("-V");
-		builder.appendArgument(PRQACommandBuilder.wrapInQuotationMarks(resolveAbsOrRelativePath(workspace, settings.vcsConfigXml)));
+		builder.appendArgument(PRQACommandBuilder.wrapInQuotationMarks(resolveAbsOrRelativePath(workspace,
+				settings.getVcsConfigXml(), out)));
 		return builder.getCommand();
 	}
 
 	public CmdResult uploadQacli(PrintStream out) throws PrqaUploadException, PrqaException {
 		CmdResult res = null;
-		if (!settings.publishToQAV) {
+		if (!settings.isPublishToQAV()) {
 			return res;
 		}
-		String finalCommand = createUploadCommandQacli();
+		String finalCommand = createUploadCommandQacli(out);
 		out.println("Upload command: " + finalCommand);
 		try {
 			if (getEnvironment() == null) {
@@ -242,13 +263,14 @@ public class QAFrameworkReport implements Serializable {
 		return res;
 	}
 
-	public CmdResult addUploadConfigurationFilesToProject(PrintStream out) throws PrqaException, JDOMException, IOException {
+	public CmdResult addUploadConfigurationFilesToProject(PrintStream out) throws PrqaException, JDOMException,
+			IOException {
 		CmdResult res = null;
 		if (!checkIfCanUpload()) {
 			return res;
 		}
 		setQaVerifyServerSettings();
-		String configProjectCommand = createAddUploadConfigurationFilesToProjectCommand();
+		String configProjectCommand = createAddUploadConfigurationFilesToProjectCommand(out);
 		out.println("Project upload configuration command: " + configProjectCommand);
 		try {
 			if (getEnvironment() == null) {
@@ -265,23 +287,23 @@ public class QAFrameworkReport implements Serializable {
 
 	private boolean checkIfCanUpload() {
 		boolean canUploadProject = false;
-		if (!settings.publishToQAV) {
+		if (!settings.isPublishToQAV()) {
 			return canUploadProject;
 		}
-		if (StringUtils.isBlank(settings.qaProject) || StringUtils.isBlank(settings.qaVerifyConfigFile) || StringUtils.isBlank(settings.vcsConfigXml)) {
+		if (StringUtils.isBlank(settings.getQaProject()) || StringUtils.isBlank(settings.getQaVerifyConfigFile())
+				|| StringUtils.isBlank(settings.getVcsConfigXml())) {
 			return canUploadProject;
 		}
 		return true;
 	}
 
 	private void setQaVerifyServerSettings() throws PrqaException, JDOMException, IOException {
-		QaVerifyConfigurationFileParser qaVFileParser = new QaVerifyConfigurationFileParser(settings.qaVerifyConfigFile);
-		String projectWithOsFilePaths = FilenameUtils.separatorsToSystem(settings.qaProject);
-		qaVFileParser
-				.changeQaVerifyConfiFileSettings(
-						qaVerifySettings,
-						projectWithOsFilePaths.substring(projectWithOsFilePaths.lastIndexOf(System.getProperty("file.separator")) + 1,
-								projectWithOsFilePaths.length()));
+		QaVerifyConfigurationFileParser qaVFileParser = new QaVerifyConfigurationFileParser(
+				settings.getQaVerifyConfigFile());
+		String projectWithOsFilePaths = FilenameUtils.separatorsToSystem(settings.getQaProject());
+		qaVFileParser.changeQaVerifyConfiFileSettings(qaVerifySettings, projectWithOsFilePaths.substring(
+				projectWithOsFilePaths.lastIndexOf(System.getProperty("file.separator")) + 1,
+				projectWithOsFilePaths.length()));
 	}
 
 	// __________________________________________________________________
@@ -309,18 +331,26 @@ public class QAFrameworkReport implements Serializable {
 	 * @return
 	 * @throws PrqaException
 	 */
-	private String resolveAbsOrRelativePath(File workspaceRoot, String projectFilePath) throws PrqaException {
+	private String resolveAbsOrRelativePath(File workspaceRoot, String projectFilePath, PrintStream outStream)
+			throws PrqaException {
+		outStream.println("The selected project is:" + projectFilePath);
+		outStream.println("worksapce root" + workspaceRoot);
 		File pFile = new File(projectFilePath);
 		if (pFile.isAbsolute()) {
+			outStream.println("File is absolute");
 			if (!pFile.exists()) {
 				throw new PrqaException(String.format("The project file %s does not exist.", projectFilePath));
 			} else {
+				outStream.println("Return is absolute: " + projectFilePath);
 				return projectFilePath;
 			}
 		} else {
+			outStream.println("File is relative");
 			File relative = new File(workspaceRoot, projectFilePath);
 			if (relative.exists()) {
-				return relative.getPath();
+				String path = relative.getPath();
+				outStream.println("File is relative with path: " + path);
+				return path;
 			} else {
 				throw new PrqaException(String.format("The project file %s does not exist.", relative.getPath()));
 			}
@@ -341,28 +371,32 @@ public class QAFrameworkReport implements Serializable {
 	public PRQAComplianceStatus getComplianceStatus() throws PrqaException, Exception {
 		PRQAComplianceStatus status = new PRQAComplianceStatus();
 
-		File reportFolder = new File(settings.qaProject + "/prqa/reports/");
-		File resultsDataFile = new File(settings.qaProject + "/prqa/output/results_data.xml");
+		File reportFolder = new File(settings.getQaProject() + "/prqa/reports/");
+		File resultsDataFile = new File(settings.getQaProject() + "/prqa/output/results_data.xml");
 
-		if (!reportFolder.exists() || !reportFolder.isDirectory() || !resultsDataFile.exists() || !resultsDataFile.isFile()) {
+		if (!reportFolder.exists() || !reportFolder.isDirectory() || !resultsDataFile.exists()
+				|| !resultsDataFile.isFile()) {
 			return status;
 		}
 
 		File[] listOfReports = reportFolder.listFiles();
-		if(listOfReports.length <1){
+		if (listOfReports.length < 1) {
 			return status;
 		}
-		
+
 		Double fileCompliance = 0.0;
 		Double projectCompliance = 0.0;
 		int messages = 0;
-		
+
 		String fileExtension = FilenameUtils.getExtension(listOfReports[0].getPath().toString());
 		if (fileExtension.equals(XHTML) || fileExtension.equals(HTML)) {
 			ComplianceReportHtmlParser parser = new ComplianceReportHtmlParser(listOfReports[0].getAbsolutePath());
-			fileCompliance += Double.parseDouble(parser.getParseFirstResult(ComplianceReportHtmlParser.QAFfileCompliancePattern));
-			projectCompliance += Double.parseDouble(parser.getParseFirstResult(ComplianceReportHtmlParser.QAFprojectCompliancePattern));
-			messages += Integer.parseInt(parser.getParseFirstResult(ComplianceReportHtmlParser.QAFtotalMessagesPattern));
+			fileCompliance += Double.parseDouble(parser
+					.getParseFirstResult(ComplianceReportHtmlParser.QAFfileCompliancePattern));
+			projectCompliance += Double.parseDouble(parser
+					.getParseFirstResult(ComplianceReportHtmlParser.QAFprojectCompliancePattern));
+			messages += Integer
+					.parseInt(parser.getParseFirstResult(ComplianceReportHtmlParser.QAFtotalMessagesPattern));
 		}
 
 		ResultsDataParser resultsDataParser = new ResultsDataParser(resultsDataFile.getAbsolutePath());
@@ -437,4 +471,9 @@ public class QAFrameworkReport implements Serializable {
 	public PRQAApplicationSettings getAppSettings() {
 		return appSettings;
 	}
+
+	public void setQaFrameworkVersion(QaFrameworkVersion qaFrameworkVersion) {
+		this.qaFrameworkVersion = qaFrameworkVersion;
+	}
+
 }

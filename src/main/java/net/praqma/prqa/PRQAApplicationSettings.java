@@ -6,11 +6,11 @@ package net.praqma.prqa;
 
 import java.io.Serializable;
 
-/**
- * 
- * @author Praqma
- */
+
 public class PRQAApplicationSettings implements Serializable {
+	
+	private static final long serialVersionUID = 1L;
+	
 	public final String qarHome;
 	public final String qavClientHome;
 	public final String qawHome;

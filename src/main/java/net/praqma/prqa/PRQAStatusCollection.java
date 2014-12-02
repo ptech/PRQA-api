@@ -8,17 +8,19 @@ import net.praqma.prqa.exceptions.PrqaException;
 import net.praqma.prqa.status.StatusCategory;
 
 /**
- *
+ * 
  * @author Praqma
  */
 public class PRQAStatusCollection extends ArrayList<PRQAReading> {
 
-	private Map<StatusCategory,Number> overrideMinimum = new EnumMap<StatusCategory,Number>(StatusCategory.class);
-	private Map<StatusCategory,Number> overrideMaximum = new EnumMap<StatusCategory,Number>(StatusCategory.class);
+	private static final long serialVersionUID = 1L;
+	
+	private Map<StatusCategory, Number> overrideMinimum = new EnumMap<StatusCategory, Number>(StatusCategory.class);
+	private Map<StatusCategory, Number> overrideMaximum = new EnumMap<StatusCategory, Number>(StatusCategory.class);
 	private static final Logger logger;
 
 	static {
-        logger = Logger.getLogger(PRQAStatusCollection.class.getName());
+		logger = Logger.getLogger(PRQAStatusCollection.class.getName());
 	}
 
 	public PRQAStatusCollection() {
@@ -26,7 +28,8 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading> {
 	}
 
 	public PRQAStatusCollection(ArrayList<PRQAReading> collection) {
-		logger.finest(String.format("Constructor called for class PRQAStatusCollection(ArrayList<PRQAReading> collection)"));		
+		logger.finest(String
+				.format("Constructor called for class PRQAStatusCollection(ArrayList<PRQAReading> collection)"));
 		for (PRQAReading e : collection) {
 			logger.finest(String.format("    %s", e));
 		}
@@ -35,18 +38,19 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading> {
 	}
 
 	public PRQAStatusCollection(PRQAStatusCollection collection) {
-		logger.finest(String.format("Constructor called for class PRQAStatusCollection(PRQAStatusCollection collection)"));		
+		logger.finest(String
+				.format("Constructor called for class PRQAStatusCollection(PRQAStatusCollection collection)"));
 		for (PRQAReading e : collection) {
 			logger.finest(String.format("    %s", e));
 		}
-		
+
 		this.addAll(collection);
 	}
 
 	/**
-	 * *
-	 * Implemented a collection method to gather extremities from a given set of collected compliance statistics.
-	 *
+	 * * Implemented a collection method to gather extremities from a given set
+	 * of collected compliance statistics.
+	 * 
 	 * @param category
 	 * @return
 	 */
@@ -87,11 +91,12 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading> {
 	}
 
 	/**
-	 * *
-	 * Implemented a collection method to gather extremities from a given set of collected compliance statistics.
-	 *
+	 * * Implemented a collection method to gather extremities from a given set
+	 * of collected compliance statistics.
+	 * 
 	 * @param category
-	 * @return a number indicating the smallest given observation for the specified category.
+	 * @return a number indicating the smallest given observation for the
+	 *         specified category.
 	 */
 	public final Number getMin(StatusCategory category) throws PrqaException {
 		logger.finest(String.format("Starting execution of method - getMin"));
@@ -129,8 +134,10 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading> {
 	}
 
 	/**
-	 * Implemented methods to override the min and max values, these are used in the graphing part of the project. You override specific performance metrics.
-	 *
+	 * Implemented methods to override the min and max values, these are used in
+	 * the graphing part of the project. You override specific performance
+	 * metrics.
+	 * 
 	 * @param category
 	 * @param value
 	 */
@@ -177,7 +184,7 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading> {
 		}
 		logger.finest(String.format("Maximum for StatusCategory %s isn't set, returning null", category));
 		return null;
-    }
+	}
 
 	public final void clearOverrides() {
 		logger.finest(String.format("Starting execution of method - clearOverrides"));

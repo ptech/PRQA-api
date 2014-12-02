@@ -8,10 +8,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 
 import net.praqma.prqa.exceptions.PrqaException;
 import net.praqma.prqa.reports.PRQAReport;

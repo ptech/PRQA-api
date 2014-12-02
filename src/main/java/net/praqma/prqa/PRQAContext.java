@@ -23,13 +23,6 @@ public class PRQAContext {
 	public enum QARReportType {
 		Compliance, CodeReview, Suppression;
 
-//		@Override
-//		public String toString() {
-//			return value;
-//		}
-
-	
-
 		public static final EnumSet<QARReportType> OPTIONAL_TYPES = EnumSet.of(CodeReview, Suppression);
 		public static final EnumSet<QARReportType> REQUIRED_TYPES = EnumSet.of(Compliance);
 	}
