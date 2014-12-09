@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -178,24 +177,12 @@ public class QAFrameworkReport implements Serializable {
 		return createReportCommand(projectLocation, out);
 	}
 
-	private boolean isQaFrameworkVersionPriorToVersion4(PrintStream out) {
-		String qafVersion = qaFrameworkVersion.getQaFrameworkVersion();
-		qafVersion = qafVersion.substring(0, qafVersion.lastIndexOf("."));
-		out.println("Version: " + qafVersion);
-		if (Integer.parseInt(qafVersion.substring(qafVersion.lastIndexOf(".") + 1, qafVersion.length())) < 4) {
-			out.println("Is before 0.4: ");
-			return true;
-		}
-		out.println("Is after 0.4: ");
-		return false;
-	}
-
 	private String createReportCommand(String projectLocation, PrintStream out) {
 		out.println("Create report command");
 		PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
 		builder.appendArgument("report -P");
 		builder.appendArgument(projectLocation);
-		if (isQaFrameworkVersionPriorToVersion4(out)) {
+		if (qaFrameworkVersion.isQaFrameworkVersionPriorToVersion4()) {
 			builder.appendArgument("-l C");
 		}
 		builder.appendArgument("-t RCR");
@@ -368,11 +355,12 @@ public class QAFrameworkReport implements Serializable {
 		log.fine("==========================================");
 	}
 
-	public PRQAComplianceStatus getComplianceStatus() throws PrqaException, Exception {
+	public PRQAComplianceStatus getComplianceStatus(PrintStream out) throws PrqaException, Exception {
 		PRQAComplianceStatus status = new PRQAComplianceStatus();
 
 		File reportFolder = new File(settings.getQaProject() + "/prqa/reports/");
-		File resultsDataFile = new File(settings.getQaProject() + "/prqa/output/results_data.xml");
+		File resultsDataFile = new File(settings.getQaProject() + getResultsDataFileRelativePath());
+		out.println("RESULTS_DATA_MXL file path: " + resultsDataFile.getAbsolutePath());
 
 		if (!reportFolder.exists() || !reportFolder.isDirectory() || !resultsDataFile.exists()
 				|| !resultsDataFile.isFile()) {
@@ -408,6 +396,18 @@ public class QAFrameworkReport implements Serializable {
 		status.setMessages(messages);
 		status.setMessagesGroups(messagesGroups);
 		return status;
+	}
+
+	private String getResultsDataFileRelativePath() {
+		String relativePath = "/prqa/";
+		String resultsDataFileName = "results_data.xml";
+		if (qaFrameworkVersion.isQaFrameworkVersionPriorToVersion4()) {
+			relativePath += "output/";
+		} else {
+			relativePath += "reports/";
+		}
+		return relativePath += resultsDataFileName;
+
 	}
 
 	private void sortViolatedRulesByRuleID(List<MessageGroup> messagesGroups) {
