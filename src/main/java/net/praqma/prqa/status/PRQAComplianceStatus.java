@@ -3,6 +3,7 @@ package net.praqma.prqa.status;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import net.praqma.prqa.QaFrameworkVersion;
 
 import net.praqma.prqa.exceptions.PrqaException;
 import net.praqma.prqa.exceptions.PrqaReadingException;
@@ -23,6 +24,7 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
 	private Double projectCompliance;
 	private Map<Integer, Integer> messagesByLevel = new TreeMap<Integer, Integer>();
 	private List<MessageGroup> messagesGroups;
+    private QaFrameworkVersion qaFrameworkVersion;
 
 	public PRQAComplianceStatus() {
 	}
@@ -40,6 +42,9 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
 
 		logger.finest(String.format("Ending execution of constructor - PRQAComplianceStatus"));
 	}
+    public void setQaFrameworkVersion(QaFrameworkVersion qaFrameworkVersion) {
+        this.qaFrameworkVersion = qaFrameworkVersion;
+    }
 
 	public int getMessages() {
 		logger.finest(String.format("Starting execution of method - getMessages"));
@@ -266,6 +271,7 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
 	@Override
 	public String toHtml() {
 		StringBuilder sb = new StringBuilder();
+        boolean PRIOR_QAF104 = (qaFrameworkVersion.isQaFrameworkVersionPriorToVersion4());
 		sb.append("<table cellpadding=\"0\" style=\"border-style:none;margin:10px;border-collapse:collapse;border-spacing:0px\">");
 		sb.append("<h2>Compliance Summary</h2>");
 		sb.append("<thead>");
@@ -298,7 +304,10 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
 			for (MessageGroup messageGroup : messagesGroups) {
 
 				sb.append("<th style=\"padding-right:5px;\">" + messageGroup.getMessageGroupName().trim() + ": </th>");
-                sb.append("<th style=\"padding-right:5px;\">" + messageGroup.getTotalViolations() + "</th>");
+                if (PRIOR_QAF104 == false)
+                {
+                    sb.append("<th style=\"padding-right:5px;\">" + messageGroup.getTotalViolations() + "</th>");
+                }
 				sb.append("</tr>");
 				sb.append("</thead>");
 				sb.append("<tbody>");

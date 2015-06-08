@@ -64,7 +64,7 @@ public class ResultsDataParser {
                     return messagesGroups;
 				}
 			}
-            else if (event == XMLStreamConstants.END_ELEMENT) {
+            else if (event == XMLStreamConstants.END_DOCUMENT) {
                 reader.close();
                 break;
             }

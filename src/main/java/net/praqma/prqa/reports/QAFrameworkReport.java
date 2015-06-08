@@ -357,6 +357,7 @@ public class QAFrameworkReport implements Serializable {
 
 	public PRQAComplianceStatus getComplianceStatus(PrintStream out) throws PrqaException, Exception {
 		PRQAComplianceStatus status = new PRQAComplianceStatus();
+        status.setQaFrameworkVersion(qaFrameworkVersion);
 		String projectLocation;
 		String report_structure;
 		report_structure = new File("prqa/", "/reports").getPath();
