@@ -297,7 +297,8 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
 			List<Rule> violatedRules;
 			for (MessageGroup messageGroup : messagesGroups) {
 
-				sb.append("<th style=\"padding-right:5px;\">" + messageGroup.getMessageGroupName().trim() + "</th>");
+				sb.append("<th style=\"padding-right:5px;\">" + messageGroup.getMessageGroupName().trim() + ": </th>");
+                sb.append("<th style=\"padding-right:5px;\">" + messageGroup.getTotalViolations() + "</th>");
 				sb.append("</tr>");
 				sb.append("</thead>");
 				sb.append("<tbody>");

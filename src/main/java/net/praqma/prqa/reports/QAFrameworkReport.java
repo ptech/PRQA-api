@@ -357,10 +357,16 @@ public class QAFrameworkReport implements Serializable {
 
 	public PRQAComplianceStatus getComplianceStatus(PrintStream out) throws PrqaException, Exception {
 		PRQAComplianceStatus status = new PRQAComplianceStatus();
+		String projectLocation;
+		String report_structure;
+		report_structure = new File("prqa/", "/reports").getPath();
 
-		File reportFolder = new File(settings.getQaProject() + "/prqa/reports/");
-		File resultsDataFile = new File(settings.getQaProject() + getResultsDataFileRelativePath());
-		out.println("RESULTS_DATA_MXL file path: " + resultsDataFile.getAbsolutePath());
+		projectLocation = resolveAbsOrRelativePath(workspace, settings.getQaProject(), out);
+		File reportFolder = new File(projectLocation, report_structure);
+		out.println("Report Folder Path:: " + reportFolder);
+		
+		File resultsDataFile = new File(projectLocation, getResultsDataFileRelativePath());
+		out.println("RESULTS DATA file path: " + resultsDataFile.getPath());
 
 		if (!reportFolder.exists() || !reportFolder.isDirectory() || !resultsDataFile.exists()
 				|| !resultsDataFile.isFile()) {
@@ -375,10 +381,13 @@ public class QAFrameworkReport implements Serializable {
 		Double fileCompliance = 0.0;
 		Double projectCompliance = 0.0;
 		int messages = 0;
-
+        boolean PRIOR_QAF104 = (qaFrameworkVersion.isQaFrameworkVersionPriorToVersion4());
+                /*
+                Below section is to open old compliance report and parse html file (QAF 1.0.30backwords)
+                */
 		String fileExtension = FilenameUtils.getExtension(listOfReports[0].getPath().toString());
-		if (fileExtension.equals(XHTML) || fileExtension.equals(HTML)) {
-			ComplianceReportHtmlParser parser = new ComplianceReportHtmlParser(listOfReports[0].getAbsolutePath());
+		if (fileExtension.equals(XHTML) || fileExtension.equals(HTML)){
+  			ComplianceReportHtmlParser parser = new ComplianceReportHtmlParser(listOfReports[0].getAbsolutePath());
 			fileCompliance += Double.parseDouble(parser
 					.getParseFirstResult(ComplianceReportHtmlParser.QAFfileCompliancePattern));
 			projectCompliance += Double.parseDouble(parser
@@ -386,15 +395,25 @@ public class QAFrameworkReport implements Serializable {
 			messages += Integer
 					.parseInt(parser.getParseFirstResult(ComplianceReportHtmlParser.QAFtotalMessagesPattern));
 		}
-
-		ResultsDataParser resultsDataParser = new ResultsDataParser(resultsDataFile.getAbsolutePath());
-		List<MessageGroup> messagesGroups = resultsDataParser.parseResultsData();
-		sortViolatedRulesByRuleID(messagesGroups);
-
-		status.setFileCompliance(fileCompliance);
-		status.setProjectCompliance(projectCompliance);
-		status.setMessages(messages);
-		status.setMessagesGroups(messagesGroups);
+        
+        /*This section is to read result data file and parse the results*/
+        if (PRIOR_QAF104 == false)
+        {
+            ResultsDataParser resultsDataParser = new ResultsDataParser(resultsDataFile.getAbsolutePath());
+            resultsDataParser.setQaFrameworkVersion(qaFrameworkVersion);
+            List<MessageGroup> messagesGroups = resultsDataParser.parseResultsData();
+            sortViolatedRulesByRuleID(messagesGroups);
+            status.setMessagesGroups(messagesGroups);
+            
+            messages = resultsDataParser.getdiagnosticCount();
+            status.setMessages(messages); 
+        }
+        else
+        {
+            status.setFileCompliance(fileCompliance);
+            status.setProjectCompliance(projectCompliance);
+            status.setMessages(messages);
+        }
 		return status;
 	}
 
@@ -475,5 +494,4 @@ public class QAFrameworkReport implements Serializable {
 	public void setQaFrameworkVersion(QaFrameworkVersion qaFrameworkVersion) {
 		this.qaFrameworkVersion = qaFrameworkVersion;
 	}
-
 }
