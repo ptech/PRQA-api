@@ -2,13 +2,13 @@ package net.praqma.prqa.parsers;
 
 public class Rule {
 
-	private int ruleNumber;
+	private String ruleNumber;
 	private int ruleTotalViolations;
 
 	public Rule() {
 	}
 
-	public void setRuleNumber(int ruleNumber) {
+	public void setRuleNumber(String ruleNumber) {
 		this.ruleNumber = ruleNumber;
 	}
 
@@ -16,7 +16,7 @@ public class Rule {
 		this.ruleTotalViolations = ruleTotalViolations;
 	}
 
-	public int getRuleID() {
+	public String getRuleID() {
 		return ruleNumber;
 	}
 
@@ -26,7 +26,7 @@ public class Rule {
 
 	@Override
 	public int hashCode() {
-		return (ruleNumber + 2) * 2 + ruleTotalViolations;
+		return (Integer.parseInt(ruleNumber) + 2) * 2 + ruleTotalViolations;
 	}
 
 	@Override

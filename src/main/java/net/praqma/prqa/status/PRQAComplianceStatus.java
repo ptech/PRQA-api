@@ -316,11 +316,11 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
 				int i = 0;
 				for (Rule violatedRule : violatedRules) {
 					if (i % 2 == 0) {
-						sb.append(String.format("<tr><td style=\"background-color:#CCCCCC\">Rule %s</td><td style=\"background-color:#CCCCCC\">%s</td></tr>",
-								i, violatedRule.getRuleTotalViolations()));
+						sb.append(String.format("<tr><td style=\"background-color:#CCCCCC\">%s:Rule %s -> </td><td style=\"background-color:#CCCCCC\">%s</td></tr>",
+								i, violatedRule.getRuleID(), violatedRule.getRuleTotalViolations()));
 					} else {
-						sb.append(String.format("<tr><td style=\"background-color:#FFFFFF\">Rule %s</td><td style=\"background-color:#FFFFFF\">%s</td></tr>",
-								i, violatedRule.getRuleTotalViolations()));
+						sb.append(String.format("<tr><td style=\"background-color:#FFFFFF\">%s:Rule %s -> </td><td style=\"background-color:#FFFFFF\">%s</td></tr>",
+								i, violatedRule.getRuleID(), violatedRule.getRuleTotalViolations()));
 					}
 					i++;
 				}
@@ -416,8 +416,8 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
 				List<Rule> violatedRules = messageGroup.getViolatedRules();
 				int messagesWithinTresholdCount = 0;
 				for (Rule violatedRule : violatedRules) {
-					int ruleID = violatedRule.getRuleID();
-					if (ruleID >= tresholdLevel && ruleID <= 9) {
+					String ruleID = violatedRule.getRuleID();
+					if (Integer.parseInt(ruleID) >= tresholdLevel && Integer.parseInt(ruleID) <= 9) {
 						messagesWithinTresholdCount += violatedRule.getRuleTotalViolations();
 						messagesWithinThreshold += messagesWithinTresholdCount;
 					}

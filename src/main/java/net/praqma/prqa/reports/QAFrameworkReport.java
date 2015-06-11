@@ -383,38 +383,31 @@ public class QAFrameworkReport implements Serializable {
 		Double projectCompliance = 0.0;
 		int messages = 0;
         boolean PRIOR_QAF104 = (qaFrameworkVersion.isQaFrameworkVersionPriorToVersion4());
-                /*
-                Below section is to open old compliance report and parse html file (QAF 1.0.30backwords)
-                */
-		String fileExtension = FilenameUtils.getExtension(listOfReports[0].getPath().toString());
-		if (fileExtension.equals(XHTML) || fileExtension.equals(HTML)){
-  			ComplianceReportHtmlParser parser = new ComplianceReportHtmlParser(listOfReports[0].getAbsolutePath());
-			fileCompliance += Double.parseDouble(parser
-					.getParseFirstResult(ComplianceReportHtmlParser.QAFfileCompliancePattern));
-			projectCompliance += Double.parseDouble(parser
-					.getParseFirstResult(ComplianceReportHtmlParser.QAFprojectCompliancePattern));
-			messages += Integer
-					.parseInt(parser.getParseFirstResult(ComplianceReportHtmlParser.QAFtotalMessagesPattern));
-		}
+        for (int i = 0; i < listOfReports.length; i++){
+             if (listOfReports[i].isFile()) {
+                 String fileExtension = FilenameUtils.getExtension(listOfReports[i].getPath().toString());
+                 if (fileExtension.equals(XHTML) || fileExtension.equals(HTML)){
+                    ComplianceReportHtmlParser parser = new ComplianceReportHtmlParser(listOfReports[i].getAbsolutePath());
+                    fileCompliance += Double.parseDouble(parser.getParseFirstResult(ComplianceReportHtmlParser.QAFfileCompliancePattern));
+                    projectCompliance += Double.parseDouble(parser.getParseFirstResult(ComplianceReportHtmlParser.QAFprojectCompliancePattern));
+                    messages += Integer.parseInt(parser.getParseFirstResult(ComplianceReportHtmlParser.QAFtotalMessagesPattern));
+                 }
+            }
+        }
+		
         
         /*This section is to read result data file and parse the results*/
-        if (PRIOR_QAF104 == false)
-        {
-            ResultsDataParser resultsDataParser = new ResultsDataParser(resultsDataFile.getAbsolutePath());
-            resultsDataParser.setQaFrameworkVersion(qaFrameworkVersion);
-            List<MessageGroup> messagesGroups = resultsDataParser.parseResultsData();
-            sortViolatedRulesByRuleID(messagesGroups);
-            status.setMessagesGroups(messagesGroups);
-            
-            messages = resultsDataParser.getdiagnosticCount();
-            status.setMessages(messages); 
-        }
-        else
-        {
-            status.setFileCompliance(fileCompliance);
-            status.setProjectCompliance(projectCompliance);
-            status.setMessages(messages);
-        }
+        ResultsDataParser resultsDataParser = new ResultsDataParser(resultsDataFile.getAbsolutePath());
+        resultsDataParser.setQaFrameworkVersion(qaFrameworkVersion);
+        List<MessageGroup> messagesGroups = resultsDataParser.parseResultsData();
+        /* sortViolatedRulesByRuleID(messagesGroups);*/
+        status.setMessagesGroups(messagesGroups);
+        //messages = resultsDataParser.getdiagnosticCount();
+        //status.setMessages(messages); 
+        status.setFileCompliance(fileCompliance);
+        status.setProjectCompliance(projectCompliance);
+        status.setMessages(messages);
+
 		return status;
 	}
 
@@ -429,7 +422,7 @@ public class QAFrameworkReport implements Serializable {
 		return relativePath += resultsDataFileName;
 
 	}
-
+/*
 	private void sortViolatedRulesByRuleID(List<MessageGroup> messagesGroups) {
 		for (MessageGroup messageGroup : messagesGroups) {
 			Collections.sort(messageGroup.getViolatedRules(), new Comparator<Rule>() {
@@ -446,6 +439,7 @@ public class QAFrameworkReport implements Serializable {
 			});
 		}
 	}
+    */
 
 	/**
 	 * @param workspace

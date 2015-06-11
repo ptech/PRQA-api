@@ -36,7 +36,7 @@ public class ComplianceReportHtmlParser extends ReportHtmlParser {
         }        
         totalMessagesPattern = Pattern.compile("<td align=\"left\">Total Number of Messages</td>\\r?\\n<td align=\"right\">(\\d*)</td>");
         fileCompliancePattern = Pattern.compile("<td align=\"left\">File Compliance Index</td>\\r?\\n<td align=\"right\">(\\S*)%</td>");
-        projectCompliancePattern = Pattern.compile("<td align=\"left\">Project Compliance Index</td>\\r?\\n<td align=\"right\">(\\S*)%</td>");      
+        projectCompliancePattern = Pattern.compile("<td align=\"left\">Project Compliance Index</td>\\r?\\n<td align=\"right\">(\\S*)%</td>");    
         
         QAFtotalMessagesPattern = Pattern.compile("<td>Diagnostic Count</td><td>(\\d*)</td>");
         QAFfileCompliancePattern = Pattern.compile("<td>File Compliance Index</td><td>(\\S*)%</td>");
