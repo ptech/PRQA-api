@@ -165,7 +165,7 @@ public class QAFrameworkReport implements Serializable {
 
 	private String createReportCommandForQacli(boolean isUnix, PrintStream out) throws PrqaException {
 		out.println("Create report command");
-		out.println("settings.getQaProject():" + settings.getQaProject());
+		//out.println("settings.getQaProject():" + settings.getQaProject());
 		String projectLocation;
 
 		projectLocation = PRQACommandBuilder.getProjectFile(resolveAbsOrRelativePath(workspace,
