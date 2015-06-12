@@ -19,10 +19,9 @@ import org.w3c.dom.Element;
 
 public class ResultsDataParser {
 
-	private String filePath;
+	private final String filePath;
 	private int rootLevel = 1;
-    private int count = 0;
-    private int sliderVal = 0;
+    /* private int count = 0; */
     private QaFrameworkVersion qaFrameworkVersion;
     
 

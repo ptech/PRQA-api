@@ -400,7 +400,7 @@ public class QAFrameworkReport implements Serializable {
         ResultsDataParser resultsDataParser = new ResultsDataParser(resultsDataFile.getAbsolutePath());
         resultsDataParser.setQaFrameworkVersion(qaFrameworkVersion);
         List<MessageGroup> messagesGroups = resultsDataParser.parseResultsData();
-        /* sortViolatedRulesByRuleID(messagesGroups);*/
+        sortViolatedRulesByRuleID(messagesGroups);
         status.setMessagesGroups(messagesGroups);
         //messages = resultsDataParser.getdiagnosticCount();
         //status.setMessages(messages); 
@@ -422,24 +422,17 @@ public class QAFrameworkReport implements Serializable {
 		return relativePath += resultsDataFileName;
 
 	}
-/*
 	private void sortViolatedRulesByRuleID(List<MessageGroup> messagesGroups) {
 		for (MessageGroup messageGroup : messagesGroups) {
 			Collections.sort(messageGroup.getViolatedRules(), new Comparator<Rule>() {
 				@Override
 				public int compare(Rule o1, Rule o2) {
-					if (o1.getRuleID() > o2.getRuleID()) {
-						return 1;
-					}
-					if (o1.getRuleID() < o2.getRuleID()) {
-						return -1;
-					}
-					return 0;
+                    return o1.getRuleID().toString().compareTo(o2.getRuleID().toString());
 				}
 			});
 		}
 	}
-    */
+
 
 	/**
 	 * @param workspace
