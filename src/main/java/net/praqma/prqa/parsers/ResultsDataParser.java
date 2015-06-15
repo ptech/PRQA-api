@@ -83,40 +83,42 @@ public class ResultsDataParser {
         List<MessageGroup> messagesGroups = new ArrayList<MessageGroup>();
         document.getDocumentElement().normalize();
         NodeList nList = document.getElementsByTagName("dataroot");
-        for (int temp = 0; temp < nList.getLength(); temp++) {
-            Node node = nList.item(temp);
+        for (int varDataRoot = 0; varDataRoot < nList.getLength(); varDataRoot++) {
+            Node node = nList.item(varDataRoot);
             if ( node.getNodeType() == Node.ELEMENT_NODE ){
-                Element pElement = (Element) node;
-                NodeList pNodeList = pElement.getElementsByTagName("tree");
-                for (temp = 0; temp < pNodeList.getLength(); temp++) {
-                    Node cNode = pNodeList.item(temp);
-                    if ( cNode.getNodeType() == Node.ELEMENT_NODE ){
-                        if(cNode.getAttributes().getNamedItem("type").getNodeValue().equals("rules")){
-                            Element cElement = (Element) cNode;
-                            NodeList cNodeList = cElement.getElementsByTagName("RuleGroup");
-                            for (temp = 0; temp < cNodeList.getLength(); temp++) {
-                                Node ccNode = cNodeList.item(temp);
-                                MessageGroup messageGroup = new MessageGroup();
-                                messageGroup.setTotalViolations(Integer.parseInt(ccNode.getAttributes().getNamedItem("active").getNodeValue()));
-                                messageGroup.setMessageGroupName(ccNode.getAttributes().getNamedItem("name").getNodeValue());
-                                messagesGroups.add(messageGroup);
-                                Element ccElement = (Element) ccNode;
-                                NodeList ccNodeList = ccElement.getChildNodes();
-                                for (temp = 0; temp < ccNodeList.getLength(); temp++){
-                                    if (ccNodeList.item(temp).getNodeType() == Node.ELEMENT_NODE){
-                                        Node cccNode = ccNodeList.item(temp);
-                                        Rule violatedRule = new Rule();
-                                        violatedRule.setRuleTotalViolations((Integer.parseInt(cccNode.getAttributes().getNamedItem("active").getNodeValue())));
-                                        violatedRule.setRuleNumber(cccNode.getAttributes().getNamedItem("id").getNodeValue());
-                                        messageGroup.addViolatedRule(violatedRule);                                       
-                                    } 
-                                }
+                if(node.getAttributes().getNamedItem("type").getNodeValue().equals("project")){
+                    Element pElement = (Element) node;
+                    NodeList pNodeList = pElement.getElementsByTagName("tree");
+                    for (int varTree = 0; varTree < pNodeList.getLength(); varTree++) {
+                        Node cNode = pNodeList.item(varTree);
+                        if ( cNode.getNodeType() == Node.ELEMENT_NODE ){
+                            if(cNode.getAttributes().getNamedItem("type").getNodeValue().equals("rules")){
+                                Element cElement = (Element) cNode;
+                                NodeList cNodeList = cElement.getElementsByTagName("RuleGroup");
+                                for (int varRGroup = 0; varRGroup < cNodeList.getLength(); varRGroup++) {
+                                    Node ccNode = cNodeList.item(varRGroup);
+                                    MessageGroup messageGroup = new MessageGroup();
+                                    messageGroup.setTotalViolations(Integer.parseInt(ccNode.getAttributes().getNamedItem("active").getNodeValue()));
+                                    messageGroup.setMessageGroupName(ccNode.getAttributes().getNamedItem("name").getNodeValue());
+                                    Element ccElement = (Element) ccNode;
+                                    NodeList ccNodeList = ccElement.getChildNodes();
+                                    for (int varRule = 0; varRule < ccNodeList.getLength(); varRule++){
+                                        if (ccNodeList.item(varRule).getNodeType() == Node.ELEMENT_NODE){
+                                            Node cccNode = ccNodeList.item(varRule);
+                                            Rule violatedRule = new Rule();
+                                            violatedRule.setRuleTotalViolations((Integer.parseInt(cccNode.getAttributes().getNamedItem("active").getNodeValue())));
+                                            violatedRule.setRuleNumber(cccNode.getAttributes().getNamedItem("id").getNodeValue());
+                                            messageGroup.addViolatedRule(violatedRule);                                       
+                                        } 
+                                    }
+                                    messagesGroups.add(messageGroup);
+                                }   
                             }
                         }
                     }
-                }
-            } 
-        }
+                } 
+            }
+        }   
         return messagesGroups;
     }
     ///////////////////////////////OLD FRAMEWORK////////////////////////////////////////////
