@@ -277,7 +277,8 @@ public class QAFrameworkReport implements Serializable {
 		if (!settings.isPublishToQAV()) {
 			return canUploadProject;
 		}
-		if (StringUtils.isBlank(settings.getQaVerifyProjectName()) || StringUtils.isBlank(settings.getQaVerifyConfigFile()) || StringUtils.isBlank(settings.getVcsConfigXml())) {
+		if (StringUtils.isBlank(settings.getQaVerifyProjectName()) 
+		    || StringUtils.isBlank(settings.getQaVerifyConfigFile()) || StringUtils.isBlank(settings.getVcsConfigXml())) {
 			return canUploadProject;
 		}
 		return true;
