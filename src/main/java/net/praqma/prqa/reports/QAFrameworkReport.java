@@ -202,7 +202,7 @@ public class QAFrameworkReport implements Serializable {
 
 	private String createUploadCommandQacli(PrintStream out) throws PrqaException {
 		String projectLocation;
-		if (!StringUtils.isBlank(settings.getQaProject())) {
+		if (!StringUtils.isBlank(settings.getQaVerifyProjectName())) {
 			projectLocation = PRQACommandBuilder.wrapInQuotationMarks(resolveAbsOrRelativePath(workspace,
 					settings.getQaProject(), out));
 		} else {
@@ -277,8 +277,8 @@ public class QAFrameworkReport implements Serializable {
 		if (!settings.isPublishToQAV()) {
 			return canUploadProject;
 		}
-		if (StringUtils.isBlank(settings.getQaProject()) || StringUtils.isBlank(settings.getQaVerifyConfigFile())
-				|| StringUtils.isBlank(settings.getVcsConfigXml())) {
+		if (StringUtils.isBlank(settings.getQaVerifyProjectName()) 
+		    || StringUtils.isBlank(settings.getQaVerifyConfigFile()) || StringUtils.isBlank(settings.getVcsConfigXml())) {
 			return canUploadProject;
 		}
 		return true;
@@ -287,10 +287,8 @@ public class QAFrameworkReport implements Serializable {
 	private void setQaVerifyServerSettings() throws PrqaException, JDOMException, IOException {
 		QaVerifyConfigurationFileParser qaVFileParser = new QaVerifyConfigurationFileParser(
 				settings.getQaVerifyConfigFile());
-		String projectWithOsFilePaths = FilenameUtils.separatorsToSystem(settings.getQaProject());
-		qaVFileParser.changeQaVerifyConfiFileSettings(qaVerifySettings, projectWithOsFilePaths.substring(
-				projectWithOsFilePaths.lastIndexOf(System.getProperty("file.separator")) + 1,
-				projectWithOsFilePaths.length()));
+                String projName = settings.getQaVerifyProjectName();
+                qaVFileParser.changeQaVerifyConfiFileSettings(qaVerifySettings, projName );
 	}
 
 	// __________________________________________________________________
@@ -402,8 +400,6 @@ public class QAFrameworkReport implements Serializable {
         List<MessageGroup> messagesGroups = resultsDataParser.parseResultsData();
         sortViolatedRulesByRuleID(messagesGroups);
         status.setMessagesGroups(messagesGroups);
-        //messages = resultsDataParser.getdiagnosticCount();
-        //status.setMessages(messages); 
         status.setFileCompliance(fileCompliance);
         status.setProjectCompliance(projectCompliance);
         status.setMessages(messages);
@@ -478,7 +474,10 @@ public class QAFrameworkReport implements Serializable {
 	public PRQAApplicationSettings getAppSettings() {
 		return appSettings;
 	}
-
+	
+	/**
+	 * @return the qaFrameworkVersion
+	 */
 	public void setQaFrameworkVersion(QaFrameworkVersion qaFrameworkVersion) {
 		this.qaFrameworkVersion = qaFrameworkVersion;
 	}
