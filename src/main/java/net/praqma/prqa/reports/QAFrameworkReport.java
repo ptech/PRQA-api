@@ -286,11 +286,7 @@ public class QAFrameworkReport implements Serializable {
 	private void setQaVerifyServerSettings() throws PrqaException, JDOMException, IOException {
 		QaVerifyConfigurationFileParser qaVFileParser = new QaVerifyConfigurationFileParser(
 				settings.getQaVerifyConfigFile());
-		//String projectWithOsFilePaths = FilenameUtils.separatorsToSystem(settings.getQaProject());
                 String projName = settings.getQaVerifyProjectName();
-		/*qaVFileParser.changeQaVerifyConfiFileSettings(qaVerifySettings, projectWithOsFilePaths.substring(
-				projectWithOsFilePaths.lastIndexOf(System.getProperty("file.separator")) + 1,
-				projectWithOsFilePaths.length())); */
                 qaVFileParser.changeQaVerifyConfiFileSettings(qaVerifySettings, projName );
 	}
 
@@ -403,8 +399,6 @@ public class QAFrameworkReport implements Serializable {
         List<MessageGroup> messagesGroups = resultsDataParser.parseResultsData();
         sortViolatedRulesByRuleID(messagesGroups);
         status.setMessagesGroups(messagesGroups);
-        //messages = resultsDataParser.getdiagnosticCount();
-        //status.setMessages(messages); 
         status.setFileCompliance(fileCompliance);
         status.setProjectCompliance(projectCompliance);
         status.setMessages(messages);
@@ -479,7 +473,10 @@ public class QAFrameworkReport implements Serializable {
 	public PRQAApplicationSettings getAppSettings() {
 		return appSettings;
 	}
-
+	
+	/**
+	 * @return the qaFrameworkVersion
+	 */
 	public void setQaFrameworkVersion(QaFrameworkVersion qaFrameworkVersion) {
 		this.qaFrameworkVersion = qaFrameworkVersion;
 	}
