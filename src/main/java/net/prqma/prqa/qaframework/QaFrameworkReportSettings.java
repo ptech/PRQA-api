@@ -14,7 +14,7 @@ public class QaFrameworkReportSettings implements ReportSettings {
 	private String qaVerifyConfigFile;
 	private String vcsConfigXml;
 	private String product;
-        private String qaVerifyProjectName;
+    private String qaVerifyProjectName;
 
 	public QaFrameworkReportSettings(String qaInstallation, String qaProject, boolean qaEnableDependencyMode, boolean qaCrossModuleAnalysis,
 			String cmaProjectName, boolean generateReport, boolean publishToQAV, String qaVerifyConfigFile, String vcsConfigXml, String product, String qaVerifyProjectName) {
