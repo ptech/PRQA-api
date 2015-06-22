@@ -14,9 +14,10 @@ public class QaFrameworkReportSettings implements ReportSettings {
 	private String qaVerifyConfigFile;
 	private String vcsConfigXml;
 	private String product;
+        private String qaVerifyProjectName;
 
 	public QaFrameworkReportSettings(String qaInstallation, String qaProject, boolean qaEnableDependencyMode, boolean qaCrossModuleAnalysis,
-			String cmaProjectName, boolean generateReport, boolean publishToQAV, String qaVerifyConfigFile, String vcsConfigXml, String product) {
+			String cmaProjectName, boolean generateReport, boolean publishToQAV, String qaVerifyConfigFile, String vcsConfigXml, String product, String qaVerifyProjectName) {
 
 		this.qaInstallation = qaInstallation;
 		this.qaCrossModuleAnalysis = qaCrossModuleAnalysis;
@@ -28,6 +29,7 @@ public class QaFrameworkReportSettings implements ReportSettings {
 		this.product = product;
 		this.qaVerifyConfigFile = qaVerifyConfigFile;
 		this.vcsConfigXml = vcsConfigXml;
+                this.qaVerifyProjectName = qaVerifyProjectName;
 	}
 
 	@Override
@@ -74,5 +76,14 @@ public class QaFrameworkReportSettings implements ReportSettings {
 
 	public String getVcsConfigXml() {
 		return vcsConfigXml;
-	}	
+	}
+        
+	public String getQaVerifyProjectName() {
+		return qaVerifyProjectName;
+	}
+        
+	public void setQaVerifyProjectName(String qaVerifyProjectName) {
+		this.qaVerifyProjectName = qaVerifyProjectName;
+	}
+        
 }
