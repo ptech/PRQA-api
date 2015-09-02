@@ -419,7 +419,7 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
 					String ruleID = violatedRule.getRuleID();
 					if (Integer.parseInt(ruleID) >= tresholdLevel && Integer.parseInt(ruleID) <= 9) {
 						messagesWithinTresholdCount += violatedRule.getRuleTotalViolations();
-						messagesWithinThreshold += messagesWithinTresholdCount;
+						messagesWithinThreshold += violatedRule.getRuleTotalViolations();
 					}
 				}
 				messageGroup.setMessagesWithinTreshold(messagesWithinTresholdCount);
