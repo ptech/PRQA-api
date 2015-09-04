@@ -318,11 +318,11 @@ public class QAFrameworkReport implements Serializable {
 	 */
 	private String resolveAbsOrRelativePath(File workspaceRoot, String projectFilePath, PrintStream outStream)
 			throws PrqaException {
-		outStream.println("The selected project is:" + projectFilePath);
-		outStream.println("worksapce root" + workspaceRoot);
+		outStream.println("The selected project is: " + projectFilePath);
+		outStream.println("workspace root: " + workspaceRoot);
 		File pFile = new File(projectFilePath);
 		if (pFile.isAbsolute()) {
-			outStream.println("File is absolute");
+			outStream.println("File is absolute ");
 			if (!pFile.exists()) {
 				throw new PrqaException(String.format("The project file %s does not exist.", projectFilePath));
 			} else {
