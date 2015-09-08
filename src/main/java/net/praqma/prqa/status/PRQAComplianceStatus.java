@@ -271,7 +271,7 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
 	@Override
 	public String toHtml() {
 		StringBuilder sb = new StringBuilder();
-        boolean PRIOR_QAF104 = (qaFrameworkVersion.isQaFrameworkVersionPriorToVersion4());
+        boolean PRIOR_QAF104 = (qaFrameworkVersion.isQaFrameworkVersionPriorToVersion104());
 		sb.append("<table cellpadding=\"0\" style=\"border-style:none;margin:10px;border-collapse:collapse;border-spacing:0px\">");
 		sb.append("<h2>Compliance Summary</h2>");
 		sb.append("<thead>");

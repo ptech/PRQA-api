@@ -32,14 +32,18 @@ public class QaFrameworkVersion {
 		return isAnOlderVersion;
 	}
 
-	public boolean isQaFrameworkVersionPriorToVersion4() {
+	public boolean isQaFrameworkVersionPriorToVersion104() {
 
 		String shortVersion = getVersionShortFormat();
-		if (Integer.parseInt(shortVersion.substring(shortVersion.lastIndexOf(".") + 1, shortVersion.length())) < 4) {
-//			"Is before 0.4: ";
-			return true;
-		}
-		return false;
+                String qafVersion = shortVersion.substring(shortVersion.lastIndexOf(" ") + 1, shortVersion.length());
+		return (qafVersion.equals("1.0.0") || qafVersion.equals("1.0.1") || qafVersion.equals("1.0.2") || qafVersion.equals("1.0.3"));
+	}
+        
+	public boolean isQaFrameworkUnified() {
+
+		String shortVersion = getVersionShortFormat();
+                String qafVersion = shortVersion.substring(shortVersion.lastIndexOf(" ") + 1, shortVersion.length());
+		return (!qafVersion.equals("1.0.0") || !qafVersion.equals("1.0.1") || !qafVersion.equals("1.0.2") || !qafVersion.equals("1.0.3") || !qafVersion.equals("1.0.4") || !qafVersion.equals("1.0.5"));
 	}
 
 	private String getVersionShortFormat() {

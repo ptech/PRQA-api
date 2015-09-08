@@ -182,7 +182,7 @@ public class QAFrameworkReport implements Serializable {
 		PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
 		builder.appendArgument("report -P");
 		builder.appendArgument(projectLocation);
-		if (qaFrameworkVersion.isQaFrameworkVersionPriorToVersion4()) {
+		if (qaFrameworkVersion.isQaFrameworkVersionPriorToVersion104()) {
 			builder.appendArgument("-l C");
 		}
 		builder.appendArgument("-t RCR");
@@ -380,7 +380,7 @@ public class QAFrameworkReport implements Serializable {
 		Double fileCompliance = 0.0;
 		Double projectCompliance = 0.0;
 		int messages = 0;
-        boolean PRIOR_QAF104 = (qaFrameworkVersion.isQaFrameworkVersionPriorToVersion4());
+        boolean PRIOR_QAF104 = (qaFrameworkVersion.isQaFrameworkVersionPriorToVersion104());
         for (int i = 0; i < listOfReports.length; i++){
              if (listOfReports[i].isFile()) {
                  String fileExtension = FilenameUtils.getExtension(listOfReports[i].getPath().toString());
@@ -410,7 +410,7 @@ public class QAFrameworkReport implements Serializable {
 	private String getResultsDataFileRelativePath() {
 		String relativePath = "/prqa/";
 		String resultsDataFileName = "results_data.xml";
-		if (qaFrameworkVersion.isQaFrameworkVersionPriorToVersion4()) {
+		if (qaFrameworkVersion.isQaFrameworkVersionPriorToVersion104()) {
 			relativePath += "output/";
 		} else {
 			relativePath += "reports/";

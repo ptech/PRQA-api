@@ -33,7 +33,7 @@ public class ResultsDataParser {
     }
 
 	public List<MessageGroup> parseResultsData() throws Exception {
-        boolean PRIOR_QAF104 = (qaFrameworkVersion.isQaFrameworkVersionPriorToVersion4());
+        boolean PRIOR_QAF104 = (qaFrameworkVersion.isQaFrameworkVersionPriorToVersion104());
 		
         FileInputStream fileis = new FileInputStream(filePath);
         
