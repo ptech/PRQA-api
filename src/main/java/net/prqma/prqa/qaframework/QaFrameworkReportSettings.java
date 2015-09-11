@@ -6,6 +6,8 @@ public class QaFrameworkReportSettings implements ReportSettings {
 
 	private String qaInstallation;
 	private String qaProject;
+        public String uniProjectName;
+        public boolean pullUnifiedProject;
 	private boolean qaEnableDependencyMode;
 	private boolean qaCrossModuleAnalysis;
 	private String cmaProjectName;
@@ -16,10 +18,12 @@ public class QaFrameworkReportSettings implements ReportSettings {
 	private String product;
     private String qaVerifyProjectName;
 
-	public QaFrameworkReportSettings(String qaInstallation, String qaProject, boolean qaEnableDependencyMode, boolean qaCrossModuleAnalysis,
+	public QaFrameworkReportSettings(String qaInstallation, String qaProject, boolean pullUnifiedProject, String uniProjectName, boolean qaEnableDependencyMode, boolean qaCrossModuleAnalysis,
 	    String cmaProjectName, boolean generateReport, boolean publishToQAV, String qaVerifyConfigFile, String vcsConfigXml, String product, String qaVerifyProjectName) {
 
 		this.qaInstallation = qaInstallation;
+                this.uniProjectName = uniProjectName;
+                this.pullUnifiedProject = pullUnifiedProject;
 		this.qaCrossModuleAnalysis = qaCrossModuleAnalysis;
 		this.cmaProjectName = cmaProjectName;
 		this.publishToQAV = publishToQAV;
@@ -32,7 +36,7 @@ public class QaFrameworkReportSettings implements ReportSettings {
                 this.qaVerifyProjectName = qaVerifyProjectName;
 	}
 
-	@Override
+        @Override
 	public String getProduct() {
 		return "";
 	}
@@ -57,7 +61,15 @@ public class QaFrameworkReportSettings implements ReportSettings {
 	public boolean isQaCrossModuleAnalysis() {
 		return qaCrossModuleAnalysis;
 	}
-
+        
+	public boolean isPullUnifiedProject() {
+		return pullUnifiedProject;
+	}
+        
+	public String getUniProjectName() {
+		return uniProjectName;
+	}        
+        
 	public String getCmaProjectName() {
 		return cmaProjectName;
 	}
