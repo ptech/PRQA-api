@@ -98,8 +98,7 @@ public class QAFrameworkReport implements Serializable {
                     "Download Unified Project Definition was selected but no Unified project was provided. The Download unified project was aborted.");
         }
         PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
-        builder.appendArgument("-v");
-/*        
+        builder.appendArgument("admin");    
         builder.appendArgument("--pull-unify-project");
         builder.appendArgument("--qaf-project");
         builder.appendArgument(PRQACommandBuilder.getProjectFile(resolveAbsOrRelativePath(workspace,
@@ -112,7 +111,6 @@ public class QAFrameworkReport implements Serializable {
         builder.appendArgument("localhost:8090");
         builder.appendArgument("--project-name");
         builder.appendArgument(settings.getUniProjectName());
-*/
         return builder.getCommand();
     }
 
@@ -145,6 +143,10 @@ public class QAFrameworkReport implements Serializable {
         if (settings.isQaEnableDependencyMode()) {
             analyzeOptions = analyzeOptions.replace("c", "");
         }
+        if (settings.isQaEnableProjectCma()) {
+            analyzeOptions = analyzeOptions.concat("p");
+        }
+        
         builder.appendArgument(analyzeOptions);
         builder.appendArgument("-P");
         builder.appendArgument(PRQACommandBuilder.getProjectFile(resolveAbsOrRelativePath(workspace,
