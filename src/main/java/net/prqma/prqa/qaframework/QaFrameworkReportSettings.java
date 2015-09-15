@@ -7,8 +7,8 @@ public class QaFrameworkReportSettings implements ReportSettings {
 
     private String qaInstallation;
     private String qaProject;
-    public String uniProjectName;
-    public boolean pullUnifiedProject;
+    private String uniProjectName;
+    private boolean pullUnifiedProject;
     private boolean qaEnableDependencyMode;
     private boolean qaEnableProjectCma;
     private boolean qaCrossModuleAnalysis;
@@ -19,9 +19,13 @@ public class QaFrameworkReportSettings implements ReportSettings {
     private String vcsConfigXml;
     private String product;
     private String qaVerifyProjectName;
+    private String uploadSnapshotName;
+    private String buildNumber;
 
-    public QaFrameworkReportSettings(String qaInstallation, String qaProject, boolean pullUnifiedProject, String uniProjectName, boolean qaEnableProjectCma, boolean qaEnableDependencyMode, boolean qaCrossModuleAnalysis,
-            String cmaProjectName, boolean generateReport, boolean publishToQAV, String qaVerifyConfigFile, String vcsConfigXml, String product, String qaVerifyProjectName) {
+    public QaFrameworkReportSettings(String qaInstallation, String qaProject, boolean pullUnifiedProject, String uniProjectName, 
+            boolean qaEnableProjectCma, boolean qaEnableDependencyMode, boolean qaCrossModuleAnalysis, String cmaProjectName, 
+            boolean generateReport, boolean publishToQAV, String qaVerifyConfigFile, String vcsConfigXml, String product, 
+            String qaVerifyProjectName, String uploadSnapshotName, String buildNumber) {
 
         this.qaInstallation = qaInstallation;
         this.uniProjectName = uniProjectName;
@@ -37,6 +41,8 @@ public class QaFrameworkReportSettings implements ReportSettings {
         this.qaVerifyConfigFile = qaVerifyConfigFile;
         this.vcsConfigXml = vcsConfigXml;
         this.qaVerifyProjectName = qaVerifyProjectName;
+        this.uploadSnapshotName = uploadSnapshotName;
+        this.buildNumber = buildNumber;
     }
 
     @Override
@@ -104,5 +110,21 @@ public class QaFrameworkReportSettings implements ReportSettings {
     public void setQaVerifyProjectName(String qaVerifyProjectName) {
         this.qaVerifyProjectName = qaVerifyProjectName;
     }
+    
+    public String getUploadSnapshotName() {
+        return uploadSnapshotName;
+    }
 
+    public void setUploadSnapshotName(String uploadSnapshotName) {
+        this.uploadSnapshotName = uploadSnapshotName;
+    }
+    
+    public String getbuildNumber() {
+        return buildNumber;
+    }
+
+    public void setBuildNumber(String buildNumber) {
+        this.buildNumber = buildNumber;
+    }
+    
 }

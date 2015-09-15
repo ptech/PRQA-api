@@ -254,6 +254,10 @@ public class QAFrameworkReport implements Serializable {
         builder.appendArgument("upload -P");
         builder.appendArgument(projectLocation);
         builder.appendArgument("--qav-upload");
+        builder.appendArgument("--upload-project");
+        builder.appendArgument(settings.getQaVerifyProjectName());
+        builder.appendArgument("--snapshot-name");        
+        builder.appendArgument(settings.getUploadSnapshotName() + '_' + settings.getbuildNumber());
         return builder.getCommand();
     }
 
@@ -319,8 +323,7 @@ public class QAFrameworkReport implements Serializable {
         if (!settings.isPublishToQAV()) {
             return canUploadProject;
         }
-        if (StringUtils.isBlank(settings.getQaVerifyProjectName())
-                || StringUtils.isBlank(settings.getQaVerifyConfigFile()) || StringUtils.isBlank(settings.getVcsConfigXml())) {
+        if ( StringUtils.isBlank(settings.getQaVerifyProjectName()) || StringUtils.isBlank(settings.getVcsConfigXml()) || qaFrameworkVersion.isQaFrameworkUnified()) {
             return canUploadProject;
         }
         return true;
