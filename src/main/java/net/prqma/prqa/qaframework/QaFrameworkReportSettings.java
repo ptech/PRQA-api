@@ -15,15 +15,17 @@ public class QaFrameworkReportSettings implements ReportSettings {
     private String cmaProjectName;
     private boolean generateReport;
     private boolean publishToQAV;
+    private boolean loginToQAV;
     private String product;
     private String qaVerifyProjectName;
     private String uploadSnapshotName;
     private String buildNumber;
     private String uploadSourceCode;
+  
 
     public QaFrameworkReportSettings(String qaInstallation, String qaProject, boolean pullUnifiedProject, String uniProjectName, 
             boolean qaEnableProjectCma, boolean qaEnableDependencyMode, boolean qaCrossModuleAnalysis, String cmaProjectName, 
-            boolean generateReport, boolean publishToQAV, String product, String qaVerifyProjectName, String uploadSnapshotName, 
+            boolean generateReport, boolean publishToQAV, boolean loginToQAV, String product, String qaVerifyProjectName, String uploadSnapshotName, 
             String buildNumber, String uploadSourceCode) {
 
         this.qaInstallation = qaInstallation;
@@ -32,6 +34,7 @@ public class QaFrameworkReportSettings implements ReportSettings {
         this.qaCrossModuleAnalysis = qaCrossModuleAnalysis;
         this.cmaProjectName = cmaProjectName;
         this.publishToQAV = publishToQAV;
+        this.loginToQAV = loginToQAV;
         this.qaEnableProjectCma = qaEnableProjectCma;
         this.qaEnableDependencyMode = qaEnableDependencyMode;
         this.generateReport = generateReport;
@@ -53,6 +56,10 @@ public class QaFrameworkReportSettings implements ReportSettings {
         return publishToQAV;
     }
 
+    public boolean loginToQAV() {
+        return loginToQAV;
+    }
+    
     public String getQaInstallation() {
         return qaInstallation;
     }
@@ -92,7 +99,11 @@ public class QaFrameworkReportSettings implements ReportSettings {
     public boolean isPublishToQAV() {
         return publishToQAV;
     }
-
+    
+    public boolean isLoginToQAV() {
+        return loginToQAV;
+    }
+    
     public String getQaVerifyProjectName() {
         return qaVerifyProjectName;
     }
@@ -124,6 +135,5 @@ public class QaFrameworkReportSettings implements ReportSettings {
     public void setUploadSourceCode(String uploadSourceCode) {
         this.uploadSourceCode = uploadSourceCode;
     }
-    
     
 }

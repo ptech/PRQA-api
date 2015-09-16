@@ -104,11 +104,11 @@ public class QAFrameworkReport implements Serializable {
         builder.appendArgument(PRQACommandBuilder.getProjectFile(resolveAbsOrRelativePath(workspace,
                 settings.getQaProject(), out)));
         builder.appendArgument("--username");
-        builder.appendArgument("neeraj");
+        builder.appendArgument(qaVerifySettings.user);
         builder.appendArgument("--password");
-        builder.appendArgument("neeraj");
+        builder.appendArgument(qaVerifySettings.password);
         builder.appendArgument("--url");
-        builder.appendArgument("localhost:8090");
+        builder.appendArgument(qaVerifySettings.host +":"+ qaVerifySettings.port);
         builder.appendArgument("--project-name");
         builder.appendArgument(settings.getUniProjectName());
         return builder.getCommand();
@@ -254,6 +254,12 @@ public class QAFrameworkReport implements Serializable {
         builder.appendArgument("upload -P");
         builder.appendArgument(projectLocation);
         builder.appendArgument("--qav-upload");
+        builder.appendArgument("--username");
+        builder.appendArgument(qaVerifySettings.user);
+        builder.appendArgument("--password");
+        builder.appendArgument(qaVerifySettings.password);
+        builder.appendArgument("--url");
+        builder.appendArgument(qaVerifySettings.host +":"+ qaVerifySettings.port);        
         builder.appendArgument("--upload-project");
         builder.appendArgument(settings.getQaVerifyProjectName());
         builder.appendArgument("--snapshot-name");        
@@ -265,7 +271,8 @@ public class QAFrameworkReport implements Serializable {
 
     public CmdResult uploadQacli(PrintStream out) throws PrqaUploadException, PrqaException {
         CmdResult res = null;
-        if (!settings.isPublishToQAV()) {
+        if ((!settings.isPublishToQAV()) && (!settings.isLoginToQAV())) {
+            out.println("Upload Results to QAV or QAV Server Login option is not Selected");
             return res;
         }
         String finalCommand = createUploadCommandQacli(out);
