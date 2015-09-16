@@ -258,20 +258,8 @@ public class QAFrameworkReport implements Serializable {
         builder.appendArgument(settings.getQaVerifyProjectName());
         builder.appendArgument("--snapshot-name");        
         builder.appendArgument(settings.getUploadSnapshotName() + '_' + settings.getbuildNumber());
-        return builder.getCommand();
-    }
-
-    private String createAddUploadConfigurationFilesToProjectCommand(PrintStream out) throws PrqaException {
-        PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
-        builder.appendArgument("admin --qaf-project-config -P");
-        builder.appendArgument(PRQACommandBuilder.wrapInQuotationMarks(resolveAbsOrRelativePath(workspace,
-                settings.getQaProject(), out)));
-        builder.appendArgument("-Q");
-        builder.appendArgument(PRQACommandBuilder.wrapInQuotationMarks(resolveAbsOrRelativePath(workspace,
-                settings.getQaVerifyConfigFile(), out)));
-        builder.appendArgument("-V");
-        builder.appendArgument(PRQACommandBuilder.wrapInQuotationMarks(resolveAbsOrRelativePath(workspace,
-                settings.getVcsConfigXml(), out)));
+        builder.appendArgument("--upload-source");
+        builder.appendArgument(settings.getUploadSourceCode());
         return builder.getCommand();
     }
 
@@ -295,47 +283,7 @@ public class QAFrameworkReport implements Serializable {
 
         return res;
     }
-
-    public CmdResult addUploadConfigurationFilesToProject(PrintStream out) throws PrqaException, JDOMException,
-            IOException {
-        CmdResult res = null;
-        if (!checkIfCanUpload()) {
-            return res;
-        }
-        setQaVerifyServerSettings();
-        String configProjectCommand = createAddUploadConfigurationFilesToProjectCommand(out);
-        out.println("Project upload configuration command: " + configProjectCommand);
-        try {
-            if (getEnvironment() == null) {
-                res = CommandLine.getInstance().run(configProjectCommand, workspace, true, false);
-            } else {
-                res = CommandLine.getInstance().run(configProjectCommand, workspace, true, false, getEnvironment());
-            }
-        } catch (AbnormalProcessTerminationException abnex) {
-            log.logp(Level.SEVERE, this.getClass().getName(), "upload()", "Logged error with upload", abnex);
-            throw new PrqaUploadException(String.format("Upload failed with message:%n%s", abnex.getMessage()), abnex);
-        }
-        return res;
-    }
-
-    private boolean checkIfCanUpload() {
-        boolean canUploadProject = false;
-        if (!settings.isPublishToQAV()) {
-            return canUploadProject;
-        }
-        if ( StringUtils.isBlank(settings.getQaVerifyProjectName()) || StringUtils.isBlank(settings.getVcsConfigXml()) || qaFrameworkVersion.isQaFrameworkUnified()) {
-            return canUploadProject;
-        }
-        return true;
-    }
-
-    private void setQaVerifyServerSettings() throws PrqaException, JDOMException, IOException {
-        QaVerifyConfigurationFileParser qaVFileParser = new QaVerifyConfigurationFileParser(
-                settings.getQaVerifyConfigFile());
-        String projName = settings.getQaVerifyProjectName();
-        qaVFileParser.changeQaVerifyConfiFileSettings(qaVerifySettings, projName);
-    }
-
+    
     // __________________________________________________________________
     private String formatQacliPath() {
         String qacliPath;

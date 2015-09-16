@@ -15,17 +15,16 @@ public class QaFrameworkReportSettings implements ReportSettings {
     private String cmaProjectName;
     private boolean generateReport;
     private boolean publishToQAV;
-    private String qaVerifyConfigFile;
-    private String vcsConfigXml;
     private String product;
     private String qaVerifyProjectName;
     private String uploadSnapshotName;
     private String buildNumber;
+    private String uploadSourceCode;
 
     public QaFrameworkReportSettings(String qaInstallation, String qaProject, boolean pullUnifiedProject, String uniProjectName, 
             boolean qaEnableProjectCma, boolean qaEnableDependencyMode, boolean qaCrossModuleAnalysis, String cmaProjectName, 
-            boolean generateReport, boolean publishToQAV, String qaVerifyConfigFile, String vcsConfigXml, String product, 
-            String qaVerifyProjectName, String uploadSnapshotName, String buildNumber) {
+            boolean generateReport, boolean publishToQAV, String product, String qaVerifyProjectName, String uploadSnapshotName, 
+            String buildNumber, String uploadSourceCode) {
 
         this.qaInstallation = qaInstallation;
         this.uniProjectName = uniProjectName;
@@ -38,11 +37,10 @@ public class QaFrameworkReportSettings implements ReportSettings {
         this.generateReport = generateReport;
         this.qaProject = qaProject;
         this.product = product;
-        this.qaVerifyConfigFile = qaVerifyConfigFile;
-        this.vcsConfigXml = vcsConfigXml;
         this.qaVerifyProjectName = qaVerifyProjectName;
         this.uploadSnapshotName = uploadSnapshotName;
         this.buildNumber = buildNumber;
+        this.uploadSourceCode = uploadSourceCode;
     }
 
     @Override
@@ -95,14 +93,6 @@ public class QaFrameworkReportSettings implements ReportSettings {
         return publishToQAV;
     }
 
-    public String getQaVerifyConfigFile() {
-        return qaVerifyConfigFile;
-    }
-
-    public String getVcsConfigXml() {
-        return vcsConfigXml;
-    }
-
     public String getQaVerifyProjectName() {
         return qaVerifyProjectName;
     }
@@ -126,5 +116,14 @@ public class QaFrameworkReportSettings implements ReportSettings {
     public void setBuildNumber(String buildNumber) {
         this.buildNumber = buildNumber;
     }
+    
+    public String getUploadSourceCode() {
+        return uploadSourceCode;
+    }
+    
+    public void setUploadSourceCode(String uploadSourceCode) {
+        this.uploadSourceCode = uploadSourceCode;
+    }
+    
     
 }
