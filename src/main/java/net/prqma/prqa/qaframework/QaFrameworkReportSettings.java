@@ -150,7 +150,7 @@ public class QaFrameworkReportSettings implements ReportSettings {
     }
 
     public boolean isGenSupReport() {
-        return genMdReport;
+        return genSupReport;
     }
 
     public void setGenCrReport(boolean genCrReport) {
