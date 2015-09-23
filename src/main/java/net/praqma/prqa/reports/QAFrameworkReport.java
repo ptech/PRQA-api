@@ -78,6 +78,10 @@ public class QAFrameworkReport implements Serializable {
 
     public CmdResult pullUnifyProjectQacli(boolean isUnix, PrintStream out) throws PrqaException {
         CmdResult res = null;
+        if (!settings.isLoginToQAV()) {
+            out.println("Configuration Error: Pull Unified Project is Selected but QAV Server Connection Configuration is not Selected");
+            return res;
+        }
         if (settings.isPullUnifiedProject()) {
             String command = createPullUnifyProjectCommand(isUnix, out);
             out.println("Download Unified Project Definition command:");
@@ -95,10 +99,12 @@ public class QAFrameworkReport implements Serializable {
 
         if (StringUtils.isBlank(settings.getUniProjectName())) {
             throw new PrqaException(
-                    "Download Unified Project Definition was selected but no Unified project was provided. The Download unified project was aborted.");
+                    "Configuration Error: Download Unified Project Definition was selected but no Unified project was provided. The Download unified project was aborted.");
+        } else if (StringUtils.isBlank(qaVerifySettings.host) || StringUtils.isBlank(qaVerifySettings.user) || StringUtils.isBlank(qaVerifySettings.password)) {
+            throw new PrqaException("QAV Server Connection Settings are not selected");
         }
         PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
-        builder.appendArgument("admin");    
+        builder.appendArgument("admin");
         builder.appendArgument("--pull-unify-project");
         builder.appendArgument("--qaf-project");
         builder.appendArgument(PRQACommandBuilder.getProjectFile(resolveAbsOrRelativePath(workspace,
@@ -108,7 +114,7 @@ public class QAFrameworkReport implements Serializable {
         builder.appendArgument("--password");
         builder.appendArgument(qaVerifySettings.password);
         builder.appendArgument("--url");
-        builder.appendArgument(qaVerifySettings.host +":"+ qaVerifySettings.port);
+        builder.appendArgument(qaVerifySettings.host + ":" + qaVerifySettings.port);
         builder.appendArgument("--project-name");
         builder.appendArgument(settings.getUniProjectName());
         return builder.getCommand();
@@ -144,9 +150,9 @@ public class QAFrameworkReport implements Serializable {
             analyzeOptions = analyzeOptions.replace("c", "");
         }
         if (settings.isQaEnableProjectCma()) {
-            analyzeOptions = analyzeOptions.concat("p");
+            analyzeOptions = analyzeOptions.replace("f", "p");
         }
-        
+
         builder.appendArgument(analyzeOptions);
         builder.appendArgument("-P");
         builder.appendArgument(PRQACommandBuilder.getProjectFile(resolveAbsOrRelativePath(workspace,
@@ -174,7 +180,7 @@ public class QAFrameworkReport implements Serializable {
 
         if (StringUtils.isBlank(settings.getCmaProjectName())) {
             throw new PrqaException(
-                    "Perform Cross-Module analysis was selected but no CMA project was provided. The analysis project was aborted.");
+                    "Configuration Error: Perform Cross-Module analysis was selected but no CMA project was provided. The analysis project was aborted.");
         }
         PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
         builder.appendArgument("analyze");
@@ -183,13 +189,12 @@ public class QAFrameworkReport implements Serializable {
         return builder.getCommand();
     }
 
-    public CmdResult reportQacli(boolean isUnix, PrintStream out) throws PrqaException {
+    public CmdResult reportQacli(boolean isUnix, String repType, PrintStream out) throws PrqaException {
 
-        String reportCommand = createReportCommandForQacli(isUnix, out);
+        String reportCommand = createReportCommandForQacli(isUnix, repType, out);
         Map<String, String> systemVars = new HashMap<String, String>();
         systemVars.putAll(System.getenv());
         systemVars.putAll(getEnvironment());
-
         out.println("Report command :" + reportCommand);
         try {
             PRQAReport._logEnv("Current report generation execution environment", systemVars);
@@ -205,39 +210,41 @@ public class QAFrameworkReport implements Serializable {
         return new CmdResult();
     }
 
-    private String createReportCommandForQacli(boolean isUnix, PrintStream out) throws PrqaException {
-        out.println("Create report command");
-        //out.println("settings.getQaProject():" + settings.getQaProject());
+    private String createReportCommandForQacli(boolean isUnix, String reportType, PrintStream out) throws PrqaException {
+        out.println("Create " + reportType + " report command");
         String projectLocation;
-
         projectLocation = PRQACommandBuilder.getProjectFile(resolveAbsOrRelativePath(workspace,
                 settings.getQaProject(), out));
-        out.println("PROJECT LOCATION: " + projectLocation);
-
-        removeOldReports(projectLocation.replace(QUOTE, "").trim());
-        out.println("After remove old reports");
-        return createReportCommand(projectLocation, out);
+        removeOldReports(projectLocation.replace(QUOTE, "").trim(), reportType);
+        return createReportCommand(projectLocation, reportType, out);
     }
 
-    private String createReportCommand(String projectLocation, PrintStream out) {
-        out.println("Create report command");
+    private String createReportCommand(String projectLocation, String reportType, PrintStream out) {
+//        out.println("Create report command");
         PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
         builder.appendArgument("report -P");
         builder.appendArgument(projectLocation);
         if (qaFrameworkVersion.isQaFrameworkVersionPriorToVersion104()) {
             builder.appendArgument("-l C");
         }
-        builder.appendArgument("-t RCR");
+        builder.appendArgument("-t");
+        builder.appendArgument(reportType);
+
         return builder.getCommand();
     }
 
-    private void removeOldReports(String projectLocation) {
+    private void removeOldReports(String projectLocation, String reportType) {
         String reportsPath = "/prqa/reports";
         File file = new File(projectLocation + reportsPath);
         if (file.isDirectory()) {
             File[] files = file.listFiles();
             for (File f : files) {
-                f.delete();
+                if ((f.getName().contains("RCR") && reportType.equals("RCR")) || (f.getName().contains("CRR") && reportType.equals("CRR"))
+                        || (f.getName().contains("MDR") && reportType.equals("MDR")) || (f.getName().contains("SUR") && reportType.equals("SR"))
+                        || f.getName().contains("results_data")) {
+                    f.delete();
+                }
+
             }
         }
     }
@@ -259,10 +266,10 @@ public class QAFrameworkReport implements Serializable {
         builder.appendArgument("--password");
         builder.appendArgument(qaVerifySettings.password);
         builder.appendArgument("--url");
-        builder.appendArgument(qaVerifySettings.host +":"+ qaVerifySettings.port);        
+        builder.appendArgument(qaVerifySettings.host + ":" + qaVerifySettings.port);
         builder.appendArgument("--upload-project");
         builder.appendArgument(settings.getQaVerifyProjectName());
-        builder.appendArgument("--snapshot-name");        
+        builder.appendArgument("--snapshot-name");
         builder.appendArgument(settings.getUploadSnapshotName() + '_' + settings.getbuildNumber());
         builder.appendArgument("--upload-source");
         builder.appendArgument(settings.getUploadSourceCode());
@@ -271,8 +278,10 @@ public class QAFrameworkReport implements Serializable {
 
     public CmdResult uploadQacli(PrintStream out) throws PrqaUploadException, PrqaException {
         CmdResult res = null;
-        if ((!settings.isPublishToQAV()) && (!settings.isLoginToQAV())) {
-            out.println("Upload Results to QAV or QAV Server Login option is not Selected");
+        if ((!settings.isPublishToQAV())) {
+            return res;
+        } else if (!settings.isLoginToQAV()) {
+            out.println("Configuration Error: Upload Results to QAV is Selected but QAV Server Connection Configuration is not Selected");
             return res;
         }
         String finalCommand = createUploadCommandQacli(out);
@@ -290,7 +299,7 @@ public class QAFrameworkReport implements Serializable {
 
         return res;
     }
-    
+
     // __________________________________________________________________
     private String formatQacliPath() {
         String qacliPath;
@@ -329,7 +338,7 @@ public class QAFrameworkReport implements Serializable {
                 return projectFilePath;
             }
         } else {
-            outStream.println("File is relative");
+//            outStream.println("File is relative");
             File relative = new File(workspaceRoot, projectFilePath);
             if (relative.exists()) {
                 String path = relative.getPath();
@@ -380,15 +389,13 @@ public class QAFrameworkReport implements Serializable {
         Double projectCompliance = 0.0;
         int messages = 0;
         boolean PRIOR_QAF104 = (qaFrameworkVersion.isQaFrameworkVersionPriorToVersion104());
-        for (int i = 0; i < listOfReports.length; i++) {
-            if (listOfReports[i].isFile()) {
-                String fileExtension = FilenameUtils.getExtension(listOfReports[i].getPath().toString());
-                if (fileExtension.equals(XHTML) || fileExtension.equals(HTML)) {
-                    ComplianceReportHtmlParser parser = new ComplianceReportHtmlParser(listOfReports[i].getAbsolutePath());
-                    fileCompliance += Double.parseDouble(parser.getParseFirstResult(ComplianceReportHtmlParser.QAFfileCompliancePattern));
-                    projectCompliance += Double.parseDouble(parser.getParseFirstResult(ComplianceReportHtmlParser.QAFprojectCompliancePattern));
-                    messages += Integer.parseInt(parser.getParseFirstResult(ComplianceReportHtmlParser.QAFtotalMessagesPattern));
-                }
+
+        for (File reportFile : listOfReports) {
+            if (reportFile.getName().contains("RCR")) {
+                ComplianceReportHtmlParser parser = new ComplianceReportHtmlParser(reportFile.getAbsolutePath());
+                fileCompliance += Double.parseDouble(parser.getParseFirstResult(ComplianceReportHtmlParser.QAFfileCompliancePattern));
+                projectCompliance += Double.parseDouble(parser.getParseFirstResult(ComplianceReportHtmlParser.QAFprojectCompliancePattern));
+                messages += Integer.parseInt(parser.getParseFirstResult(ComplianceReportHtmlParser.QAFtotalMessagesPattern));
             }
         }
 

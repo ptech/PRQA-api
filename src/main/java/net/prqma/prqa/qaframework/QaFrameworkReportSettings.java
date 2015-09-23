@@ -21,12 +21,14 @@ public class QaFrameworkReportSettings implements ReportSettings {
     private String uploadSnapshotName;
     private String buildNumber;
     private String uploadSourceCode;
-  
+    private boolean genCrReport;
+    private boolean genMdReport;
+    private boolean genSupReport;
 
-    public QaFrameworkReportSettings(String qaInstallation, String qaProject, boolean pullUnifiedProject, String uniProjectName, 
-            boolean qaEnableProjectCma, boolean qaEnableDependencyMode, boolean qaCrossModuleAnalysis, String cmaProjectName, 
-            boolean generateReport, boolean publishToQAV, boolean loginToQAV, String product, String qaVerifyProjectName, String uploadSnapshotName, 
-            String buildNumber, String uploadSourceCode) {
+    public QaFrameworkReportSettings(String qaInstallation, String qaProject, boolean pullUnifiedProject, String uniProjectName,
+            boolean qaEnableProjectCma, boolean qaEnableDependencyMode, boolean qaCrossModuleAnalysis, String cmaProjectName,
+            boolean generateReport, boolean publishToQAV, boolean loginToQAV, String product, String qaVerifyProjectName, String uploadSnapshotName,
+            String buildNumber, String uploadSourceCode, boolean genCrReport, boolean genMdReport, boolean genSupReport) {
 
         this.qaInstallation = qaInstallation;
         this.uniProjectName = uniProjectName;
@@ -44,6 +46,9 @@ public class QaFrameworkReportSettings implements ReportSettings {
         this.uploadSnapshotName = uploadSnapshotName;
         this.buildNumber = buildNumber;
         this.uploadSourceCode = uploadSourceCode;
+        this.genMdReport = genMdReport;
+        this.genCrReport = genCrReport;
+        this.genSupReport = genSupReport;
     }
 
     @Override
@@ -59,7 +64,7 @@ public class QaFrameworkReportSettings implements ReportSettings {
     public boolean loginToQAV() {
         return loginToQAV;
     }
-    
+
     public String getQaInstallation() {
         return qaInstallation;
     }
@@ -71,7 +76,7 @@ public class QaFrameworkReportSettings implements ReportSettings {
     public boolean isQaEnableDependencyMode() {
         return qaEnableDependencyMode;
     }
-    
+
     public boolean isQaEnableProjectCma() {
         return qaEnableProjectCma;
     }
@@ -99,11 +104,11 @@ public class QaFrameworkReportSettings implements ReportSettings {
     public boolean isPublishToQAV() {
         return publishToQAV;
     }
-    
+
     public boolean isLoginToQAV() {
         return loginToQAV;
     }
-    
+
     public String getQaVerifyProjectName() {
         return qaVerifyProjectName;
     }
@@ -111,7 +116,7 @@ public class QaFrameworkReportSettings implements ReportSettings {
     public void setQaVerifyProjectName(String qaVerifyProjectName) {
         this.qaVerifyProjectName = qaVerifyProjectName;
     }
-    
+
     public String getUploadSnapshotName() {
         return uploadSnapshotName;
     }
@@ -119,7 +124,7 @@ public class QaFrameworkReportSettings implements ReportSettings {
     public void setUploadSnapshotName(String uploadSnapshotName) {
         this.uploadSnapshotName = uploadSnapshotName;
     }
-    
+
     public String getbuildNumber() {
         return buildNumber;
     }
@@ -127,13 +132,36 @@ public class QaFrameworkReportSettings implements ReportSettings {
     public void setBuildNumber(String buildNumber) {
         this.buildNumber = buildNumber;
     }
-    
+
     public String getUploadSourceCode() {
         return uploadSourceCode;
     }
-    
+
     public void setUploadSourceCode(String uploadSourceCode) {
         this.uploadSourceCode = uploadSourceCode;
     }
-    
+
+    public boolean isGenCrReport() {
+        return genCrReport;
+    }
+
+    public boolean isGenMdReport() {
+        return genMdReport;
+    }
+
+    public boolean isGenSupReport() {
+        return genMdReport;
+    }
+
+    public void setGenCrReport(boolean genCrReport) {
+        this.genCrReport = genCrReport;
+    }
+
+    public void setGenMdReport(boolean genMdReport) {
+        this.genMdReport = genMdReport;
+    }
+
+    public void setGenSupReport(boolean genSupReport) {
+        this.genSupReport = genSupReport;
+    }
 }
