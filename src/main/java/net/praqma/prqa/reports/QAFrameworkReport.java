@@ -388,8 +388,6 @@ public class QAFrameworkReport implements Serializable {
         Double fileCompliance = 0.0;
         Double projectCompliance = 0.0;
         int messages = 0;
-        boolean PRIOR_QAF104 = (qaFrameworkVersion.isQaFrameworkVersionPriorToVersion104());
-
         for (File reportFile : listOfReports) {
             if (reportFile.getName().contains("RCR")) {
                 ComplianceReportHtmlParser parser = new ComplianceReportHtmlParser(reportFile.getAbsolutePath());
