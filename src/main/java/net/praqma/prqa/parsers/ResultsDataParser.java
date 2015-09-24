@@ -36,9 +36,11 @@ public class ResultsDataParser {
         boolean PRIOR_QAF104 = (qaFrameworkVersion.isQaFrameworkVersionPriorToVersion104());
         
         FileInputStream fileis = new FileInputStream(filePath);
+        
         /**
-         * Dom Parsing - Temporary fix to read the xml file. will be replaced.
+         * TODO: Dom Parsing - Temporary fix to read the xml file. will be replaced.
          */
+        
         if (PRIOR_QAF104) {
             XMLInputFactory factory = XMLInputFactory.newInstance();
             XMLStreamReader reader = factory.createXMLStreamReader(fileis);
@@ -51,30 +53,6 @@ public class ResultsDataParser {
         }
     }
 
-    /*This method is to return count.
-     public int getdiagnosticCount() throws Exception {
-     DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-     DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-     FileInputStream inputFile = new FileInputStream(filePath);
-     Document doc = dBuilder.parse(inputFile);
-     return diagnosticCount(doc);
-     }
-     private int diagnosticCount(Document document) throws Exception {
-     document.getDocumentElement().normalize();
-     NodeList nList = document.getElementsByTagName("Folder");
-     if ("NoInfo".equals(nList.item(0).getAttributes().getNamedItem("status").getNodeValue()))
-     {  
-     for (int temp = 0; temp < nList.getLength(); temp++)
-     {
-     Node node = nList.item(temp);
-     if (node instanceof Element) {
-     count += Integer.parseInt(node.getAttributes().getNamedItem("active").getNodeValue());
-     }
-     }
-     }
-     return count;
-     }
-     */
     private List<MessageGroup> beginFileParsing(Document document) throws Exception {
         List<MessageGroup> messagesGroups = new ArrayList<MessageGroup>();
         document.getDocumentElement().normalize();
@@ -221,7 +199,6 @@ public class ResultsDataParser {
             }
         }
         return messageGroup;
-
     }
 
     private Rule createViolatedRule(XMLStreamReader reader) throws Exception {
