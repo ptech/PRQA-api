@@ -409,14 +409,7 @@ public class QAFrameworkReport implements Serializable {
     }
 
     private String getResultsDataFileRelativePath() {
-        String relativePath = "/prqa/";
-        String resultsDataFileName = "results_data.xml";
-        if (qaFrameworkVersion.isQaFrameworkVersionPriorToVersion104()) {
-            relativePath += "output/";
-        } else {
-            relativePath += "reports/";
-        }
-        return relativePath += resultsDataFileName;
+        return (qaFrameworkVersion.isQaFrameworkVersionPriorToVersion104() ? "/prqa/output/results_data.xml" : "/prqa/reports/results_data.xml");
 
     }
 
