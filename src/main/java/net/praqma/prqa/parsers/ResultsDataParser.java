@@ -32,16 +32,14 @@ public class ResultsDataParser {
         this.qaFrameworkVersion = qaFrameworkVersion;
     }
 
-    public List<MessageGroup> parseResultsData() throws Exception {
-        boolean PRIOR_QAF104 = (qaFrameworkVersion.isQaFrameworkVersionPriorToVersion104());
-        
+    public List<MessageGroup> parseResultsData() throws Exception {       
         FileInputStream fileis = new FileInputStream(filePath);
         
         /**
          * TODO: Dom Parsing - Temporary fix to read the xml file. will be replaced.
          */
         
-        if (PRIOR_QAF104) {
+        if (qaFrameworkVersion.isQaFrameworkVersionPriorToVersion104()) {
             XMLInputFactory factory = XMLInputFactory.newInstance();
             XMLStreamReader reader = factory.createXMLStreamReader(fileis);
             return beginFileParse(reader);
