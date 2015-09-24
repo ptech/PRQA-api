@@ -220,7 +220,6 @@ public class QAFrameworkReport implements Serializable {
     }
 
     private String createReportCommand(String projectLocation, String reportType, PrintStream out) {
-//        out.println("Create report command");
         PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
         builder.appendArgument("report -P");
         builder.appendArgument(projectLocation);
@@ -338,7 +337,6 @@ public class QAFrameworkReport implements Serializable {
                 return projectFilePath;
             }
         } else {
-//            outStream.println("File is relative");
             File relative = new File(workspaceRoot, projectFilePath);
             if (relative.exists()) {
                 String path = relative.getPath();
