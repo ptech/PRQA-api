@@ -129,7 +129,8 @@ public class PRQAReportTest {
 		new File(mockProjectFile).deleteOnExit();
 	}
 
-/*	@Test
+/*	TODO: REVIEW THE TEST
+        @Test
 	public void testUploadCommandGeneratorQacli() throws IOException, PrqaException {
 		PRQAReport report = new PRQAReport(repSettings, serverSettings, uploadSettings, appSettings);
 		report.setWorkspace(tmpDir);
