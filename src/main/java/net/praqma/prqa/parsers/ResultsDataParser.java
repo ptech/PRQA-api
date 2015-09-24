@@ -34,14 +34,12 @@ public class ResultsDataParser {
 
     public List<MessageGroup> parseResultsData() throws Exception {
         boolean PRIOR_QAF104 = (qaFrameworkVersion.isQaFrameworkVersionPriorToVersion104());
-        boolean QA_UNIFIED = (qaFrameworkVersion.isQaFrameworkUnified());
-
+        
         FileInputStream fileis = new FileInputStream(filePath);
-
         /**
          * Dom Parsing - Temporary fix to read the xml file. will be replaced.
          */
-        if (PRIOR_QAF104 == true) {
+        if (PRIOR_QAF104) {
             XMLInputFactory factory = XMLInputFactory.newInstance();
             XMLStreamReader reader = factory.createXMLStreamReader(fileis);
             return beginFileParse(reader);

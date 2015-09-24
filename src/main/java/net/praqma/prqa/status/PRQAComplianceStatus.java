@@ -304,7 +304,7 @@ public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAC
 			for (MessageGroup messageGroup : messagesGroups) {
 
 				sb.append("<th style=\"padding-right:5px;\">" + messageGroup.getMessageGroupName().trim() + ": </th>");
-                if (PRIOR_QAF104 == false)
+                if (!PRIOR_QAF104)
                 {
                     sb.append("<th style=\"padding-right:5px;\">" + messageGroup.getTotalViolations() + "</th>");
                 }
