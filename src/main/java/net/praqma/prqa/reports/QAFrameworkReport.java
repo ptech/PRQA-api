@@ -77,22 +77,21 @@ public class QAFrameworkReport implements Serializable {
     }
 
     public CmdResult pullUnifyProjectQacli(boolean isUnix, PrintStream out) throws PrqaException {
-        CmdResult res = null;
         if (!settings.isLoginToQAV()) {
             out.println("Configuration Error: Pull Unified Project is Selected but QAV Server Connection Configuration is not Selected");
-            return res;
+            return null;
         }
         if (settings.isPullUnifiedProject()) {
             String command = createPullUnifyProjectCommand(isUnix, out);
             out.println("Download Unified Project Definition command:");
             out.println(command);
             try {
-                res = CommandLine.getInstance().run(command, workspace, true, false);
+                return CommandLine.getInstance().run(command, workspace, true, false);
             } catch (AbnormalProcessTerminationException abnex) {
                 throw new PrqaException(String.format("Failed to Download Unified Project, message was:\n %s", abnex.getMessage()), abnex);
             }
         }
-        return res;
+        return null;
     }
 
     private String createPullUnifyProjectCommand(boolean isUnix, PrintStream out) throws PrqaException {
@@ -126,20 +125,18 @@ public class QAFrameworkReport implements Serializable {
         out.println(finalCommand);
         Map<String, String> systemVars = new HashMap<String, String>();
         systemVars.putAll(System.getenv());
-        CmdResult res = null;
         try {
             if (getEnvironment() == null) {
                 PRQAReport._logEnv("Current analysis execution environment", systemVars);
-                res = CommandLine.getInstance().run(finalCommand, workspace, true, false);
+                return CommandLine.getInstance().run(finalCommand, workspace, true, false);
             } else {
                 systemVars.putAll(getEnvironment());
                 PRQAReport._logEnv("Current modified analysis execution environment", systemVars);
-                res = CommandLine.getInstance().run(finalCommand, workspace, true, false, systemVars);
+                return CommandLine.getInstance().run(finalCommand, workspace, true, false, systemVars);
             }
         } catch (AbnormalProcessTerminationException abnex) {
             throw new PrqaException(String.format("Failed to analyze, message was:\n %s", abnex.getMessage()), abnex);
         }
-        return res;
     }
 
     private String createAnalysisCommandForQacli(boolean isUnix, PrintStream out) throws PrqaException {
@@ -161,19 +158,18 @@ public class QAFrameworkReport implements Serializable {
     }
 
     public CmdResult cmaAnalysisQacli(boolean isUnix, PrintStream out) throws PrqaException {
-        CmdResult res = null;
         if (settings.isQaCrossModuleAnalysis()) {
             String command = createCmaAnalysisCommand(isUnix);
             out.println("Perform Cross-Module analysis command:");
             out.println(command);
             try {
-                res = CommandLine.getInstance().run(command, workspace, true, false);
+                return CommandLine.getInstance().run(command, workspace, true, false);
             } catch (AbnormalProcessTerminationException abnex) {
                 throw new PrqaException(String.format("Failed to analyze, message was:\n %s", abnex.getMessage()),
                         abnex);
             }
         }
-        return res;
+        return null;
     }
 
     private String createCmaAnalysisCommand(boolean isUnix) throws PrqaException {
@@ -238,8 +234,10 @@ public class QAFrameworkReport implements Serializable {
         if (file.isDirectory()) {
             File[] files = file.listFiles();
             for (File f : files) {
-                if ((f.getName().contains("RCR") && reportType.equals("RCR")) || (f.getName().contains("CRR") && reportType.equals("CRR"))
-                        || (f.getName().contains("MDR") && reportType.equals("MDR")) || (f.getName().contains("SUR") && reportType.equals("SR"))
+                if ((f.getName().contains("RCR") && reportType.equals("RCR"))
+                        || (f.getName().contains("CRR") && reportType.equals("CRR"))
+                        || (f.getName().contains("MDR") && reportType.equals("MDR"))
+                        || (f.getName().contains("SUR") && reportType.equals("SR"))
                         || f.getName().contains("results_data")) {
                     f.delete();
                 }
@@ -276,38 +274,32 @@ public class QAFrameworkReport implements Serializable {
     }
 
     public CmdResult uploadQacli(PrintStream out) throws PrqaUploadException, PrqaException {
-        CmdResult res = null;
-        if ((!settings.isPublishToQAV())) {
-            return res;
-        } else if (!settings.isLoginToQAV()) {
+        if (!settings.isLoginToQAV()) {
             out.println("Configuration Error: Upload Results to QAV is Selected but QAV Server Connection Configuration is not Selected");
-            return res;
+            return null;
         }
         String finalCommand = createUploadCommandQacli(out);
         out.println("Upload command: " + finalCommand);
         try {
-            if (getEnvironment() == null) {
-                res = CommandLine.getInstance().run(finalCommand, workspace, true, false);
+            Map<String, String> getEnv = getEnvironment();
+            if (getEnv == null) {
+                return CommandLine.getInstance().run(finalCommand, workspace, true, false);
             } else {
-                res = CommandLine.getInstance().run(finalCommand, workspace, true, false, getEnvironment());
+                return CommandLine.getInstance().run(finalCommand, workspace, true, false, getEnv);
             }
         } catch (AbnormalProcessTerminationException abnex) {
             log.logp(Level.SEVERE, this.getClass().getName(), "upload()", "Logged error with upload", abnex);
             throw new PrqaUploadException(String.format("Upload failed with message:%n%s", abnex.getMessage()), abnex);
         }
-
-        return res;
     }
 
     // __________________________________________________________________
     private String formatQacliPath() {
-        String qacliPath;
         if (environment.containsKey(QACli.QAF_BIN_PATH)) {
-            qacliPath = QUOTE + environment.get(QACli.QAF_BIN_PATH) + FILE_SEPARATOR + "qacli" + QUOTE;
+            return (QUOTE + environment.get(QACli.QAF_BIN_PATH) + FILE_SEPARATOR + QACli.QACLI + QUOTE);
         } else {
-            qacliPath = "qacli";
+            return QACli.QACLI;
         }
-        return qacliPath;
     }
 
     public static String getNamingTemplate(PRQAContext.QARReportType type, String extension) {
@@ -373,7 +365,9 @@ public class QAFrameworkReport implements Serializable {
         File resultsDataFile = new File(projectLocation, getResultsDataFileRelativePath());
         out.println("RESULTS DATA file path: " + resultsDataFile.getPath());
 
-        if (!reportFolder.exists() || !reportFolder.isDirectory() || !resultsDataFile.exists()
+        if (!reportFolder.exists()
+                || !reportFolder.isDirectory()
+                || !resultsDataFile.exists()
                 || !resultsDataFile.isFile()) {
             return status;
         }

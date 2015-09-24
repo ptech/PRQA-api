@@ -29,6 +29,7 @@ public class QACli implements Product {
 	public static final String QAF_BIN_PATH = "QAFBINPATH";
 	public static final String WORKSPACE_PATH = "WORKSPACEPATH";
 	public static final String QAF_INSTALL_PATH = "QAFINSTALLPATH";
+        public static final String QACLI = "qacli";
 
 	@Override
 	public final String getProductVersion(Map<String, String> environment, File workspace, boolean isUnix) throws PrqaSetupException {
@@ -42,7 +43,7 @@ public class QACli implements Product {
 			sb.append(environment.get(QAF_BIN_PATH));
 			sb.append(System.getProperty("file.separator"));
 		}
-		sb.append("qacli\" --version");
+		sb.append(QACLI).append("\" --version");
 
 		try {
 			res = CommandLine.getInstance().run(sb.toString(), workspace, true, false, environment);
