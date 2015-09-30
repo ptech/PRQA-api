@@ -81,7 +81,7 @@ public class QAFrameworkReport implements Serializable {
             out.println("Configuration Error: Pull Unified Project is Selected but QAV Server Connection Configuration is not Selected");
             return null;
         }
-        if (settings.isPullUnifiedProject()) {
+        else {
             String command = createPullUnifyProjectCommand(isUnix, out);
             out.println("Download Unified Project Definition command:");
             out.println(command);
@@ -91,7 +91,6 @@ public class QAFrameworkReport implements Serializable {
                 throw new PrqaException(String.format("Failed to Download Unified Project, message was:\n %s", abnex.getMessage()), abnex);
             }
         }
-        return null;
     }
 
     private String createPullUnifyProjectCommand(boolean isUnix, PrintStream out) throws PrqaException {
@@ -186,7 +185,9 @@ public class QAFrameworkReport implements Serializable {
     }
 
     public CmdResult reportQacli(boolean isUnix, String repType, PrintStream out) throws PrqaException {
-
+        if (repType.equals("SR") && (!qaFrameworkVersion.isQaFrameworkUnified())){
+            repType = "SUR";
+        }
         String reportCommand = createReportCommandForQacli(isUnix, repType, out);
         Map<String, String> systemVars = new HashMap<String, String>();
         systemVars.putAll(System.getenv());
