@@ -29,14 +29,22 @@ public class QaFrameworkVersion {
 
 		String shortVersion = getVersionShortFormat();
                 String qafVersion = shortVersion.substring(shortVersion.lastIndexOf(" ") + 1);
-		return (qafVersion.equals("1.0.0") || qafVersion.equals("1.0.1") || qafVersion.equals("1.0.2") || qafVersion.equals("1.0.3"));
+		return ( qafVersion.equals("1.0.0")
+                        || qafVersion.equals("1.0.1")
+                        || qafVersion.equals("1.0.2")
+                        || qafVersion.equals("1.0.3"));
 	}
         
 	public boolean isQaFrameworkUnified() {
 
 		String shortVersion = getVersionShortFormat();
-                String qafVersion = shortVersion.substring(shortVersion.lastIndexOf(" "));
-		return (!qafVersion.equals("1.0.0") || !qafVersion.equals("1.0.1") || !qafVersion.equals("1.0.2") || !qafVersion.equals("1.0.3") || !qafVersion.equals("1.0.4") || !qafVersion.equals("1.0.5"));
+                String qafVersion = shortVersion.substring(shortVersion.lastIndexOf(" ") + 1);
+		return ( !qafVersion.equals("1.0.0") 
+                        && !qafVersion.equals("1.0.1")
+                        && !qafVersion.equals("1.0.2")
+                        && !qafVersion.equals("1.0.3")
+                        && !qafVersion.equals("1.0.4")
+                        && !qafVersion.equals("1.0.5"));
 	}
 
 	private String getVersionShortFormat() {
