@@ -190,9 +190,11 @@ public class QAFrameworkReport implements Serializable {
         }
         /*MDR Report type isnt supported in 1.0.3, 1.0.2, 1.0.1 and 1.0.0 */
         if (repType.equals("MDR") && (qaFrameworkVersion.isQaFrameworkVersionPriorToVersion104())){
-            out.println("----------------------------------------------------------------------------------------------------");
+            out.println("===================================================================================================");
             out.println("Warning: Metrics Data Report isn't supported report type in PRQA-Framework Prior to 1.0.4 version");
-            out.println("----------------------------------------------------------------------------------------------------");
+            out.println("===================================================================================================");
+            log.severe(String.format("Warning: Metrics Data Report isn't supported report type in PRQA-Framework Prior to 1.0.4 version");
+            
             return null;
         }
         String reportCommand = createReportCommandForQacli(isUnix, repType, out);
