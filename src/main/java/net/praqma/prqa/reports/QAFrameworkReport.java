@@ -193,7 +193,7 @@ public class QAFrameworkReport implements Serializable {
             out.println("===================================================================================================");
             out.println("Warning: Metrics Data Report isn't supported report type in PRQA-Framework Prior to 1.0.4 version");
             out.println("===================================================================================================");
-            log.severe(String.format("Warning: Metrics Data Report isn't supported report type in PRQA-Framework Prior to 1.0.4 version");
+            log.severe(String.format("Warning: Metrics Data Report isn't supported report type in PRQA-Framework Prior to 1.0.4 version"));
             
             return null;
         }
