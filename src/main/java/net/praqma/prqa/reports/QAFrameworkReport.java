@@ -144,13 +144,16 @@ public class QAFrameworkReport implements Serializable {
         if (settings.isQaEnableDependencyMode() && analyzeOptions.contains("c")) {
             analyzeOptions = analyzeOptions.replace("c", "");
         }
-        if (settings.isQaEnableProjectCma() && analyzeOptions.contains("f")) {
+        
+        if (settings.isQaEnableProjectCma()) {
+            if(analyzeOptions.contains("f")) {
             analyzeOptions = analyzeOptions.replace("f", "p");
+        } else {
+                if (analyzeOptions.contains("f") && settings.isQaEnableMtr()) {
+                    analyzeOptions = analyzeOptions.replace("f", "m");
+                }
+            }
         }
-        if (!settings.isQaEnableProjectCma() && analyzeOptions.contains("f") && settings.isQaEnableMtr()) {
-            analyzeOptions = analyzeOptions.replace("f", "m");
-        }
-
         builder.appendArgument(analyzeOptions);
         builder.appendArgument("-P");
         builder.appendArgument(PRQACommandBuilder.getProjectFile(resolveAbsOrRelativePath(workspace,
@@ -325,8 +328,7 @@ public class QAFrameworkReport implements Serializable {
      */
     private String resolveAbsOrRelativePath(File workspaceRoot, String projectFilePath, PrintStream outStream)
             throws PrqaException {
-        outStream.println("Project Name: " + projectFilePath);
-        outStream.println("workspace: " + workspaceRoot);
+        outStream.println("Project : " + projectFilePath);
         File pFile = new File(projectFilePath);
         if (pFile.isAbsolute()) {
             outStream.println("Project Path is absolute ");
@@ -407,12 +409,6 @@ public class QAFrameworkReport implements Serializable {
         status.setProjectCompliance(projectCompliance);
         status.setMessages(messages);
 
-        return status;
-    }
-
-    /*Dirty Hack Should be fixed properly*/
-    public PRQAComplianceStatus getDummyComplianceStatus(PrintStream out) throws PrqaException, Exception {
-        PRQAComplianceStatus status = new PRQAComplianceStatus();
         return status;
     }
 
