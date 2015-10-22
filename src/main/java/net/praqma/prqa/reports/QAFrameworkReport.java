@@ -144,14 +144,13 @@ public class QAFrameworkReport implements Serializable {
         if (settings.isQaEnableDependencyMode() && analyzeOptions.contains("c")) {
             analyzeOptions = analyzeOptions.replace("c", "");
         }
-        
         if (settings.isQaEnableProjectCma()) {
-            if(analyzeOptions.contains("f")) {
-            analyzeOptions = analyzeOptions.replace("f", "p");
-        } else {
+            if (analyzeOptions.contains("f")) {
+                analyzeOptions = analyzeOptions.replace("f", "p");
+            }
+            } else {
                 if (analyzeOptions.contains("f") && settings.isQaEnableMtr()) {
-                    analyzeOptions = analyzeOptions.replace("f", "m");
-                }
+                analyzeOptions = analyzeOptions.replace("f", "m");
             }
         }
         builder.appendArgument(analyzeOptions);

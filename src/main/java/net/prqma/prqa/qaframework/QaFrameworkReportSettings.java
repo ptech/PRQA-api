@@ -26,6 +26,33 @@ public class QaFrameworkReportSettings implements ReportSettings {
     private boolean genCrReport;
     private boolean genMdReport;
     private boolean genSupReport;
+    
+    /**
+     * 
+     * @param qaInstallation
+     * @param qaProject
+     * @param pullUnifiedProject
+     * @param uniProjectName
+     * @param qaEnableMtr
+     * @param qaEnableProjectCma
+     * @param qaEnableDependencyMode
+     * @param qaCrossModuleAnalysis
+     * @param cmaProjectName
+     * @param generateReport
+     * @param publishToQAV
+     * @param loginToQAV
+     * @param product
+     * @param qaUploadWhenStable
+     * @param qaVerifyProjectName
+     * @param uploadSnapshotName
+     * @param buildNumber
+     * @param uploadSourceCode
+     * @param genCrReport
+     * @param genMdReport
+     * @param genSupReport 
+     * 
+     *  TODO - We should create a builder for this object to make the creation more readable.
+     */
 
     public QaFrameworkReportSettings(String qaInstallation, String qaProject, boolean pullUnifiedProject, String uniProjectName,
             boolean qaEnableMtr, boolean qaEnableProjectCma, boolean qaEnableDependencyMode, boolean qaCrossModuleAnalysis, String cmaProjectName,
