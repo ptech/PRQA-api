@@ -47,7 +47,7 @@ public class QaFrameworkVersion {
                         && !qafVersion.equals("1.0.5"));
 	}
 
-	private String getVersionShortFormat() {
+	public String getVersionShortFormat() {
 		return qaFrameworkVersion.substring(0, qaFrameworkVersion.lastIndexOf("."));
 	}
 }

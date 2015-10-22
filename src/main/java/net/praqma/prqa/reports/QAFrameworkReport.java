@@ -80,8 +80,7 @@ public class QAFrameworkReport implements Serializable {
         if (!settings.isLoginToQAV()) {
             out.println("Configuration Error: Pull Unified Project is Selected but QAV Server Connection Configuration is not Selected");
             return null;
-        }
-        else {
+        } else {
             String command = createPullUnifyProjectCommand(isUnix, out);
             out.println("Download Unified Project Definition command:");
             out.println(command);
@@ -118,8 +117,8 @@ public class QAFrameworkReport implements Serializable {
         return builder.getCommand();
     }
 
-    public CmdResult analyzeQacli(boolean isUnix, PrintStream out) throws PrqaException {
-        String finalCommand = createAnalysisCommandForQacli(isUnix, out);
+    public CmdResult analyzeQacli(boolean isUnix, String Options, PrintStream out) throws PrqaException {
+        String finalCommand = createAnalysisCommandForQacli(isUnix, Options, out);
         out.println("Analysis command:");
         out.println(finalCommand);
         Map<String, String> systemVars = new HashMap<String, String>();
@@ -138,15 +137,18 @@ public class QAFrameworkReport implements Serializable {
         }
     }
 
-    private String createAnalysisCommandForQacli(boolean isUnix, PrintStream out) throws PrqaException {
+    private String createAnalysisCommandForQacli(boolean isUnix, String options, PrintStream out) throws PrqaException {
         PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
         builder.appendArgument("analyze");
-        String analyzeOptions = "-fc";
-        if (settings.isQaEnableDependencyMode()) {
+        String analyzeOptions = options;
+        if (settings.isQaEnableDependencyMode() && analyzeOptions.contains("c")) {
             analyzeOptions = analyzeOptions.replace("c", "");
         }
-        if (settings.isQaEnableProjectCma()) {
+        if (settings.isQaEnableProjectCma() && analyzeOptions.contains("f")) {
             analyzeOptions = analyzeOptions.replace("f", "p");
+        }
+        if (!settings.isQaEnableProjectCma() && analyzeOptions.contains("f") && settings.isQaEnableMtr()) {
+            analyzeOptions = analyzeOptions.replace("f", "m");
         }
 
         builder.appendArgument(analyzeOptions);
@@ -185,16 +187,12 @@ public class QAFrameworkReport implements Serializable {
     }
 
     public CmdResult reportQacli(boolean isUnix, String repType, PrintStream out) throws PrqaException {
-        if (repType.equals("SR") && (!qaFrameworkVersion.isQaFrameworkUnified())){
-            repType = "SUR";
-        }
         /*MDR Report type isnt supported in 1.0.3, 1.0.2, 1.0.1 and 1.0.0 */
-        if (repType.equals("MDR") && (qaFrameworkVersion.isQaFrameworkVersionPriorToVersion104())){
+        if (repType.equals("MDR") && (qaFrameworkVersion.isQaFrameworkVersionPriorToVersion104())) {
             out.println("===================================================================================================");
             out.println("Warning: Metrics Data Report isn't supported report type in PRQA-Framework Prior to 1.0.4 version");
             out.println("===================================================================================================");
             log.severe(String.format("Warning: Metrics Data Report isn't supported report type in PRQA-Framework Prior to 1.0.4 version"));
-            
             return null;
         }
         String reportCommand = createReportCommandForQacli(isUnix, repType, out);
@@ -327,13 +325,13 @@ public class QAFrameworkReport implements Serializable {
      */
     private String resolveAbsOrRelativePath(File workspaceRoot, String projectFilePath, PrintStream outStream)
             throws PrqaException {
-        outStream.println("The selected project is: " + projectFilePath);
-        outStream.println("workspace root: " + workspaceRoot);
+        outStream.println("Project Name: " + projectFilePath);
+        outStream.println("workspace: " + workspaceRoot);
         File pFile = new File(projectFilePath);
         if (pFile.isAbsolute()) {
-            outStream.println("File is absolute ");
+            outStream.println("Project Path is absolute ");
             if (!pFile.exists()) {
-                throw new PrqaException(String.format("The project file %s does not exist.", projectFilePath));
+                throw new PrqaException(String.format("The project path %s does not exist.", projectFilePath));
             } else {
                 outStream.println("Return is absolute: " + projectFilePath);
                 return projectFilePath;
@@ -342,10 +340,10 @@ public class QAFrameworkReport implements Serializable {
             File relative = new File(workspaceRoot, projectFilePath);
             if (relative.exists()) {
                 String path = relative.getPath();
-                outStream.println("File is relative with path: " + path);
+                outStream.println("Project Path: " + path);
                 return path;
             } else {
-                throw new PrqaException(String.format("The project file %s does not exist.", relative.getPath()));
+                throw new PrqaException(String.format("The project path %s does not exist.", relative.getPath()));
             }
         }
     }
@@ -409,6 +407,12 @@ public class QAFrameworkReport implements Serializable {
         status.setProjectCompliance(projectCompliance);
         status.setMessages(messages);
 
+        return status;
+    }
+
+    /*Dirty Hack Should be fixed properly*/
+    public PRQAComplianceStatus getDummyComplianceStatus(PrintStream out) throws PrqaException, Exception {
+        PRQAComplianceStatus status = new PRQAComplianceStatus();
         return status;
     }
 
