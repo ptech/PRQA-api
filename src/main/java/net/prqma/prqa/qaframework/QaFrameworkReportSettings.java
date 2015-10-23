@@ -10,6 +10,7 @@ public class QaFrameworkReportSettings implements ReportSettings {
     private String uniProjectName;
     private boolean pullUnifiedProject;
     private boolean qaEnableDependencyMode;
+    private boolean qaEnableMtr;
     private boolean qaEnableProjectCma;
     private boolean qaCrossModuleAnalysis;
     private String cmaProjectName;
@@ -17,6 +18,7 @@ public class QaFrameworkReportSettings implements ReportSettings {
     private boolean publishToQAV;
     private boolean loginToQAV;
     private String product;
+    private boolean qaUploadWhenStable;
     private String qaVerifyProjectName;
     private String uploadSnapshotName;
     private String buildNumber;
@@ -24,11 +26,38 @@ public class QaFrameworkReportSettings implements ReportSettings {
     private boolean genCrReport;
     private boolean genMdReport;
     private boolean genSupReport;
+    
+    /**
+     * 
+     * @param qaInstallation
+     * @param qaProject
+     * @param pullUnifiedProject
+     * @param uniProjectName
+     * @param qaEnableMtr
+     * @param qaEnableProjectCma
+     * @param qaEnableDependencyMode
+     * @param qaCrossModuleAnalysis
+     * @param cmaProjectName
+     * @param generateReport
+     * @param publishToQAV
+     * @param loginToQAV
+     * @param product
+     * @param qaUploadWhenStable
+     * @param qaVerifyProjectName
+     * @param uploadSnapshotName
+     * @param buildNumber
+     * @param uploadSourceCode
+     * @param genCrReport
+     * @param genMdReport
+     * @param genSupReport 
+     * 
+     *  TODO - We should create a builder for this object to make the creation more readable.
+     */
 
     public QaFrameworkReportSettings(String qaInstallation, String qaProject, boolean pullUnifiedProject, String uniProjectName,
-            boolean qaEnableProjectCma, boolean qaEnableDependencyMode, boolean qaCrossModuleAnalysis, String cmaProjectName,
-            boolean generateReport, boolean publishToQAV, boolean loginToQAV, String product, String qaVerifyProjectName, String uploadSnapshotName,
-            String buildNumber, String uploadSourceCode, boolean genCrReport, boolean genMdReport, boolean genSupReport) {
+            boolean qaEnableMtr, boolean qaEnableProjectCma, boolean qaEnableDependencyMode, boolean qaCrossModuleAnalysis, String cmaProjectName,
+            boolean generateReport, boolean publishToQAV, boolean loginToQAV, String product, boolean qaUploadWhenStable, String qaVerifyProjectName,
+            String uploadSnapshotName, String buildNumber, String uploadSourceCode, boolean genCrReport, boolean genMdReport, boolean genSupReport) {
 
         this.qaInstallation = qaInstallation;
         this.uniProjectName = uniProjectName;
@@ -37,11 +66,13 @@ public class QaFrameworkReportSettings implements ReportSettings {
         this.cmaProjectName = cmaProjectName;
         this.publishToQAV = publishToQAV;
         this.loginToQAV = loginToQAV;
+        this.qaEnableMtr = qaEnableMtr;
         this.qaEnableProjectCma = qaEnableProjectCma;
         this.qaEnableDependencyMode = qaEnableDependencyMode;
         this.generateReport = generateReport;
         this.qaProject = qaProject;
         this.product = product;
+        this.qaUploadWhenStable = qaUploadWhenStable;
         this.qaVerifyProjectName = qaVerifyProjectName;
         this.uploadSnapshotName = uploadSnapshotName;
         this.buildNumber = buildNumber;
@@ -81,6 +112,10 @@ public class QaFrameworkReportSettings implements ReportSettings {
         return qaEnableProjectCma;
     }
 
+    public boolean isQaEnableMtr() {
+        return qaEnableMtr;
+    }
+
     public boolean isQaCrossModuleAnalysis() {
         return qaCrossModuleAnalysis;
     }
@@ -107,6 +142,10 @@ public class QaFrameworkReportSettings implements ReportSettings {
 
     public boolean isLoginToQAV() {
         return loginToQAV;
+    }
+
+    public boolean isQaUploadWhenStable() {
+        return qaUploadWhenStable;
     }
 
     public String getQaVerifyProjectName() {
