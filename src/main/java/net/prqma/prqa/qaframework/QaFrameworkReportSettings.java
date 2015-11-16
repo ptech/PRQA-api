@@ -26,9 +26,13 @@ public class QaFrameworkReportSettings implements ReportSettings {
     private boolean genCrReport;
     private boolean genMdReport;
     private boolean genSupReport;
-    
+    private boolean analysisSettings;
+    private boolean stopWhenFail;
+    private boolean generatePreprocess;
+    private boolean assembleSupportAnalytics;
+
     /**
-     * 
+     *
      * @param qaInstallation
      * @param qaProject
      * @param pullUnifiedProject
@@ -49,15 +53,16 @@ public class QaFrameworkReportSettings implements ReportSettings {
      * @param uploadSourceCode
      * @param genCrReport
      * @param genMdReport
-     * @param genSupReport 
-     * 
-     *  TODO - We should create a builder for this object to make the creation more readable.
+     * @param genSupReport
+     *
+     * TODO - We should create a builder for this object to make the creation
+     * more readable.
      */
-
     public QaFrameworkReportSettings(String qaInstallation, String qaProject, boolean pullUnifiedProject, String uniProjectName,
             boolean qaEnableMtr, boolean qaEnableProjectCma, boolean qaEnableDependencyMode, boolean qaCrossModuleAnalysis, String cmaProjectName,
             boolean generateReport, boolean publishToQAV, boolean loginToQAV, String product, boolean qaUploadWhenStable, String qaVerifyProjectName,
-            String uploadSnapshotName, String buildNumber, String uploadSourceCode, boolean genCrReport, boolean genMdReport, boolean genSupReport) {
+            String uploadSnapshotName, String buildNumber, String uploadSourceCode, boolean genCrReport, boolean genMdReport, boolean genSupReport,
+            boolean analysisSettings, boolean stopWhenFail, boolean generatePreprocess, boolean assembleSupportAnalytics) {
 
         this.qaInstallation = qaInstallation;
         this.uniProjectName = uniProjectName;
@@ -80,6 +85,11 @@ public class QaFrameworkReportSettings implements ReportSettings {
         this.genMdReport = genMdReport;
         this.genCrReport = genCrReport;
         this.genSupReport = genSupReport;
+        this.analysisSettings = analysisSettings;
+        this.stopWhenFail = stopWhenFail;
+        this.generatePreprocess = generatePreprocess;
+        this.assembleSupportAnalytics = assembleSupportAnalytics;
+
     }
 
     @Override
@@ -203,4 +213,37 @@ public class QaFrameworkReportSettings implements ReportSettings {
     public void setGenSupReport(boolean genSupReport) {
         this.genSupReport = genSupReport;
     }
+
+    public boolean isAnalysisSettings() {
+        return analysisSettings;
+    }
+
+    public boolean isStopWhenFail() {
+        return stopWhenFail;
+    }
+
+    public boolean isGeneratePreprocess() {
+        return generatePreprocess;
+    }
+
+    public boolean isAssembleSupportAnalytics() {
+        return assembleSupportAnalytics;
+    }
+
+    public void setAnalysisSettings(boolean analysisSettings) {
+        this.analysisSettings = analysisSettings;
+    }
+
+    public void setStopWhenFail(boolean stopWhenFail) {
+        this.stopWhenFail = stopWhenFail;
+    }
+
+    public void setGeneratePreprocess(boolean genSupReport) {
+        this.genSupReport = genSupReport;
+    }
+
+    public void setAssembleSupportAnalytics(boolean assembleSupportAnalytics) {
+        this.assembleSupportAnalytics = assembleSupportAnalytics;
+    }
+
 }
