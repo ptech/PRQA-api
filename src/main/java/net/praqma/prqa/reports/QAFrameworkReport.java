@@ -133,7 +133,7 @@ public class QAFrameworkReport implements Serializable {
                 return CommandLine.getInstance().run(finalCommand, workspace, true, false, systemVars);
             }
         } catch (AbnormalProcessTerminationException abnex) {
-            throw new PrqaException(String.format("Failed to analyze, message was:\n %s", abnex.getMessage()), abnex);
+            throw new PrqaException(String.format("ERROR: Failed to analyze, message is... \n %s ", abnex.getMessage()), abnex);
         }
     }
 
@@ -148,12 +148,27 @@ public class QAFrameworkReport implements Serializable {
             if (analyzeOptions.contains("f")) {
                 analyzeOptions = analyzeOptions.replace("f", "p");
             }
-            } else {
-                if (analyzeOptions.contains("f") && settings.isQaEnableMtr()) {
+        } else {
+            if (analyzeOptions.contains("f") && settings.isQaEnableMtr()) {
                 analyzeOptions = analyzeOptions.replace("f", "m");
             }
         }
+
         builder.appendArgument(analyzeOptions);
+        if (settings.isStopWhenFail() && settings.isAnalysisSettings()) {
+            builder.appendArgument("--stop-on-fail");
+        }
+
+        if (settings.isGeneratePreprocess() && settings.isAnalysisSettings()) {
+            builder.appendArgument("--generate-preprocessed-source");
+        }
+
+        if (settings.isGeneratePreprocess() && settings.isAnalysisSettings() && settings.isAssembleSupportAnalytics()) {
+            builder.appendArgument("--assemble-support-analytics");
+        } else if (settings.isAnalysisSettings() && settings.isAssembleSupportAnalytics() && (!settings.isGeneratePreprocess())) {
+            log.log(Level.WARNING, "Assemble Support Analytics is selected but Generate Preprocessed Source option is not selected");
+        }
+
         builder.appendArgument("-P");
         builder.appendArgument(PRQACommandBuilder.getProjectFile(resolveAbsOrRelativePath(workspace,
                 settings.getQaProject(), out)));
@@ -168,7 +183,7 @@ public class QAFrameworkReport implements Serializable {
             try {
                 return CommandLine.getInstance().run(command, workspace, true, false);
             } catch (AbnormalProcessTerminationException abnex) {
-                throw new PrqaException(String.format("Failed to analyze, message was:\n %s", abnex.getMessage()),
+                throw new PrqaException(String.format("ERROR: Failed to analyze, message is:  %s", abnex.getMessage()),
                         abnex);
             }
         }
