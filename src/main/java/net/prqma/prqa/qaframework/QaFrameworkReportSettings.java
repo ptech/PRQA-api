@@ -238,12 +238,11 @@ public class QaFrameworkReportSettings implements ReportSettings {
         this.stopWhenFail = stopWhenFail;
     }
 
-    public void setGeneratePreprocess(boolean genSupReport) {
-        this.genSupReport = genSupReport;
+    public void setGeneratePreprocess(boolean generatePreprocess) {
+        this.generatePreprocess = generatePreprocess;
     }
 
     public void setAssembleSupportAnalytics(boolean assembleSupportAnalytics) {
         this.assembleSupportAnalytics = assembleSupportAnalytics;
     }
-
 }
