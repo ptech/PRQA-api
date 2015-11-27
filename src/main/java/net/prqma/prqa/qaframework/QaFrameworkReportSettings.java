@@ -1,9 +1,10 @@
 package net.prqma.prqa.qaframework;
+import java.io.Serializable;
 
 import net.praqma.prqa.ReportSettings;
 import net.praqma.prqa.QAVerifyServerSettings;
 
-public class QaFrameworkReportSettings implements ReportSettings {
+public class QaFrameworkReportSettings implements ReportSettings, Serializable {
 
     private String qaInstallation;
     private String qaProject;

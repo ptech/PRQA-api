@@ -5,6 +5,7 @@
 package net.praqma.prqa.products;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -19,7 +20,7 @@ import net.praqma.util.execute.CommandLine;
  * 
  * @author Alexandru Ion
  */
-public class QACli implements Product {
+public class QACli implements Product, Serializable {
 
 	/**
 	 * 

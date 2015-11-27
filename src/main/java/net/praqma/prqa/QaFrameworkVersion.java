@@ -1,8 +1,9 @@
 package net.praqma.prqa;
 
 import java.io.PrintStream;
+import java.io.Serializable;
 
-public class QaFrameworkVersion {
+public class QaFrameworkVersion implements Serializable {
 
 	private String qaFrameworkVersion;
 

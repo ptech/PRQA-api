@@ -1,12 +1,13 @@
 package net.praqma.prqa;
 
+import java.io.Serializable;
 import java.util.EnumSet;
 
 /**
  * 
  * @author jes
  */
-public class PRQAContext {
+public class PRQAContext implements Serializable{
 
 	public enum ComparisonSettings {
 		None, Threshold, Improvement;

@@ -1,9 +1,10 @@
 package net.praqma.prqa.parsers;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MessageGroup {
+public class MessageGroup implements Serializable {
 
 	private String messageGroupName;
 	private int totalViolations;
