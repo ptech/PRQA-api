@@ -118,7 +118,7 @@ public class QAFrameworkReport implements Serializable {
         String finalCommand = createAnalysisCommandForQacli(isUnix, Options, out);
         out.println("Analysis command:");
         out.println(finalCommand);
-        HashMap<String, String> systemVars = new HashMap<String, String>();
+        HashMap<String, String> systemVars = new HashMap<>();
         systemVars.putAll(System.getenv());
         try {
             if (getEnvironment() == null) {
