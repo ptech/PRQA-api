@@ -1,5 +1,6 @@
 package net.praqma.prqa;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
@@ -11,7 +12,7 @@ import net.praqma.prqa.status.StatusCategory;
  * 
  * @author Praqma
  */
-public class PRQAStatusCollection extends ArrayList<PRQAReading> {
+public class PRQAStatusCollection extends ArrayList<PRQAReading> implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	

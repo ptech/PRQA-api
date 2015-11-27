@@ -1,5 +1,6 @@
 package net.praqma.prqa.status;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -16,7 +17,7 @@ import net.praqma.prqa.parsers.Rule;
  * 
  * @author jes, man
  */
-public class PRQAComplianceStatus extends PRQAStatus implements Comparable<PRQAComplianceStatus> {
+public class PRQAComplianceStatus extends PRQAStatus implements Serializable, Comparable<PRQAComplianceStatus> {
 
 	private int messages;
 	private int messagesWithinThreshold;

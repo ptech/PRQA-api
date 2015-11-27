@@ -1,6 +1,7 @@
 package net.praqma.prqa.parsers;
 
 import java.io.FileInputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,7 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 
-public class ResultsDataParser {
+public class ResultsDataParser implements Serializable{
 
     private String filePath;
     private int rootLevel = 1;

@@ -20,7 +20,6 @@ import net.praqma.prqa.exceptions.PrqaException;
 import net.praqma.prqa.exceptions.PrqaUploadException;
 import net.praqma.prqa.parsers.ComplianceReportHtmlParser;
 import net.praqma.prqa.parsers.MessageGroup;
-import net.praqma.prqa.parsers.QaVerifyConfigurationFileParser;
 import net.praqma.prqa.parsers.ResultsDataParser;
 import net.praqma.prqa.parsers.Rule;
 import net.praqma.prqa.products.PRQACommandBuilder;
@@ -31,9 +30,7 @@ import net.praqma.util.execute.CmdResult;
 import net.praqma.util.execute.CommandLine;
 import net.prqma.prqa.qaframework.QaFrameworkReportSettings;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
-import org.jdom2.JDOMException;
 
 public class QAFrameworkReport implements Serializable {
 
@@ -121,7 +118,7 @@ public class QAFrameworkReport implements Serializable {
         String finalCommand = createAnalysisCommandForQacli(isUnix, Options, out);
         out.println("Analysis command:");
         out.println(finalCommand);
-        Map<String, String> systemVars = new HashMap<String, String>();
+        HashMap<String, String> systemVars = new HashMap<>();
         systemVars.putAll(System.getenv());
         try {
             if (getEnvironment() == null) {
