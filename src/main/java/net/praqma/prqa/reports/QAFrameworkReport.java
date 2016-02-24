@@ -197,6 +197,8 @@ public class QAFrameworkReport implements Serializable {
         builder.appendArgument("analyze");
         builder.appendArgument("-C");
         builder.appendArgument(settings.getCmaProjectName());
+        builder.appendArgument("-P");
+        builder.appendArgument(settings.getQaProject());
         return builder.getCommand();
     }
 
