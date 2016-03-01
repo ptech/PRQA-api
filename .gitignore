@@ -1,5 +1,12 @@
-target*
-*.log
+**/target/*
+**/work/*
+**/*.log
+**/*.class
+**/*.stapler
+**/*.project
+**/nb-configuration.xml
+**/*.iml
+**/.idea/*
 
 .classpath
 .project
