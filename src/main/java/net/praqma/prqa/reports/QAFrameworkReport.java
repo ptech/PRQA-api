@@ -174,7 +174,7 @@ public class QAFrameworkReport implements Serializable {
 
     public CmdResult cmaAnalysisQacli(boolean isUnix, PrintStream out) throws PrqaException {
         if (settings.isQaCrossModuleAnalysis()) {
-            String command = createCmaAnalysisCommand(isUnix);
+            String command = createCmaAnalysisCommand(isUnix, out);
             out.println("Perform Cross-Module analysis command:");
             out.println(command);
             try {
@@ -187,7 +187,7 @@ public class QAFrameworkReport implements Serializable {
         return null;
     }
 
-    private String createCmaAnalysisCommand(boolean isUnix) throws PrqaException {
+    private String createCmaAnalysisCommand(boolean isUnix, PrintStream out) throws PrqaException {
 
         if (StringUtils.isBlank(settings.getCmaProjectName())) {
             throw new PrqaException(
@@ -198,7 +198,8 @@ public class QAFrameworkReport implements Serializable {
         builder.appendArgument("-C");
         builder.appendArgument(settings.getCmaProjectName());
         builder.appendArgument("-P");
-        builder.appendArgument(String.format("\"%s\"", settings.getQaProject()));
+        builder.appendArgument(PRQACommandBuilder.getProjectFile(resolveAbsOrRelativePath(workspace,
+                settings.getQaProject(), out)));
         return builder.getCommand();
     }
 
