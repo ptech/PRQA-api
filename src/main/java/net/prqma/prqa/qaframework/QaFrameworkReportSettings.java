@@ -14,7 +14,6 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
     private boolean qaEnableMtr;
     private boolean qaEnableProjectCma;
     private boolean qaCrossModuleAnalysis;
-    private String cmaProjectName;
     private boolean generateReport;
     private boolean publishToQAV;
     private boolean loginToQAV;
@@ -42,7 +41,6 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
      * @param qaEnableProjectCma
      * @param qaEnableDependencyMode
      * @param qaCrossModuleAnalysis
-     * @param cmaProjectName
      * @param generateReport
      * @param publishToQAV
      * @param loginToQAV
@@ -60,7 +58,7 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
      * more readable.
      */
     public QaFrameworkReportSettings(String qaInstallation, String qaProject, boolean pullUnifiedProject, String uniProjectName,
-            boolean qaEnableMtr, boolean qaEnableProjectCma, boolean qaEnableDependencyMode, boolean qaCrossModuleAnalysis, String cmaProjectName,
+            boolean qaEnableMtr, boolean qaEnableProjectCma, boolean qaEnableDependencyMode, boolean qaCrossModuleAnalysis,
             boolean generateReport, boolean publishToQAV, boolean loginToQAV, String product, boolean qaUploadWhenStable, String qaVerifyProjectName,
             String uploadSnapshotName, String buildNumber, String uploadSourceCode, boolean genCrReport, boolean genMdReport, boolean genSupReport,
             boolean analysisSettings, boolean stopWhenFail, boolean generatePreprocess, boolean assembleSupportAnalytics) {
@@ -69,7 +67,6 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
         this.uniProjectName = uniProjectName;
         this.pullUnifiedProject = pullUnifiedProject;
         this.qaCrossModuleAnalysis = qaCrossModuleAnalysis;
-        this.cmaProjectName = cmaProjectName;
         this.publishToQAV = publishToQAV;
         this.loginToQAV = loginToQAV;
         this.qaEnableMtr = qaEnableMtr;
@@ -137,10 +134,6 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
 
     public String getUniProjectName() {
         return uniProjectName;
-    }
-
-    public String getCmaProjectName() {
-        return cmaProjectName;
     }
 
     public boolean isGenerateReport() {
