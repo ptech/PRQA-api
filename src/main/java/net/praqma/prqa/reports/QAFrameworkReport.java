@@ -189,14 +189,9 @@ public class QAFrameworkReport implements Serializable {
 
     private String createCmaAnalysisCommand(boolean isUnix, PrintStream out) throws PrqaException {
 
-        if (StringUtils.isBlank(settings.getCmaProjectName())) {
-            throw new PrqaException(
-                    "Configuration Error: Perform Cross-Module analysis was selected but no CMA project was provided. The analysis project was aborted.");
-        }
         PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
         builder.appendArgument("analyze");
-        builder.appendArgument("-C");
-        builder.appendArgument(settings.getCmaProjectName());
+        builder.appendArgument("-p");
         builder.appendArgument("-P");
         builder.appendArgument(PRQACommandBuilder.getProjectFile(resolveAbsOrRelativePath(workspace,
                 settings.getQaProject(), out)));
