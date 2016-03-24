@@ -58,7 +58,7 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
      * more readable.
      */
     public QaFrameworkReportSettings(String qaInstallation, String qaProject, boolean pullUnifiedProject, String uniProjectName,
-            boolean qaEnableMtr, boolean qaEnableProjectCma, boolean qaEnableDependencyMode, boolean qaCrossModuleAnalysis,
+            boolean qaEnableMtr, boolean qaEnableDependencyMode, boolean qaCrossModuleAnalysis,
             boolean generateReport, boolean publishToQAV, boolean loginToQAV, String product, boolean qaUploadWhenStable, String qaVerifyProjectName,
             String uploadSnapshotName, String buildNumber, String uploadSourceCode, boolean genCrReport, boolean genMdReport, boolean genSupReport,
             boolean analysisSettings, boolean stopWhenFail, boolean generatePreprocess, boolean assembleSupportAnalytics) {
@@ -70,7 +70,6 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
         this.publishToQAV = publishToQAV;
         this.loginToQAV = loginToQAV;
         this.qaEnableMtr = qaEnableMtr;
-        this.qaEnableProjectCma = qaEnableProjectCma;
         this.qaEnableDependencyMode = qaEnableDependencyMode;
         this.generateReport = generateReport;
         this.qaProject = qaProject;
