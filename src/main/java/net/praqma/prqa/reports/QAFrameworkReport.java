@@ -309,7 +309,7 @@ public class QAFrameworkReport implements Serializable {
             }
         } catch (AbnormalProcessTerminationException abnex) {
             log.logp(Level.SEVERE, this.getClass().getName(), "upload()", "Logged error with upload", abnex);
-            throw new PrqaUploadException(String.format("Upload failed with message:%n%s", abnex.getMessage()), abnex);
+            throw new PrqaUploadException(String.format("Upload failed with message: %s", abnex.getMessage()), abnex);
         }
     }
 
