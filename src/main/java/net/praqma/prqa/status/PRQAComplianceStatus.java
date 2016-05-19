@@ -416,8 +416,8 @@ public class PRQAComplianceStatus extends PRQAStatus implements Serializable, Co
 				List<Rule> violatedRules = messageGroup.getViolatedRules();
 				int messagesWithinTresholdCount = 0;
 				for (Rule violatedRule : violatedRules) {
-					String ruleID = violatedRule.getRuleID();
-					if (Integer.parseInt(ruleID) >= tresholdLevel && Integer.parseInt(ruleID) <= 9) {
+					int ruleID = violatedRule.getRuleNumber();
+					if (ruleID >= tresholdLevel && ruleID <= 9) {
 						messagesWithinTresholdCount += violatedRule.getRuleTotalViolations();
 						messagesWithinThreshold += violatedRule.getRuleTotalViolations();
 					}
