@@ -8,7 +8,7 @@ public class Rule implements Serializable {
 
 	private String ruleNumber;
 	private int ruleTotalViolations;
-	private Pattern pattern = Pattern.compile("\\d+");
+	private static final Pattern DIGITS = Pattern.compile("\\d+");
 
 	public Rule() {
 	}
@@ -30,12 +30,8 @@ public class Rule implements Serializable {
 	 * @return 0 if there is no number in the rule ID. Otherwise, return the first number in the rule ID.
      */
 	public int getRuleNumber() {
-		Matcher matcher = pattern.matcher(ruleNumber);
-		if (matcher.find()) {
-			return Integer.parseInt(matcher.group());
-		} else {
-			return 0;
-		}
+		Matcher matcher = DIGITS.matcher(ruleNumber);
+		return matcher.find() ? Integer.parseInt(matcher.group()) : 0;
 	}
 
 	public int getRuleTotalViolations() {
