@@ -106,7 +106,7 @@ public class QAFrameworkReport implements Serializable {
         builder.appendArgument("--username");
         builder.appendArgument(qaVerifySettings.user);
         builder.appendArgument("--password");
-        builder.appendArgument(qaVerifySettings.password);
+        builder.appendArgument(qaVerifySettings.password.isEmpty() ? "\"\"" : qaVerifySettings.password);
         builder.appendArgument("--url");
         builder.appendArgument(qaVerifySettings.host + ":" + qaVerifySettings.port);
         builder.appendArgument("--project-name");
@@ -281,7 +281,7 @@ public class QAFrameworkReport implements Serializable {
         builder.appendArgument("--username");
         builder.appendArgument(qaVerifySettings.user);
         builder.appendArgument("--password");
-        builder.appendArgument(qaVerifySettings.password);
+        builder.appendArgument(qaVerifySettings.password.isEmpty() ? "\"\"" : qaVerifySettings.password);
         builder.appendArgument("--url");
         builder.appendArgument(qaVerifySettings.host + ":" + qaVerifySettings.port);
         builder.appendArgument("--upload-project");
