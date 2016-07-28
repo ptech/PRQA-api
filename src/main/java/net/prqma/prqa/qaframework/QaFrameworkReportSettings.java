@@ -2,7 +2,6 @@ package net.prqma.prqa.qaframework;
 import java.io.Serializable;
 
 import net.praqma.prqa.ReportSettings;
-import net.praqma.prqa.QAVerifyServerSettings;
 
 public class QaFrameworkReportSettings implements ReportSettings, Serializable {
 
@@ -11,7 +10,6 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
     private String uniProjectName;
     private boolean pullUnifiedProject;
     private boolean qaEnableDependencyMode;
-    private boolean qaEnableMtr;
     private boolean qaEnableProjectCma;
     private boolean qaCrossModuleAnalysis;
     private boolean generateReport;
@@ -37,7 +35,6 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
      * @param qaProject
      * @param pullUnifiedProject
      * @param uniProjectName
-     * @param qaEnableMtr
      * @param qaEnableProjectCma
      * @param qaEnableDependencyMode
      * @param qaCrossModuleAnalysis
@@ -58,7 +55,7 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
      * more readable.
      */
     public QaFrameworkReportSettings(String qaInstallation, String qaProject, boolean pullUnifiedProject, String uniProjectName,
-            boolean qaEnableMtr, boolean qaEnableDependencyMode, boolean qaCrossModuleAnalysis,
+                                 boolean qaEnableDependencyMode, boolean qaCrossModuleAnalysis,
             boolean generateReport, boolean publishToQAV, boolean loginToQAV, String product, boolean qaUploadWhenStable, String qaVerifyProjectName,
             String uploadSnapshotName, String buildNumber, String uploadSourceCode, boolean genCrReport, boolean genMdReport, boolean genSupReport,
             boolean analysisSettings, boolean stopWhenFail, boolean generatePreprocess, boolean assembleSupportAnalytics) {
@@ -69,7 +66,6 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
         this.qaCrossModuleAnalysis = qaCrossModuleAnalysis;
         this.publishToQAV = publishToQAV;
         this.loginToQAV = loginToQAV;
-        this.qaEnableMtr = qaEnableMtr;
         this.qaEnableDependencyMode = qaEnableDependencyMode;
         this.generateReport = generateReport;
         this.qaProject = qaProject;
@@ -117,10 +113,6 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
 
     public boolean isQaEnableProjectCma() {
         return qaEnableProjectCma;
-    }
-
-    public boolean isQaEnableMtr() {
-        return qaEnableMtr;
     }
 
     public boolean isQaCrossModuleAnalysis() {

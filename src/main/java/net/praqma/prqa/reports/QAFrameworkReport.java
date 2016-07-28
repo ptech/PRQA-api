@@ -145,10 +145,6 @@ public class QAFrameworkReport implements Serializable {
             if (analyzeOptions.contains("f")) {
                 analyzeOptions = analyzeOptions.replace("f", "p");
             }
-        } else {
-            if (analyzeOptions.contains("f") && settings.isQaEnableMtr()) {
-                analyzeOptions = analyzeOptions.replace("f", "m");
-            }
         }
 
         builder.appendArgument(analyzeOptions);
