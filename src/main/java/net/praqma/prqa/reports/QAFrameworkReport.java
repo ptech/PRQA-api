@@ -181,7 +181,7 @@ public class QAFrameworkReport implements Serializable {
                             abnex);
                 }
             } else {
-                throw new PrqaException("ERROR: Detected PRQA Framework version 2.1.0. This version does not support activating CMA analysis from command line. It has to be done by adding it to the toolchain of the project.");
+                throw new PrqaException("ERROR: Detected PRQA Framework version 2.1.0. CMA analysis cannot be configured with the selected option. It has to be done by adding it to the toolchain of the project.");
             }
         }
         return null;
