@@ -171,27 +171,33 @@ public class QAFrameworkReport implements Serializable {
     public CmdResult cmaAnalysisQacli(boolean isUnix, PrintStream out) throws PrqaException {
         if (settings.isQaCrossModuleAnalysis()) {
             String command = createCmaAnalysisCommand(isUnix, out);
-            out.println("Perform Cross-Module analysis command:");
-            out.println(command);
-            try {
-                return CommandLine.getInstance().run(command, workspace, true, false);
-            } catch (AbnormalProcessTerminationException abnex) {
-                throw new PrqaException(String.format("ERROR: Failed to analyze, message is:  %s", abnex.getMessage()),
-                        abnex);
+            if (command != null) {
+                out.println("Perform Cross-Module analysis command:");
+                out.println(command);
+                try {
+                    return CommandLine.getInstance().run(command, workspace, true, false);
+                } catch (AbnormalProcessTerminationException abnex) {
+                    throw new PrqaException(String.format("ERROR: Failed to analyze, message is:  %s", abnex.getMessage()),
+                            abnex);
+                }
+            } else {
+                throw new PrqaException("ERROR: Detected PRQA Framework version 2.1.0. This version does not support activating CMA analysis from command line. It has to be done by adding it to the toolchain of the project.");
             }
         }
         return null;
     }
 
     private String createCmaAnalysisCommand(boolean isUnix, PrintStream out) throws PrqaException {
-
-        PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
-        builder.appendArgument("analyze");
-        builder.appendArgument("-p");
-        builder.appendArgument("-P");
-        builder.appendArgument(PRQACommandBuilder.getProjectFile(resolveAbsOrRelativePath(workspace,
-                settings.getQaProject(), out)));
-        return builder.getCommand();
+        if (!qaFrameworkVersion.isQaFrameworkVersion210()) {
+            PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
+            builder.appendArgument("analyze");
+            builder.appendArgument("-p");
+            builder.appendArgument("-P");
+            builder.appendArgument(PRQACommandBuilder.getProjectFile(resolveAbsOrRelativePath(workspace,
+                    settings.getQaProject(), out)));
+            return builder.getCommand();
+        }
+        return null;
     }
 
     public CmdResult reportQacli(boolean isUnix, String repType, PrintStream out) throws PrqaException {
