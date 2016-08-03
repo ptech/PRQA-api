@@ -48,6 +48,12 @@ public class QaFrameworkVersion implements Serializable {
                         && !qafVersion.equals("1.0.5"));
 	}
 
+	public boolean isQaFrameworkVersion210() {
+		String shortVersion = getVersionShortFormat();
+		String qafVersion = shortVersion.substring(shortVersion.lastIndexOf(" ") + 1);
+		return qafVersion.equals("2.1.0");
+	}
+
 	public String getVersionShortFormat() {
 		return qaFrameworkVersion.substring(0, qaFrameworkVersion.lastIndexOf("."));
 	}
