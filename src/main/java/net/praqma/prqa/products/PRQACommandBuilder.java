@@ -4,10 +4,12 @@
  */
 package net.praqma.prqa.products;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.logging.Logger;
 import net.praqma.prqa.CodeUploadSetting;
+import net.praqma.prqa.exceptions.PrqaException;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -45,37 +47,39 @@ public class PRQACommandBuilder implements Serializable {
         return this;
     }
 
-    public PRQACommandBuilder prependArgument(String argument) {
-        if(!StringUtils.isBlank(argument)) {
-            logger.finest(String.format("Starting execution of method - prependArgument"));
-            logger.finest(String.format("Input parameter argument type: %s; value: %s", argument.getClass(), argument));
-
-            arguments.addFirst(argument);
-        }
-        logger.finest(String.format("Returning %s", this));
-
-        return this;
-    }
-
     public String getCommand() {
         StringBuilder builder = new StringBuilder();
         logger.finest(String.format("Starting execution of method - getCommand"));
 
-        //String output = "";
         builder.append(executable).append(" ");
-        //output += executable + " ";
 
         for (String s : arguments) {
-            //output += s + " ";
             builder.append(s).append(" ");
             
         }
 
-        //logger.finest(String.format("Returning value: %s", output));
         logger.finest(String.format("Returning value: %s", builder.toString()));
 
-        //return output;
         return builder.toString();
+    }
+
+    /**
+     * Resolves the project file location. This can be either absolute or
+     * relative to the current workspace
+     */
+    public static String resolveAbsOrRelativePath(File workspaceRoot, String filePath) throws PrqaException {
+        File file = new File(filePath);
+        if (!file.isAbsolute()) {
+            file = new File(workspaceRoot, filePath);
+        }
+        if (!file.exists()) {
+            throw new PrqaException(String.format("The file %s does not exist.", file.getPath()));
+        }
+        return file.getPath();
+    }
+
+    public static String wrapFile(File workspaceRoot, String filePath) throws PrqaException {
+        return wrapInQuotationMarks(resolveAbsOrRelativePath(workspaceRoot, filePath));
     }
 
     public static String getCmaf(String path, boolean escapeInputParameterWhiteSpace) {
@@ -195,8 +199,6 @@ public class PRQACommandBuilder implements Serializable {
 
     /**
      * Uses the project names as specified in the project file
-     *
-     * @return
      */
     public static String getProjectName() {
         logger.finest(String.format("Starting execution of method - getProjectName"));
@@ -228,17 +230,6 @@ public class PRQACommandBuilder implements Serializable {
         return output;
     }
 
-    public static String getProjectFile(String file) {
-        logger.finest(String.format("Starting execution of method - getProjectFile"));
-        logger.finest(String.format("Input parameter file type: %s; value: %s", file.getClass(), file));
-
-        String output = String.format("\"%s\"", file);
-
-        logger.finest(String.format("Returning value: %s", output));
-
-        return output;
-    }
-    
     public static String getHost(String hostname) {
         logger.entering(PRQACommandBuilder.class.getName(), "getHost", hostname);
         String host = String.format("-host %s", hostname);
@@ -296,25 +287,13 @@ public class PRQACommandBuilder implements Serializable {
         }
     }
     
-    /**
-     * 
-     * @param string
-     * @return 
-     */
-    
     public static String escapeWhitespace(String string) {
-        return String.format("%s", string.replace(" ", "\\ "));
+        return string.replace(" ", "\\ ");
     }
-    
-    /**
-     * 
-     * @param string
-     * @return 
-     */
     
     public static String wrapInQuotationMarks(String string) {
         logger.entering(PRQACommandBuilder.class.getName(), "wrapInQuotationMarks", string);
-        String wrapped = String.format("\""+"%s"+"\"", string);
+        String wrapped = String.format("\"%s\"", string);
         logger.exiting(PRQACommandBuilder.class.getName(), "wrapInQuotationMarks", wrapped);
         return wrapped;
     }
@@ -381,8 +360,6 @@ public class PRQACommandBuilder implements Serializable {
     
     /**
      * Method which creates the necessary sfba option. The boolean indicates whether the project has just been analyzed, if that is the case. The -sfba parameter is returned
-     * @param wasAnalyzedBeforeHand
-     * @return 
      */
     public static String getSfbaOption(boolean wasAnalyzedBeforeHand) {
         String res = "";
@@ -448,5 +425,3 @@ public class PRQACommandBuilder implements Serializable {
         return res;
     }
 }
-
-

@@ -1,7 +1,6 @@
 package net.praqma.prqa.reports;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintStream;
 import java.io.Serializable;
 import java.util.Collections;
@@ -101,8 +100,7 @@ public class QAFrameworkReport implements Serializable {
         builder.appendArgument("admin");
         builder.appendArgument("--pull-unify-project");
         builder.appendArgument("--qaf-project");
-        builder.appendArgument(PRQACommandBuilder.getProjectFile(resolveAbsOrRelativePath(workspace,
-                settings.getQaProject(), out)));
+        builder.appendArgument(PRQACommandBuilder.wrapFile(workspace, settings.getQaProject()));
         builder.appendArgument("--username");
         builder.appendArgument(qaVerifySettings.user);
         builder.appendArgument("--password");
@@ -163,8 +161,7 @@ public class QAFrameworkReport implements Serializable {
         }
 
         builder.appendArgument("-P");
-        builder.appendArgument(PRQACommandBuilder.getProjectFile(resolveAbsOrRelativePath(workspace,
-                settings.getQaProject(), out)));
+        builder.appendArgument(PRQACommandBuilder.wrapFile(workspace, settings.getQaProject()));
         return builder.getCommand();
     }
 
@@ -193,8 +190,7 @@ public class QAFrameworkReport implements Serializable {
             builder.appendArgument("analyze");
             builder.appendArgument("-p");
             builder.appendArgument("-P");
-            builder.appendArgument(PRQACommandBuilder.getProjectFile(resolveAbsOrRelativePath(workspace,
-                    settings.getQaProject(), out)));
+            builder.appendArgument(PRQACommandBuilder.wrapFile(workspace, settings.getQaProject()));
             return builder.getCommand();
         }
         return null;
@@ -230,17 +226,15 @@ public class QAFrameworkReport implements Serializable {
 
     private String createReportCommandForQacli(boolean isUnix, String reportType, PrintStream out) throws PrqaException {
         out.println("Create " + reportType + " report command");
-        String projectLocation;
-        projectLocation = PRQACommandBuilder.getProjectFile(resolveAbsOrRelativePath(workspace,
-                settings.getQaProject(), out));
-        removeOldReports(projectLocation.replace(QUOTE, "").trim(), reportType);
+        String projectLocation = PRQACommandBuilder.resolveAbsOrRelativePath(workspace, settings.getQaProject());
+        removeOldReports(projectLocation, reportType);
         return createReportCommand(projectLocation, reportType, out);
     }
 
     private String createReportCommand(String projectLocation, String reportType, PrintStream out) {
         PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
         builder.appendArgument("report -P");
-        builder.appendArgument(projectLocation);
+        builder.appendArgument(PRQACommandBuilder.wrapInQuotationMarks(projectLocation));
         if (qaFrameworkVersion.isQaFrameworkVersionPriorToVersion104()) {
             builder.appendArgument("-l C");
         }
@@ -271,10 +265,9 @@ public class QAFrameworkReport implements Serializable {
     private String createUploadCommandQacli(PrintStream out) throws PrqaException {
         String projectLocation;
         if (!StringUtils.isBlank(settings.getQaVerifyProjectName())) {
-            projectLocation = PRQACommandBuilder.wrapInQuotationMarks(resolveAbsOrRelativePath(workspace,
-                    settings.getQaProject(), out));
+            projectLocation = PRQACommandBuilder.wrapFile(workspace, settings.getQaProject());
         } else {
-            throw new PrqaException("Neither filelist or project file has been set, this should not be happening");
+            throw new PrqaException("Neither file list nor project file has been set, this should not be happening");
         }
         PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
         builder.appendArgument("upload -P");
@@ -328,39 +321,6 @@ public class QAFrameworkReport implements Serializable {
         return type.toString() + " " + extension;
     }
 
-    /**
-     * Resolves the project file location. This can be either absolute or
-     * relative to the current workspace
-     *
-     * @param workspaceRoot
-     * @param projectFilePath
-     * @return
-     * @throws PrqaException
-     */
-    private String resolveAbsOrRelativePath(File workspaceRoot, String projectFilePath, PrintStream outStream)
-            throws PrqaException {
-        outStream.println("Project : " + projectFilePath);
-        File pFile = new File(projectFilePath);
-        if (pFile.isAbsolute()) {
-            outStream.println("Project Path is absolute ");
-            if (!pFile.exists()) {
-                throw new PrqaException(String.format("The project path %s does not exist.", projectFilePath));
-            } else {
-                outStream.println("Return is absolute: " + projectFilePath);
-                return projectFilePath;
-            }
-        } else {
-            File relative = new File(workspaceRoot, projectFilePath);
-            if (relative.exists()) {
-                String path = relative.getPath();
-                outStream.println("Project Path: " + path);
-                return path;
-            } else {
-                throw new PrqaException(String.format("The project path %s does not exist.", relative.getPath()));
-            }
-        }
-    }
-
     public static void _logEnv(String location, Map<String, String> env) {
         log.fine(String.format("%s", location));
         log.fine("==========================================");
@@ -377,9 +337,9 @@ public class QAFrameworkReport implements Serializable {
         status.setQaFrameworkVersion(qaFrameworkVersion);
         String projectLocation;
         String report_structure;
-        report_structure = new File("prqa/", "/reports").getPath();
+        report_structure = new File("prqa", "reports").getPath();
 
-        projectLocation = resolveAbsOrRelativePath(workspace, settings.getQaProject(), out);
+        projectLocation = PRQACommandBuilder.resolveAbsOrRelativePath(workspace, settings.getQaProject());
         File reportFolder = new File(projectLocation, report_structure);
         out.println("Report Folder Path:: " + reportFolder);
 
@@ -439,51 +399,30 @@ public class QAFrameworkReport implements Serializable {
         }
     }
 
-    /**
-     * @param workspace the workspace to set
-     */
     public void setWorkspace(File workspace) {
         this.workspace = workspace;
     }
 
-    /**
-     * @return the settings
-     */
     public QaFrameworkReportSettings getSettings() {
         return settings;
     }
 
-    /**
-     * @param settings the settings to set
-     */
     public void setSettings(QaFrameworkReportSettings settings) {
         this.settings = settings;
     }
 
-    /**
-     * @return the environment
-     */
     public Map<String, String> getEnvironment() {
         return environment;
     }
 
-    /**
-     * @param environment the environment to set
-     */
     public void setEnvironment(Map<String, String> environment) {
         this.environment = environment;
     }
 
-    /**
-     * @return the appSettings
-     */
     public PRQAApplicationSettings getAppSettings() {
         return appSettings;
     }
 
-    /**
-     * @return the qaFrameworkVersion
-     */
     public void setQaFrameworkVersion(QaFrameworkVersion qaFrameworkVersion) {
         this.qaFrameworkVersion = qaFrameworkVersion;
     }
