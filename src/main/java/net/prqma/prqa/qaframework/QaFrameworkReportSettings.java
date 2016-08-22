@@ -1,4 +1,5 @@
 package net.prqma.prqa.qaframework;
+
 import java.io.Serializable;
 
 import net.praqma.prqa.ReportSettings;
@@ -29,36 +30,29 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
     private boolean generatePreprocess;
     private boolean assembleSupportAnalytics;
 
-    /**
-     *
-     * @param qaInstallation
-     * @param qaProject
-     * @param pullUnifiedProject
-     * @param uniProjectName
-     * @param qaEnableProjectCma
-     * @param qaEnableDependencyMode
-     * @param qaCrossModuleAnalysis
-     * @param generateReport
-     * @param publishToQAV
-     * @param loginToQAV
-     * @param product
-     * @param qaUploadWhenStable
-     * @param qaVerifyProjectName
-     * @param uploadSnapshotName
-     * @param buildNumber
-     * @param uploadSourceCode
-     * @param genCrReport
-     * @param genMdReport
-     * @param genSupReport
-     *
-     * TODO - We should create a builder for this object to make the creation
-     * more readable.
-     */
-    public QaFrameworkReportSettings(String qaInstallation, String qaProject, boolean pullUnifiedProject, String uniProjectName,
-                                 boolean qaEnableDependencyMode, boolean qaCrossModuleAnalysis,
-            boolean generateReport, boolean publishToQAV, boolean loginToQAV, String product, boolean qaUploadWhenStable, String qaVerifyProjectName,
-            String uploadSnapshotName, String buildNumber, String uploadSourceCode, boolean genCrReport, boolean genMdReport, boolean genSupReport,
-            boolean analysisSettings, boolean stopWhenFail, boolean generatePreprocess, boolean assembleSupportAnalytics) {
+    public QaFrameworkReportSettings(
+            String qaInstallation,
+            String qaProject,
+            boolean pullUnifiedProject,
+            String uniProjectName,
+            boolean qaEnableDependencyMode,
+            boolean qaCrossModuleAnalysis,
+            boolean generateReport,
+            boolean publishToQAV,
+            boolean loginToQAV,
+            String product,
+            boolean qaUploadWhenStable,
+            String qaVerifyProjectName,
+            String uploadSnapshotName,
+            String buildNumber,
+            String uploadSourceCode,
+            boolean genCrReport,
+            boolean genMdReport,
+            boolean genSupReport,
+            boolean analysisSettings,
+            boolean stopWhenFail,
+            boolean generatePreprocess,
+            boolean assembleSupportAnalytics) {
 
         this.qaInstallation = qaInstallation;
         this.uniProjectName = uniProjectName;
