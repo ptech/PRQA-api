@@ -174,72 +174,79 @@ public class PRQAReport implements Serializable {
     }
 
     public String createUploadCommand() throws PrqaException {
-        if (settings.publishToQAV) {
-            int availableProcessors = Runtime.getRuntime().availableProcessors();
-            String importCommand = PRQACommandBuilder.escapeWhitespace("qaimport");
-
-            importCommand += " " + "%Q %P+ %L+ " + PRQACommandBuilder.getNumberOfThreads(availableProcessors) + " "
-                    + PRQACommandBuilder.getSop(StringUtils.isBlank(upSettings.sourceOrigin) ? workspace.getPath() : upSettings.sourceOrigin) + " ";
-            importCommand += PRQACommandBuilder.getPrqaVcs(upSettings.codeUploadSetting, upSettings.vcsConfigXml) + " ";
-            importCommand += PRQACommandBuilder.getQavOutPathParameter(workspace.getPath()) + " ";
-            importCommand += PRQACommandBuilder.getImportLogFilePathParameter(workspace.getPath() + QAV.QAV_IMPORT_LOG) + " ";
-            importCommand += PRQACommandBuilder.getCodeAll(upSettings.codeUploadSetting);
-
-            // Step2: The upload part
-            String uploadPart = "#upload %P+ " + "-prqavcs " + PRQACommandBuilder.wrapInEscapedQuotationMarks(upSettings.vcsConfigXml);
-            uploadPart += " " + PRQACommandBuilder.getHost(qavSettings.host);
-            uploadPart += " " + PRQACommandBuilder.getPort(qavSettings.port);
-            uploadPart += " " + PRQACommandBuilder.getUser(qavSettings.user);
-            uploadPart += " " + PRQACommandBuilder.getPassword(qavSettings.password);
-            uploadPart += " " + PRQACommandBuilder.getProjectDatabase(upSettings.qaVerifyProjectName);
-            uploadPart += " " + PRQACommandBuilder.getProd(upSettings.singleSnapshotMode);
-            uploadPart += " " + PRQACommandBuilder.getLogFilePathParameter(workspace.getPath() + QAV.QAV_UPLOAD_LOG);
-            uploadPart += " " + PRQACommandBuilder.wrapInEscapedQuotationMarks(workspace.getPath());
-
-            // Step3: Finalize
-            String source = "";
-            if (StringUtils.isNotBlank(settings.projectFile)) {
-                source = PRQACommandBuilder.wrapFile(workspace, settings.projectFile);
-            } else if (StringUtils.isNotBlank(settings.fileList)) {
-                source = "-list " + PRQACommandBuilder.wrapFile(workspace, settings.fileList);
-                if (StringUtils.isNotBlank(settings.settingsFile)) {
-                    source += " " + "-via " + PRQACommandBuilder.wrapFile(workspace, settings.settingsFile);
-                }
-            } else {
-                throw new PrqaException("Neither file list nor project file has been set, this should not be happening");
-            }
-
-            String mainCommand = "qaw" + " " + settings.product + " " + source;
-            mainCommand += " " + PRQACommandBuilder.getSfbaOption(true) + " ";
-            mainCommand += PRQACommandBuilder.getDependencyModeParameter(true) + " ";
-
-            String finalCommand = mainCommand
-                    + PRQACommandBuilder.getMaseq(PRQACommandBuilder.getCrossModuleAnalysisParameter(settings.performCrossModuleAnalysis) + importCommand
-                    + uploadPart);
-            return finalCommand;
+        if (!settings.publishToQAV) {
+            return null;
         }
-        return null;
+        String uploadBinary = "upload";
+        try {
+            run("publish -host 127.0.0.1 -port -1");
+        }
+        catch (AbnormalProcessTerminationException e)
+        {
+            if (e.getExitValue() == 10)
+            {
+                uploadBinary = "publish";
+            }
+        }
+        int availableProcessors = Runtime.getRuntime().availableProcessors();
+        String importCommand = "qaimport %Q %P+ %L+ " + PRQACommandBuilder.getNumberOfThreads(availableProcessors) + " "
+                + PRQACommandBuilder.getSop(StringUtils.isBlank(upSettings.sourceOrigin) ? workspace.getPath() : upSettings.sourceOrigin) + " "
+                + PRQACommandBuilder.getPrqaVcs(upSettings.codeUploadSetting, upSettings.vcsConfigXml) + " "
+                + PRQACommandBuilder.getQavOutPathParameter(workspace.getPath()) + " "
+                + PRQACommandBuilder.getImportLogFilePathParameter(workspace.getPath() + QAV.QAV_IMPORT_LOG) + " "
+                + PRQACommandBuilder.getCodeAll(upSettings.codeUploadSetting);
+
+        // Step2: The upload part
+        String uploadPart = "#" + uploadBinary + " %P+ " + "-prqavcs " + PRQACommandBuilder.wrapInEscapedQuotationMarks(upSettings.vcsConfigXml)
+                + " " + PRQACommandBuilder.getHost(qavSettings.host)
+                + " " + PRQACommandBuilder.getPort(qavSettings.port)
+                + " " + PRQACommandBuilder.getUser(qavSettings.user)
+                + " " + PRQACommandBuilder.getPassword(qavSettings.password)
+                + " " + PRQACommandBuilder.getProjectDatabase(upSettings.qaVerifyProjectName)
+                + " " + PRQACommandBuilder.getProd(upSettings.singleSnapshotMode)
+                + " " + PRQACommandBuilder.getLogFilePathParameter(workspace.getPath() + QAV.QAV_UPLOAD_LOG)
+                + " " + PRQACommandBuilder.wrapInEscapedQuotationMarks(workspace.getPath());
+
+        // Step3: Finalize
+        String source = "";
+        if (StringUtils.isNotBlank(settings.projectFile)) {
+            source = PRQACommandBuilder.wrapFile(workspace, settings.projectFile);
+        } else if (StringUtils.isNotBlank(settings.fileList)) {
+            source = "-list " + PRQACommandBuilder.wrapFile(workspace, settings.fileList);
+            if (StringUtils.isNotBlank(settings.settingsFile)) {
+                source += " -via " + PRQACommandBuilder.wrapFile(workspace, settings.settingsFile);
+            }
+        } else {
+            throw new PrqaException("Neither file list nor project file has been set, this should not be happening");
+        }
+
+        String mainCommand = "qaw " + settings.product + " " + source
+                + " " + PRQACommandBuilder.getSfbaOption(true) + " "
+                + PRQACommandBuilder.getDependencyModeParameter(true) + " ";
+
+        String finalCommand = mainCommand
+                + PRQACommandBuilder.getMaseq(PRQACommandBuilder.getCrossModuleAnalysisParameter(settings.performCrossModuleAnalysis)
+                + importCommand
+                + uploadPart);
+        return finalCommand;
     }
 
-    public CmdResult upload() throws PrqaUploadException, PrqaException {
-        CmdResult res = null;
+    public CmdResult run(String command) {
+        return CommandLine.getInstance().run(command, workspace, true, false, getEnvironment());
+    }
+
+    public CmdResult upload() throws PrqaException {
         String finalCommand = createUploadCommand();
         if (finalCommand == null) {
             return null;
         }
 
         try {
-            if (getEnvironment() == null) {
-                res = CommandLine.getInstance().run(finalCommand, workspace, true, false);
-            } else {
-                res = CommandLine.getInstance().run(finalCommand, workspace, true, false, getEnvironment());
-            }
+            return run(finalCommand);
         } catch (AbnormalProcessTerminationException abnex) {
             log.logp(Level.SEVERE, this.getClass().getName(), "upload()", "Logged error with upload", abnex);
             throw new PrqaUploadException(String.format("Upload failed with message: %s", abnex.getMessage()), abnex);
         }
-
-        return res;
     }
 
     public PRQAComplianceStatus getComplianceStatus() throws PrqaException {
