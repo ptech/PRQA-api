@@ -58,8 +58,12 @@ public class PRQAReport implements Serializable {
         this.appSettings = appSettings;
     }
 
+    public static String getReportName(PRQAContext.QARReportType type) {
+        return type == PRQAContext.QARReportType.CodeReview ? "Code Review" : type.toString();
+    }
+
     public static String getNamingTemplate(PRQAContext.QARReportType type, String extension) {
-        return type.toString() + " " + extension;
+        return getReportName(type) + " " + extension;
     }
 
     private static String wrapFile(File workspaceRoot, String filePath) throws PrqaException {
@@ -123,8 +127,8 @@ public class PRQAReport implements Serializable {
         String reports = "";
         String qar = appSettings != null ? PRQAApplicationSettings.resolveQarExe(isUnix) : "qar";
         for (PRQAContext.QARReportType type : settings.chosenReportTypes) {
-            reports += qar + " %Q %P+ %L+ " + PRQACommandBuilder.getReportTypeParameter(type.toString(), true) + " ";
-            reports += PRQACommandBuilder.getViewingProgram("noviewer", false) + " ";
+            reports += qar + " %Q %P+ %L+ " + PRQACommandBuilder.getReportTypeParameter(getReportName(type), true) + " ";
+            reports += PRQACommandBuilder.getViewingProgram("none", false) + " ";
             reports += PRQACommandBuilder.getReportFormatParameter(PRQAReport.XHTML, false) + " ";
             reports += PRQACommandBuilder.getProjectName() + " ";
             reports += PRQACommandBuilder.getOutputPathParameter(workspace.getPath(), true);
