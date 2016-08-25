@@ -274,7 +274,7 @@ public class PRQAComplianceStatus extends PRQAStatus implements Serializable, Co
 		sb.append("<h2>Compliance Summary</h2>");
 		sb.append("<thead>");
 		sb.append("<tr>");
-		sb.append("<th style=\"padding:10px 10px 0px;font-weight:700\">Rules within threshold</th>");
+		sb.append("<th style=\"padding:10px 10px 0px;font-weight:700\">Messages within threshold</th>");
 		sb.append("<th style=\"padding:10px 10px 0px;font-weight:700\">All messages</th>");
 		sb.append("<th style=\"padding:10px 10px 0px;font-weight:700\">Project Compliance</th>");
 		sb.append("<th style=\"padding:10px 10px 0px;font-weight:700\">File Compliance</th>");
