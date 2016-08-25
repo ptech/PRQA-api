@@ -1,6 +1,7 @@
 package net.praqma.prqa.status;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -225,9 +226,6 @@ public class PRQAComplianceStatus extends PRQAStatus implements Serializable, Co
 
 	/***
 	 * Implemented this to decide which one is 'better than last'.
-	 * 
-	 * @param o
-	 * @return
 	 */
 	@Override
 	public int compareTo(PRQAComplianceStatus o) {
@@ -387,15 +385,15 @@ public class PRQAComplianceStatus extends PRQAStatus implements Serializable, Co
 		return cnt;
 	}
 
-	public int getMessagesWithinTresholdCount(int tresholdLevel) {
+	public int getMessagesWithinThresholdCount(int thresholdLevel) {
 		if (messagesGroups != null && !messagesGroups.isEmpty()) {
 			int count = 0;
 			for (MessageGroup messageGroup : messagesGroups) {
-				count += messageGroup.getMessagesWithinTreshold();
+				count += messageGroup.getMessagesWithinThreshold();
 			}
 			messagesWithinThreshold = count;
 		} else {
-			messagesWithinThreshold = getMessageCount(tresholdLevel);
+			messagesWithinThreshold = getMessageCount(thresholdLevel);
 		}
 		return messagesWithinThreshold;
 
@@ -409,21 +407,13 @@ public class PRQAComplianceStatus extends PRQAStatus implements Serializable, Co
 		this.messagesWithinThreshold = messagesWithinThreshold;
 	}
 
-	public void setMessagesWithinThresholdForEachMessageGroup(int tresholdLevel) {
+	public void setMessagesWithinThresholdForEachMessageGroup(int thresholdLevel) {
 		if (messagesGroups != null && !messagesGroups.isEmpty()) {
-			messagesWithinThreshold = 0;
+			Map<String, Integer> map = new HashMap<>();
 			for (MessageGroup messageGroup : messagesGroups) {
-				List<Rule> violatedRules = messageGroup.getViolatedRules();
-				int messagesWithinTresholdCount = 0;
-				for (Rule violatedRule : violatedRules) {
-					int ruleID = violatedRule.getRuleNumber();
-					if (ruleID >= tresholdLevel && ruleID <= 9) {
-						messagesWithinTresholdCount += violatedRule.getRuleTotalViolations();
-						messagesWithinThreshold += violatedRule.getRuleTotalViolations();
-					}
-				}
-				messageGroup.setMessagesWithinTreshold(messagesWithinTresholdCount);
+				messageGroup.setMessagesWithinThreshold(thresholdLevel, map);
 			}
+			messagesWithinThreshold = Rule.calc(map);
 		}
 	}
 }

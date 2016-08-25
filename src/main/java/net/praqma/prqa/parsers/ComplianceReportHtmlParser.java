@@ -21,9 +21,6 @@ public class ComplianceReportHtmlParser extends ReportHtmlParser {
     
     public static final Pattern[] levelNMessages;  
 
-    
-    public ComplianceReportHtmlParser() { }
-           
     public ComplianceReportHtmlParser(String fullReportPath) {
         super(fullReportPath);
     }
