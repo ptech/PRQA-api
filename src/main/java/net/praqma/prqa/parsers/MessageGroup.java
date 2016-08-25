@@ -2,52 +2,51 @@ package net.praqma.prqa.parsers;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MessageGroup implements Serializable {
 
-	private String messageGroupName;
-	private int totalViolations;
-	private List<Rule> violatedRules;
-	private int messagesWithinTreshold;
+    private String messageGroupName;
+    private int totalViolations;
+    private List<Rule> violatedRules = new ArrayList<>();
+    private int messagesWithinTreshold;
 
-	public MessageGroup() {
-		this.violatedRules  =new ArrayList<Rule>();
-	}
+    public MessageGroup(String messageGroupName) {
+        this.messageGroupName = messageGroupName;
+    }
 
-	public String getMessageGroupName() {
-		return messageGroupName;
-	}
+    public String getMessageGroupName() {
+        return messageGroupName;
+    }
 
-	public int getTotalViolations() {
-		return totalViolations;
-	}
+    public int getTotalViolations() {
+        return totalViolations;
+    }
 
-	public void setMessageGroupName(String messageGroupName) {
-		this.messageGroupName = messageGroupName;
-	}
+    public List<Rule> getViolatedRules() {
+        return violatedRules;
+    }
 
-	public void setTotalViolations(int totalViolations) {
-		this.totalViolations = totalViolations;
-	}
+    public void addViolatedRule(Rule rule) {
+        this.violatedRules.add(rule);
+    }
 
-	public void setViolatedRules(List<Rule> violatedRules) {
-		this.violatedRules = violatedRules;
-	}
+    public int getMessagesWithinThreshold() {
+        return messagesWithinTreshold;
+    }
 
-	public List<Rule> getViolatedRules() {
-		return violatedRules;
-	}
-
-	public void addViolatedRule(Rule rule) {
-		this.violatedRules.add(rule);
-	}
-
-	public int getMessagesWithinTreshold() {
-		return messagesWithinTreshold;
-	}
-
-	public void setMessagesWithinTreshold(int messagesWithinTreshold) {
-		this.messagesWithinTreshold = messagesWithinTreshold;
-	}
+    public void setMessagesWithinThreshold(int thresholdLevel, Map<String, Integer> total)
+    {
+        Map<String, Integer> map = new HashMap<>();
+        for (Rule violatedRule : getViolatedRules()) {
+            int ruleID = violatedRule.getRuleNumber();
+            if (ruleID >= thresholdLevel && ruleID <= 9) {
+                map.putAll(violatedRule.getMessages());
+                total.putAll(violatedRule.getMessages());
+            }
+        }
+        messagesWithinTreshold = Rule.calc(map);
+    }
 }

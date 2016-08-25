@@ -3,7 +3,9 @@ package net.praqma.prqa.parsers;
 import java.io.FileInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLInputFactory;
@@ -22,7 +24,6 @@ public class ResultsDataParser implements Serializable{
 
     private String filePath;
     private int rootLevel = 1;
-    /* private int count = 0; */
     private QaFrameworkVersion qaFrameworkVersion;
 
     public ResultsDataParser(String filePath) {
@@ -39,7 +40,6 @@ public class ResultsDataParser implements Serializable{
         /**
          * TODO: Dom Parsing - Temporary fix to read the xml file. will be replaced.
          */
-        
         if (qaFrameworkVersion.isQaFrameworkVersionPriorToVersion104()) {
             XMLInputFactory factory = XMLInputFactory.newInstance();
             XMLStreamReader reader = factory.createXMLStreamReader(fileis);
@@ -52,8 +52,19 @@ public class ResultsDataParser implements Serializable{
         }
     }
 
+    private Map<String, Integer> getMessages(Element node)
+    {
+        Map<String, Integer> map = new HashMap<>();
+        NodeList nList = node.getElementsByTagName("Message");
+        for (int i = 0; i < nList.getLength(); ++i) {
+            Node message = nList.item(i);
+            map.put(message.getAttributes().getNamedItem("guid").getNodeValue(), Integer.parseInt(message.getAttributes().getNamedItem("active").getNodeValue()));
+        }
+        return map;
+    }
+
     private List<MessageGroup> beginFileParsing(Document document) throws Exception {
-        List<MessageGroup> messagesGroups = new ArrayList<MessageGroup>();
+        List<MessageGroup> messagesGroups = new ArrayList<>();
         document.getDocumentElement().normalize();
         NodeList nList = document.getElementsByTagName("dataroot");
         for (int varDataRoot = 0; varDataRoot < nList.getLength(); varDataRoot++) {
@@ -69,20 +80,19 @@ public class ResultsDataParser implements Serializable{
                                 Element cElement = (Element) cNode;
                                 NodeList cNodeList = cElement.getElementsByTagName("RuleGroup");
                                 for (int varRGroup = 0; varRGroup < cNodeList.getLength(); varRGroup++) {
-                                    Node ccNode = cNodeList.item(varRGroup);
-                                    MessageGroup messageGroup = new MessageGroup();
-                                    messageGroup.setTotalViolations(Integer.parseInt(ccNode.getAttributes().getNamedItem("active").getNodeValue()));
-                                    messageGroup.setMessageGroupName(ccNode.getAttributes().getNamedItem("name").getNodeValue());
-                                    Element ccElement = (Element) ccNode;
-                                    NodeList ccNodeList = ccElement.getChildNodes();
+                                    Element ccNode = (Element) cNodeList.item(varRGroup);
+                                    MessageGroup messageGroup = new MessageGroup(ccNode.getAttributes().getNamedItem("name").getNodeValue());
+                                    NodeList ccNodeList = ccNode.getChildNodes();
                                     for (int varRule = 0; varRule < ccNodeList.getLength(); varRule++) {
-                                        if (ccNodeList.item(varRule).getNodeType() == Node.ELEMENT_NODE) {
-                                            Node cccNode = ccNodeList.item(varRule);
-                                            Rule violatedRule = new Rule();
-                                            violatedRule.setRuleTotalViolations((Integer.parseInt(cccNode.getAttributes().getNamedItem("active").getNodeValue())));
-                                            violatedRule.setRuleNumber(cccNode.getAttributes().getNamedItem("id").getNodeValue());
-                                            messageGroup.addViolatedRule(violatedRule);
+                                        if (ccNodeList.item(varRule).getNodeType() != Node.ELEMENT_NODE){
+                                            continue;
                                         }
+                                        Element cccNode = (Element)ccNodeList.item(varRule);
+                                        if (cccNode.getTagName() != "Rule") {
+                                            continue;
+                                        }
+                                        Rule violatedRule = new Rule(cccNode.getAttributes().getNamedItem("id").getNodeValue(), getMessages(cccNode));
+                                        messageGroup.addViolatedRule(violatedRule);
                                     }
                                     messagesGroups.add(messageGroup);
                                 }
@@ -185,34 +195,10 @@ public class ResultsDataParser implements Serializable{
     }
 
     private MessageGroup createMessageGroup(XMLStreamReader reader) throws Exception {
-        MessageGroup messageGroup = new MessageGroup();
-        int attributeCount = reader.getAttributeCount();
-        QName name;
-        for (int i = 0; i < attributeCount; i++) {
-            name = reader.getAttributeName(i);
-            if ("active".equals(name.getLocalPart())) {
-                messageGroup.setTotalViolations(Integer.parseInt(reader.getAttributeValue(i)));
-            }
-            if ("name".equals(name.getLocalPart())) {
-                messageGroup.setMessageGroupName(reader.getAttributeValue(i));
-            }
-        }
-        return messageGroup;
+        return new MessageGroup(reader.getAttributeValue("", "name"));
     }
 
     private Rule createViolatedRule(XMLStreamReader reader) throws Exception {
-        Rule violatedRule = new Rule();
-        int attributeCount = reader.getAttributeCount();
-        QName name;
-        for (int i = 0; i < attributeCount; i++) {
-            name = reader.getAttributeName(i);
-            if ("active".equals(name.getLocalPart())) {
-                violatedRule.setRuleTotalViolations((Integer.parseInt(reader.getAttributeValue(i))));
-            }
-            if ("data".equals(name.getLocalPart())) {
-                violatedRule.setRuleNumber(reader.getAttributeValue(i));
-            }
-        }
-        return violatedRule;
+        return new Rule(reader.getAttributeValue("", "data"), Integer.parseInt(reader.getAttributeValue("", "active")));
     }
 }
