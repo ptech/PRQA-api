@@ -22,6 +22,14 @@ public class MessageGroup implements Serializable {
     }
 
     public int getTotalViolations() {
+        if (totalViolations == 0)
+        {
+            Map<String, Integer> map = new HashMap<>();
+            for (Rule violatedRule : getViolatedRules()) {
+                map.putAll(violatedRule.getMessages());
+            }
+            totalViolations = Rule.calc(map);
+        }
         return totalViolations;
     }
 
