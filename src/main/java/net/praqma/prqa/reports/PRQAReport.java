@@ -6,6 +6,8 @@ package net.praqma.prqa.reports;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -43,13 +45,13 @@ public class PRQAReport implements Serializable {
 
     private static final Logger log = Logger.getLogger(PRQAReport.class.getName());
     private PRQAReportSettings settings;
-    private QAVerifyServerSettings qavSettings;
+    private Collection<QAVerifyServerSettings> qavSettings;
     private PRQAToolUploadSettings upSettings;
     private File workspace;
     private Map<String, String> environment;
     private PRQAApplicationSettings appSettings;
 
-    public PRQAReport(PRQAReportSettings settings, QAVerifyServerSettings qavSettings, PRQAToolUploadSettings upSettings, PRQAApplicationSettings appSettings,
+    public PRQAReport(PRQAReportSettings settings, Collection<QAVerifyServerSettings> qavSettings, PRQAToolUploadSettings upSettings, PRQAApplicationSettings appSettings,
                       HashMap<String, String> environment) {
         this.settings = settings;
         this.environment = environment;
@@ -173,9 +175,11 @@ public class PRQAReport implements Serializable {
         }
     }
 
-    public String createUploadCommand() throws PrqaException {
-        if (!settings.publishToQAV) {
-            return null;
+    public Collection<String> createUploadCommand() throws PrqaException {
+        Collection<String> commands = new ArrayList<>();
+
+        if (!settings.publishToQAV || qavSettings == null || qavSettings.isEmpty()) {
+            return commands;
         }
         String uploadBinary = "upload";
         try {
@@ -197,15 +201,21 @@ public class PRQAReport implements Serializable {
                 + PRQACommandBuilder.getCodeAll(upSettings.codeUploadSetting);
 
         // Step2: The upload part
-        String uploadPart = "#" + uploadBinary + " %P+ " + "-prqavcs " + PRQACommandBuilder.wrapInEscapedQuotationMarks(upSettings.vcsConfigXml)
-                + " " + PRQACommandBuilder.getHost(qavSettings.host)
-                + " " + PRQACommandBuilder.getPort(qavSettings.port)
-                + " " + PRQACommandBuilder.getUser(qavSettings.user)
-                + " " + PRQACommandBuilder.getPassword(qavSettings.password)
-                + " " + PRQACommandBuilder.getProjectDatabase(upSettings.qaVerifyProjectName)
-                + " " + PRQACommandBuilder.getProd(upSettings.singleSnapshotMode)
-                + " " + PRQACommandBuilder.getLogFilePathParameter(workspace.getPath() + QAV.QAV_UPLOAD_LOG)
-                + " " + PRQACommandBuilder.wrapInEscapedQuotationMarks(workspace.getPath());
+        Collection<String> uploadParts = new ArrayList<>();
+
+        for (QAVerifyServerSettings qavSetts : qavSettings) {
+            String uploadPart = "#" + uploadBinary + " %P+ " + "-prqavcs " + PRQACommandBuilder.wrapInEscapedQuotationMarks(upSettings.vcsConfigXml)
+                    + " " + PRQACommandBuilder.getHost(qavSetts.host)
+                    + " " + PRQACommandBuilder.getPort(qavSetts.port)
+                    + " " + PRQACommandBuilder.getUser(qavSetts.user)
+                    + " " + PRQACommandBuilder.getPassword(qavSetts.password)
+                    + " " + PRQACommandBuilder.getProjectDatabase(upSettings.qaVerifyProjectName)
+                    + " " + PRQACommandBuilder.getProd(upSettings.singleSnapshotMode)
+                    + " " + PRQACommandBuilder.getLogFilePathParameter(workspace.getPath() + QAV.QAV_UPLOAD_LOG)
+                    + " " + PRQACommandBuilder.wrapInEscapedQuotationMarks(workspace.getPath());
+
+            uploadParts.add(uploadPart);
+        }
 
         // Step3: Finalize
         String source = "";
@@ -224,25 +234,37 @@ public class PRQAReport implements Serializable {
                 + " " + PRQACommandBuilder.getSfbaOption(true) + " "
                 + PRQACommandBuilder.getDependencyModeParameter(true) + " ";
 
-        String finalCommand = mainCommand
-                + PRQACommandBuilder.getMaseq(PRQACommandBuilder.getCrossModuleAnalysisParameter(settings.performCrossModuleAnalysis)
-                + importCommand
-                + uploadPart);
-        return finalCommand;
+        for (String uploadPart : uploadParts) {
+            String finalCommand = mainCommand
+                    + PRQACommandBuilder.getMaseq(PRQACommandBuilder.getCrossModuleAnalysisParameter(settings.performCrossModuleAnalysis)
+                    + importCommand
+                    + uploadPart);
+
+            commands.add(finalCommand);
+        }
+
+        return commands;
     }
 
     public CmdResult run(String command) {
         return CommandLine.getInstance().run(command, workspace, true, false, getEnvironment());
     }
 
-    public CmdResult upload() throws PrqaException {
-        String finalCommand = createUploadCommand();
-        if (finalCommand == null) {
-            return null;
+    public Collection<CmdResult> upload() throws PrqaException {
+        Collection<String> finalCommand = createUploadCommand();
+        if (finalCommand == null || finalCommand.isEmpty()) {
+            return new ArrayList<>();
         }
 
+        Collection<CmdResult> results = new ArrayList<>();
+
         try {
-            return run(finalCommand);
+
+            for (String s : finalCommand) {
+                results.add(run(s));
+            }
+
+            return results;
         } catch (AbnormalProcessTerminationException abnex) {
             log.logp(Level.SEVERE, this.getClass().getName(), "upload()", "Logged error with upload", abnex);
             throw new PrqaUploadException(String.format("Upload failed with message: %s", abnex.getMessage()), abnex);
