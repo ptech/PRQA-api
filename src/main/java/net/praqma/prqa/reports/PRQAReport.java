@@ -18,13 +18,13 @@ import net.praqma.prqa.PRQAToolUploadSettings;
 import net.praqma.prqa.QAVerifyServerSettings;
 import net.praqma.prqa.exceptions.PrqaException;
 import net.praqma.prqa.exceptions.PrqaUploadException;
+import net.praqma.prqa.execute.PrqaCommandLine;
 import net.praqma.prqa.parsers.ComplianceReportHtmlParser;
 import net.praqma.prqa.products.PRQACommandBuilder;
 import net.praqma.prqa.products.QAV;
 import net.praqma.prqa.status.PRQAComplianceStatus;
 import net.praqma.util.execute.AbnormalProcessTerminationException;
 import net.praqma.util.execute.CmdResult;
-import net.praqma.util.execute.CommandLine;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -108,11 +108,11 @@ public class PRQAReport implements Serializable {
         try {
             if (getEnvironment() == null) {
                 PRQAReport._logEnv("Current analysis execution environment", systemVars);
-                res = CommandLine.getInstance().run(finalCommand, workspace, true, false);
+                res = PrqaCommandLine.getInstance().run(finalCommand, workspace, true, false);
             } else {
                 systemVars.putAll(getEnvironment());
                 PRQAReport._logEnv("Current modified analysis execution environment", systemVars);
-                res = CommandLine.getInstance().run(finalCommand, workspace, true, false, getEnvironment());
+                res = PrqaCommandLine.getInstance().run(finalCommand, workspace, true, false, getEnvironment());
             }
         } catch (AbnormalProcessTerminationException abnex) {
             throw new PrqaException(String.format("Failed to analyze, message was:\n %s", abnex.getMessage()), abnex);
@@ -160,11 +160,11 @@ public class PRQAReport implements Serializable {
         try {
             if (getEnvironment() == null) {
                 PRQAReport._logEnv("Current report generation execution environment", System.getenv());
-                return CommandLine.getInstance().run(finalCommand, workspace, true, false);
+                return PrqaCommandLine.getInstance().run(finalCommand, workspace, true, false);
             } else {
                 systemVars.putAll(getEnvironment());
                 PRQAReport._logEnv("Current modified report generation execution environment", systemVars);
-                return CommandLine.getInstance().run(finalCommand, workspace, true, false, getEnvironment());
+                return PrqaCommandLine.getInstance().run(finalCommand, workspace, true, false, getEnvironment());
             }
         } catch (AbnormalProcessTerminationException abnex) {
             log.severe(String.format("Failed to execute report generation command: %s%n%s", finalCommand, abnex.getMessage()));
@@ -232,7 +232,7 @@ public class PRQAReport implements Serializable {
     }
 
     public CmdResult run(String command) {
-        return CommandLine.getInstance().run(command, workspace, true, false, getEnvironment());
+        return PrqaCommandLine.getInstance().run(command, workspace, true, false, getEnvironment());
     }
 
     public CmdResult upload() throws PrqaException {
