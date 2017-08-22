@@ -5,17 +5,16 @@
 package net.praqma.prqa.products;
 
 import java.io.File;
-import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 import net.praqma.prqa.PRQAApplicationSettings;
 import net.praqma.prqa.PRQAContext.QARReportType;
 import net.praqma.prqa.exceptions.PrqaSetupException;
+import net.praqma.prqa.execute.PrqaCommandLine;
 import net.praqma.prqa.reports.PRQAReport;
 import net.praqma.util.execute.AbnormalProcessTerminationException;
 import net.praqma.util.execute.CmdResult;
-import net.praqma.util.execute.CommandLine;
 
 /**
  * Reporting class.
@@ -57,7 +56,7 @@ public class QAR implements Product {
 
 		String version = null;
 		try {
-			CmdResult res = CommandLine.getInstance().run(PRQAApplicationSettings.resolveQarExe(isUnix) + " -version", workspace, true, false, environment);
+			CmdResult res = PrqaCommandLine.getInstance().run(PRQAApplicationSettings.resolveQarExe(isUnix) + " -version", workspace, true, false, environment);
 			version = res.stdoutBuffer.toString();
 		} catch (AbnormalProcessTerminationException ex) {
 			Map<String, String> systemVars = new HashMap<String, String>();
