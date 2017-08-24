@@ -429,6 +429,10 @@ public class QAFrameworkReport implements Serializable {
 
     public boolean applyCustomLicenseServer(PrintStream out) throws PrqaException {
 
+        if (!settings.isUseCustomLicenseServer()) {
+            return false;
+        }
+
         if (isCustomServerAlreadySet(out)) {
             return false;
         }
