@@ -93,7 +93,7 @@ public class QAFrameworkReport implements Serializable {
         if (StringUtils.isBlank(settings.getUniProjectName())) {
             throw new PrqaException(
                     "Configuration Error: Download Unified Project Definition was selected but no Unified project was provided. The Download unified project was aborted.");
-        } else if (StringUtils.isBlank(qaVerifySettings.host) || StringUtils.isBlank(qaVerifySettings.user) || StringUtils.isBlank(qaVerifySettings.password)) {
+        } else if (StringUtils.isBlank(qaVerifySettings.host) || StringUtils.isBlank(qaVerifySettings.user)) {
             throw new PrqaException("QAV Server Connection Settings are not selected");
         }
         PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());

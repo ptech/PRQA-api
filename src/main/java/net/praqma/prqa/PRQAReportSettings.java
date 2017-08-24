@@ -1,6 +1,7 @@
 package net.praqma.prqa;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.EnumSet;
 
 /**
@@ -12,7 +13,7 @@ public class PRQAReportSettings implements Serializable, ReportSettings {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public final String chosenServer;
+	public final Collection<String> chosenServer;
 	public final EnumSet<PRQAContext.QARReportType> chosenReportTypes;
 
 	public final String projectFile;
@@ -27,7 +28,7 @@ public class PRQAReportSettings implements Serializable, ReportSettings {
 	public final String product;
 
 	public PRQAReportSettings(
-			final String chosenServer,
+			final Collection<String> chosenServer,
 			final String projectFile,
 			final boolean performCrossModuleAnalysis,
 			final boolean publishToQAV,
