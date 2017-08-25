@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 
 
 public class StreamGobbler extends Thread {
-    protected static Logger logger = java.util.logging.Logger.getLogger(StreamGobbler.class.getName());
+    protected static Logger logger = Logger.getLogger(StreamGobbler.class.getName());
     public static final String linesep = System.getProperty("line.separator");
 
     InputStream is;
@@ -39,16 +39,13 @@ public class StreamGobbler extends Thread {
 
     public void run() {
         try {
-            InputStreamReader isr = new InputStreamReader(is/* , "UTF-8" */);
-            BufferedReader br = new BufferedReader(isr);
-            String line = null;
-
+            BufferedReader br = new BufferedReader(new InputStreamReader(is/* , "UTF-8" */));
+            String line;
             while ((line = br.readLine()) != null) {
-                logger.info( line );
+                // logger.info(line);
                 lres.add(line);
                 if (printStream != null) {
                     printStream.println(line);
-                    printStream.flush();
                 }
             }
 
@@ -65,6 +62,7 @@ public class StreamGobbler extends Thread {
                 notifyAll();
             }
         } catch (IOException ioe) {
+            logger.severe("Could not read line from input stream.");
             ioe.printStackTrace();
         }
     }
