@@ -31,6 +31,8 @@ import net.prqma.prqa.qaframework.QaFrameworkReportSettings;
 
 import org.apache.commons.lang.StringUtils;
 
+import static net.praqma.prqa.reports.ReportType.*;
+
 public class QAFrameworkReport implements Serializable {
 
     /**
@@ -250,10 +252,10 @@ public class QAFrameworkReport implements Serializable {
         if (file.isDirectory()) {
             File[] files = file.listFiles();
             for (File f : files) {
-                if ((f.getName().contains("RCR") && reportType.equals("RCR"))
-                        || (f.getName().contains("CRR") && reportType.equals("CRR"))
-                        || (f.getName().contains("MDR") && reportType.equals("MDR"))
-                        || (f.getName().contains("SUR") && reportType.equals("SR"))
+                if ((f.getName().contains(RCR.name()) && reportType.equals(RCR.name()))
+                        || (f.getName().contains(CRR.name()) && reportType.equals(CRR.name()))
+                        || (f.getName().contains(MDR.name()) && reportType.equals(MDR.name()))
+                        || (f.getName().contains(SUR.name()) && reportType.equals(SUR.name()))
                         || f.getName().contains("results_data")) {
                     f.delete();
                 }
@@ -362,7 +364,7 @@ public class QAFrameworkReport implements Serializable {
         Double projectCompliance = 0.0;
         int messages = 0;
         for (File reportFile : listOfReports) {
-            if (reportFile.getName().contains("RCR")) {
+            if (reportFile.getName().contains(RCR.name())) {
                 ComplianceReportHtmlParser parser = new ComplianceReportHtmlParser(reportFile.getAbsolutePath());
                 fileCompliance += Double.parseDouble(parser.getParseFirstResult(ComplianceReportHtmlParser.QAFfileCompliancePattern));
                 projectCompliance += Double.parseDouble(parser.getParseFirstResult(ComplianceReportHtmlParser.QAFprojectCompliancePattern));
