@@ -17,6 +17,7 @@ import net.praqma.prqa.QAVerifyServerSettings;
 import net.praqma.prqa.QaFrameworkVersion;
 import net.praqma.prqa.exceptions.PrqaException;
 import net.praqma.prqa.exceptions.PrqaUploadException;
+import net.praqma.prqa.execute.PrqaCommandLine;
 import net.praqma.prqa.parsers.ComplianceReportHtmlParser;
 import net.praqma.prqa.parsers.MessageGroup;
 import net.praqma.prqa.parsers.ResultsDataParser;
@@ -26,7 +27,6 @@ import net.praqma.prqa.products.QACli;
 import net.praqma.prqa.status.PRQAComplianceStatus;
 import net.praqma.util.execute.AbnormalProcessTerminationException;
 import net.praqma.util.execute.CmdResult;
-import net.praqma.util.execute.CommandLine;
 import net.prqma.prqa.qaframework.QaFrameworkReportSettings;
 
 import org.apache.commons.lang.StringUtils;
@@ -81,7 +81,7 @@ public class QAFrameworkReport implements Serializable {
             out.println("Download Unified Project Definition command:");
             out.println(command);
             try {
-                return CommandLine.getInstance().run(command, workspace, true, false);
+                return PrqaCommandLine.getInstance().run(command, workspace, true, false, out);
             } catch (AbnormalProcessTerminationException abnex) {
                 throw new PrqaException(String.format("Failed to Download Unified Project, message was:\n %s", abnex.getMessage()), abnex);
             }
@@ -121,11 +121,11 @@ public class QAFrameworkReport implements Serializable {
         try {
             if (getEnvironment() == null) {
                 PRQAReport._logEnv("Current analysis execution environment", systemVars);
-                return CommandLine.getInstance().run(finalCommand, workspace, true, false);
+                return PrqaCommandLine.getInstance().run(finalCommand, workspace, true, false, out);
             } else {
                 systemVars.putAll(getEnvironment());
                 PRQAReport._logEnv("Current modified analysis execution environment", systemVars);
-                return CommandLine.getInstance().run(finalCommand, workspace, true, false, systemVars);
+                return PrqaCommandLine.getInstance().run(finalCommand, workspace, true, false, systemVars, out);
             }
         } catch (AbnormalProcessTerminationException abnex) {
             throw new PrqaException(String.format("ERROR: Failed to analyze, message is... \n %s ", abnex.getMessage()), abnex);
@@ -172,7 +172,7 @@ public class QAFrameworkReport implements Serializable {
                 out.println("Perform Cross-Module analysis command:");
                 out.println(command);
                 try {
-                    return CommandLine.getInstance().run(command, workspace, true, false);
+                    return PrqaCommandLine.getInstance().run(command, workspace, true, false, out);
                 } catch (AbnormalProcessTerminationException abnex) {
                     throw new PrqaException(String.format("ERROR: Failed to analyze, message is:  %s", abnex.getMessage()),
                             abnex);
@@ -212,7 +212,7 @@ public class QAFrameworkReport implements Serializable {
         out.println("Report command :" + reportCommand);
         try {
             PRQAReport._logEnv("Current report generation execution environment", systemVars);
-            return CommandLine.getInstance().run(reportCommand, workspace, true, false, systemVars);
+            return PrqaCommandLine.getInstance().run(reportCommand, workspace, true, false, systemVars, out);
         } catch (AbnormalProcessTerminationException abnex) {
             log.severe(String.format("Failed to execute report generation command: %s%n%s", reportCommand,
                     abnex.getMessage()));
@@ -298,9 +298,9 @@ public class QAFrameworkReport implements Serializable {
         try {
             Map<String, String> getEnv = getEnvironment();
             if (getEnv == null) {
-                return CommandLine.getInstance().run(finalCommand, workspace, true, false);
+                return PrqaCommandLine.getInstance().run(finalCommand, workspace, true, false, out);
             } else {
-                return CommandLine.getInstance().run(finalCommand, workspace, true, false, getEnv);
+                return PrqaCommandLine.getInstance().run(finalCommand, workspace, true, false, getEnv, out);
             }
         } catch (AbnormalProcessTerminationException abnex) {
             log.logp(Level.SEVERE, this.getClass().getName(), "upload()", "Logged error with upload", abnex);

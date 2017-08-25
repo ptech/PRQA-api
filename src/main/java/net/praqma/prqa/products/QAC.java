@@ -7,16 +7,15 @@ package net.praqma.prqa.products;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
 import net.praqma.prqa.exceptions.PrqaSetupException;
+import net.praqma.prqa.execute.PrqaCommandLine;
 import net.praqma.prqa.reports.PRQAReport;
 import net.praqma.util.execute.AbnormalProcessTerminationException;
 import net.praqma.util.execute.CmdResult;
-import net.praqma.util.execute.CommandLine;
 
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 
@@ -43,7 +42,7 @@ public class QAC implements Product {
         try {
             f = File.createTempFile("test_prqa_file", ".c", workspace);
             logger.fine(String.format("Created dummy test file for version detection: %s", f.getAbsolutePath()));
-            res = CommandLine.getInstance().run(String.format("qac -version \"%s\"", f.getAbsolutePath()), workspace, true, false, environment);
+            res = PrqaCommandLine.getInstance().run(String.format("qac -version \"%s\"", f.getAbsolutePath()), workspace, true, false, environment);
 
         } catch (AbnormalProcessTerminationException abnex) {
             logger.warning(String.format("Failed to detect QA·C version with command %s returned code %s%nMessage was:%n%s", abnex.getCommand(), abnex.getExitValue(), abnex.getMessage()));

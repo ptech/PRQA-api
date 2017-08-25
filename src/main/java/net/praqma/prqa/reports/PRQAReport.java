@@ -26,8 +26,8 @@ import net.praqma.prqa.products.QAV;
 import net.praqma.prqa.status.PRQAComplianceStatus;
 import net.praqma.util.execute.AbnormalProcessTerminationException;
 import net.praqma.util.execute.CmdResult;
-import net.praqma.util.execute.CommandLine;
 
+import net.praqma.util.execute.CommandLine;
 import org.apache.commons.lang.StringUtils;
 
 /**
