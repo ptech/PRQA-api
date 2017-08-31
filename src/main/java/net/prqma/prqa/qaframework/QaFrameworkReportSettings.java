@@ -27,6 +27,10 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
     private boolean genSupReport;
     private boolean analysisSettings;
     private boolean stopWhenFail;
+    private boolean reuseCmaDb;
+    private boolean useDiskStorage;
+    private boolean customCpuThreads;
+    private String maxNumThreads;
     private boolean generatePreprocess;
     private boolean assembleSupportAnalytics;
 
@@ -51,6 +55,10 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
             boolean genSupReport,
             boolean analysisSettings,
             boolean stopWhenFail,
+            boolean reuseCmaDb,
+            boolean useDiskStorage,
+            boolean customCpuThreads,
+            String maxNumThreads,
             boolean generatePreprocess,
             boolean assembleSupportAnalytics) {
 
@@ -74,6 +82,10 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
         this.genSupReport = genSupReport;
         this.analysisSettings = analysisSettings;
         this.stopWhenFail = stopWhenFail;
+        this.reuseCmaDb = reuseCmaDb;
+        this.useDiskStorage = useDiskStorage;
+        this.customCpuThreads = customCpuThreads;
+        this.maxNumThreads = maxNumThreads;
         this.generatePreprocess = generatePreprocess;
         this.assembleSupportAnalytics = assembleSupportAnalytics;
 
@@ -224,4 +236,21 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
     public void setAssembleSupportAnalytics(boolean assembleSupportAnalytics) {
         this.assembleSupportAnalytics = assembleSupportAnalytics;
     }
+
+    public boolean isReuseCmaDb() {
+        return reuseCmaDb;
+    }
+
+    public boolean isUseDiskStorage() {
+        return useDiskStorage;
+    }
+
+    public String getMaxNumThreads() {
+        return maxNumThreads;
+    }
+
+    public boolean isCustomCpuThreads() {
+        return customCpuThreads;
+    }
+
 }

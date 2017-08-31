@@ -134,6 +134,34 @@ public class QAFrameworkReport implements Serializable {
         }
     }
 
+    private String createSetCpuThreadsCommand() {
+        PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
+        builder.appendArgument("admin");
+        builder.appendArgument("--set-cpus");
+        builder.appendArgument(settings.getMaxNumThreads());
+        return builder.getCommand();
+    }
+
+    public boolean applyCpuThreads(PrintStream out) throws PrqaException {
+
+        String setCpuThreadsCmd = createSetCpuThreadsCommand();
+        out.println("Set the number of CPUs used for analysis.");
+        out.println(setCpuThreadsCmd);
+        try {
+            if (getEnvironment() == null) {
+                PrqaCommandLine.getInstance().run(setCpuThreadsCmd, workspace, true, false);
+            } else {
+                HashMap<String, String> systemVars = new HashMap<>();
+                systemVars.putAll(System.getenv());
+                systemVars.putAll(getEnvironment());
+                PrqaCommandLine.getInstance().run(setCpuThreadsCmd, workspace, true, false, systemVars);
+            }
+        } catch (AbnormalProcessTerminationException abnex) {
+            throw new PrqaException("ERROR: Failed to set the number of CPUs used for analysis, please check the command message above for more details", abnex);
+        }
+        return true;
+    }
+
     private String createAnalysisCommandForQacli(boolean isUnix, String options, PrintStream out) throws PrqaException {
         PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
         builder.appendArgument("analyze");
@@ -160,6 +188,14 @@ public class QAFrameworkReport implements Serializable {
             builder.appendArgument("--assemble-support-analytics");
         } else if (settings.isAnalysisSettings() && settings.isAssembleSupportAnalytics() && (!settings.isGeneratePreprocess())) {
             log.log(Level.WARNING, "Assemble Support Analytics is selected but Generate Preprocessed Source option is not selected");
+        }
+
+        if (settings.isReuseCmaDb() && settings.isAnalysisSettings()) {
+            builder.appendArgument("--reuse_db");
+        }
+
+        if (settings.isUseDiskStorage() && settings.isAnalysisSettings()) {
+            builder.appendArgument("--use_disk_storage");
         }
 
         builder.appendArgument("-P");
