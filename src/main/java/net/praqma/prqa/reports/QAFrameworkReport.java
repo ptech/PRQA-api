@@ -85,7 +85,7 @@ public class QAFrameworkReport implements Serializable {
             try {
                 return PrqaCommandLine.getInstance().run(command, workspace, true, false, out);
             } catch (AbnormalProcessTerminationException abnex) {
-                throw new PrqaException(String.format("Failed to Download Unified Project, message was:\n %s", abnex.getMessage()), abnex);
+                throw new PrqaException("ERROR: Failed to Download Unified Project, please check the download command message above for more details", abnex);
             }
         }
     }
@@ -130,7 +130,7 @@ public class QAFrameworkReport implements Serializable {
                 return PrqaCommandLine.getInstance().run(finalCommand, workspace, true, false, systemVars, out);
             }
         } catch (AbnormalProcessTerminationException abnex) {
-            throw new PrqaException(String.format("ERROR: Failed to analyze, message is... \n %s ", abnex.getMessage()), abnex);
+            throw new PrqaException("ERROR: Failed to analyze, please check the analysis command message above for more details", abnex);
         }
     }
 
@@ -176,8 +176,7 @@ public class QAFrameworkReport implements Serializable {
                 try {
                     return PrqaCommandLine.getInstance().run(command, workspace, true, false, out);
                 } catch (AbnormalProcessTerminationException abnex) {
-                    throw new PrqaException(String.format("ERROR: Failed to analyze, message is:  %s", abnex.getMessage()),
-                            abnex);
+                    throw new PrqaException("ERROR: Failed to analyze, please check the Cross-Module-Analysis command message above for more details");
                 }
             } else {
                 throw new PrqaException("ERROR: Detected PRQA Framework version 2.1.0. CMA analysis cannot be configured with the selected option. It has to be done by adding it to the toolchain of the project.");
@@ -220,8 +219,7 @@ public class QAFrameworkReport implements Serializable {
                     abnex.getMessage()));
             log.logp(Level.SEVERE, this.getClass().getName(), "report()",
                     "Failed to execute report generation command", abnex);
-            out.println(String.format("Failed to execute report generation command: %s%n%s", reportCommand,
-                    abnex.getMessage()));
+            out.println("Failed to execute report generation command, please check the report command message above for more details");
         }
         return new CmdResult();
     }
@@ -306,7 +304,7 @@ public class QAFrameworkReport implements Serializable {
             }
         } catch (AbnormalProcessTerminationException abnex) {
             log.logp(Level.SEVERE, this.getClass().getName(), "upload()", "Logged error with upload", abnex);
-            throw new PrqaUploadException(String.format("Upload failed with message: %s", abnex.getMessage()), abnex);
+            throw new PrqaUploadException("ERROR: Failed to upload, please check the upload command message above for more details", abnex);
         }
     }
 
