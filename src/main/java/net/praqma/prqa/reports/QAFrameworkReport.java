@@ -135,17 +135,16 @@ public class QAFrameworkReport implements Serializable {
     }
 
     private String createSetCpuThreadsCommand() {
-        PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
-        builder.appendArgument("admin");
-        builder.appendArgument("--set-cpus");
-        builder.appendArgument(settings.getMaxNumThreads());
-        return builder.getCommand();
+        return new PRQACommandBuilder(formatQacliPath())
+                .appendArgument("admin")
+                .appendArgument("--set-cpus")
+                .appendArgument(settings.getMaxNumThreads())
+                .getCommand();
     }
 
     public boolean applyCpuThreads(PrintStream out) throws PrqaException {
-
         String setCpuThreadsCmd = createSetCpuThreadsCommand();
-        out.println("Set the number of CPUs used for analysis.");
+        out.println("Max Number of Analysis Threads Command:");
         out.println(setCpuThreadsCmd);
         try {
             if (getEnvironment() == null) {
