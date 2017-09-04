@@ -1,16 +1,5 @@
 package net.praqma.prqa.reports;
 
-import java.io.File;
-import java.io.PrintStream;
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import net.praqma.prqa.PRQAApplicationSettings;
 import net.praqma.prqa.PRQAContext;
 import net.praqma.prqa.QAVerifyServerSettings;
@@ -28,10 +17,23 @@ import net.praqma.prqa.status.PRQAComplianceStatus;
 import net.praqma.util.execute.AbnormalProcessTerminationException;
 import net.praqma.util.execute.CmdResult;
 import net.prqma.prqa.qaframework.QaFrameworkReportSettings;
-
 import org.apache.commons.lang.StringUtils;
 
-import static net.praqma.prqa.reports.ReportType.*;
+import java.io.File;
+import java.io.PrintStream;
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static net.praqma.prqa.reports.ReportType.CRR;
+import static net.praqma.prqa.reports.ReportType.MDR;
+import static net.praqma.prqa.reports.ReportType.RCR;
+import static net.praqma.prqa.reports.ReportType.SUR;
 
 public class QAFrameworkReport implements Serializable {
 
@@ -445,12 +447,12 @@ public class QAFrameworkReport implements Serializable {
 
         try {
             if (getEnvironment() == null) {
-                CommandLine.getInstance().run(setLicenseServerCmd, workspace, true, false);
+                PrqaCommandLine.getInstance().run(setLicenseServerCmd, workspace, true, false, out);
             } else {
                 HashMap<String, String> systemVars = new HashMap<>();
                 systemVars.putAll(System.getenv());
                 systemVars.putAll(getEnvironment());
-                CommandLine.getInstance().run(setLicenseServerCmd, workspace, true, false, systemVars);
+                PrqaCommandLine.getInstance().run(setLicenseServerCmd, workspace, true, false, systemVars, out);
             }
         } catch (AbnormalProcessTerminationException abnex) {
             throw new PrqaException(String.format("ERROR: Failed to set license server, message is... \n %s ", abnex.getMessage()), abnex);
@@ -470,12 +472,12 @@ public class QAFrameworkReport implements Serializable {
 
         try {
             if (getEnvironment() == null) {
-                CommandLine.getInstance().run(setLicenseServerCmd, workspace, true, false);
+                PrqaCommandLine.getInstance().run(setLicenseServerCmd, workspace, true, false, out);
             } else {
                 HashMap<String, String> systemVars = new HashMap<>();
                 systemVars.putAll(System.getenv());
                 systemVars.putAll(getEnvironment());
-                CommandLine.getInstance().run(setLicenseServerCmd, workspace, true, false, systemVars);
+                PrqaCommandLine.getInstance().run(setLicenseServerCmd, workspace, true, false, systemVars, out);
             }
         } catch (AbnormalProcessTerminationException abnex) {
             throw new PrqaException(String.format("ERROR: Failed to remove license , message is... \n %s ", abnex.getMessage()), abnex);
@@ -491,12 +493,12 @@ public class QAFrameworkReport implements Serializable {
         CmdResult res;
         try {
             if (getEnvironment() == null) {
-                res = CommandLine.getInstance().run(listLicenseServersCmd, workspace, false, true);
+                res = PrqaCommandLine.getInstance().run(listLicenseServersCmd, workspace, false, true, out);
             } else {
                 HashMap<String, String> systemVars = new HashMap<>();
                 systemVars.putAll(System.getenv());
                 systemVars.putAll(getEnvironment());
-                res = CommandLine.getInstance().run(listLicenseServersCmd, workspace, false, true, systemVars);
+                res = PrqaCommandLine.getInstance().run(listLicenseServersCmd, workspace, false, true, systemVars, out);
             }
         } catch (AbnormalProcessTerminationException abnex) {
             throw new PrqaException(String.format("ERROR: Failed to list current servers, message is... \n %s ", abnex.getMessage()), abnex);
