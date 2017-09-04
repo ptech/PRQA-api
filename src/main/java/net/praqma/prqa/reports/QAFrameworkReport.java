@@ -17,6 +17,7 @@ import net.praqma.prqa.QAVerifyServerSettings;
 import net.praqma.prqa.QaFrameworkVersion;
 import net.praqma.prqa.exceptions.PrqaException;
 import net.praqma.prqa.exceptions.PrqaUploadException;
+import net.praqma.prqa.execute.PrqaCommandLine;
 import net.praqma.prqa.parsers.ComplianceReportHtmlParser;
 import net.praqma.prqa.parsers.MessageGroup;
 import net.praqma.prqa.parsers.ResultsDataParser;
@@ -26,10 +27,11 @@ import net.praqma.prqa.products.QACli;
 import net.praqma.prqa.status.PRQAComplianceStatus;
 import net.praqma.util.execute.AbnormalProcessTerminationException;
 import net.praqma.util.execute.CmdResult;
-import net.praqma.util.execute.CommandLine;
 import net.prqma.prqa.qaframework.QaFrameworkReportSettings;
 
 import org.apache.commons.lang.StringUtils;
+
+import static net.praqma.prqa.reports.ReportType.*;
 
 public class QAFrameworkReport implements Serializable {
 
@@ -81,7 +83,7 @@ public class QAFrameworkReport implements Serializable {
             out.println("Download Unified Project Definition command:");
             out.println(command);
             try {
-                return CommandLine.getInstance().run(command, workspace, true, false);
+                return PrqaCommandLine.getInstance().run(command, workspace, true, false, out);
             } catch (AbnormalProcessTerminationException abnex) {
                 throw new PrqaException(String.format("Failed to Download Unified Project, message was:\n %s", abnex.getMessage()), abnex);
             }
@@ -121,11 +123,11 @@ public class QAFrameworkReport implements Serializable {
         try {
             if (getEnvironment() == null) {
                 PRQAReport._logEnv("Current analysis execution environment", systemVars);
-                return CommandLine.getInstance().run(finalCommand, workspace, true, false);
+                return PrqaCommandLine.getInstance().run(finalCommand, workspace, true, false, out);
             } else {
                 systemVars.putAll(getEnvironment());
                 PRQAReport._logEnv("Current modified analysis execution environment", systemVars);
-                return CommandLine.getInstance().run(finalCommand, workspace, true, false, systemVars);
+                return PrqaCommandLine.getInstance().run(finalCommand, workspace, true, false, systemVars, out);
             }
         } catch (AbnormalProcessTerminationException abnex) {
             throw new PrqaException(String.format("ERROR: Failed to analyze, message is... \n %s ", abnex.getMessage()), abnex);
@@ -172,7 +174,7 @@ public class QAFrameworkReport implements Serializable {
                 out.println("Perform Cross-Module analysis command:");
                 out.println(command);
                 try {
-                    return CommandLine.getInstance().run(command, workspace, true, false);
+                    return PrqaCommandLine.getInstance().run(command, workspace, true, false, out);
                 } catch (AbnormalProcessTerminationException abnex) {
                     throw new PrqaException(String.format("ERROR: Failed to analyze, message is:  %s", abnex.getMessage()),
                             abnex);
@@ -212,7 +214,7 @@ public class QAFrameworkReport implements Serializable {
         out.println("Report command :" + reportCommand);
         try {
             PRQAReport._logEnv("Current report generation execution environment", systemVars);
-            return CommandLine.getInstance().run(reportCommand, workspace, true, false, systemVars);
+            return PrqaCommandLine.getInstance().run(reportCommand, workspace, true, false, systemVars, out);
         } catch (AbnormalProcessTerminationException abnex) {
             log.severe(String.format("Failed to execute report generation command: %s%n%s", reportCommand,
                     abnex.getMessage()));
@@ -250,10 +252,10 @@ public class QAFrameworkReport implements Serializable {
         if (file.isDirectory()) {
             File[] files = file.listFiles();
             for (File f : files) {
-                if ((f.getName().contains("RCR") && reportType.equals("RCR"))
-                        || (f.getName().contains("CRR") && reportType.equals("CRR"))
-                        || (f.getName().contains("MDR") && reportType.equals("MDR"))
-                        || (f.getName().contains("SUR") && reportType.equals("SR"))
+                if ((f.getName().contains(RCR.name()) && reportType.equals(RCR.name()))
+                        || (f.getName().contains(CRR.name()) && reportType.equals(CRR.name()))
+                        || (f.getName().contains(MDR.name()) && reportType.equals(MDR.name()))
+                        || (f.getName().contains(SUR.name()) && reportType.equals(SUR.name()))
                         || f.getName().contains("results_data")) {
                     f.delete();
                 }
@@ -298,9 +300,9 @@ public class QAFrameworkReport implements Serializable {
         try {
             Map<String, String> getEnv = getEnvironment();
             if (getEnv == null) {
-                return CommandLine.getInstance().run(finalCommand, workspace, true, false);
+                return PrqaCommandLine.getInstance().run(finalCommand, workspace, true, false, out);
             } else {
-                return CommandLine.getInstance().run(finalCommand, workspace, true, false, getEnv);
+                return PrqaCommandLine.getInstance().run(finalCommand, workspace, true, false, getEnv, out);
             }
         } catch (AbnormalProcessTerminationException abnex) {
             log.logp(Level.SEVERE, this.getClass().getName(), "upload()", "Logged error with upload", abnex);
@@ -362,7 +364,7 @@ public class QAFrameworkReport implements Serializable {
         Double projectCompliance = 0.0;
         int messages = 0;
         for (File reportFile : listOfReports) {
-            if (reportFile.getName().contains("RCR")) {
+            if (reportFile.getName().contains(RCR.name())) {
                 ComplianceReportHtmlParser parser = new ComplianceReportHtmlParser(reportFile.getAbsolutePath());
                 fileCompliance += Double.parseDouble(parser.getParseFirstResult(ComplianceReportHtmlParser.QAFfileCompliancePattern));
                 projectCompliance += Double.parseDouble(parser.getParseFirstResult(ComplianceReportHtmlParser.QAFprojectCompliancePattern));

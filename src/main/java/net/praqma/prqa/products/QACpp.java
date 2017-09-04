@@ -4,19 +4,19 @@
  */
 package net.praqma.prqa.products;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Logger;
 import net.praqma.prqa.exceptions.PrqaSetupException;
+import net.praqma.prqa.execute.PrqaCommandLine;
 import net.praqma.prqa.reports.PRQAReport;
 import net.praqma.util.execute.AbnormalProcessTerminationException;
 import net.praqma.util.execute.CmdResult;
-import net.praqma.util.execute.CommandLine;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
+
+import java.io.File;
+import java.io.FileFilter;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * 
@@ -39,7 +39,7 @@ public class QACpp implements Product {
 		File f = null;
 		try {
 			f = File.createTempFile("test_prqa_file", ".c", workspace);
-			res = CommandLine.getInstance().run(String.format("qacpp -version \"%s\"", f.getAbsolutePath()), workspace, true, false, environment);
+			res = PrqaCommandLine.getInstance().run(String.format("qacpp -version \"%s\"", f.getAbsolutePath()), workspace, true, false, environment);
 		} catch (AbnormalProcessTerminationException ex) {
 			logger.warning(String.format("Failed to detect QA·C++ version with command %s returned code %s%nMessage was:%n%s", ex.getCommand(),
 					ex.getExitValue(), ex.getMessage()));

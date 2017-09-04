@@ -11,10 +11,10 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import net.praqma.prqa.exceptions.PrqaSetupException;
+import net.praqma.prqa.execute.PrqaCommandLine;
 import net.praqma.prqa.reports.PRQAReport;
 import net.praqma.util.execute.AbnormalProcessTerminationException;
 import net.praqma.util.execute.CmdResult;
-import net.praqma.util.execute.CommandLine;
 
 /**
  * 
@@ -47,7 +47,7 @@ public class QACli implements Product, Serializable {
 		sb.append(QACLI).append("\" --version");
 
 		try {
-			res = CommandLine.getInstance().run(sb.toString(), workspace, true, false, environment);
+			res = PrqaCommandLine.getInstance().run(sb.toString(), workspace, true, false, environment);
 			StringBuffer strBuffer = res.stdoutBuffer;
 			productVersion = strBuffer.substring(strBuffer.indexOf(":") + 1, strBuffer.length()).trim();
 
