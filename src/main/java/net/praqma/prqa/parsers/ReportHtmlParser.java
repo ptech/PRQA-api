@@ -39,8 +39,6 @@ public abstract class ReportHtmlParser implements Serializable {
 	 * * Parse method. Takes a path to a file, and a pattern for which to scan
 	 * for.
 	 * 
-	 * @param path
-	 * @param pattern
 	 * @return
 	 * @throws PrqaException
 	 */
@@ -87,15 +85,15 @@ public abstract class ReportHtmlParser implements Serializable {
 		}
 		logger.finest(String.format("File opened successfully!"));
 
-		InputStreamReader isr = new InputStreamReader(fis);
-		BufferedReader source = new BufferedReader(isr);
-		String sourceLine = "";
-		Matcher match = null;
-		String report = "";
+		try (InputStreamReader isr = new InputStreamReader(fis);
+			 BufferedReader source = new BufferedReader(isr);){
 
-		logger.finest(String.format("Attempting to read the file..."));
+			String sourceLine = "";
+			Matcher match;
+			String report = "";
 
-		try {
+			logger.finest(String.format("Attempting to read the file..."));
+
 			while ((sourceLine = source.readLine()) != null) {
 				report += sourceLine + ReportHtmlParser.LINE_SEPARATOR;
 				match = pattern.matcher(report);
@@ -113,25 +111,8 @@ public abstract class ReportHtmlParser implements Serializable {
 				}
 			}
 		} catch (IOException ex) {
-			PrqaParserException exception = new PrqaParserException(ex);
-
-			logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
-
-			throw exception;
-		} finally {
-
-			logger.finest(String.format("Atempting to close the file"));
-
-			try {
-				source.close();
-			} catch (IOException ex) {
-				PrqaParserException exception = new PrqaParserException(ex);
-				logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
-				throw exception;
-			}
-
-			logger.finest(String.format("File closed successfully"));
-
+			logger.severe(String.format("Exception thrown type: %s; message: %s", ex.getClass(), ex.getMessage()));
+			throw new PrqaParserException(ex);
 		}
 
 		logger.finest(String.format("File read successfully!"));
