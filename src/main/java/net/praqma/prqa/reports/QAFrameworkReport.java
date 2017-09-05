@@ -1,16 +1,5 @@
 package net.praqma.prqa.reports;
 
-import java.io.File;
-import java.io.PrintStream;
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import net.praqma.prqa.PRQAApplicationSettings;
 import net.praqma.prqa.PRQAContext;
 import net.praqma.prqa.QAVerifyServerSettings;
@@ -28,10 +17,23 @@ import net.praqma.prqa.status.PRQAComplianceStatus;
 import net.praqma.util.execute.AbnormalProcessTerminationException;
 import net.praqma.util.execute.CmdResult;
 import net.prqma.prqa.qaframework.QaFrameworkReportSettings;
-
 import org.apache.commons.lang.StringUtils;
 
-import static net.praqma.prqa.reports.ReportType.*;
+import java.io.File;
+import java.io.PrintStream;
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static net.praqma.prqa.reports.ReportType.CRR;
+import static net.praqma.prqa.reports.ReportType.MDR;
+import static net.praqma.prqa.reports.ReportType.RCR;
+import static net.praqma.prqa.reports.ReportType.SUR;
 
 public class QAFrameworkReport implements Serializable {
 
@@ -427,5 +429,111 @@ public class QAFrameworkReport implements Serializable {
 
     public void setQaFrameworkVersion(QaFrameworkVersion qaFrameworkVersion) {
         this.qaFrameworkVersion = qaFrameworkVersion;
+    }
+
+    public boolean applyCustomLicenseServer(PrintStream out) throws PrqaException {
+
+        if (!settings.isUseCustomLicenseServer()) {
+            return false;
+        }
+
+        if (isCustomServerAlreadySet(out)) {
+            return false;
+        }
+
+        String setLicenseServerCmd = createSetLicenseServersCmd();
+        out.println("Set license server command:");
+        out.println(setLicenseServerCmd);
+
+        try {
+            if (getEnvironment() == null) {
+                PrqaCommandLine.getInstance().run(setLicenseServerCmd, workspace, true, false, out);
+            } else {
+                HashMap<String, String> systemVars = new HashMap<>();
+                systemVars.putAll(System.getenv());
+                systemVars.putAll(getEnvironment());
+                PrqaCommandLine.getInstance().run(setLicenseServerCmd, workspace, true, false, systemVars, out);
+            }
+        } catch (AbnormalProcessTerminationException abnex) {
+            throw new PrqaException(String.format("ERROR: Failed to set license server, message is... \n %s ", abnex.getMessage()), abnex);
+        }
+
+        return true;
+    }
+
+    public void unsetCustomLicenseServer(boolean wasApplied, PrintStream out) throws PrqaException {
+        if (!wasApplied || !settings.isUseCustomLicenseServer()) {
+            return;
+        }
+
+        String setLicenseServerCmd = createRemoveLicenseServersCmd();
+        out.println("Remove custom license server command:");
+        out.println(setLicenseServerCmd);
+
+        try {
+            if (getEnvironment() == null) {
+                PrqaCommandLine.getInstance().run(setLicenseServerCmd, workspace, true, false, out);
+            } else {
+                HashMap<String, String> systemVars = new HashMap<>();
+                systemVars.putAll(System.getenv());
+                systemVars.putAll(getEnvironment());
+                PrqaCommandLine.getInstance().run(setLicenseServerCmd, workspace, true, false, systemVars, out);
+            }
+        } catch (AbnormalProcessTerminationException abnex) {
+            throw new PrqaException(String.format("ERROR: Failed to remove license , message is... \n %s ", abnex.getMessage()), abnex);
+        }
+    }
+
+    private boolean isCustomServerAlreadySet(PrintStream out) throws PrqaException {
+
+        String listLicenseServersCmd = createListLicenseServersCmd();
+        out.println("List license servers command:");
+        out.println(listLicenseServersCmd);
+
+        CmdResult res;
+        try {
+            if (getEnvironment() == null) {
+                res = PrqaCommandLine.getInstance().run(listLicenseServersCmd, workspace, false, true, out);
+            } else {
+                HashMap<String, String> systemVars = new HashMap<>();
+                systemVars.putAll(System.getenv());
+                systemVars.putAll(getEnvironment());
+                res = PrqaCommandLine.getInstance().run(listLicenseServersCmd, workspace, false, true, systemVars, out);
+            }
+        } catch (AbnormalProcessTerminationException abnex) {
+            throw new PrqaException(String.format("ERROR: Failed to list current servers, message is... \n %s ", abnex.getMessage()), abnex);
+        }
+
+        boolean contains = StringUtils.contains(res.stdoutBuffer.toString(), settings.getCustomLicenseServerAddress());
+        if (contains) {
+            out.println("Custom license server already set");
+        } else {
+            out.println("Custom license server not set");
+        }
+        return contains;
+    }
+
+
+    private String createListLicenseServersCmd() {
+        PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
+        builder.appendArgument("admin");
+        builder.appendArgument("--list-license-servers");
+        return builder.getCommand();
+    }
+
+    private String createSetLicenseServersCmd() {
+        PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
+        builder.appendArgument("admin");
+        builder.appendArgument("--set-license-server");
+        builder.appendArgument(settings.getCustomLicenseServerAddress());
+        return builder.getCommand();
+    }
+
+    private String createRemoveLicenseServersCmd() {
+        PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
+        builder.appendArgument("admin");
+        builder.appendArgument("--remove-license-server");
+        builder.appendArgument(settings.getCustomLicenseServerAddress());
+        return builder.getCommand();
     }
 }
