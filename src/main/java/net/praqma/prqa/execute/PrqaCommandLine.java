@@ -76,11 +76,11 @@ public class PrqaCommandLine implements CommandLineInterface {
         return this.run(cmd, dir, merge, ignore, null, null);
     }
 
-    public CmdResult run(String cmd, File dir, boolean merge, boolean ignore, PrintStream outputStream) throws CommandLineException, AbnormalProcessTerminationException {
-        return this.run(cmd, dir, merge, ignore, null, outputStream);
+    public CmdResult run(String cmd, File dir, boolean merge, boolean ignore, PrintStream printStream) throws CommandLineException, AbnormalProcessTerminationException {
+        return this.run(cmd, dir, merge, ignore, null, printStream);
     }
 
-    public synchronized CmdResult run(String cmd, File dir, boolean merge, boolean ignore, Map<String, String> variables, PrintStream outputStream) throws CommandLineException, AbnormalProcessTerminationException {
+    public synchronized CmdResult run(String cmd, File dir, boolean merge, boolean ignore, Map<String, String> variables, PrintStream printStream) throws CommandLineException, AbnormalProcessTerminationException {
         this.cmd[this.last] = cmd;
         this.logger.config("$ " + cmd);
 
@@ -106,59 +106,65 @@ public class PrqaCommandLine implements CommandLineInterface {
 
             CmdResult result = new CmdResult();
             Process p = pb.start();
-
-            StreamGobbler output = new StreamGobbler(p.getInputStream(), outputStream);
-            StreamGobbler errors = new StreamGobbler(p.getErrorStream(), outputStream);
-            p.getOutputStream().close();
-            output.start();
-            errors.start();
             int exitValue = 0;
+            StreamGobbler output;
+            StreamGobbler errors;
 
-            try {
-                exitValue = p.waitFor();
-            } catch (InterruptedException var21) {
-                p.destroy();
-            } finally {
-                Thread.interrupted();
-            }
+            try (InputStream inputStream = p.getInputStream();
+                 InputStream errorStream = p.getErrorStream();) {
 
-            try {
-                output.join();
-            } catch (InterruptedException var20) {
-                this.logger.severe("Could not join output thread");
-            }
+                output = new StreamGobbler(inputStream, printStream);
+                errors = new StreamGobbler(errorStream, printStream);
 
-            try {
-                errors.join();
-            } catch (InterruptedException var19) {
-                this.logger.severe("Could not join errors thread");
-            }
+                output.start();
+                errors.start();
 
-            p.getErrorStream().close();
-            p.getInputStream().close();
-            if (recorder != null) {
-                if (merge) {
-                    recorder.addCommand(cmd, exitValue, dir, output.sres.toString());
-                } else {
-                    recorder.addCommand(cmd, exitValue, dir, errors.sres.toString());
+                try {
+                    exitValue = p.waitFor();
+                } catch (InterruptedException var21) {
+                    p.destroy();
+                } finally {
+                    Thread.interrupted();
+                }
+
+                try {
+                    output.join();
+                } catch (InterruptedException var20) {
+                    this.logger.severe("Could not join output thread");
+                }
+
+                try {
+                    errors.join();
+                } catch (InterruptedException var19) {
+                    this.logger.severe("Could not join errors thread");
                 }
             }
 
-            if (exitValue != 0) {
-                this.logger.fine("Abnormal process termination(" + exitValue + "): " + errors.sres.toString());
-                if (!ignore) {
+            if (output != null && errors != null) {
+                if (recorder != null) {
                     if (merge) {
-                        throw new AbnormalProcessTerminationException(output.sres.toString(), cmd, exitValue);
+                        recorder.addCommand(cmd, exitValue, dir, output.sres.toString());
+                    } else {
+                        recorder.addCommand(cmd, exitValue, dir, errors.sres.toString());
                     }
-
-                    throw new AbnormalProcessTerminationException(errors.sres.toString(), cmd, exitValue);
                 }
-            }
 
-            result.stdoutBuffer = output.sres;
-            result.stdoutList = output.lres;
-            result.errorBuffer = errors.sres;
-            result.errorList = errors.lres;
+                if (exitValue != 0) {
+                    this.logger.fine("Abnormal process termination(" + exitValue + "): " + errors.sres.toString());
+                    if (!ignore) {
+                        if (merge) {
+                            throw new AbnormalProcessTerminationException(output.sres.toString(), cmd, exitValue);
+                        }
+
+                        throw new AbnormalProcessTerminationException(errors.sres.toString(), cmd, exitValue);
+                    }
+                }
+
+                result.stdoutBuffer = output.sres;
+                result.stdoutList = output.lres;
+                result.errorBuffer = errors.sres;
+                result.errorList = errors.lres;
+            }
             return result;
         } catch (IOException var23) {
             this.logger.warning("Could not execute the command \"" + cmd + "\" correctly: " + var23.getMessage());
