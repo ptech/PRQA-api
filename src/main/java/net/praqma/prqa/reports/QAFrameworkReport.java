@@ -442,7 +442,7 @@ public class QAFrameworkReport implements Serializable {
         }
 
         String setLicenseServerCmd = createSetLicenseServersCmd();
-        out.println("Set license server:");
+        out.println("Set license server command:");
         out.println(setLicenseServerCmd);
 
         try {
@@ -467,7 +467,7 @@ public class QAFrameworkReport implements Serializable {
         }
 
         String setLicenseServerCmd = createRemoveLicenseServersCmd();
-        out.println("Remove custom license server:");
+        out.println("Remove custom license server command:");
         out.println(setLicenseServerCmd);
 
         try {
@@ -487,7 +487,7 @@ public class QAFrameworkReport implements Serializable {
     private boolean isCustomServerAlreadySet(PrintStream out) throws PrqaException {
 
         String listLicenseServersCmd = createListLicenseServersCmd();
-        out.println("List license servers:");
+        out.println("List license servers command:");
         out.println(listLicenseServersCmd);
 
         CmdResult res;
