@@ -504,9 +504,6 @@ public class QAFrameworkReport implements Serializable {
             throw new PrqaException(String.format("ERROR: Failed to list current servers, message is... \n %s ", abnex.getMessage()), abnex);
         }
 
-        out.println("Currently defined license servers:");
-        out.println(res.stdoutBuffer.toString());
-
         boolean contains = StringUtils.contains(res.stdoutBuffer.toString(), settings.getCustomLicenseServerAddress());
         if (contains) {
             out.println("Custom license server already set");
