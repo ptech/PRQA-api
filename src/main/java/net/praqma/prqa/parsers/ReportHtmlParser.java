@@ -77,11 +77,8 @@ public abstract class ReportHtmlParser implements Serializable {
 		try {
 			fis = new FileInputStream(file);
 		} catch (FileNotFoundException ex) {
-			PrqaParserException exception = new PrqaParserException(ex);
-
-			logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
-
-			throw exception;
+			logger.severe(String.format("Exception thrown type: %s; message: %s", ex.getClass(), ex.getMessage()));
+			throw new PrqaParserException(ex);
 		}
 		logger.finest(String.format("File opened successfully!"));
 
