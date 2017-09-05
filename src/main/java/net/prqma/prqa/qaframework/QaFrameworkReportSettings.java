@@ -8,6 +8,8 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
 
     private String qaInstallation;
     private String qaProject;
+    private final boolean useCustomLicenseServer;
+    private final String customLicenseServerAddress;
     private String uniProjectName;
     private boolean pullUnifiedProject;
     private boolean qaEnableDependencyMode;
@@ -32,6 +34,8 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
 
     public QaFrameworkReportSettings(
             String qaInstallation,
+            boolean useCustomLicenseServer,
+            String customLicenseServerAddress,
             String qaProject,
             boolean pullUnifiedProject,
             String uniProjectName,
@@ -55,6 +59,8 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
             boolean assembleSupportAnalytics) {
 
         this.qaInstallation = qaInstallation;
+        this.useCustomLicenseServer = useCustomLicenseServer;
+        this.customLicenseServerAddress = customLicenseServerAddress;
         this.uniProjectName = uniProjectName;
         this.pullUnifiedProject = pullUnifiedProject;
         this.qaCrossModuleAnalysis = qaCrossModuleAnalysis;
@@ -223,5 +229,13 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
 
     public void setAssembleSupportAnalytics(boolean assembleSupportAnalytics) {
         this.assembleSupportAnalytics = assembleSupportAnalytics;
+    }
+
+    public String getCustomLicenseServerAddress() {
+        return customLicenseServerAddress;
+    }
+
+    public boolean isUseCustomLicenseServer() {
+        return useCustomLicenseServer;
     }
 }
