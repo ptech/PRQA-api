@@ -38,8 +38,7 @@ public class StreamGobbler extends Thread {
     }
 
     public void run() {
-        try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(is/* , "UTF-8" */));
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
             String line;
             while ((line = br.readLine()) != null) {
                 // logger.info(line);
