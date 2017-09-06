@@ -1,8 +1,8 @@
 package net.prqma.prqa.qaframework;
 
-import java.io.Serializable;
-
 import net.praqma.prqa.ReportSettings;
+
+import java.io.Serializable;
 
 public class QaFrameworkReportSettings implements ReportSettings, Serializable {
 
@@ -31,6 +31,7 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
     private boolean stopWhenFail;
     private boolean generatePreprocess;
     private boolean assembleSupportAnalytics;
+    private boolean generateReportOnAnalysisError;
 
     public QaFrameworkReportSettings(
             String qaInstallation,
@@ -56,7 +57,8 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
             boolean analysisSettings,
             boolean stopWhenFail,
             boolean generatePreprocess,
-            boolean assembleSupportAnalytics) {
+            boolean assembleSupportAnalytics,
+            boolean generateReportOnAnalysisError) {
 
         this.qaInstallation = qaInstallation;
         this.useCustomLicenseServer = useCustomLicenseServer;
@@ -83,6 +85,7 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
         this.generatePreprocess = generatePreprocess;
         this.assembleSupportAnalytics = assembleSupportAnalytics;
 
+        this.generateReportOnAnalysisError = generateReportOnAnalysisError;
     }
 
     @Override
@@ -237,5 +240,9 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
 
     public boolean isUseCustomLicenseServer() {
         return useCustomLicenseServer;
+    }
+
+    public boolean isGenerateReportOnAnalysisError() {
+        return generateReportOnAnalysisError;
     }
 }
