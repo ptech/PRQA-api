@@ -227,7 +227,7 @@ public class QAFrameworkReport implements Serializable {
     }
 
     private String createReportCommandForQacli(boolean isUnix, String reportType, PrintStream out) throws PrqaException {
-        out.println("Perform CREATE ".concat(reportType).concat(" REPORT command"));
+        out.println("Perform CREATE " + reportType + " REPORT command");
         String projectLocation = PRQACommandBuilder.resolveAbsOrRelativePath(workspace, settings.getQaProject());
         removeOldReports(projectLocation, reportType);
         return createReportCommand(projectLocation, reportType, out);
