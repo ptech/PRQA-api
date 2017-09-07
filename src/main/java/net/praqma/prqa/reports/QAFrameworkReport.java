@@ -343,10 +343,10 @@ public class QAFrameworkReport implements Serializable {
 
         projectLocation = PRQACommandBuilder.resolveAbsOrRelativePath(workspace, settings.getQaProject());
         File reportFolder = new File(projectLocation, report_structure);
-        out.println("Report Folder Path:: " + reportFolder);
+        out.println("Report Folder Path: " + reportFolder);
 
         File resultsDataFile = new File(projectLocation, getResultsDataFileRelativePath());
-        out.println("RESULTS DATA file path: " + resultsDataFile.getPath());
+        out.println("Results Data File Path: " + resultsDataFile.getPath());
 
         if (!reportFolder.exists()
                 || !reportFolder.isDirectory()
