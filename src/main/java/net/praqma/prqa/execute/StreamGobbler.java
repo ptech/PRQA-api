@@ -44,7 +44,7 @@ public class StreamGobbler extends Thread {
                 // logger.info(line);
                 lres.add(line);
                 if (printStream != null) {
-                    printStream.println(line);
+                    printStream.println(" > ".concat(line));
                 }
             }
 
