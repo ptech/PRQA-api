@@ -117,7 +117,7 @@ public class QAFrameworkReport implements Serializable {
     }
 
     public CmdResult analyzeQacli(boolean isUnix, String Options, PrintStream out) throws PrqaException {
-        String finalCommand = createAnalysisCommandForQacli(isUnix, Options, out);
+        String finalCommand = createAnalysisCommandForQacli(isUnix, Options);
         out.println("Perform ANALYSIS command:");
         out.println(finalCommand);
         HashMap<String, String> systemVars = new HashMap<>();
@@ -146,7 +146,7 @@ public class QAFrameworkReport implements Serializable {
 
     public boolean applyCpuThreads(PrintStream out) throws PrqaException {
         String setCpuThreadsCmd = createSetCpuThreadsCommand();
-        out.println("Max Number of Analysis Threads Command:");
+        out.println("Perform MAX NUMBER of ANALYSIS THREADS command:");
         out.println(setCpuThreadsCmd);
         try {
             if (getEnvironment() == null) {
@@ -163,7 +163,7 @@ public class QAFrameworkReport implements Serializable {
         return true;
     }
 
-    private String createAnalysisCommandForQacli(boolean isUnix, String options, PrintStream out) throws PrqaException {
+    private String createAnalysisCommandForQacli(boolean isUnix, String options) throws PrqaException {
         PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
         builder.appendArgument("analyze");
         String analyzeOptions = options;
@@ -177,26 +177,31 @@ public class QAFrameworkReport implements Serializable {
         }
 
         builder.appendArgument(analyzeOptions);
-        if (settings.isStopWhenFail() && settings.isAnalysisSettings()) {
-            builder.appendArgument("--stop-on-fail");
-        }
 
-        if (settings.isGeneratePreprocess() && settings.isAnalysisSettings()) {
-            builder.appendArgument("--generate-preprocessed-source");
-        }
+        if(settings.isAnalysisSettings()) {
+            if (settings.isStopWhenFail()) {
+                builder.appendArgument("--stop-on-fail");
+            }
 
-        if (settings.isGeneratePreprocess() && settings.isAnalysisSettings() && settings.isAssembleSupportAnalytics()) {
-            builder.appendArgument("--assemble-support-analytics");
-        } else if (settings.isAnalysisSettings() && settings.isAssembleSupportAnalytics() && (!settings.isGeneratePreprocess())) {
-            log.log(Level.WARNING, "Assemble Support Analytics is selected but Generate Preprocessed Source option is not selected");
-        }
+            if (settings.isGeneratePreprocess()) {
+                builder.appendArgument("--generate-preprocessed-source");
+            }
 
-        if (settings.isReuseCmaDb() && settings.isAnalysisSettings()) {
-            builder.appendArgument("--reuse_db");
-        }
+            if (settings.isAssembleSupportAnalytics()) {
+                if (settings.isGeneratePreprocess()) {
+                    builder.appendArgument("--assemble-support-analytics");
+                } else {
+                    log.log(Level.WARNING, "Assemble Support Analytics is selected but Generate Preprocessed Source option is not selected");
+                }
+            }
 
-        if (settings.isUseDiskStorage() && settings.isAnalysisSettings()) {
-            builder.appendArgument("--use_disk_storage");
+            if (settings.isReuseCmaDb()) {
+                builder.appendArgument("--reuse_db");
+            }
+
+            if (settings.isUseDiskStorage()) {
+                builder.appendArgument("--use_disk_storage");
+            }
         }
 
         builder.appendArgument("-P");
