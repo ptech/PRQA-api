@@ -35,12 +35,12 @@ import static net.praqma.prqa.reports.ReportType.MDR;
 import static net.praqma.prqa.reports.ReportType.RCR;
 import static net.praqma.prqa.reports.ReportType.SUR;
 
+/**
+ * @author Alexandru Ion
+ * @since 2.0.3
+ */
 public class QAFrameworkReport implements Serializable {
 
-    /**
-     * @author Alexandru Ion
-     * @since 2.0.3
-     */
     private static final long serialVersionUID = 1L;
     public static final String XHTML = "xhtml";
     public static final String XML = "xml";
@@ -181,14 +181,14 @@ public class QAFrameworkReport implements Serializable {
                     throw new PrqaException("ERROR: Failed to analyze, please check the Cross-Module-Analysis command message above for more details");
                 }
             } else {
-                throw new PrqaException("ERROR: Detected PRQA Framework version 2.1.0. CMA analysis cannot be configured with the selected option. It has to be done by adding it to the toolchain of the project.");
+                throw new PrqaException("ERROR: Detected PRQA Framework version 2.1.0 or higher. CMA analysis cannot be configured with the selected option. It has to be done by adding it to the toolchain of the project.");
             }
         }
         return null;
     }
 
     private String createCmaAnalysisCommand(boolean isUnix, PrintStream out) throws PrqaException {
-        if (!qaFrameworkVersion.isQaFrameworkVersion210()) {
+        if (qaFrameworkVersion.isQaFrameworkVersionPriorTo210()) {
             PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
             builder.appendArgument("analyze");
             builder.appendArgument("-p");
@@ -205,11 +205,11 @@ public class QAFrameworkReport implements Serializable {
             out.println("===================================================================================================");
             out.println("Warning: Metrics Data Report isn't supported report type in PRQA-Framework Prior to 1.0.4 version");
             out.println("===================================================================================================");
-            log.severe(String.format("Warning: Metrics Data Report isn't supported report type in PRQA-Framework Prior to 1.0.4 version"));
+            log.severe("Warning: Metrics Data Report isn't supported report type in PRQA-Framework Prior to 1.0.4 version");
             return null;
         }
         String reportCommand = createReportCommandForQacli(isUnix, repType, out);
-        Map<String, String> systemVars = new HashMap<String, String>();
+        Map<String, String> systemVars = new HashMap<>();
         systemVars.putAll(System.getenv());
         systemVars.putAll(getEnvironment());
         out.println(reportCommand);
@@ -251,15 +251,16 @@ public class QAFrameworkReport implements Serializable {
         File file = new File(projectLocation + reportsPath);
         if (file.isDirectory()) {
             File[] files = file.listFiles();
-            for (File f : files) {
-                if ((f.getName().contains(RCR.name()) && reportType.equals(RCR.name()))
-                        || (f.getName().contains(CRR.name()) && reportType.equals(CRR.name()))
-                        || (f.getName().contains(MDR.name()) && reportType.equals(MDR.name()))
-                        || (f.getName().contains(SUR.name()) && reportType.equals(SUR.name()))
-                        || f.getName().contains("results_data")) {
-                    f.delete();
+            if (files != null) {
+                for (File f : files) {
+                    if ((f.getName().contains(RCR.name()) && reportType.equals(RCR.name()))
+                            || (f.getName().contains(CRR.name()) && reportType.equals(CRR.name()))
+                            || (f.getName().contains(MDR.name()) && reportType.equals(MDR.name()))
+                            || (f.getName().contains(SUR.name()) && reportType.equals(SUR.name()))
+                            || f.getName().contains("results_data")) {
+                        f.delete();
+                    }
                 }
-
             }
         }
     }
@@ -290,7 +291,7 @@ public class QAFrameworkReport implements Serializable {
         return builder.getCommand();
     }
 
-    public CmdResult uploadQacli(PrintStream out) throws PrqaUploadException, PrqaException {
+    public CmdResult uploadQacli(PrintStream out) throws PrqaException {
         if (!settings.isLoginToQAV()) {
             out.println("Configuration Error: Upload Results to QAV is Selected but QAV Server Connection Configuration is not Selected");
             return null;
@@ -334,7 +335,7 @@ public class QAFrameworkReport implements Serializable {
         log.fine("==========================================");
     }
 
-    public PRQAComplianceStatus getComplianceStatus(PrintStream out) throws PrqaException, Exception {
+    public PRQAComplianceStatus getComplianceStatus(PrintStream out) throws Exception {
         PRQAComplianceStatus status = new PRQAComplianceStatus();
         status.setQaFrameworkVersion(qaFrameworkVersion);
         String projectLocation;
@@ -356,19 +357,21 @@ public class QAFrameworkReport implements Serializable {
         }
 
         File[] listOfReports = reportFolder.listFiles();
-        if (listOfReports.length < 1) {
+        if (listOfReports != null && listOfReports.length < 1) {
             return status;
         }
 
         Double fileCompliance = 0.0;
         Double projectCompliance = 0.0;
         int messages = 0;
-        for (File reportFile : listOfReports) {
-            if (reportFile.getName().contains(RCR.name())) {
-                ComplianceReportHtmlParser parser = new ComplianceReportHtmlParser(reportFile.getAbsolutePath());
-                fileCompliance += Double.parseDouble(parser.getParseFirstResult(ComplianceReportHtmlParser.QAFfileCompliancePattern));
-                projectCompliance += Double.parseDouble(parser.getParseFirstResult(ComplianceReportHtmlParser.QAFprojectCompliancePattern));
-                messages += Integer.parseInt(parser.getParseFirstResult(ComplianceReportHtmlParser.QAFtotalMessagesPattern));
+        if (listOfReports != null) {
+            for (File reportFile : listOfReports) {
+                if (reportFile.getName().contains(RCR.name())) {
+                    ComplianceReportHtmlParser parser = new ComplianceReportHtmlParser(reportFile.getAbsolutePath());
+                    fileCompliance += Double.parseDouble(parser.getParseFirstResult(ComplianceReportHtmlParser.QAFfileCompliancePattern));
+                    projectCompliance += Double.parseDouble(parser.getParseFirstResult(ComplianceReportHtmlParser.QAFprojectCompliancePattern));
+                    messages += Integer.parseInt(parser.getParseFirstResult(ComplianceReportHtmlParser.QAFtotalMessagesPattern));
+                }
             }
         }
 
@@ -395,7 +398,7 @@ public class QAFrameworkReport implements Serializable {
             Collections.sort(messageGroup.getViolatedRules(), new Comparator<Rule>() {
                 @Override
                 public int compare(Rule o1, Rule o2) {
-                    return o1.getRuleID().toString().compareTo(o2.getRuleID().toString());
+                    return o1.getRuleID().compareTo(o2.getRuleID());
                 }
             });
         }
