@@ -72,6 +72,8 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
         this.uniProjectName = uniProjectName;
         this.pullUnifiedProject = pullUnifiedProject;
         this.qaCrossModuleAnalysis = qaCrossModuleAnalysis;
+        this.reuseCmaDb = reuseCmaDb;
+        this.useDiskStorage = useDiskStorage;
         this.publishToQAV = publishToQAV;
         this.loginToQAV = loginToQAV;
         this.qaEnableDependencyMode = qaEnableDependencyMode;
@@ -88,8 +90,6 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
         this.genSupReport = genSupReport;
         this.analysisSettings = analysisSettings;
         this.stopWhenFail = stopWhenFail;
-        this.reuseCmaDb = reuseCmaDb;
-        this.useDiskStorage = useDiskStorage;
         this.customCpuThreads = customCpuThreads;
         this.maxNumThreads = maxNumThreads;
         this.generatePreprocess = generatePreprocess;
