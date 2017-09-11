@@ -194,14 +194,6 @@ public class QAFrameworkReport implements Serializable {
                     log.log(Level.WARNING, "Assemble Support Analytics is selected but Generate Preprocessed Source option is not selected");
                 }
             }
-
-            if (settings.isReuseCmaDb()) {
-                builder.appendArgument("--reuse_db");
-            }
-
-            if (settings.isUseDiskStorage()) {
-                builder.appendArgument("--use_disk_storage");
-            }
         }
 
         builder.appendArgument("-P");
@@ -218,7 +210,7 @@ public class QAFrameworkReport implements Serializable {
                 try {
                     return PrqaCommandLine.getInstance().run(command, workspace, true, false, out);
                 } catch (AbnormalProcessTerminationException abnex) {
-                    throw new PrqaException("ERROR: Failed to analyze, please check the Cross-Module-Analysis command message above for more details");
+                    throw new PrqaException("ERROR: Failed to analyze, please check the Cross-Module-Analysis command message above for more details", abnex);
                 }
             } else {
                 throw new PrqaException("ERROR: Detected PRQA Framework version 2.1.0. CMA analysis cannot be configured with the selected option. It has to be done by adding it to the toolchain of the project.");
@@ -233,6 +225,12 @@ public class QAFrameworkReport implements Serializable {
             builder.appendArgument("analyze");
             builder.appendArgument("-p");
             builder.appendArgument("-P");
+            if (settings.isReuseCmaDb()) {
+                builder.appendArgument("--reuse_db");
+            }
+            if (settings.isUseDiskStorage()) {
+                builder.appendArgument("--use_disk_storage");
+            }
             builder.appendArgument(PRQACommandBuilder.wrapFile(workspace, settings.getQaProject()));
             return builder.getCommand();
         }

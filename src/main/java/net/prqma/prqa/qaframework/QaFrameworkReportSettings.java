@@ -15,6 +15,8 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
     private boolean qaEnableDependencyMode;
     private boolean qaEnableProjectCma;
     private boolean qaCrossModuleAnalysis;
+    private boolean reuseCmaDb;
+    private boolean useDiskStorage;
     private boolean generateReport;
     private boolean publishToQAV;
     private boolean loginToQAV;
@@ -29,8 +31,6 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
     private boolean genSupReport;
     private boolean analysisSettings;
     private boolean stopWhenFail;
-    private boolean reuseCmaDb;
-    private boolean useDiskStorage;
     private boolean customCpuThreads;
     private String maxNumThreads;
     private boolean generatePreprocess;
@@ -45,6 +45,8 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
             String uniProjectName,
             boolean qaEnableDependencyMode,
             boolean qaCrossModuleAnalysis,
+            boolean reuseCmaDb,
+            boolean useDiskStorage,
             boolean generateReport,
             boolean publishToQAV,
             boolean loginToQAV,
@@ -59,8 +61,6 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
             boolean genSupReport,
             boolean analysisSettings,
             boolean stopWhenFail,
-            boolean reuseCmaDb,
-            boolean useDiskStorage,
             boolean customCpuThreads,
             String maxNumThreads,
             boolean generatePreprocess,
