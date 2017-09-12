@@ -1,52 +1,35 @@
 package net.praqma.prqa;
 
-import java.io.PrintStream;
 import java.io.Serializable;
 
 public class QaFrameworkVersion implements Serializable {
 
-    private String qaFrameworkVersion;
+    private String qaFrameworkVersionString;
 
-    public QaFrameworkVersion(String qaFrameworkVersion) {
-        this.qaFrameworkVersion = qaFrameworkVersion;
+    public QaFrameworkVersion(String qaFrameworkVersionString) {
+        this.qaFrameworkVersionString = qaFrameworkVersionString;
     }
 
-    public boolean isQafVersionSupported(PrintStream printStream) {
-        String qafVersion = getQAFrameworkShortVersion();
-        printStream.println("PRQA Source Code Analysis Framework " + qafVersion);
-
-        if (!isQAFVersionSupported()) {
-            printStream.println(String.format(
-                    "Your QA·CLI version is %s.In order to use our product install a newer version of PRQA·Framework!",
-                    qaFrameworkVersion));
-            return false;
-        }
-        return true;
-    }
-
-    public boolean isQaFrameworkVersionPriorToVersion104() {
-        return versionCompare(getQAFrameworkShortVersion(), "1.0.4") == -1;
-    }
-
-    public boolean isQaFrameworkVersionPriorTo210() {
-        return versionCompare(getQAFrameworkShortVersion(), "2.1.0") == -1;
-    }
-
-    private boolean isQAFVersionSupported() {
-        return qaFrameworkVersion != null && qaFrameworkVersion.length() != 0 && !isAnOlderVersionThanSupported();
-    }
-
-    private boolean isAnOlderVersionThanSupported() {
-        return getVersionShortFormat().equals("1.0.0");
-    }
-
-    private String getQAFrameworkShortVersion() {
+    public String getQaFrameworkVersion() {
         String shortVersion = getVersionShortFormat();
         return shortVersion.substring(shortVersion.lastIndexOf(" ") + 1);
     }
 
+    public boolean isQaFrameworkVersionPriorToVersion104() {
+        return versionCompare(getQaFrameworkVersion(), "1.0.4") == -1;
+    }
+
+    public boolean isQaFrameworkVersionPriorTo210() {
+        return versionCompare(getQaFrameworkVersion(), "2.1.0") == -1;
+    }
+
+    public boolean isQAFVersionSupported() {
+        return qaFrameworkVersionString != null && qaFrameworkVersionString.length() != 0 &&
+                !getVersionShortFormat().equals("1.0.0");
+    }
+
     private String getVersionShortFormat() {
-        return qaFrameworkVersion.substring(0, qaFrameworkVersion.lastIndexOf("."));
+        return qaFrameworkVersionString.substring(0, qaFrameworkVersionString.lastIndexOf("."));
     }
 
     /**
