@@ -188,7 +188,7 @@ public class QAFrameworkReport implements Serializable {
     }
 
     private String createCmaAnalysisCommand(boolean isUnix, PrintStream out) throws PrqaException {
-        if (qaFrameworkVersion.isQaFrameworkVersionPriorTo210()) {
+        if (qaFrameworkVersion.isVersionPriorTo210()) {
             PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
             builder.appendArgument("analyze");
             builder.appendArgument("-p");
@@ -201,7 +201,7 @@ public class QAFrameworkReport implements Serializable {
 
     public CmdResult reportQacli(boolean isUnix, String repType, PrintStream out) throws PrqaException {
         /*MDR Report type isnt supported in 1.0.3, 1.0.2, 1.0.1 and 1.0.0 */
-        if (repType.equals("MDR") && (qaFrameworkVersion.isQaFrameworkVersionPriorToVersion104())) {
+        if (repType.equals("MDR") && (qaFrameworkVersion.isVersionPriorTo104())) {
             out.println("===================================================================================================");
             out.println("Warning: Metrics Data Report isn't supported report type in PRQA-Framework Prior to 1.0.4 version");
             out.println("===================================================================================================");
@@ -237,7 +237,7 @@ public class QAFrameworkReport implements Serializable {
         PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
         builder.appendArgument("report -P");
         builder.appendArgument(PRQACommandBuilder.wrapInQuotationMarks(projectLocation));
-        if (qaFrameworkVersion.isQaFrameworkVersionPriorToVersion104()) {
+        if (qaFrameworkVersion.isVersionPriorTo104()) {
             builder.appendArgument("-l C");
         }
         builder.appendArgument("-t");
@@ -389,7 +389,7 @@ public class QAFrameworkReport implements Serializable {
     }
 
     private String getResultsDataFileRelativePath() {
-        return (qaFrameworkVersion.isQaFrameworkVersionPriorToVersion104() ? "/prqa/output/results_data.xml" : "/prqa/reports/results_data.xml");
+        return (qaFrameworkVersion.isVersionPriorTo104() ? "/prqa/output/results_data.xml" : "/prqa/reports/results_data.xml");
 
     }
 

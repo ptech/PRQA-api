@@ -7,29 +7,24 @@ public class QaFrameworkVersion implements Serializable {
     private String qaFrameworkVersionString;
 
     public QaFrameworkVersion(String qaFrameworkVersionString) {
-        this.qaFrameworkVersionString = qaFrameworkVersionString;
+        this.qaFrameworkVersionString = qaFrameworkVersionString == null ? "" : qaFrameworkVersionString;
     }
 
     public String getQaFrameworkVersion() {
-        String shortVersion = getVersionShortFormat();
+        String shortVersion = qaFrameworkVersionString.substring(0, qaFrameworkVersionString.lastIndexOf("."));
         return shortVersion.substring(shortVersion.lastIndexOf(" ") + 1);
     }
 
-    public boolean isQaFrameworkVersionPriorToVersion104() {
+    public boolean isVersionPriorTo104() {
         return versionCompare(getQaFrameworkVersion(), "1.0.4") == -1;
     }
 
-    public boolean isQaFrameworkVersionPriorTo210() {
+    public boolean isVersionPriorTo210() {
         return versionCompare(getQaFrameworkVersion(), "2.1.0") == -1;
     }
 
-    public boolean isQAFVersionSupported() {
-        return qaFrameworkVersionString != null && qaFrameworkVersionString.length() != 0 &&
-                !getVersionShortFormat().equals("1.0.0");
-    }
-
-    private String getVersionShortFormat() {
-        return qaFrameworkVersionString.substring(0, qaFrameworkVersionString.lastIndexOf("."));
+    public boolean isVersionSupported() {
+        return qaFrameworkVersionString.length() != 0 && versionCompare(getQaFrameworkVersion(), "1.0.0") == 1;
     }
 
     /**
