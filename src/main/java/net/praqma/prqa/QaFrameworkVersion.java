@@ -1,60 +1,38 @@
 package net.praqma.prqa;
 
+import net.praqma.prqa.utils.ComparableVersion;
+
 import java.io.Serializable;
 
 public class QaFrameworkVersion implements Serializable {
 
-    private String qaFrameworkVersionString;
+    private ComparableVersion qaFrameworkVersion;
 
     public QaFrameworkVersion(String qaFrameworkVersionString) {
-        this.qaFrameworkVersionString = qaFrameworkVersionString == null ? "" : qaFrameworkVersionString;
+        // example: "PRQA Framework version 2.2.0.9151-qax" will be cut to "2.2.0.9151-qax"
+        String version = qaFrameworkVersionString.substring(qaFrameworkVersionString.lastIndexOf(" ") + 1).trim();
+        this.qaFrameworkVersion = new ComparableVersion(version);
     }
 
     public String getQaFrameworkVersion() {
-        String shortVersion = qaFrameworkVersionString.substring(0, qaFrameworkVersionString.lastIndexOf("."));
-        return shortVersion.substring(shortVersion.lastIndexOf(" ") + 1);
+        return qaFrameworkVersion.toString();
+    }
+
+    public String getQaFrameworkShortVersion() {
+        String value = qaFrameworkVersion.toString();
+        return value.length() > 5 ? value.substring(0, 5) : value;
     }
 
     public boolean isVersionPriorTo104() {
-        return versionCompare(getQaFrameworkVersion(), "1.0.4") == -1;
+        return qaFrameworkVersion.compareTo(new ComparableVersion("1.0.4")) < 0;
     }
 
     public boolean isVersionPriorTo210() {
-        return versionCompare(getQaFrameworkVersion(), "2.1.0") == -1;
+        return qaFrameworkVersion.compareTo(new ComparableVersion("2.1.0")) < 0;
     }
 
     public boolean isVersionSupported() {
-        return qaFrameworkVersionString.length() != 0 && versionCompare(getQaFrameworkVersion(), "1.0.0") == 1;
-    }
-
-    /**
-     * Compares two version strings.
-     * <p>
-     * Use this instead of String.compareTo() for a non-lexicographical
-     * comparison that works for version strings. e.g. "1.10".compareTo("1.6").
-     *
-     * @param str1 a string of ordinal numbers separated by decimal points.
-     * @param str2 a string of ordinal numbers separated by decimal points.
-     * @return The result is a negative integer if str1 is _numerically_ less than str2.
-     * The result is a positive integer if str1 is _numerically_ greater than str2.
-     * The result is zero if the strings are _numerically_ equal.
-     * @note It does not work if "1.10" is supposed to be equal to "1.10.0".
-     */
-    private static int versionCompare(String str1, String str2) {
-        String[] vals1 = str1.split("\\.");
-        String[] vals2 = str2.split("\\.");
-        int i = 0;
-        // set index to first non-equal ordinal or length of shortest version string
-        while (i < vals1.length && i < vals2.length && vals1[i].equals(vals2[i])) {
-            i++;
-        }
-        // compare first non-equal ordinal number
-        if (i < vals1.length && i < vals2.length) {
-            int diff = Integer.valueOf(vals1[i]).compareTo(Integer.valueOf(vals2[i]));
-            return Integer.signum(diff);
-        }
-        // the strings are equal or one string is a substring of the other
-        // e.g. "1.2.3" = "1.2.3" or "1.2.3" < "1.2.3.4"
-        return Integer.signum(vals1.length - vals2.length);
+        return qaFrameworkVersion != null &&
+                qaFrameworkVersion.compareTo(new ComparableVersion("1.0.0")) > 0;
     }
 }
