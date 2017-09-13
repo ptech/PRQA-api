@@ -1,12 +1,12 @@
 package net.praqma.prqa;
 
-import net.praqma.prqa.utils.ComparableVersion;
+import org.apache.maven.artifact.versioning.ComparableVersion;
 
 import java.io.Serializable;
 
 public class QaFrameworkVersion implements Serializable {
 
-    public static final String MINOR_SUPPORTED_VERSION = "2.0.0";
+    public static final String MINOR_SUPPORTED_VERSION = "2.2.0";
 
     private ComparableVersion qaFrameworkVersion;
 
