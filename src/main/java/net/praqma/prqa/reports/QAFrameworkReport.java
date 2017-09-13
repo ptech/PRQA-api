@@ -18,8 +18,19 @@ import net.praqma.util.execute.AbnormalProcessTerminationException;
 import net.praqma.util.execute.CmdResult;
 import net.prqma.prqa.qaframework.QaFrameworkReportSettings;
 import org.apache.commons.lang.StringUtils;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.io.Serializable;
 import java.util.Collections;
@@ -52,6 +63,33 @@ public class QAFrameworkReport implements Serializable {
     public static String XHTML_REPORT_EXTENSION = "Report." + PRQAReport.XHTML;
     public static String XML_REPORT_EXTENSION = "Report." + PRQAReport.XML;
     public static String HTML_REPORT_EXTENSION = "Report." + PRQAReport.HTML;
+
+    public static String extractReportsPath(final String root)
+            throws
+            IOException {
+
+        String r = StringUtils.isEmpty(root) ? root : root + File.separator;
+
+        try {
+            final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            final DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+            final Document document = documentBuilder.parse(new File(r, "prqaproject.xml"));
+            final Element element = document.getDocumentElement();
+            final XPath xPath = XPathFactory.newInstance().newXPath();
+            final XPathExpression compile = xPath.compile("/prqaproject/configurations/default_config/@name");
+            final String name = compile.evaluate(element);
+
+            if (StringUtils.isEmpty(name)) {
+                throw new IOException("Unable to find default config name in project");
+            }
+
+            final String fmt = "prqa%1$sconfigs%1$s%2$s%1$sreports";
+            return String.format(fmt, File.separator, name);
+
+        } catch (SAXException | XPathExpressionException | ParserConfigurationException e) {
+            throw new IOException("Failed to parse project configuration", e);
+        }
+    }
 
     private static final Logger log = Logger.getLogger(QAFrameworkReport.class.getName());
     private QaFrameworkReportSettings settings;
@@ -339,13 +377,12 @@ public class QAFrameworkReport implements Serializable {
         status.setQaFrameworkVersion(qaFrameworkVersion);
         String projectLocation;
         String report_structure;
-        report_structure = new File("prqa", "reports").getPath();
-
         projectLocation = PRQACommandBuilder.resolveAbsOrRelativePath(workspace, settings.getQaProject());
+        report_structure = new File(extractReportsPath(projectLocation)).getPath();
         File reportFolder = new File(projectLocation, report_structure);
         out.println("Report Folder Path: " + reportFolder);
 
-        File resultsDataFile = new File(projectLocation, getResultsDataFileRelativePath());
+        File resultsDataFile = new File(reportFolder + File.separator + "results_data.xml");
         out.println("Results Data File Path: " + resultsDataFile.getPath());
 
         if (!reportFolder.exists()
@@ -383,11 +420,6 @@ public class QAFrameworkReport implements Serializable {
         status.setMessages(messages);
 
         return status;
-    }
-
-    private String getResultsDataFileRelativePath() {
-        return (qaFrameworkVersion.isQaFrameworkVersionPriorToVersion104() ? "/prqa/output/results_data.xml" : "/prqa/reports/results_data.xml");
-
     }
 
     private void sortViolatedRulesByRuleID(List<MessageGroup> messagesGroups) {
