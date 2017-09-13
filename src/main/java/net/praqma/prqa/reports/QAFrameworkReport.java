@@ -48,6 +48,7 @@ public class QAFrameworkReport implements Serializable {
 
     private static final String FILE_SEPARATOR = System.getProperty("file.separator");
     private static final String QUOTE = "\"";
+    private static final String RESULTS_DATA_PATH = "/prqa/reports/results_data.xml";
 
     public static String XHTML_REPORT_EXTENSION = "Report." + PRQAReport.XHTML;
     public static String XML_REPORT_EXTENSION = "Report." + PRQAReport.XML;
@@ -188,26 +189,16 @@ public class QAFrameworkReport implements Serializable {
     }
 
     private String createCmaAnalysisCommand(boolean isUnix, PrintStream out) throws PrqaException {
-        if (qaFrameworkVersion.isVersionPriorTo210()) {
-            PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
-            builder.appendArgument("analyze");
-            builder.appendArgument("-p");
-            builder.appendArgument("-P");
-            builder.appendArgument(PRQACommandBuilder.wrapFile(workspace, settings.getQaProject()));
-            return builder.getCommand();
-        }
-        return null;
+        // TODO fix this CMA analyse command
+        PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
+        builder.appendArgument("analyze");
+        builder.appendArgument("-p");
+        builder.appendArgument("-P");
+        builder.appendArgument(PRQACommandBuilder.wrapFile(workspace, settings.getQaProject()));
+        return builder.getCommand();
     }
 
     public CmdResult reportQacli(boolean isUnix, String repType, PrintStream out) throws PrqaException {
-        /*MDR Report type isnt supported in 1.0.3, 1.0.2, 1.0.1 and 1.0.0 */
-        if (repType.equals("MDR") && (qaFrameworkVersion.isVersionPriorTo104())) {
-            out.println("===================================================================================================");
-            out.println("Warning: Metrics Data Report isn't supported report type in PRQA-Framework Prior to 1.0.4 version");
-            out.println("===================================================================================================");
-            log.severe("Warning: Metrics Data Report isn't supported report type in PRQA-Framework Prior to 1.0.4 version");
-            return null;
-        }
         String reportCommand = createReportCommandForQacli(isUnix, repType, out);
         Map<String, String> systemVars = new HashMap<>();
         systemVars.putAll(System.getenv());
@@ -237,9 +228,6 @@ public class QAFrameworkReport implements Serializable {
         PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
         builder.appendArgument("report -P");
         builder.appendArgument(PRQACommandBuilder.wrapInQuotationMarks(projectLocation));
-        if (qaFrameworkVersion.isVersionPriorTo104()) {
-            builder.appendArgument("-l C");
-        }
         builder.appendArgument("-t");
         builder.appendArgument(reportType);
 
@@ -389,7 +377,7 @@ public class QAFrameworkReport implements Serializable {
     }
 
     private String getResultsDataFileRelativePath() {
-        return (qaFrameworkVersion.isVersionPriorTo104() ? "/prqa/output/results_data.xml" : "/prqa/reports/results_data.xml");
+        return RESULTS_DATA_PATH;
 
     }
 

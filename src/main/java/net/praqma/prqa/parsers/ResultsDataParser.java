@@ -34,19 +34,10 @@ public class ResultsDataParser implements Serializable{
     }
 
     public List<MessageGroup> parseResultsData() throws Exception {       
-        FileInputStream fileis = new FileInputStream(filePath);
-
-        // TODO: Dom Parsing - Temporary fix to read the xml file. will be replaced.
-        if (qaFrameworkVersion.isVersionPriorTo104()) {
-            XMLInputFactory factory = XMLInputFactory.newInstance();
-            XMLStreamReader reader = factory.createXMLStreamReader(fileis);
-            return beginFileParse(reader);
-        } else {
-            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Document document = dBuilder.parse(fileis);
-            return beginFileParsing(document);
-        }
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+        Document document = dBuilder.parse(new FileInputStream(filePath));
+        return beginFileParsing(document);
     }
 
     private Map<String, Integer> getMessages(Element node)

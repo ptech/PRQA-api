@@ -6,6 +6,8 @@ import java.io.Serializable;
 
 public class QaFrameworkVersion implements Serializable {
 
+    public static final String MINOR_SUPPORTED_VERSION = "2.0.0";
+
     private ComparableVersion qaFrameworkVersion;
 
     public QaFrameworkVersion(String qaFrameworkVersionString) {
@@ -23,15 +25,7 @@ public class QaFrameworkVersion implements Serializable {
         return value.length() > 5 ? value.substring(0, 5) : value;
     }
 
-    public boolean isVersionPriorTo104() {
-        return qaFrameworkVersion.compareTo(new ComparableVersion("1.0.4")) < 0;
-    }
-
-    public boolean isVersionPriorTo210() {
-        return qaFrameworkVersion.compareTo(new ComparableVersion("2.1.0")) < 0;
-    }
-
     public boolean isVersionSupported() {
-        return qaFrameworkVersion.compareTo(new ComparableVersion("1.0.0")) > 0;
+        return qaFrameworkVersion.compareTo(new ComparableVersion(MINOR_SUPPORTED_VERSION)) > -1;
     }
 }
