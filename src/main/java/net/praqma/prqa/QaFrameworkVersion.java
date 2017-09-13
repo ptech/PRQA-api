@@ -32,7 +32,6 @@ public class QaFrameworkVersion implements Serializable {
     }
 
     public boolean isVersionSupported() {
-        return qaFrameworkVersion != null &&
-                qaFrameworkVersion.compareTo(new ComparableVersion("1.0.0")) > 0;
+        return qaFrameworkVersion.compareTo(new ComparableVersion("1.0.0")) > 0;
     }
 }
