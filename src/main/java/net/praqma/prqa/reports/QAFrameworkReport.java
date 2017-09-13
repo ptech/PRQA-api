@@ -284,7 +284,11 @@ public class QAFrameworkReport implements Serializable {
         builder.appendArgument("--upload-project");
         builder.appendArgument(settings.getQaVerifyProjectName());
         builder.appendArgument("--snapshot-name");
-        builder.appendArgument(settings.getUploadSnapshotName() + '_' + settings.getbuildNumber());
+        if (settings.isAddBuildNumber()){
+            builder.appendArgument(settings.getUploadSnapshotName() + '_' + settings.getbuildNumber());
+        } else {
+            builder.appendArgument(settings.getUploadSnapshotName());
+        }
         builder.appendArgument("--upload-source");
         builder.appendArgument(settings.getUploadSourceCode());
         return builder.getCommand();
