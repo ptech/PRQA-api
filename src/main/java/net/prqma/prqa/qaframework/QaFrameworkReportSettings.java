@@ -1,8 +1,8 @@
 package net.prqma.prqa.qaframework;
 
-import java.io.Serializable;
-
 import net.praqma.prqa.ReportSettings;
+
+import java.io.Serializable;
 
 public class QaFrameworkReportSettings implements ReportSettings, Serializable {
 
@@ -35,6 +35,7 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
     private String maxNumThreads;
     private boolean generatePreprocess;
     private boolean assembleSupportAnalytics;
+    private boolean generateReportOnAnalysisError;
 
     public QaFrameworkReportSettings(
             String qaInstallation,
@@ -64,7 +65,8 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
             boolean customCpuThreads,
             String maxNumThreads,
             boolean generatePreprocess,
-            boolean assembleSupportAnalytics) {
+            boolean assembleSupportAnalytics,
+            boolean generateReportOnAnalysisError) {
 
         this.qaInstallation = qaInstallation;
         this.useCustomLicenseServer = useCustomLicenseServer;
@@ -95,6 +97,7 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
         this.generatePreprocess = generatePreprocess;
         this.assembleSupportAnalytics = assembleSupportAnalytics;
 
+        this.generateReportOnAnalysisError = generateReportOnAnalysisError;
     }
 
     @Override
@@ -251,6 +254,10 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
         return useCustomLicenseServer;
     }
 
+    public boolean isGenerateReportOnAnalysisError() {
+        return generateReportOnAnalysisError;
+    }
+
     public boolean isReuseCmaDb() {
         return reuseCmaDb;
     }
@@ -266,5 +273,4 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
     public boolean isCustomCpuThreads() {
         return customCpuThreads;
     }
-
 }
