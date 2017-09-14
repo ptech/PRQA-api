@@ -292,4 +292,3 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
         this.addBuildNumber = addBuildNumber;
     }
 }
-}
