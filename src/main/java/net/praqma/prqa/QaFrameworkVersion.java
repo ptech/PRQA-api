@@ -8,24 +8,23 @@ public class QaFrameworkVersion implements Serializable {
 
     public static final String MINOR_SUPPORTED_VERSION = "2.2.0";
 
-    private ComparableVersion qaFrameworkVersion;
+    private String qaFrameworkVersion;
 
     public QaFrameworkVersion(String qaFrameworkVersionString) {
         // example: "PRQA Framework version 2.2.0.9151-qax" will be cut to "2.2.0.9151-qax"
         String version = qaFrameworkVersionString.substring(qaFrameworkVersionString.lastIndexOf(" ") + 1).trim();
-        this.qaFrameworkVersion = new ComparableVersion(version);
+        this.qaFrameworkVersion = version;
     }
 
     public String getQaFrameworkVersion() {
-        return qaFrameworkVersion.toString();
+        return qaFrameworkVersion;
     }
 
     public String getQaFrameworkShortVersion() {
-        String value = qaFrameworkVersion.toString();
-        return value.length() > 5 ? value.substring(0, 5) : value;
+        return qaFrameworkVersion.length() > 5 ? qaFrameworkVersion.substring(0, 5) : qaFrameworkVersion;
     }
 
     public boolean isVersionSupported() {
-        return qaFrameworkVersion.compareTo(new ComparableVersion(MINOR_SUPPORTED_VERSION)) > -1;
+        return new ComparableVersion(qaFrameworkVersion).compareTo(new ComparableVersion(MINOR_SUPPORTED_VERSION)) > -1;
     }
 }
