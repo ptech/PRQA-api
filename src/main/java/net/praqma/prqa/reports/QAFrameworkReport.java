@@ -22,25 +22,18 @@ import org.apache.commons.lang.StringUtils;
 import java.io.File;
 import java.io.PrintStream;
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static net.praqma.prqa.reports.ReportType.CRR;
-import static net.praqma.prqa.reports.ReportType.MDR;
-import static net.praqma.prqa.reports.ReportType.RCR;
-import static net.praqma.prqa.reports.ReportType.SUR;
+import static net.praqma.prqa.reports.ReportType.*;
 
+/**
+ * @author Alexandru Ion
+ * @since 2.0.3
+ */
 public class QAFrameworkReport implements Serializable {
 
-    /**
-     * @author Alexandru Ion
-     * @since 2.0.3
-     */
     private static final long serialVersionUID = 1L;
     public static final String XHTML = "xhtml";
     public static final String XML = "xml";
@@ -62,14 +55,14 @@ public class QAFrameworkReport implements Serializable {
     private QaFrameworkVersion qaFrameworkVersion;
 
     public QAFrameworkReport(QaFrameworkReportSettings settings, QAVerifyServerSettings qaVerifySettings,
-            PRQAApplicationSettings appSettings) {
+                             PRQAApplicationSettings appSettings) {
         this.settings = settings;
         this.appSettings = appSettings;
         this.qaVerifySettings = qaVerifySettings;
     }
 
     public QAFrameworkReport(QaFrameworkReportSettings settings, QAVerifyServerSettings qaVerifySettings,
-            PRQAApplicationSettings appSettings, HashMap<String, String> environment) {
+                             PRQAApplicationSettings appSettings, HashMap<String, String> environment) {
         this.settings = settings;
         this.environment = environment;
         this.appSettings = appSettings;
@@ -97,7 +90,7 @@ public class QAFrameworkReport implements Serializable {
         if (StringUtils.isBlank(settings.getUniProjectName())) {
             throw new PrqaException(
                     "Configuration Error: Download Unified Project Definition was selected but no Unified project was provided. The Download unified project was aborted.");
-        } else if (StringUtils.isBlank(qaVerifySettings.host) || StringUtils.isBlank(qaVerifySettings.user)) {
+        } else if (StringUtils.isBlank(qaVerifySettings.getHost()) || StringUtils.isBlank(qaVerifySettings.getUser())) {
             throw new PrqaException("QAV Server Connection Settings are not selected");
         }
         PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
@@ -106,11 +99,11 @@ public class QAFrameworkReport implements Serializable {
         builder.appendArgument("--qaf-project");
         builder.appendArgument(PRQACommandBuilder.wrapFile(workspace, settings.getQaProject()));
         builder.appendArgument("--username");
-        builder.appendArgument(qaVerifySettings.user);
+        builder.appendArgument(qaVerifySettings.getUser());
         builder.appendArgument("--password");
-        builder.appendArgument(qaVerifySettings.password.isEmpty() ? "\"\"" : qaVerifySettings.password);
+        builder.appendArgument(qaVerifySettings.getPassword().isEmpty() ? "\"\"" : qaVerifySettings.getPassword());
         builder.appendArgument("--url");
-        builder.appendArgument(qaVerifySettings.host + ":" + qaVerifySettings.port);
+        builder.appendArgument(qaVerifySettings.getHost() + ":" + qaVerifySettings.getPort());
         builder.appendArgument("--project-name");
         builder.appendArgument(settings.getUniProjectName());
         return builder.getCommand();
@@ -142,11 +135,6 @@ public class QAFrameworkReport implements Serializable {
         String analyzeOptions = options;
         if (settings.isQaEnableDependencyMode() && analyzeOptions.contains("c")) {
             analyzeOptions = analyzeOptions.replace("c", "");
-        }
-        if (settings.isQaEnableProjectCma()) {
-            if (analyzeOptions.contains("f")) {
-                analyzeOptions = analyzeOptions.replace("f", "p");
-            }
         }
 
         builder.appendArgument(analyzeOptions);
@@ -276,15 +264,15 @@ public class QAFrameworkReport implements Serializable {
         builder.appendArgument(projectLocation);
         builder.appendArgument("--qav-upload");
         builder.appendArgument("--username");
-        builder.appendArgument(qaVerifySettings.user);
+        builder.appendArgument(qaVerifySettings.getUser());
         builder.appendArgument("--password");
-        builder.appendArgument(qaVerifySettings.password.isEmpty() ? "\"\"" : qaVerifySettings.password);
+        builder.appendArgument(qaVerifySettings.getPassword().isEmpty() ? "\"\"" : qaVerifySettings.getPassword());
         builder.appendArgument("--url");
-        builder.appendArgument(qaVerifySettings.host + ":" + qaVerifySettings.port);
+        builder.appendArgument(qaVerifySettings.getHost() + ":" + qaVerifySettings.getPort());
         builder.appendArgument("--upload-project");
         builder.appendArgument(settings.getQaVerifyProjectName());
         builder.appendArgument("--snapshot-name");
-        builder.appendArgument(settings.getUploadSnapshotName() + '_' + settings.getbuildNumber());
+        builder.appendArgument(settings.getUploadSnapshotName() + '_' + settings.getBuildNumber());
         builder.appendArgument("--upload-source");
         builder.appendArgument(settings.getUploadSourceCode());
         return builder.getCommand();
