@@ -18,8 +18,19 @@ import net.praqma.util.execute.AbnormalProcessTerminationException;
 import net.praqma.util.execute.CmdResult;
 import net.prqma.prqa.qaframework.QaFrameworkReportSettings;
 import org.apache.commons.lang.StringUtils;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.io.Serializable;
 import java.util.Collections;
@@ -52,6 +63,35 @@ public class QAFrameworkReport implements Serializable {
     public static String XHTML_REPORT_EXTENSION = "Report." + PRQAReport.XHTML;
     public static String XML_REPORT_EXTENSION = "Report." + PRQAReport.XML;
     public static String HTML_REPORT_EXTENSION = "Report." + PRQAReport.HTML;
+
+    public static String extractReportsPath(final String root, final String qaProject)
+            throws
+            PrqaException {
+
+        String path = StringUtils.isEmpty(root) ? root : root + File.separator;
+
+        path = PRQACommandBuilder.resolveAbsOrRelativePath(new File(path), qaProject);
+
+        try {
+            final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            final DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+            final Document document = documentBuilder.parse(new File(path, "prqaproject.xml"));
+            final Element element = document.getDocumentElement();
+            final XPath xPath = XPathFactory.newInstance().newXPath();
+            final XPathExpression compile = xPath.compile("/prqaproject/configurations/default_config/@name");
+            final String name = compile.evaluate(element);
+
+            if (StringUtils.isEmpty(name)) {
+                throw new PrqaException("Unable to find default config name in project");
+            }
+
+            final String fmt = "prqa%1$sconfigs%1$s%2$s%1$sreports";
+            return path + File.separator + String.format(fmt, File.separator, name);
+
+        } catch (IOException | SAXException | XPathExpressionException | ParserConfigurationException e) {
+            throw new PrqaException("Failed to parse project configuration", e);
+        }
+    }
 
     private static final Logger log = Logger.getLogger(QAFrameworkReport.class.getName());
     private QaFrameworkReportSettings settings;
@@ -286,20 +326,29 @@ public class QAFrameworkReport implements Serializable {
         return builder.getCommand();
     }
 
-    private void removeOldReports(String projectLocation, String reportType) {
-        String reportsPath = "/prqa/reports";
-        File file = new File(projectLocation + reportsPath);
+    private void removeOldReports(String projectLocation, String reportType)
+            throws
+            PrqaException {
+
+        File file = new File(extractReportsPath(projectLocation, settings.getQaProject()));
+
         if (file.isDirectory()) {
             File[] files = file.listFiles();
-            for (File f : files) {
-                if ((f.getName().contains(RCR.name()) && reportType.equals(RCR.name()))
-                        || (f.getName().contains(CRR.name()) && reportType.equals(CRR.name()))
-                        || (f.getName().contains(MDR.name()) && reportType.equals(MDR.name()))
-                        || (f.getName().contains(SUR.name()) && reportType.equals(SUR.name()))
-                        || f.getName().contains("results_data")) {
-                    f.delete();
-                }
+            if (files != null) {
+                for (File f : files) {
+                    if ((f.getName().contains(RCR.name()) && reportType.equals(RCR.name()))
+                            || (f.getName().contains(CRR.name()) && reportType.equals(CRR.name()))
+                            || (f.getName().contains(MDR.name()) && reportType.equals(MDR.name()))
+                            || (f.getName().contains(SUR.name()) && reportType.equals(SUR.name()))
+                            || f.getName().contains("results_data")) {
 
+                        if (f.delete()) {
+                            log.finest("Deleted old report " + f.getAbsolutePath());
+                        }
+
+                    }
+
+                }
             }
         }
     }
@@ -374,18 +423,15 @@ public class QAFrameworkReport implements Serializable {
         log.fine("==========================================");
     }
 
-    public PRQAComplianceStatus getComplianceStatus(PrintStream out) throws PrqaException, Exception {
+    public PRQAComplianceStatus getComplianceStatus(PrintStream out) throws PrqaException {
         PRQAComplianceStatus status = new PRQAComplianceStatus();
         status.setQaFrameworkVersion(qaFrameworkVersion);
-        String projectLocation;
         String report_structure;
-        report_structure = new File("prqa", "reports").getPath();
-
-        projectLocation = PRQACommandBuilder.resolveAbsOrRelativePath(workspace, settings.getQaProject());
-        File reportFolder = new File(projectLocation, report_structure);
+        report_structure = new File(extractReportsPath(workspace.getAbsolutePath(), settings.getQaProject())).getPath();
+        File reportFolder = new File(report_structure);
         out.println("Report Folder Path: " + reportFolder);
 
-        File resultsDataFile = new File(projectLocation, getResultsDataFileRelativePath());
+        File resultsDataFile = new File(reportFolder + File.separator + "results_data.xml");
         out.println("Results Data File Path: " + resultsDataFile.getPath());
 
         if (!reportFolder.exists()
@@ -415,7 +461,12 @@ public class QAFrameworkReport implements Serializable {
         /*This section is to read result data file and parse the results*/
         ResultsDataParser resultsDataParser = new ResultsDataParser(resultsDataFile.getAbsolutePath());
         resultsDataParser.setQaFrameworkVersion(qaFrameworkVersion);
-        List<MessageGroup> messagesGroups = resultsDataParser.parseResultsData();
+        List<MessageGroup> messagesGroups;
+        try {
+            messagesGroups = resultsDataParser.parseResultsData();
+        } catch (Exception e) {
+            throw new PrqaException(e);
+        }
         sortViolatedRulesByRuleID(messagesGroups);
         status.setMessagesGroups(messagesGroups);
         status.setFileCompliance(fileCompliance);
@@ -423,11 +474,6 @@ public class QAFrameworkReport implements Serializable {
         status.setMessages(messages);
 
         return status;
-    }
-
-    private String getResultsDataFileRelativePath() {
-        return (qaFrameworkVersion.isQaFrameworkVersionPriorToVersion104() ? "/prqa/output/results_data.xml" : "/prqa/reports/results_data.xml");
-
     }
 
     private void sortViolatedRulesByRuleID(List<MessageGroup> messagesGroups) {
