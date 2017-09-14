@@ -4,6 +4,18 @@
  */
 package net.praqma.prqa.reports;
 
+import net.praqma.prqa.*;
+import net.praqma.prqa.exceptions.PrqaException;
+import net.praqma.prqa.exceptions.PrqaUploadException;
+import net.praqma.prqa.parsers.ComplianceReportHtmlParser;
+import net.praqma.prqa.products.PRQACommandBuilder;
+import net.praqma.prqa.products.QAV;
+import net.praqma.prqa.status.PRQAComplianceStatus;
+import net.praqma.util.execute.AbnormalProcessTerminationException;
+import net.praqma.util.execute.CmdResult;
+import net.praqma.util.execute.CommandLine;
+import org.apache.commons.lang.StringUtils;
+
 import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,31 +25,14 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import net.praqma.prqa.PRQAApplicationSettings;
-import net.praqma.prqa.PRQAContext;
-import net.praqma.prqa.PRQAReportSettings;
-import net.praqma.prqa.PRQAToolUploadSettings;
-import net.praqma.prqa.QAVerifyServerSettings;
-import net.praqma.prqa.exceptions.PrqaException;
-import net.praqma.prqa.exceptions.PrqaUploadException;
-import net.praqma.prqa.parsers.ComplianceReportHtmlParser;
-import net.praqma.prqa.products.PRQACommandBuilder;
-import net.praqma.prqa.products.QAV;
-import net.praqma.prqa.status.PRQAComplianceStatus;
-import net.praqma.util.execute.AbnormalProcessTerminationException;
-import net.praqma.util.execute.CmdResult;
-
-import net.praqma.util.execute.CommandLine;
-import org.apache.commons.lang.StringUtils;
-
 /**
  * @author Praqma
  */
 public class PRQAReport implements Serializable {
 
-    public static final String XHTML = "xhtml";
-    public static final String XML = "xml";
-    public static final String HTML = "html";
+    static final String XHTML = "xhtml";
+    static final String XML = "xml";
+    static final String HTML = "html";
 
     public static String XHTML_REPORT_EXTENSION = "Report." + PRQAReport.XHTML;
     public static String XML_REPORT_EXTENSION = "Report." + PRQAReport.XML;
@@ -60,7 +55,7 @@ public class PRQAReport implements Serializable {
         this.appSettings = appSettings;
     }
 
-    public static String getReportName(PRQAContext.QARReportType type) {
+    private static String getReportName(PRQAContext.QARReportType type) {
         return type == PRQAContext.QARReportType.CodeReview ? "Code Review" : type.toString();
     }
 
@@ -72,7 +67,7 @@ public class PRQAReport implements Serializable {
         return PRQACommandBuilder.wrapFile(workspaceRoot, filePath);
     }
 
-    public PRQACommandBuilder createCommandBuilder(boolean isUnix) throws PrqaException {
+    private PRQACommandBuilder createCommandBuilder(boolean isUnix) throws PrqaException {
         PRQACommandBuilder builder = new PRQACommandBuilder(appSettings != null ? PRQAApplicationSettings.resolveQawExe(isUnix) : "qaw");
         builder.appendArgument(settings.product);
         if (StringUtils.isNotBlank(settings.projectFile)) {
@@ -104,9 +99,9 @@ public class PRQAReport implements Serializable {
 
     public CmdResult analyze(boolean isUnix) throws PrqaException {
         String finalCommand = createAnalysisCommand(isUnix);
-        Map<String, String> systemVars = new HashMap<String, String>();
+        Map<String, String> systemVars = new HashMap<>();
         systemVars.putAll(System.getenv());
-        CmdResult res = null;
+        CmdResult res;
         try {
             if (getEnvironment() == null) {
                 PRQAReport._logEnv("Current analysis execution environment", systemVars);
@@ -126,18 +121,18 @@ public class PRQAReport implements Serializable {
         PRQACommandBuilder builder = createCommandBuilder(isUnix);
         builder.appendArgument(PRQACommandBuilder.getSfbaOption(true));
 
-        String reports = "";
+        StringBuilder reports = new StringBuilder();
         String qar = appSettings != null ? PRQAApplicationSettings.resolveQarExe(isUnix) : "qar";
         for (PRQAContext.QARReportType type : settings.chosenReportTypes) {
-            reports += qar + " %Q %P+ %L+ " + PRQACommandBuilder.getReportTypeParameter(getReportName(type), true) + " ";
-            reports += PRQACommandBuilder.getViewingProgram("none", false) + " ";
-            reports += PRQACommandBuilder.getReportFormatParameter(PRQAReport.XHTML, false) + " ";
-            reports += PRQACommandBuilder.getProjectName() + " ";
-            reports += PRQACommandBuilder.getOutputPathParameter(workspace.getPath(), true);
-            reports += "#";
+            reports.append(qar).append(" %Q %P+ %L+ ").append(PRQACommandBuilder.getReportTypeParameter(getReportName(type), true)).append(" ");
+            reports.append(PRQACommandBuilder.getViewingProgram("none", false)).append(" ");
+            reports.append(PRQACommandBuilder.getReportFormatParameter(PRQAReport.XHTML, false)).append(" ");
+            reports.append(PRQACommandBuilder.getProjectName()).append(" ");
+            reports.append(PRQACommandBuilder.getOutputPathParameter(workspace.getPath(), true));
+            reports.append("#");
         }
         // Remove trailing #
-        reports = reports.substring(0, reports.length() - 1);
+        reports = new StringBuilder(reports.substring(0, reports.length() - 1));
         String qarEmbedded = (settings.performCrossModuleAnalysis ? "pal %Q %P+ %L+#" : "") + reports;
         builder.appendArgument(PRQACommandBuilder.getMaseq(qarEmbedded));
         return builder.getCommand();
@@ -155,7 +150,7 @@ public class PRQAReport implements Serializable {
     }
 
     public CmdResult report(boolean isUnix) throws PrqaException {
-        Map<String, String> systemVars = new HashMap<String, String>();
+        Map<String, String> systemVars = new HashMap<>();
         systemVars.putAll(System.getenv());
 
         String finalCommand = createReportCommand(isUnix);
@@ -184,11 +179,8 @@ public class PRQAReport implements Serializable {
         String uploadBinary = "upload";
         try {
             run("publish -host 127.0.0.1 -port -1");
-        }
-        catch (AbnormalProcessTerminationException e)
-        {
-            if (e.getExitValue() == 10)
-            {
+        } catch (AbnormalProcessTerminationException e) {
+            if (e.getExitValue() == 10) {
                 uploadBinary = "publish";
             }
         }
@@ -205,10 +197,10 @@ public class PRQAReport implements Serializable {
 
         for (QAVerifyServerSettings qavSetts : qavSettings) {
             String uploadPart = "#" + uploadBinary + " %P+ " + "-prqavcs " + PRQACommandBuilder.wrapInEscapedQuotationMarks(upSettings.vcsConfigXml)
-                    + " " + PRQACommandBuilder.getHost(qavSetts.host)
-                    + " " + PRQACommandBuilder.getPort(qavSetts.port)
-                    + " " + PRQACommandBuilder.getUser(qavSetts.user)
-                    + " " + PRQACommandBuilder.getPassword(qavSetts.password)
+                    + " " + PRQACommandBuilder.getHost(qavSetts.getHost())
+                    + " " + PRQACommandBuilder.getPort(qavSetts.getPort())
+                    + " " + PRQACommandBuilder.getUser(qavSetts.getUser())
+                    + " " + PRQACommandBuilder.getPassword(qavSetts.getPassword())
                     + " " + PRQACommandBuilder.getProjectDatabase(upSettings.qaVerifyProjectName)
                     + " " + PRQACommandBuilder.getProd(upSettings.singleSnapshotMode)
                     + " " + PRQACommandBuilder.getLogFilePathParameter(workspace.getPath() + QAV.QAV_UPLOAD_LOG)
@@ -218,7 +210,7 @@ public class PRQAReport implements Serializable {
         }
 
         // Step3: Finalize
-        String source = "";
+        String source;
         if (StringUtils.isNotBlank(settings.projectFile)) {
             source = PRQACommandBuilder.wrapFile(workspace, settings.projectFile);
         } else if (StringUtils.isNotBlank(settings.fileList)) {
@@ -295,7 +287,7 @@ public class PRQAReport implements Serializable {
         return status;
     }
 
-    public File getWorkspace() {
+    private File getWorkspace() {
         return workspace;
     }
 

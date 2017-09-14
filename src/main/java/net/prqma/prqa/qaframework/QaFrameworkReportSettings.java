@@ -1,19 +1,22 @@
 package net.prqma.prqa.qaframework;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import net.praqma.prqa.ReportSettings;
 
 import java.io.Serializable;
 
+@Getter
+@AllArgsConstructor
 public class QaFrameworkReportSettings implements ReportSettings, Serializable {
 
     private String qaInstallation;
+    private boolean useCustomLicenseServer;
+    private String customLicenseServerAddress;
     private String qaProject;
-    private final boolean useCustomLicenseServer;
-    private final String customLicenseServerAddress;
-    private String uniProjectName;
     private boolean pullUnifiedProject;
+    private String uniProjectName;
     private boolean qaEnableDependencyMode;
-    private boolean qaEnableProjectCma;
     private boolean qaCrossModuleAnalysis;
     private boolean generateReport;
     private boolean publishToQAV;
@@ -33,61 +36,6 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
     private boolean assembleSupportAnalytics;
     private boolean generateReportOnAnalysisError;
 
-    public QaFrameworkReportSettings(
-            String qaInstallation,
-            boolean useCustomLicenseServer,
-            String customLicenseServerAddress,
-            String qaProject,
-            boolean pullUnifiedProject,
-            String uniProjectName,
-            boolean qaEnableDependencyMode,
-            boolean qaCrossModuleAnalysis,
-            boolean generateReport,
-            boolean publishToQAV,
-            boolean loginToQAV,
-            String product,
-            boolean qaUploadWhenStable,
-            String qaVerifyProjectName,
-            String uploadSnapshotName,
-            String buildNumber,
-            String uploadSourceCode,
-            boolean genCrReport,
-            boolean genMdReport,
-            boolean genSupReport,
-            boolean analysisSettings,
-            boolean stopWhenFail,
-            boolean generatePreprocess,
-            boolean assembleSupportAnalytics,
-            boolean generateReportOnAnalysisError) {
-
-        this.qaInstallation = qaInstallation;
-        this.useCustomLicenseServer = useCustomLicenseServer;
-        this.customLicenseServerAddress = customLicenseServerAddress;
-        this.uniProjectName = uniProjectName;
-        this.pullUnifiedProject = pullUnifiedProject;
-        this.qaCrossModuleAnalysis = qaCrossModuleAnalysis;
-        this.publishToQAV = publishToQAV;
-        this.loginToQAV = loginToQAV;
-        this.qaEnableDependencyMode = qaEnableDependencyMode;
-        this.generateReport = generateReport;
-        this.qaProject = qaProject;
-        this.product = product;
-        this.qaUploadWhenStable = qaUploadWhenStable;
-        this.qaVerifyProjectName = qaVerifyProjectName;
-        this.uploadSnapshotName = uploadSnapshotName;
-        this.buildNumber = buildNumber;
-        this.uploadSourceCode = uploadSourceCode;
-        this.genMdReport = genMdReport;
-        this.genCrReport = genCrReport;
-        this.genSupReport = genSupReport;
-        this.analysisSettings = analysisSettings;
-        this.stopWhenFail = stopWhenFail;
-        this.generatePreprocess = generatePreprocess;
-        this.assembleSupportAnalytics = assembleSupportAnalytics;
-
-        this.generateReportOnAnalysisError = generateReportOnAnalysisError;
-    }
-
     @Override
     public String getProduct() {
         return "";
@@ -98,151 +46,4 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
         return publishToQAV;
     }
 
-    public boolean loginToQAV() {
-        return loginToQAV;
-    }
-
-    public String getQaInstallation() {
-        return qaInstallation;
-    }
-
-    public String getQaProject() {
-        return qaProject;
-    }
-
-    public boolean isQaEnableDependencyMode() {
-        return qaEnableDependencyMode;
-    }
-
-    public boolean isQaEnableProjectCma() {
-        return qaEnableProjectCma;
-    }
-
-    public boolean isQaCrossModuleAnalysis() {
-        return qaCrossModuleAnalysis;
-    }
-
-    public boolean isPullUnifiedProject() {
-        return pullUnifiedProject;
-    }
-
-    public String getUniProjectName() {
-        return uniProjectName;
-    }
-
-    public boolean isGenerateReport() {
-        return generateReport;
-    }
-
-    public boolean isPublishToQAV() {
-        return publishToQAV;
-    }
-
-    public boolean isLoginToQAV() {
-        return loginToQAV;
-    }
-
-    public boolean isQaUploadWhenStable() {
-        return qaUploadWhenStable;
-    }
-
-    public String getQaVerifyProjectName() {
-        return qaVerifyProjectName;
-    }
-
-    public void setQaVerifyProjectName(String qaVerifyProjectName) {
-        this.qaVerifyProjectName = qaVerifyProjectName;
-    }
-
-    public String getUploadSnapshotName() {
-        return uploadSnapshotName;
-    }
-
-    public void setUploadSnapshotName(String uploadSnapshotName) {
-        this.uploadSnapshotName = uploadSnapshotName;
-    }
-
-    public String getbuildNumber() {
-        return buildNumber;
-    }
-
-    public void setBuildNumber(String buildNumber) {
-        this.buildNumber = buildNumber;
-    }
-
-    public String getUploadSourceCode() {
-        return uploadSourceCode;
-    }
-
-    public void setUploadSourceCode(String uploadSourceCode) {
-        this.uploadSourceCode = uploadSourceCode;
-    }
-
-    public boolean isGenCrReport() {
-        return genCrReport;
-    }
-
-    public boolean isGenMdReport() {
-        return genMdReport;
-    }
-
-    public boolean isGenSupReport() {
-        return genSupReport;
-    }
-
-    public void setGenCrReport(boolean genCrReport) {
-        this.genCrReport = genCrReport;
-    }
-
-    public void setGenMdReport(boolean genMdReport) {
-        this.genMdReport = genMdReport;
-    }
-
-    public void setGenSupReport(boolean genSupReport) {
-        this.genSupReport = genSupReport;
-    }
-
-    public boolean isAnalysisSettings() {
-        return analysisSettings;
-    }
-
-    public boolean isStopWhenFail() {
-        return stopWhenFail;
-    }
-
-    public boolean isGeneratePreprocess() {
-        return generatePreprocess;
-    }
-
-    public boolean isAssembleSupportAnalytics() {
-        return assembleSupportAnalytics;
-    }
-
-    public void setAnalysisSettings(boolean analysisSettings) {
-        this.analysisSettings = analysisSettings;
-    }
-
-    public void setStopWhenFail(boolean stopWhenFail) {
-        this.stopWhenFail = stopWhenFail;
-    }
-
-    public void setGeneratePreprocess(boolean generatePreprocess) {
-        this.generatePreprocess = generatePreprocess;
-    }
-
-    public void setAssembleSupportAnalytics(boolean assembleSupportAnalytics) {
-        this.assembleSupportAnalytics = assembleSupportAnalytics;
-    }
-
-    public String getCustomLicenseServerAddress() {
-        return customLicenseServerAddress;
-    }
-
-    public boolean isUseCustomLicenseServer() {
-        return useCustomLicenseServer;
-    }
-
-    public boolean isGenerateReportOnAnalysisError() {
-        return generateReportOnAnalysisError;
-    }
 }
