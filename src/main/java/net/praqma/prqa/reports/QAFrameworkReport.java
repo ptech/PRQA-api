@@ -18,8 +18,19 @@ import net.praqma.util.execute.AbnormalProcessTerminationException;
 import net.praqma.util.execute.CmdResult;
 import net.prqma.prqa.qaframework.QaFrameworkReportSettings;
 import org.apache.commons.lang.StringUtils;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.io.Serializable;
 import java.util.Collections;
@@ -53,6 +64,35 @@ public class QAFrameworkReport implements Serializable {
     public static String XHTML_REPORT_EXTENSION = "Report." + PRQAReport.XHTML;
     public static String XML_REPORT_EXTENSION = "Report." + PRQAReport.XML;
     public static String HTML_REPORT_EXTENSION = "Report." + PRQAReport.HTML;
+
+    public static String extractReportsPath(final String root, final String qaProject)
+            throws
+            PrqaException {
+
+        String path = StringUtils.isEmpty(root) ? root : root + File.separator;
+
+        path = PRQACommandBuilder.resolveAbsOrRelativePath(new File(path), qaProject);
+
+        try {
+            final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+            final DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+            final Document document = documentBuilder.parse(new File(path, "prqaproject.xml"));
+            final Element element = document.getDocumentElement();
+            final XPath xPath = XPathFactory.newInstance().newXPath();
+            final XPathExpression compile = xPath.compile("/prqaproject/configurations/default_config/@name");
+            final String name = compile.evaluate(element);
+
+            if (StringUtils.isEmpty(name)) {
+                throw new PrqaException("Unable to find default config name in project");
+            }
+
+            final String fmt = "prqa%1$sconfigs%1$s%2$s%1$sreports";
+            return path + File.separator + String.format(fmt, File.separator, name);
+
+        } catch (IOException | SAXException | XPathExpressionException | ParserConfigurationException e) {
+            throw new PrqaException("Failed to parse project configuration", e);
+        }
+    }
 
     private static final Logger log = Logger.getLogger(QAFrameworkReport.class.getName());
     private QaFrameworkReportSettings settings;
@@ -118,7 +158,7 @@ public class QAFrameworkReport implements Serializable {
     }
 
     public CmdResult analyzeQacli(boolean isUnix, String Options, PrintStream out) throws PrqaException {
-        String finalCommand = createAnalysisCommandForQacli(isUnix, Options, out);
+        String finalCommand = createAnalysisCommandForQacli(isUnix, Options);
         out.println("Perform ANALYSIS command:");
         out.println(finalCommand);
         HashMap<String, String> systemVars = new HashMap<>();
@@ -137,7 +177,34 @@ public class QAFrameworkReport implements Serializable {
         }
     }
 
-    private String createAnalysisCommandForQacli(boolean isUnix, String options, PrintStream out) throws PrqaException {
+    private String createSetCpuThreadsCommand() {
+        return new PRQACommandBuilder(formatQacliPath())
+                .appendArgument("admin")
+                .appendArgument("--set-cpus")
+                .appendArgument(settings.getMaxNumThreads())
+                .getCommand();
+    }
+
+    public boolean applyCpuThreads(PrintStream out) throws PrqaException {
+        String setCpuThreadsCmd = createSetCpuThreadsCommand();
+        out.println("Perform MAX NUMBER of ANALYSIS THREADS command:");
+        out.println(setCpuThreadsCmd);
+        try {
+            if (getEnvironment() == null) {
+                PrqaCommandLine.getInstance().run(setCpuThreadsCmd, workspace, true, false);
+            } else {
+                HashMap<String, String> systemVars = new HashMap<>();
+                systemVars.putAll(System.getenv());
+                systemVars.putAll(getEnvironment());
+                PrqaCommandLine.getInstance().run(setCpuThreadsCmd, workspace, true, false, systemVars);
+            }
+        } catch (AbnormalProcessTerminationException abnex) {
+            throw new PrqaException("ERROR: Failed to set the number of CPUs used for analysis, please check the command message above for more details", abnex);
+        }
+        return true;
+    }
+
+    private String createAnalysisCommandForQacli(boolean isUnix, String options) throws PrqaException {
         PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
         builder.appendArgument("analyze");
         String analyzeOptions = options;
@@ -151,18 +218,23 @@ public class QAFrameworkReport implements Serializable {
         }
 
         builder.appendArgument(analyzeOptions);
-        if (settings.isStopWhenFail() && settings.isAnalysisSettings()) {
-            builder.appendArgument("--stop-on-fail");
-        }
 
-        if (settings.isGeneratePreprocess() && settings.isAnalysisSettings()) {
-            builder.appendArgument("--generate-preprocessed-source");
-        }
+        if(settings.isAnalysisSettings()) {
+            if (settings.isStopWhenFail()) {
+                builder.appendArgument("--stop-on-fail");
+            }
 
-        if (settings.isGeneratePreprocess() && settings.isAnalysisSettings() && settings.isAssembleSupportAnalytics()) {
-            builder.appendArgument("--assemble-support-analytics");
-        } else if (settings.isAnalysisSettings() && settings.isAssembleSupportAnalytics() && (!settings.isGeneratePreprocess())) {
-            log.log(Level.WARNING, "Assemble Support Analytics is selected but Generate Preprocessed Source option is not selected");
+            if (settings.isGeneratePreprocess()) {
+                builder.appendArgument("--generate-preprocessed-source");
+            }
+
+            if (settings.isAssembleSupportAnalytics()) {
+                if (settings.isGeneratePreprocess()) {
+                    builder.appendArgument("--assemble-support-analytics");
+                } else {
+                    log.log(Level.WARNING, "Assemble Support Analytics is selected but Generate Preprocessed Source option is not selected");
+                }
+            }
         }
 
         builder.appendArgument("-P");
@@ -173,28 +245,34 @@ public class QAFrameworkReport implements Serializable {
     public CmdResult cmaAnalysisQacli(boolean isUnix, PrintStream out) throws PrqaException {
         if (settings.isQaCrossModuleAnalysis()) {
             String command = createCmaAnalysisCommand(isUnix, out);
-            if (command != null) {
-                out.println("Perform CROSS-MODULE ANALYSIS command:");
-                out.println(command);
-                try {
-                    return PrqaCommandLine.getInstance().run(command, workspace, true, false, out);
-                } catch (AbnormalProcessTerminationException abnex) {
-                    throw new PrqaException("ERROR: Failed to analyze, please check the Cross-Module-Analysis command message above for more details");
-                }
-            } else {
-                throw new PrqaException("ERROR: Detected PRQA Framework version 2.1.0 or higher. CMA analysis cannot be configured with the selected option. It has to be done by adding it to the toolchain of the project.");
+            out.println("Perform CROSS-MODULE ANALYSIS command:");
+            out.println(command);
+            try {
+                return PrqaCommandLine.getInstance().run(command, workspace, true, false, out);
+            } catch (AbnormalProcessTerminationException abnex) {
+                throw new PrqaException("ERROR: Failed to analyze, please check the Cross-Module-Analysis command message above for more details", abnex);
             }
         }
         return null;
     }
 
     private String createCmaAnalysisCommand(boolean isUnix, PrintStream out) throws PrqaException {
-        // TODO fix this CMA analyse command
         PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
         builder.appendArgument("analyze");
-        builder.appendArgument("-p");
+
+        if (settings.isReuseCmaDb()) {
+            builder.appendArgument("--reuse_db");
+        }
+        if (settings.isUseDiskStorage()) {
+            builder.appendArgument("--use_disk_storage");
+        }
+
+        builder.appendArgument("-cf");
         builder.appendArgument("-P");
         builder.appendArgument(PRQACommandBuilder.wrapFile(workspace, settings.getQaProject()));
+        builder.appendArgument("-C");
+        builder.appendArgument(settings.getCmaProjectName());
+
         return builder.getCommand();
     }
 
@@ -234,9 +312,11 @@ public class QAFrameworkReport implements Serializable {
         return builder.getCommand();
     }
 
-    private void removeOldReports(String projectLocation, String reportType) {
-        String reportsPath = "/prqa/reports";
-        File file = new File(projectLocation + reportsPath);
+    private void removeOldReports(String projectLocation, String reportType)
+            throws PrqaException {
+
+        File file = new File(extractReportsPath(projectLocation, settings.getQaProject()));
+
         if (file.isDirectory()) {
             File[] files = file.listFiles();
             if (files != null) {
@@ -246,8 +326,13 @@ public class QAFrameworkReport implements Serializable {
                             || (f.getName().contains(MDR.name()) && reportType.equals(MDR.name()))
                             || (f.getName().contains(SUR.name()) && reportType.equals(SUR.name()))
                             || f.getName().contains("results_data")) {
-                        f.delete();
+
+                        if (f.delete()) {
+                            log.finest("Deleted old report " + f.getAbsolutePath());
+                        }
+
                     }
+
                 }
             }
         }
@@ -323,18 +408,15 @@ public class QAFrameworkReport implements Serializable {
         log.fine("==========================================");
     }
 
-    public PRQAComplianceStatus getComplianceStatus(PrintStream out) throws Exception {
+    public PRQAComplianceStatus getComplianceStatus(PrintStream out) throws PrqaException {
         PRQAComplianceStatus status = new PRQAComplianceStatus();
         status.setQaFrameworkVersion(qaFrameworkVersion);
-        String projectLocation;
         String report_structure;
-        report_structure = new File("prqa", "reports").getPath();
-
-        projectLocation = PRQACommandBuilder.resolveAbsOrRelativePath(workspace, settings.getQaProject());
-        File reportFolder = new File(projectLocation, report_structure);
+        report_structure = new File(extractReportsPath(workspace.getAbsolutePath(), settings.getQaProject())).getPath();
+        File reportFolder = new File(report_structure);
         out.println("Report Folder Path: " + reportFolder);
 
-        File resultsDataFile = new File(projectLocation, getResultsDataFileRelativePath());
+        File resultsDataFile = new File(reportFolder + File.separator + "results_data.xml");
         out.println("Results Data File Path: " + resultsDataFile.getPath());
 
         if (!reportFolder.exists()
@@ -366,7 +448,12 @@ public class QAFrameworkReport implements Serializable {
         /*This section is to read result data file and parse the results*/
         ResultsDataParser resultsDataParser = new ResultsDataParser(resultsDataFile.getAbsolutePath());
         resultsDataParser.setQaFrameworkVersion(qaFrameworkVersion);
-        List<MessageGroup> messagesGroups = resultsDataParser.parseResultsData();
+        List<MessageGroup> messagesGroups;
+        try {
+            messagesGroups = resultsDataParser.parseResultsData();
+        } catch (Exception e) {
+            throw new PrqaException(e);
+        }
         sortViolatedRulesByRuleID(messagesGroups);
         status.setMessagesGroups(messagesGroups);
         status.setFileCompliance(fileCompliance);
