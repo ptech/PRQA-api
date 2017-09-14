@@ -117,7 +117,7 @@ public class QAFrameworkReport implements Serializable {
     }
 
     public CmdResult analyzeQacli(boolean isUnix, String Options, PrintStream out) throws PrqaException {
-        String finalCommand = createAnalysisCommandForQacli(isUnix, Options, out);
+        String finalCommand = createAnalysisCommandForQacli(isUnix, Options);
         out.println("Perform ANALYSIS command:");
         out.println(finalCommand);
         HashMap<String, String> systemVars = new HashMap<>();
@@ -136,7 +136,34 @@ public class QAFrameworkReport implements Serializable {
         }
     }
 
-    private String createAnalysisCommandForQacli(boolean isUnix, String options, PrintStream out) throws PrqaException {
+    private String createSetCpuThreadsCommand() {
+        return new PRQACommandBuilder(formatQacliPath())
+                .appendArgument("admin")
+                .appendArgument("--set-cpus")
+                .appendArgument(settings.getMaxNumThreads())
+                .getCommand();
+    }
+
+    public boolean applyCpuThreads(PrintStream out) throws PrqaException {
+        String setCpuThreadsCmd = createSetCpuThreadsCommand();
+        out.println("Perform MAX NUMBER of ANALYSIS THREADS command:");
+        out.println(setCpuThreadsCmd);
+        try {
+            if (getEnvironment() == null) {
+                PrqaCommandLine.getInstance().run(setCpuThreadsCmd, workspace, true, false);
+            } else {
+                HashMap<String, String> systemVars = new HashMap<>();
+                systemVars.putAll(System.getenv());
+                systemVars.putAll(getEnvironment());
+                PrqaCommandLine.getInstance().run(setCpuThreadsCmd, workspace, true, false, systemVars);
+            }
+        } catch (AbnormalProcessTerminationException abnex) {
+            throw new PrqaException("ERROR: Failed to set the number of CPUs used for analysis, please check the command message above for more details", abnex);
+        }
+        return true;
+    }
+
+    private String createAnalysisCommandForQacli(boolean isUnix, String options) throws PrqaException {
         PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
         builder.appendArgument("analyze");
         String analyzeOptions = options;
@@ -150,18 +177,23 @@ public class QAFrameworkReport implements Serializable {
         }
 
         builder.appendArgument(analyzeOptions);
-        if (settings.isStopWhenFail() && settings.isAnalysisSettings()) {
-            builder.appendArgument("--stop-on-fail");
-        }
 
-        if (settings.isGeneratePreprocess() && settings.isAnalysisSettings()) {
-            builder.appendArgument("--generate-preprocessed-source");
-        }
+        if(settings.isAnalysisSettings()) {
+            if (settings.isStopWhenFail()) {
+                builder.appendArgument("--stop-on-fail");
+            }
 
-        if (settings.isGeneratePreprocess() && settings.isAnalysisSettings() && settings.isAssembleSupportAnalytics()) {
-            builder.appendArgument("--assemble-support-analytics");
-        } else if (settings.isAnalysisSettings() && settings.isAssembleSupportAnalytics() && (!settings.isGeneratePreprocess())) {
-            log.log(Level.WARNING, "Assemble Support Analytics is selected but Generate Preprocessed Source option is not selected");
+            if (settings.isGeneratePreprocess()) {
+                builder.appendArgument("--generate-preprocessed-source");
+            }
+
+            if (settings.isAssembleSupportAnalytics()) {
+                if (settings.isGeneratePreprocess()) {
+                    builder.appendArgument("--assemble-support-analytics");
+                } else {
+                    log.log(Level.WARNING, "Assemble Support Analytics is selected but Generate Preprocessed Source option is not selected");
+                }
+            }
         }
 
         builder.appendArgument("-P");
@@ -178,7 +210,7 @@ public class QAFrameworkReport implements Serializable {
                 try {
                     return PrqaCommandLine.getInstance().run(command, workspace, true, false, out);
                 } catch (AbnormalProcessTerminationException abnex) {
-                    throw new PrqaException("ERROR: Failed to analyze, please check the Cross-Module-Analysis command message above for more details");
+                    throw new PrqaException("ERROR: Failed to analyze, please check the Cross-Module-Analysis command message above for more details", abnex);
                 }
             } else {
                 throw new PrqaException("ERROR: Detected PRQA Framework version 2.1.0. CMA analysis cannot be configured with the selected option. It has to be done by adding it to the toolchain of the project.");
@@ -188,15 +220,23 @@ public class QAFrameworkReport implements Serializable {
     }
 
     private String createCmaAnalysisCommand(boolean isUnix, PrintStream out) throws PrqaException {
-        if (!qaFrameworkVersion.isQaFrameworkVersion210()) {
-            PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
-            builder.appendArgument("analyze");
-            builder.appendArgument("-p");
-            builder.appendArgument("-P");
-            builder.appendArgument(PRQACommandBuilder.wrapFile(workspace, settings.getQaProject()));
-            return builder.getCommand();
+        PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
+        builder.appendArgument("analyze");
+
+        if (settings.isReuseCmaDb()) {
+            builder.appendArgument("--reuse_db");
         }
-        return null;
+        if (settings.isUseDiskStorage()) {
+            builder.appendArgument("--use_disk_storage");
+        }
+
+        builder.appendArgument("-cf");
+        builder.appendArgument("-P");
+        builder.appendArgument(PRQACommandBuilder.wrapFile(workspace, settings.getQaProject()));
+        builder.appendArgument("-C");
+        builder.appendArgument(settings.getCmaProjectName());
+
+        return builder.getCommand();
     }
 
     public CmdResult reportQacli(boolean isUnix, String repType, PrintStream out) throws PrqaException {
