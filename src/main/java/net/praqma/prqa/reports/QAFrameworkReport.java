@@ -286,20 +286,29 @@ public class QAFrameworkReport implements Serializable {
         return builder.getCommand();
     }
 
-    private void removeOldReports(String projectLocation, String reportType) {
-        String reportsPath = "/prqa/reports";
-        File file = new File(projectLocation + reportsPath);
+    private void removeOldReports(String projectLocation, String reportType)
+            throws
+            PrqaException {
+
+        File file = new File(extractReportsPath(projectLocation, settings.getQaProject()));
+
         if (file.isDirectory()) {
             File[] files = file.listFiles();
-            for (File f : files) {
-                if ((f.getName().contains(RCR.name()) && reportType.equals(RCR.name()))
-                        || (f.getName().contains(CRR.name()) && reportType.equals(CRR.name()))
-                        || (f.getName().contains(MDR.name()) && reportType.equals(MDR.name()))
-                        || (f.getName().contains(SUR.name()) && reportType.equals(SUR.name()))
-                        || f.getName().contains("results_data")) {
-                    f.delete();
-                }
+            if (files != null) {
+                for (File f : files) {
+                    if ((f.getName().contains(RCR.name()) && reportType.equals(RCR.name()))
+                            || (f.getName().contains(CRR.name()) && reportType.equals(CRR.name()))
+                            || (f.getName().contains(MDR.name()) && reportType.equals(MDR.name()))
+                            || (f.getName().contains(SUR.name()) && reportType.equals(SUR.name()))
+                            || f.getName().contains("results_data")) {
 
+                        if (f.delete()) {
+                            log.finest("Deleted old report " + f.getAbsolutePath());
+                        }
+
+                    }
+
+                }
             }
         }
     }
