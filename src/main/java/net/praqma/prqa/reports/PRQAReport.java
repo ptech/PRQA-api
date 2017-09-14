@@ -34,6 +34,10 @@ public class PRQAReport implements Serializable {
     static final String XML = "xml";
     static final String HTML = "html";
 
+    public static String XHTML_REPORT_EXTENSION = "Report." + PRQAReport.XHTML;
+    public static String XML_REPORT_EXTENSION = "Report." + PRQAReport.XML;
+    public static String HTML_REPORT_EXTENSION = "Report." + PRQAReport.HTML;
+
     private static final Logger log = Logger.getLogger(PRQAReport.class.getName());
     private PRQAReportSettings settings;
     private Collection<QAVerifyServerSettings> qavSettings;
@@ -84,7 +88,7 @@ public class PRQAReport implements Serializable {
         return builder;
     }
 
-    private String createAnalysisCommand(boolean isUnix) throws PrqaException {
+    public String createAnalysisCommand(boolean isUnix) throws PrqaException {
         PRQACommandBuilder builder = createCommandBuilder(isUnix);
         String pal = settings.performCrossModuleAnalysis ? "pal %Q %P+ %L+" : "";
         if (!StringUtils.isEmpty(pal)) {
@@ -113,7 +117,7 @@ public class PRQAReport implements Serializable {
         return res;
     }
 
-    private String createReportCommand(boolean isUnix) throws PrqaException {
+    public String createReportCommand(boolean isUnix) throws PrqaException {
         PRQACommandBuilder builder = createCommandBuilder(isUnix);
         builder.appendArgument(PRQACommandBuilder.getSfbaOption(true));
 
@@ -166,7 +170,7 @@ public class PRQAReport implements Serializable {
         }
     }
 
-    private Collection<String> createUploadCommand() throws PrqaException {
+    public Collection<String> createUploadCommand() throws PrqaException {
         Collection<String> commands = new ArrayList<>();
 
         if (!settings.publishToQAV || qavSettings == null || qavSettings.isEmpty()) {
