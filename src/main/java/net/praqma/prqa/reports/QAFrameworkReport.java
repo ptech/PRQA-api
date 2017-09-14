@@ -64,30 +64,32 @@ public class QAFrameworkReport implements Serializable {
     public static String XML_REPORT_EXTENSION = "Report." + PRQAReport.XML;
     public static String HTML_REPORT_EXTENSION = "Report." + PRQAReport.HTML;
 
-    public static String extractReportsPath(final String root)
+    public static String extractReportsPath(final String root, final String qaProject)
             throws
-            IOException {
+            PrqaException {
 
-        String r = StringUtils.isEmpty(root) ? root : root + File.separator;
+        String path = StringUtils.isEmpty(root) ? root : root + File.separator;
+
+        path = PRQACommandBuilder.resolveAbsOrRelativePath(new File(path), qaProject);
 
         try {
             final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             final DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-            final Document document = documentBuilder.parse(new File(r, "prqaproject.xml"));
+            final Document document = documentBuilder.parse(new File(path, "prqaproject.xml"));
             final Element element = document.getDocumentElement();
             final XPath xPath = XPathFactory.newInstance().newXPath();
             final XPathExpression compile = xPath.compile("/prqaproject/configurations/default_config/@name");
             final String name = compile.evaluate(element);
 
             if (StringUtils.isEmpty(name)) {
-                throw new IOException("Unable to find default config name in project");
+                throw new PrqaException("Unable to find default config name in project");
             }
 
             final String fmt = "prqa%1$sconfigs%1$s%2$s%1$sreports";
-            return String.format(fmt, File.separator, name);
+            return path + File.separator + String.format(fmt, File.separator, name);
 
-        } catch (SAXException | XPathExpressionException | ParserConfigurationException e) {
-            throw new IOException("Failed to parse project configuration", e);
+        } catch (IOException | SAXException | XPathExpressionException | ParserConfigurationException e) {
+            throw new PrqaException("Failed to parse project configuration", e);
         }
     }
 
@@ -372,14 +374,12 @@ public class QAFrameworkReport implements Serializable {
         log.fine("==========================================");
     }
 
-    public PRQAComplianceStatus getComplianceStatus(PrintStream out) throws PrqaException, Exception {
+    public PRQAComplianceStatus getComplianceStatus(PrintStream out) throws PrqaException {
         PRQAComplianceStatus status = new PRQAComplianceStatus();
         status.setQaFrameworkVersion(qaFrameworkVersion);
-        String projectLocation;
         String report_structure;
-        projectLocation = PRQACommandBuilder.resolveAbsOrRelativePath(workspace, settings.getQaProject());
-        report_structure = new File(extractReportsPath(projectLocation)).getPath();
-        File reportFolder = new File(projectLocation, report_structure);
+        report_structure = new File(extractReportsPath(workspace.getAbsolutePath(), settings.getQaProject())).getPath();
+        File reportFolder = new File(report_structure);
         out.println("Report Folder Path: " + reportFolder);
 
         File resultsDataFile = new File(reportFolder + File.separator + "results_data.xml");
@@ -412,7 +412,12 @@ public class QAFrameworkReport implements Serializable {
         /*This section is to read result data file and parse the results*/
         ResultsDataParser resultsDataParser = new ResultsDataParser(resultsDataFile.getAbsolutePath());
         resultsDataParser.setQaFrameworkVersion(qaFrameworkVersion);
-        List<MessageGroup> messagesGroups = resultsDataParser.parseResultsData();
+        List<MessageGroup> messagesGroups;
+        try {
+            messagesGroups = resultsDataParser.parseResultsData();
+        } catch (Exception e) {
+            throw new PrqaException(e);
+        }
         sortViolatedRulesByRuleID(messagesGroups);
         status.setMessagesGroups(messagesGroups);
         status.setFileCompliance(fileCompliance);
