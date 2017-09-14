@@ -15,6 +15,7 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
     private boolean qaEnableDependencyMode;
     private boolean qaEnableProjectCma;
     private boolean qaCrossModuleAnalysis;
+    private String cmaProjectName;
     private boolean reuseCmaDb;
     private boolean useDiskStorage;
     private boolean generateReport;
@@ -46,6 +47,7 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
             String uniProjectName,
             boolean qaEnableDependencyMode,
             boolean qaCrossModuleAnalysis,
+            String cmaProjectName,
             boolean reuseCmaDb,
             boolean useDiskStorage,
             boolean generateReport,
@@ -74,6 +76,7 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
         this.uniProjectName = uniProjectName;
         this.pullUnifiedProject = pullUnifiedProject;
         this.qaCrossModuleAnalysis = qaCrossModuleAnalysis;
+        this.cmaProjectName = cmaProjectName;
         this.reuseCmaDb = reuseCmaDb;
         this.useDiskStorage = useDiskStorage;
         this.publishToQAV = publishToQAV;
@@ -272,5 +275,9 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
 
     public boolean isCustomCpuThreads() {
         return customCpuThreads;
+    }
+
+    public String getCmaProjectName() {
+        return cmaProjectName;
     }
 }

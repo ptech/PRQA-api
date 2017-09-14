@@ -220,21 +220,23 @@ public class QAFrameworkReport implements Serializable {
     }
 
     private String createCmaAnalysisCommand(boolean isUnix, PrintStream out) throws PrqaException {
-        if (!qaFrameworkVersion.isQaFrameworkVersion210()) {
-            PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
-            builder.appendArgument("analyze");
-            builder.appendArgument("-p");
-            builder.appendArgument("-P");
-            if (settings.isReuseCmaDb()) {
-                builder.appendArgument("--reuse_db");
-            }
-            if (settings.isUseDiskStorage()) {
-                builder.appendArgument("--use_disk_storage");
-            }
-            builder.appendArgument(PRQACommandBuilder.wrapFile(workspace, settings.getQaProject()));
-            return builder.getCommand();
+        PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
+        builder.appendArgument("analyze");
+
+        if (settings.isReuseCmaDb()) {
+            builder.appendArgument("--reuse_db");
         }
-        return null;
+        if (settings.isUseDiskStorage()) {
+            builder.appendArgument("--use_disk_storage");
+        }
+
+        builder.appendArgument("-cf");
+        builder.appendArgument("-P");
+        builder.appendArgument(PRQACommandBuilder.wrapFile(workspace, settings.getQaProject()));
+        builder.appendArgument("-C");
+        builder.appendArgument(settings.getCmaProjectName());
+
+        return builder.getCommand();
     }
 
     public CmdResult reportQacli(boolean isUnix, String repType, PrintStream out) throws PrqaException {
