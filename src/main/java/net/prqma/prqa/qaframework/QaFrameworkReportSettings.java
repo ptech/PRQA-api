@@ -15,6 +15,9 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
     private boolean qaEnableDependencyMode;
     private boolean qaEnableProjectCma;
     private boolean qaCrossModuleAnalysis;
+    private String cmaProjectName;
+    private boolean reuseCmaDb;
+    private boolean useDiskStorage;
     private boolean generateReport;
     private boolean publishToQAV;
     private boolean loginToQAV;
@@ -29,6 +32,8 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
     private boolean genSupReport;
     private boolean analysisSettings;
     private boolean stopWhenFail;
+    private boolean customCpuThreads;
+    private String maxNumThreads;
     private boolean generatePreprocess;
     private boolean assembleSupportAnalytics;
     private boolean generateReportOnAnalysisError;
@@ -42,6 +47,9 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
             String uniProjectName,
             boolean qaEnableDependencyMode,
             boolean qaCrossModuleAnalysis,
+            String cmaProjectName,
+            boolean reuseCmaDb,
+            boolean useDiskStorage,
             boolean generateReport,
             boolean publishToQAV,
             boolean loginToQAV,
@@ -56,6 +64,8 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
             boolean genSupReport,
             boolean analysisSettings,
             boolean stopWhenFail,
+            boolean customCpuThreads,
+            String maxNumThreads,
             boolean generatePreprocess,
             boolean assembleSupportAnalytics,
             boolean generateReportOnAnalysisError) {
@@ -66,6 +76,9 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
         this.uniProjectName = uniProjectName;
         this.pullUnifiedProject = pullUnifiedProject;
         this.qaCrossModuleAnalysis = qaCrossModuleAnalysis;
+        this.cmaProjectName = cmaProjectName;
+        this.reuseCmaDb = reuseCmaDb;
+        this.useDiskStorage = useDiskStorage;
         this.publishToQAV = publishToQAV;
         this.loginToQAV = loginToQAV;
         this.qaEnableDependencyMode = qaEnableDependencyMode;
@@ -82,6 +95,8 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
         this.genSupReport = genSupReport;
         this.analysisSettings = analysisSettings;
         this.stopWhenFail = stopWhenFail;
+        this.customCpuThreads = customCpuThreads;
+        this.maxNumThreads = maxNumThreads;
         this.generatePreprocess = generatePreprocess;
         this.assembleSupportAnalytics = assembleSupportAnalytics;
 
@@ -244,5 +259,25 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
 
     public boolean isGenerateReportOnAnalysisError() {
         return generateReportOnAnalysisError;
+    }
+
+    public boolean isReuseCmaDb() {
+        return reuseCmaDb;
+    }
+
+    public boolean isUseDiskStorage() {
+        return useDiskStorage;
+    }
+
+    public String getMaxNumThreads() {
+        return maxNumThreads;
+    }
+
+    public boolean isCustomCpuThreads() {
+        return customCpuThreads;
+    }
+
+    public String getCmaProjectName() {
+        return cmaProjectName;
     }
 }
