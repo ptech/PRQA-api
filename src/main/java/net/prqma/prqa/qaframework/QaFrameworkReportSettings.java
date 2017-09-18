@@ -37,6 +37,7 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
     private boolean generatePreprocess;
     private boolean assembleSupportAnalytics;
     private boolean generateReportOnAnalysisError;
+    private boolean addBuildNumber;
 
     public QaFrameworkReportSettings(
             String qaInstallation,
@@ -68,7 +69,8 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
             String maxNumThreads,
             boolean generatePreprocess,
             boolean assembleSupportAnalytics,
-            boolean generateReportOnAnalysisError) {
+            boolean generateReportOnAnalysisError,
+            boolean addBuildNumber) {
 
         this.qaInstallation = qaInstallation;
         this.useCustomLicenseServer = useCustomLicenseServer;
@@ -101,6 +103,7 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
         this.assembleSupportAnalytics = assembleSupportAnalytics;
 
         this.generateReportOnAnalysisError = generateReportOnAnalysisError;
+        this.addBuildNumber = addBuildNumber;
     }
 
     @Override
@@ -279,5 +282,13 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
 
     public String getCmaProjectName() {
         return cmaProjectName;
+    }
+
+    public boolean isAddBuildNumber() {
+        return addBuildNumber;
+    }
+
+    public void setAddBuildNumber(boolean addBuildNumber) {
+        this.addBuildNumber = addBuildNumber;
     }
 }
