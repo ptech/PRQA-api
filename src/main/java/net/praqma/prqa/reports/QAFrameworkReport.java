@@ -257,6 +257,12 @@ public class QAFrameworkReport implements Serializable {
 
         builder.appendArgument("-P");
         builder.appendArgument(PRQACommandBuilder.wrapFile(workspace, settings.getQaProject()));
+
+        if (StringUtils.isNotEmpty(settings.getProjectConfiguration())) {
+            builder.appendArgument("-K");
+            builder.appendArgument(settings.getProjectConfiguration());
+        }
+
         return builder.getCommand();
     }
 
@@ -294,6 +300,11 @@ public class QAFrameworkReport implements Serializable {
         builder.appendArgument(PRQACommandBuilder.wrapFile(workspace, settings.getQaProject()));
         builder.appendArgument("-C");
         builder.appendArgument(settings.getCmaProjectName());
+
+        if (StringUtils.isNotEmpty(settings.getProjectConfiguration())) {
+            builder.appendArgument("-K");
+            builder.appendArgument(settings.getProjectConfiguration());
+        }
 
         return builder.getCommand();
     }
@@ -342,6 +353,11 @@ public class QAFrameworkReport implements Serializable {
         }
         builder.appendArgument("-t");
         builder.appendArgument(reportType);
+
+        if (StringUtils.isNotEmpty(settings.getProjectConfiguration())) {
+            builder.appendArgument("-K");
+            builder.appendArgument(settings.getProjectConfiguration());
+        }
 
         return builder.getCommand();
     }
@@ -402,6 +418,12 @@ public class QAFrameworkReport implements Serializable {
         }
         builder.appendArgument("--upload-source");
         builder.appendArgument(settings.getUploadSourceCode());
+
+        if (StringUtils.isNotEmpty(settings.getProjectConfiguration())) {
+            builder.appendArgument("-K");
+            builder.appendArgument(settings.getProjectConfiguration());
+        }
+
         return builder.getCommand();
     }
 
