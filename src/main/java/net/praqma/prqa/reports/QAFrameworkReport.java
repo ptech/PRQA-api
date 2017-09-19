@@ -64,7 +64,9 @@ public class QAFrameworkReport implements Serializable {
     public static String XML_REPORT_EXTENSION = "Report." + PRQAReport.XML;
     public static String HTML_REPORT_EXTENSION = "Report." + PRQAReport.HTML;
 
-    public static String extractReportsPath(final String root, final String qaProject)
+    public static String extractReportsPath(final String root,
+                                            final String qaProject,
+                                            final String configuration)
             throws
             PrqaException {
 
@@ -73,20 +75,37 @@ public class QAFrameworkReport implements Serializable {
         path = PRQACommandBuilder.resolveAbsOrRelativePath(new File(path), qaProject);
 
         try {
-            final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-            final DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-            final Document document = documentBuilder.parse(new File(path, "prqaproject.xml"));
-            final Element element = document.getDocumentElement();
-            final XPath xPath = XPathFactory.newInstance().newXPath();
-            final XPathExpression compile = xPath.compile("/prqaproject/configurations/default_config/@name");
-            final String name = compile.evaluate(element);
 
-            if (StringUtils.isEmpty(name)) {
-                throw new PrqaException("Unable to find default config name in project");
+            String cfg = configuration;
+
+            if (StringUtils.isEmpty(cfg)) {
+                final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+                final DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+                final Document document = documentBuilder.parse(new File(path,
+                                                                         "prqaproject.xml"));
+                final Element element = document.getDocumentElement();
+                final XPath xPath = XPathFactory.newInstance()
+                                                .newXPath();
+                final XPathExpression compile = xPath.compile("/prqaproject/configurations/default_config/@name");
+                final String name = compile.evaluate(element);
+
+                if (StringUtils.isEmpty(name)) {
+                    throw new PrqaException("Unable to find default config name in project");
+                }
+
+                cfg = name;
             }
 
             final String fmt = "prqa%1$sconfigs%1$s%2$s%1$sreports";
-            return path + File.separator + String.format(fmt, File.separator, name);
+            String reportPath = path + File.separator + String.format(fmt,
+                                                                      File.separator,
+                                                                      cfg);
+
+            if (!new File(reportPath).exists()) {
+                throw new PrqaException("Configuration does not exist");
+            }
+
+            return reportPath;
 
         } catch (IOException | SAXException | XPathExpressionException | ParserConfigurationException e) {
             throw new PrqaException("Failed to parse project configuration", e);
@@ -238,6 +257,12 @@ public class QAFrameworkReport implements Serializable {
 
         builder.appendArgument("-P");
         builder.appendArgument(PRQACommandBuilder.wrapFile(workspace, settings.getQaProject()));
+
+        if (StringUtils.isNotEmpty(settings.getProjectConfiguration())) {
+            builder.appendArgument("-K");
+            builder.appendArgument(settings.getProjectConfiguration());
+        }
+
         return builder.getCommand();
     }
 
@@ -271,6 +296,11 @@ public class QAFrameworkReport implements Serializable {
         builder.appendArgument(PRQACommandBuilder.wrapFile(workspace, settings.getQaProject()));
         builder.appendArgument("-C");
         builder.appendArgument(settings.getCmaProjectName());
+
+        if (StringUtils.isNotEmpty(settings.getProjectConfiguration())) {
+            builder.appendArgument("-K");
+            builder.appendArgument(settings.getProjectConfiguration());
+        }
 
         return builder.getCommand();
     }
@@ -309,13 +339,20 @@ public class QAFrameworkReport implements Serializable {
         builder.appendArgument("-t");
         builder.appendArgument(reportType);
 
+        if (StringUtils.isNotEmpty(settings.getProjectConfiguration())) {
+            builder.appendArgument("-K");
+            builder.appendArgument(settings.getProjectConfiguration());
+        }
+
         return builder.getCommand();
     }
 
     private void removeOldReports(String projectLocation, String reportType)
             throws PrqaException {
 
-        File file = new File(extractReportsPath(projectLocation, settings.getQaProject()));
+        File file = new File(extractReportsPath(projectLocation,
+                                                settings.getQaProject(),
+                                                settings.getProjectConfiguration()));
 
         if (file.isDirectory()) {
             File[] files = file.listFiles();
@@ -365,6 +402,12 @@ public class QAFrameworkReport implements Serializable {
         }
         builder.appendArgument("--upload-source");
         builder.appendArgument(settings.getUploadSourceCode());
+
+        if (StringUtils.isNotEmpty(settings.getProjectConfiguration())) {
+            builder.appendArgument("-K");
+            builder.appendArgument(settings.getProjectConfiguration());
+        }
+
         return builder.getCommand();
     }
 
@@ -416,7 +459,10 @@ public class QAFrameworkReport implements Serializable {
         PRQAComplianceStatus status = new PRQAComplianceStatus();
         status.setQaFrameworkVersion(qaFrameworkVersion);
         String report_structure;
-        report_structure = new File(extractReportsPath(workspace.getAbsolutePath(), settings.getQaProject())).getPath();
+        report_structure = new File(extractReportsPath(workspace.getAbsolutePath(),
+                                                       settings.getQaProject(),
+                                                       settings.getProjectConfiguration()))
+                .getPath();
         File reportFolder = new File(report_structure);
         out.println("Report Folder Path: " + reportFolder);
 
