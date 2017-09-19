@@ -3,7 +3,6 @@ package net.praqma.prqa.execute;
 import net.praqma.util.execute.AbnormalProcessTerminationException;
 import net.praqma.util.execute.CmdResult;
 import net.praqma.util.execute.CommandLineInterface;
-import net.praqma.util.execute.Recorder;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,11 +19,6 @@ public class PrqaCommandLine implements CommandLineInterface {
     private OperatingSystem thisos;
     private String[] cmd;
     private int last;
-    private static Recorder recorder;
-
-    public void setRecorder(Recorder recorder) {
-        recorder = recorder;
-    }
 
     private PrqaCommandLine() {
         this.thisos = OperatingSystem.WINDOWS;
@@ -135,14 +129,6 @@ public class PrqaCommandLine implements CommandLineInterface {
                     errors.join();
                 } catch (InterruptedException var19) {
                     this.logger.severe("Could not join errors thread");
-                }
-            }
-
-            if (recorder != null) {
-                if (merge) {
-                    recorder.addCommand(cmd, exitValue, dir, output.sres.toString());
-                } else {
-                    recorder.addCommand(cmd, exitValue, dir, errors.sres.toString());
                 }
             }
 
