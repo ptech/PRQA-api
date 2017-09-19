@@ -59,7 +59,6 @@ public class QAFrameworkReport implements Serializable {
 
     private static final String FILE_SEPARATOR = System.getProperty("file.separator");
     private static final String QUOTE = "\"";
-    private static final String RESULTS_DATA_PATH = "/prqa/reports/results_data.xml";
 
     public static String XHTML_REPORT_EXTENSION = "Report." + PRQAReport.XHTML;
     public static String XML_REPORT_EXTENSION = "Report." + PRQAReport.XML;
@@ -466,11 +465,6 @@ public class QAFrameworkReport implements Serializable {
         status.setMessages(messages);
 
         return status;
-    }
-
-    private String getResultsDataFileRelativePath() {
-        return RESULTS_DATA_PATH;
-
     }
 
     private void sortViolatedRulesByRuleID(List<MessageGroup> messagesGroups) {
