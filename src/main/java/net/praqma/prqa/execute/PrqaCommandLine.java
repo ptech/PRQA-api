@@ -3,36 +3,30 @@ package net.praqma.prqa.execute;
 import net.praqma.util.execute.AbnormalProcessTerminationException;
 import net.praqma.util.execute.CmdResult;
 import net.praqma.util.execute.CommandLineInterface;
-import net.praqma.util.execute.Recorder;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintStream;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
 public class PrqaCommandLine implements CommandLineInterface {
     protected Logger logger = Logger.getLogger(PrqaCommandLine.class.getName());
-    protected static final String linesep = System.getProperty("line.separator");
     private static PrqaCommandLine instance = new PrqaCommandLine();
-    private String os = null;
     private OperatingSystem thisos;
     private String[] cmd;
     private int last;
-    private static Recorder recorder;
-
-    public void setRecorder(Recorder recorder) {
-        recorder = recorder;
-    }
 
     private PrqaCommandLine() {
         this.thisos = OperatingSystem.WINDOWS;
         this.cmd = null;
         this.last = 0;
-        this.os = System.getProperty("os.name");
-        this.logger.finer("Running on " + this.os);
-        if (this.os.matches("^.*(?i)windows.*$")) {
+        String os = System.getProperty("os.name");
+        this.logger.finer("Running on " + os);
+        if (os.matches("^.*(?i)windows.*$")) {
             this.logger.finer("Using special windows environment");
             this.cmd = new String[3];
             this.cmd[0] = "cmd.exe";
@@ -96,10 +90,8 @@ public class PrqaCommandLine implements CommandLineInterface {
                 this.logger.fine("CommandLine: " + variables);
                 Map<String, String> env = pb.environment();
                 Set<String> keys = variables.keySet();
-                Iterator i$ = keys.iterator();
 
-                while (i$.hasNext()) {
-                    String key = (String) i$.next();
+                for (String key : keys) {
                     env.put(key, variables.get(key));
                 }
             }
@@ -111,7 +103,7 @@ public class PrqaCommandLine implements CommandLineInterface {
             StreamGobbler errors;
 
             try (InputStream inputStream = p.getInputStream();
-                 InputStream errorStream = p.getErrorStream();) {
+                 InputStream errorStream = p.getErrorStream()) {
 
                 output = new StreamGobbler(inputStream, printStream);
                 errors = new StreamGobbler(errorStream, printStream);
@@ -140,31 +132,22 @@ public class PrqaCommandLine implements CommandLineInterface {
                 }
             }
 
-            if (output != null && errors != null) {
-                if (recorder != null) {
+            if (exitValue != 0) {
+                this.logger.fine("Abnormal process termination(" + exitValue + "): " + errors.sres.toString());
+                if (!ignore) {
                     if (merge) {
-                        recorder.addCommand(cmd, exitValue, dir, output.sres.toString());
-                    } else {
-                        recorder.addCommand(cmd, exitValue, dir, errors.sres.toString());
+                        throw new AbnormalProcessTerminationException(output.sres.toString(), cmd, exitValue);
                     }
+
+                    throw new AbnormalProcessTerminationException(errors.sres.toString(), cmd, exitValue);
                 }
-
-                if (exitValue != 0) {
-                    this.logger.fine("Abnormal process termination(" + exitValue + "): " + errors.sres.toString());
-                    if (!ignore) {
-                        if (merge) {
-                            throw new AbnormalProcessTerminationException(output.sres.toString(), cmd, exitValue);
-                        }
-
-                        throw new AbnormalProcessTerminationException(errors.sres.toString(), cmd, exitValue);
-                    }
-                }
-
-                result.stdoutBuffer = output.sres;
-                result.stdoutList = output.lres;
-                result.errorBuffer = errors.sres;
-                result.errorList = errors.lres;
             }
+
+            result.stdoutBuffer = output.sres;
+            result.stdoutList = output.lres;
+            result.errorBuffer = errors.sres;
+            result.errorList = errors.lres;
+
             return result;
         } catch (IOException var23) {
             this.logger.warning("Could not execute the command \"" + cmd + "\" correctly: " + var23.getMessage());

@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.namespace.QName;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;
@@ -35,21 +34,10 @@ public class ResultsDataParser implements Serializable{
     }
 
     public List<MessageGroup> parseResultsData() throws Exception {       
-        FileInputStream fileis = new FileInputStream(filePath);
-        
-        /**
-         * TODO: Dom Parsing - Temporary fix to read the xml file. will be replaced.
-         */
-        if (qaFrameworkVersion.isQaFrameworkVersionPriorToVersion104()) {
-            XMLInputFactory factory = XMLInputFactory.newInstance();
-            XMLStreamReader reader = factory.createXMLStreamReader(fileis);
-            return beginFileParse(reader);
-        } else {
-            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Document document = dBuilder.parse(fileis);
-            return beginFileParsing(document);
-        }
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+        Document document = dBuilder.parse(new FileInputStream(filePath));
+        return beginFileParsing(document);
     }
 
     private Map<String, Integer> getMessages(Element node)
@@ -88,7 +76,7 @@ public class ResultsDataParser implements Serializable{
                                             continue;
                                         }
                                         Element cccNode = (Element)ccNodeList.item(varRule);
-                                        if (cccNode.getTagName() != "Rule") {
+                                        if (!"Rule".equals(cccNode.getTagName() )) {
                                             continue;
                                         }
                                         Rule violatedRule = new Rule(cccNode.getAttributes().getNamedItem("id").getNodeValue(), getMessages(cccNode));
@@ -108,7 +96,7 @@ public class ResultsDataParser implements Serializable{
     ///////////////////////////////OLD FRAMEWORK////////////////////////////////////////////
 
     private List<MessageGroup> beginFileParse(XMLStreamReader reader) throws Exception {
-        List<MessageGroup> messagesGroups = new ArrayList<MessageGroup>();
+        List<MessageGroup> messagesGroups = new ArrayList<>();
 
         while (reader.hasNext()) {
             int event = reader.next();
