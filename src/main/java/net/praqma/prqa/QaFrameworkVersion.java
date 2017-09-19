@@ -20,10 +20,6 @@ public class QaFrameworkVersion implements Serializable {
         return qaFrameworkVersion;
     }
 
-    public String getQaFrameworkShortVersion() {
-        return qaFrameworkVersion.length() > 5 ? qaFrameworkVersion.substring(0, 5) : qaFrameworkVersion;
-    }
-
     public boolean isVersionSupported() {
         return new ComparableVersion(qaFrameworkVersion).compareTo(new ComparableVersion(MINIMUM_SUPPORTED_VERSION)) > -1;
     }
