@@ -4,17 +4,17 @@
  */
 package net.praqma.prqa.products;
 
+import net.praqma.prqa.exceptions.PrqaSetupException;
+import net.praqma.prqa.execute.PrqaCommandLine;
+import net.praqma.prqa.reports.QAFrameworkReport;
+import net.praqma.util.execute.AbnormalProcessTerminationException;
+import net.praqma.util.execute.CmdResult;
+
 import java.io.File;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
-
-import net.praqma.prqa.exceptions.PrqaSetupException;
-import net.praqma.prqa.execute.PrqaCommandLine;
-import net.praqma.prqa.reports.PRQAReport;
-import net.praqma.util.execute.AbnormalProcessTerminationException;
-import net.praqma.util.execute.CmdResult;
 
 /**
  * 
@@ -34,10 +34,10 @@ public class QACli implements Product, Serializable {
 
 	@Override
 	public final String getProductVersion(Map<String, String> environment, File workspace, boolean isUnix) throws PrqaSetupException {
-		logger.finest(String.format("Starting execution of method - getProductVersion()"));
+		logger.finest("Starting execution of method - getProductVersion()");
 
-		String productVersion = null;
-		CmdResult res = null;
+		String productVersion;
+		CmdResult res;
 		StringBuilder sb = new StringBuilder();
 		sb.append("\"");
 		if (environment.containsKey(QAF_BIN_PATH)) {
@@ -54,13 +54,12 @@ public class QACli implements Product, Serializable {
 		} catch (AbnormalProcessTerminationException abnex) {
 			logger.warning(String.format("Failed to detect QA·CLI version with command %s returned code %s%nMessage was:%n%s", abnex.getCommand(),
 					abnex.getExitValue(), abnex.getMessage()));
-			Map<String, String> systemVars = new HashMap<String, String>();
+			Map<String, String> systemVars = new HashMap<>();
 			systemVars.putAll(System.getenv());
 
-			if (environment != null) {
-				systemVars.putAll(environment);
-			}
-			PRQAReport._logEnv("Error in QACLI.getProductVersion() - Printing environment", systemVars);
+			systemVars.putAll(environment);
+
+			QAFrameworkReport._logEnv("Error in QACLI.getProductVersion() - Printing environment", systemVars);
 			throw new PrqaSetupException(String.format("Failed to detect QA·CLI version%n%s", abnex.getMessage()));
 
 		}
