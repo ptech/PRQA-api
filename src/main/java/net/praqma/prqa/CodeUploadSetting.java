@@ -30,13 +30,14 @@ public enum CodeUploadSetting {
         if(StringUtils.isBlank(value)) {
             return None;
         }
-        
-        if(value.equals("All code uploaded")) {
-            return AllCode;
-        } else if(value.equals("No code uploaded") ) {
-            return None;
-        } else {
-            return OnlyNew;
+
+        switch (value) {
+            case "All code uploaded":
+                return AllCode;
+            case "No code uploaded":
+                return None;
+            default:
+                return OnlyNew;
         }
     }    
 }

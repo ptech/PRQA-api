@@ -47,7 +47,7 @@ public class QaVerifyConfigurationFileParser {
 
 		SAXBuilder saxBuilder = new SAXBuilder();
 
-		Document document = (Document) saxBuilder.build(qaVerifyFile);
+		Document document = saxBuilder.build(qaVerifyFile);
 		Element rootElement = document.getRootElement();
 
 		List<Element> childrens = rootElement.getChildren(QAV_PROJECT_ELEMENT);

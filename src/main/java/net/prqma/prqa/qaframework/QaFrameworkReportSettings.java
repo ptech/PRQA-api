@@ -13,7 +13,6 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
     private String uniProjectName;
     private boolean pullUnifiedProject;
     private boolean qaEnableDependencyMode;
-    private boolean qaEnableProjectCma;
     private boolean qaCrossModuleAnalysis;
     private String cmaProjectName;
     private boolean reuseCmaDb;
@@ -21,7 +20,6 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
     private boolean generateReport;
     private boolean publishToQAV;
     private boolean loginToQAV;
-    private String product;
     private boolean qaUploadWhenStable;
     private String qaVerifyProjectName;
     private String uploadSnapshotName;
@@ -55,7 +53,6 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
             boolean generateReport,
             boolean publishToQAV,
             boolean loginToQAV,
-            String product,
             boolean qaUploadWhenStable,
             String qaVerifyProjectName,
             String uploadSnapshotName,
@@ -88,7 +85,6 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
         this.qaEnableDependencyMode = qaEnableDependencyMode;
         this.generateReport = generateReport;
         this.qaProject = qaProject;
-        this.product = product;
         this.qaUploadWhenStable = qaUploadWhenStable;
         this.qaVerifyProjectName = qaVerifyProjectName;
         this.uploadSnapshotName = uploadSnapshotName;
@@ -133,10 +129,6 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
 
     public boolean isQaEnableDependencyMode() {
         return qaEnableDependencyMode;
-    }
-
-    public boolean isQaEnableProjectCma() {
-        return qaEnableProjectCma;
     }
 
     public boolean isQaCrossModuleAnalysis() {

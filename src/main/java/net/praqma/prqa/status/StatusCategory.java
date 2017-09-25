@@ -18,5 +18,5 @@ public enum StatusCategory {
     MessagesSuppressed,
     PercentageMessagesSuppressed,
     NumberOfClasses,
-    NumberOfClassMetrics;
+    NumberOfClassMetrics
 }

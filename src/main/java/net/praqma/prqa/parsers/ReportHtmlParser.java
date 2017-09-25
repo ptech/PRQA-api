@@ -49,58 +49,58 @@ public abstract class ReportHtmlParser implements Serializable {
 	}
 
 	public void setFullReportPath(String fullReportPath) {
-		logger.finest(String.format("Starting execution of method - setFullReportPath"));
+		logger.finest("Starting execution of method - setFullReportPath");
 		this.fullReportPath = fullReportPath;
-		logger.finest(String.format("Ending execution of method - setFullReportPath"));
+		logger.finest("Ending execution of method - setFullReportPath");
 	}
 
 	public String getParseFirstResult(Pattern pattern) throws PrqaException {
-		logger.finest(String.format("Starting execution of method - getResult"));
+		logger.finest("Starting execution of method - getResult");
 		String output = getFirstResult(parse(this.fullReportPath, pattern));
 		logger.finest(String.format("Returning value: %s", output));
 		return output;
 	}
 
 	public List<String> getParseResults(Pattern pattern) throws PrqaException {
-		logger.finest(String.format("Starting execution of method - getResult"));
+		logger.finest("Starting execution of method - getResult");
 		return parse(this.fullReportPath, pattern);
 	}
 
 	public List<String> parse(String path, Pattern pattern) throws PrqaParserException {
-		logger.finest(String.format("Starting execution of method - parse"));
+		logger.finest("Starting execution of method - parse");
 
-		List<String> result = new ArrayList<String>();
+		List<String> result = new ArrayList<>();
 		File file = new File(path);
 		FileInputStream fis;
 
-		logger.finest(String.format("Attempting to open filepath: " + file.getAbsolutePath()));
+		logger.finest("Attempting to open filepath: " + file.getAbsolutePath());
 		try {
 			fis = new FileInputStream(file);
 		} catch (FileNotFoundException ex) {
 			logger.severe(String.format("Exception thrown type: %s; message: %s", ex.getClass(), ex.getMessage()));
 			throw new PrqaParserException(ex);
 		}
-		logger.finest(String.format("File opened successfully!"));
+		logger.finest("File opened successfully!");
 
 		try (InputStreamReader isr = new InputStreamReader(fis);
-			 BufferedReader source = new BufferedReader(isr);){
+			 BufferedReader source = new BufferedReader(isr)){
 
 			String sourceLine = "";
 			Matcher match;
 			String report = "";
 
-			logger.finest(String.format("Attempting to read the file..."));
+			logger.finest("Attempting to read the file...");
 
 			while ((sourceLine = source.readLine()) != null) {
 				report += sourceLine + ReportHtmlParser.LINE_SEPARATOR;
 				match = pattern.matcher(report);
 
-				while (match.find()) {
-					logger.finest(String.format("Match found!"));
+				if (match.find()) {
+					logger.finest("Match found!");
 
 					result.add(match.group(1));
 
-					logger.finest(String.format("Returning result:"));
+					logger.finest("Returning result:");
 					for (String s : result) {
 						logger.finest(String.format("    %s", s));
 					}
@@ -112,9 +112,9 @@ public abstract class ReportHtmlParser implements Serializable {
 			throw new PrqaParserException(ex);
 		}
 
-		logger.finest(String.format("File read successfully!"));
+		logger.finest("File read successfully!");
 
-		logger.finest(String.format("Returning result:"));
+		logger.finest("Returning result:");
 		for (String s : result) {
 			logger.finest(String.format("    %s", s));
 		}
@@ -123,14 +123,14 @@ public abstract class ReportHtmlParser implements Serializable {
 	}
 
 	public String getFirstResult(List<String> results) {
-		logger.finest(String.format("Starting execution of method - getFirstResult"));
+		logger.finest("Starting execution of method - getFirstResult");
 		if (results.size() > 0) {
 			String output = results.get(0);
 			logger.finest(String.format("Returning value: %s", output));
 			return output;
 		}
 
-		logger.finest(String.format("Collection is empty, returning null."));
+		logger.finest("Collection is empty, returning null.");
 		return null;
 	}
 }

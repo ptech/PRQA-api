@@ -16,8 +16,8 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading> implements Seri
 
 	private static final long serialVersionUID = 1L;
 	
-	private Map<StatusCategory, Number> overrideMinimum = new EnumMap<StatusCategory, Number>(StatusCategory.class);
-	private Map<StatusCategory, Number> overrideMaximum = new EnumMap<StatusCategory, Number>(StatusCategory.class);
+	private Map<StatusCategory, Number> overrideMinimum = new EnumMap<>(StatusCategory.class);
+	private Map<StatusCategory, Number> overrideMaximum = new EnumMap<>(StatusCategory.class);
 	private static final Logger logger;
 
 	static {
@@ -29,8 +29,7 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading> implements Seri
 	}
 
 	public PRQAStatusCollection(ArrayList<PRQAReading> collection) {
-		logger.finest(String
-				.format("Constructor called for class PRQAStatusCollection(ArrayList<PRQAReading> collection)"));
+		logger.finest("Constructor called for class PRQAStatusCollection(ArrayList<PRQAReading> collection)");
 		for (PRQAReading e : collection) {
 			logger.finest(String.format("    %s", e));
 		}
@@ -39,8 +38,7 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading> implements Seri
 	}
 
 	public PRQAStatusCollection(PRQAStatusCollection collection) {
-		logger.finest(String
-				.format("Constructor called for class PRQAStatusCollection(PRQAStatusCollection collection)"));
+		logger.finest("Constructor called for class PRQAStatusCollection(PRQAStatusCollection collection)");
 		for (PRQAReading e : collection) {
 			logger.finest(String.format("    %s", e));
 		}
@@ -56,7 +54,7 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading> implements Seri
 	 * @return
 	 */
 	public final Number getMax(StatusCategory category) throws PrqaException {
-		logger.finest(String.format("Starting execution of method - getMax"));
+		logger.finest("Starting execution of method - getMax");
 		logger.finest(String.format("Input parameter category type: %s; value: %s", category.getClass(), category));
 
 		if (getOverriddenMax(category) != null) {
@@ -100,7 +98,7 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading> implements Seri
 	 *         specified category.
 	 */
 	public final Number getMin(StatusCategory category) throws PrqaException {
-		logger.finest(String.format("Starting execution of method - getMin"));
+		logger.finest("Starting execution of method - getMin");
 		logger.finest(String.format("Input parameter category type: %s; value: %s", category.getClass(), category));
 
 		if (getOverriddenMin(category) != null) {
@@ -143,7 +141,7 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading> implements Seri
 	 * @param value
 	 */
 	public void overrideMin(StatusCategory category, Number value) {
-		logger.finest(String.format("Starting execution of method - overrideMin"));
+		logger.finest("Starting execution of method - overrideMin");
 		logger.finest(String.format("Input parameter category type: %s; value: %s", category.getClass(), category));
 		logger.finest(String.format("Input parameter value type: %s; value: %s", value.getClass(), value));
 
@@ -151,7 +149,7 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading> implements Seri
 	}
 
 	public void overrideMax(StatusCategory category, Number value) {
-		logger.finest(String.format("Starting execution of method - overrideMax"));
+		logger.finest("Starting execution of method - overrideMax");
 		logger.finest(String.format("Input parameter category type: %s; value: %s", category.getClass(), category));
 		logger.finest(String.format("Input parameter value type: %s; value: %s", value.getClass(), value));
 
@@ -159,7 +157,7 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading> implements Seri
 	}
 
 	public Number getOverriddenMax(StatusCategory category) {
-		logger.finest(String.format("Starting execution of method - getOverriddenMax"));
+		logger.finest("Starting execution of method - getOverriddenMax");
 		logger.finest(String.format("Input parameter category type: %s; value: %s", category.getClass(), category));
 
 		if (overrideMaximum.containsKey(category)) {
@@ -176,7 +174,7 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading> implements Seri
 	}
 
 	public Number getOverriddenMin(StatusCategory category) {
-		logger.finest(String.format("Starting execution of method - getOverriddenMin"));
+		logger.finest("Starting execution of method - getOverriddenMin");
 		logger.finest(String.format("Input parameter category type: %s; value: %s", category.getClass(), category));
 		if (overrideMinimum.containsKey(category)) {
 			Number output = overrideMinimum.get(category);
@@ -188,11 +186,11 @@ public class PRQAStatusCollection extends ArrayList<PRQAReading> implements Seri
 	}
 
 	public final void clearOverrides() {
-		logger.finest(String.format("Starting execution of method - clearOverrides"));
+		logger.finest("Starting execution of method - clearOverrides");
 
 		overrideMaximum.clear();
 		overrideMinimum.clear();
 
-		logger.finest(String.format("Overrides cleared."));
+		logger.finest("Overrides cleared.");
 	}
 }

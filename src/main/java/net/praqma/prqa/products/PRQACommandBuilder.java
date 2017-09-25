@@ -19,7 +19,7 @@ import org.apache.commons.lang.StringUtils;
 public class PRQACommandBuilder implements Serializable {
 
     private String executable;
-    private LinkedList<String> arguments = new LinkedList<String>();
+    private LinkedList<String> arguments = new LinkedList<>();
     private static final Logger logger;
 
     static {
@@ -349,13 +349,11 @@ public class PRQACommandBuilder implements Serializable {
     }
     
     public static String getLogFilePathParameter(String fullLogFilePath) {
-        String res = String.format("-log \\\"%s\\\"", fullLogFilePath);
-        return res;
+        return String.format("-log \\\"%s\\\"", fullLogFilePath);
     }
     
     public static String getImportLogFilePathParameter(String fullLogFilePath) {
-        String res = String.format("-po qav::log=\\\"%s\\\"", fullLogFilePath);
-        return res;
+        return String.format("-po qav::log=\\\"%s\\\"", fullLogFilePath);
     }
     
     /**
@@ -369,9 +367,8 @@ public class PRQACommandBuilder implements Serializable {
         return res;
     }
     
-    public static String getNumberOfThreads(int number) {        
-        String res = String.format("-po qav::thread=%s", number);
-        return res;
+    public static String getNumberOfThreads(int number) {
+        return String.format("-po qav::thread=%s", number);
     }
     
     public static String getSop(String topLevelSourceDir) {
@@ -379,9 +376,8 @@ public class PRQACommandBuilder implements Serializable {
         if(topLevelSourceDir.endsWith("\\")) {
             sourceDir = topLevelSourceDir.substring(0, sourceDir.length()-1);
         }
-        
-        String res = String.format("-sop \\\"%s\\\"",sourceDir);
-        return res;
+
+        return String.format("-sop \\\"%s\\\"", sourceDir);
     }
     
     public static String getProd(boolean single) {

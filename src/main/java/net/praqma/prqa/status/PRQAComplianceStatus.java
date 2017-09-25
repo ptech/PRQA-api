@@ -1,17 +1,15 @@
 package net.praqma.prqa.status;
 
+import net.praqma.prqa.exceptions.PrqaException;
+import net.praqma.prqa.exceptions.PrqaReadingException;
+import net.praqma.prqa.parsers.MessageGroup;
+import net.praqma.prqa.parsers.Rule;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-
-import net.praqma.prqa.QaFrameworkVersion;
-
-import net.praqma.prqa.exceptions.PrqaException;
-import net.praqma.prqa.exceptions.PrqaReadingException;
-import net.praqma.prqa.parsers.MessageGroup;
-import net.praqma.prqa.parsers.Rule;
 
 /**
  * This class represent a compliance status readout. 3 values, file compliance,
@@ -27,7 +25,6 @@ public class PRQAComplianceStatus extends PRQAStatus implements Serializable, Co
     private Double projectCompliance;
     private Map<Integer, Integer> messagesByLevel = new TreeMap<>();
     private List<MessageGroup> messagesGroups;
-    private QaFrameworkVersion qaFrameworkVersion;
 
     public PRQAComplianceStatus() {
     }
@@ -44,10 +41,6 @@ public class PRQAComplianceStatus extends PRQAStatus implements Serializable, Co
         this.projectCompliance = projectCompliance;
 
         logger.finest("Ending execution of constructor - PRQAComplianceStatus");
-    }
-
-    public void setQaFrameworkVersion(QaFrameworkVersion qaFrameworkVersion) {
-        this.qaFrameworkVersion = qaFrameworkVersion;
     }
 
     public int getMessages() {
@@ -257,16 +250,6 @@ public class PRQAComplianceStatus extends PRQAStatus implements Serializable, Co
         logger.finest(String.format("Returning value: %s", result));
 
         return result;
-    }
-
-    public static PRQAComplianceStatus createEmptyResult() {
-        logger.finest("Starting execution of method - createEmptyResult");
-
-        PRQAComplianceStatus output = new PRQAComplianceStatus(0, 0d, 0d);
-
-        logger.finest(String.format("Returning value: %s", output));
-
-        return output;
     }
 
     @Override

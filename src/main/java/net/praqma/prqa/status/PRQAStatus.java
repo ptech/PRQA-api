@@ -27,7 +27,7 @@ import net.praqma.prqa.exceptions.PrqaReadingException;
 public abstract class PRQAStatus implements PRQAReading, Serializable {
 
 	private static final long serialVersionUID = 1L;
-	protected List<String> notifications = new ArrayList<String>();
+	protected List<String> notifications = new ArrayList<>();
 	protected HashMap<StatusCategory, Number> thresholds;
 	protected static final Logger logger = Logger.getLogger(PRQAStatus.class.getName());
 
@@ -37,32 +37,32 @@ public abstract class PRQAStatus implements PRQAReading, Serializable {
 	 */
 	@Override
 	public void addNotification(String message) {
-		logger.finest(String.format("Starting execution of method - addNotification"));
+		logger.finest("Starting execution of method - addNotification");
 		logger.finest(String.format("Input parameter message type: %s; value: %s", message.getClass(), message));
 
 		notifications.add(message);
 
-		logger.finest(String.format("Ending execution of method - addNotification"));
+		logger.finest("Ending execution of method - addNotification");
 	}
 
 	@Override
 	public HashMap<StatusCategory, Number> getThresholds() {
 		if (thresholds != null) {
-			logger.finest(String.format("Starting execution of method - getThresholds"));
-			logger.finest(String.format("Returning HashMap<StatusCategory, Number> thresholds:"));
+			logger.finest("Starting execution of method - getThresholds");
+			logger.finest("Returning HashMap<StatusCategory, Number> thresholds:");
 			for (Entry<StatusCategory, Number> entry : thresholds.entrySet()) {
 				logger.finest(String.format("    StatusCategory: %s, Number: %s", entry.getKey(), entry.getValue()));
 			}
 
 			return thresholds;
 		} else {
-			return new HashMap<StatusCategory, Number>();
+			return new HashMap<>();
 		}
 	}
 
 	@Override
 	public void setThresholds(HashMap<StatusCategory, Number> thresholds) {
-		logger.finest(String.format("Starting execution of method - setThresholds"));
+		logger.finest("Starting execution of method - setThresholds");
 		logger.finest(String.format("Input parameter thresholds type: %s, values:", thresholds.getClass()));
 		for (Entry<StatusCategory, Number> entry : thresholds.entrySet()) {
 			logger.finest(String.format("    StatusCategory: %s, Number: %s", entry.getKey(), entry.getValue()));
@@ -70,7 +70,7 @@ public abstract class PRQAStatus implements PRQAReading, Serializable {
 
 		this.thresholds = thresholds;
 
-		logger.finest(String.format("Ending execution of method - setThresholds"));
+		logger.finest("Ending execution of method - setThresholds");
 	}
 
 	/**
@@ -78,14 +78,14 @@ public abstract class PRQAStatus implements PRQAReading, Serializable {
 	 */
 	@Override
 	public HashMap<StatusCategory, Number> getReadouts(StatusCategory... categories) throws PrqaException {
-		logger.finest(String.format("Starting execution of method - getReadouts"));
+		logger.finest("Starting execution of method - getReadouts");
 
 		for (StatusCategory category : categories) {
 			logger.finest(String.format("    %s", category));
 		}
-		logger.finest(String.format("Attempting to get readouts..."));
+		logger.finest("Attempting to get readouts...");
 
-		HashMap<StatusCategory, Number> map = new HashMap<StatusCategory, Number>();
+		HashMap<StatusCategory, Number> map = new HashMap<>();
 		for (StatusCategory category : categories) {
 			try {
 				Number readout = getReadout(category);
@@ -96,8 +96,8 @@ public abstract class PRQAStatus implements PRQAReading, Serializable {
 				throw ex;
 			}
 		}
-		logger.finest(String.format("Successfully got all readouts!"));
-		logger.finest(String.format("Returning HashMap<StatusCategory, Number> map:"));
+		logger.finest("Successfully got all readouts!");
+		logger.finest("Returning HashMap<StatusCategory, Number> map:");
 		for (Entry<StatusCategory, Number> entry : map.entrySet()) {
 			logger.finest(String.format("    StatusCategory: %s, Number: %s", entry.getKey(), entry.getValue()));
 		}

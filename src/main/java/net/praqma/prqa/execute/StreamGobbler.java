@@ -18,14 +18,14 @@ public class StreamGobbler extends Thread {
 
     StreamGobbler(InputStream is) {
         this.is = is;
-        lres = new ArrayList<String>();
+        lres = new ArrayList<>();
         sres = new StringBuffer();
     }
 
     StreamGobbler(InputStream is, PrintStream printStream) {
         this.is = is;
         this.printStream = printStream;
-        lres = new ArrayList<String>();
+        lres = new ArrayList<>();
         sres = new StringBuffer();
     }
 

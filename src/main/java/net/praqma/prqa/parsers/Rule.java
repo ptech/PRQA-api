@@ -3,6 +3,7 @@ package net.praqma.prqa.parsers;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -74,7 +75,8 @@ public class Rule implements Serializable {
     public boolean equals(Object obj) {
         if (obj instanceof Rule) {
             Rule ruleObj = (Rule) obj;
-            return ruleNumber == ruleObj.ruleNumber;
+            return Objects.equals(ruleNumber,
+                                  ruleObj.ruleNumber);
         }
         return false;
     }
