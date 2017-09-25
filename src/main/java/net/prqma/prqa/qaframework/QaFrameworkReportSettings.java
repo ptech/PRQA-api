@@ -103,6 +103,7 @@ public class QaFrameworkReportSettings implements ReportSettings, Serializable {
         this.generateReportOnAnalysisError = generateReportOnAnalysisError;
         this.addBuildNumber = addBuildNumber;
         this.projectConfiguration = projectConfiguration;
+
     }
 
     @Override

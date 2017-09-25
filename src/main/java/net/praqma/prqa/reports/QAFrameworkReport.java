@@ -229,11 +229,6 @@ public class QAFrameworkReport implements Serializable {
         if (settings.isQaEnableDependencyMode() && analyzeOptions.contains("c")) {
             analyzeOptions = analyzeOptions.replace("c", "");
         }
-        if (settings.isQaEnableProjectCma()) {
-            if (analyzeOptions.contains("f")) {
-                analyzeOptions = analyzeOptions.replace("f", "p");
-            }
-        }
 
         builder.appendArgument(analyzeOptions);
 
@@ -475,7 +470,7 @@ public class QAFrameworkReport implements Serializable {
 
     public PRQAComplianceStatus getComplianceStatus(PrintStream out) throws PrqaException {
         PRQAComplianceStatus status = new PRQAComplianceStatus();
-        status.setQaFrameworkVersion(qaFrameworkVersion);
+
         String report_structure;
         report_structure = new File(extractReportsPath(workspace.getAbsolutePath(),
                                                        settings.getQaProject(),
@@ -515,7 +510,6 @@ public class QAFrameworkReport implements Serializable {
 
         /*This section is to read result data file and parse the results*/
         ResultsDataParser resultsDataParser = new ResultsDataParser(resultsDataFile.getAbsolutePath());
-        resultsDataParser.setQaFrameworkVersion(qaFrameworkVersion);
         List<MessageGroup> messagesGroups;
         try {
             messagesGroups = resultsDataParser.parseResultsData();
