@@ -111,7 +111,6 @@ public class QAFrameworkReport implements Serializable {
     private QAVerifyServerSettings qaVerifySettings;
     private File workspace;
     private Map<String, String> environment;
-    private QaFrameworkVersion qaFrameworkVersion;
 
     public QAFrameworkReport(QaFrameworkReportSettings settings,
                              QAVerifyServerSettings qaVerifySettings,
@@ -554,10 +553,6 @@ public class QAFrameworkReport implements Serializable {
 
     public void setEnvironment(Map<String, String> environment) {
         this.environment = environment;
-    }
-
-    public void setQaFrameworkVersion(QaFrameworkVersion qaFrameworkVersion) {
-        this.qaFrameworkVersion = qaFrameworkVersion;
     }
 
     public boolean applyCustomLicenseServer(PrintStream out) throws PrqaException {

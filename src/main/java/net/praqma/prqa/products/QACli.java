@@ -30,7 +30,7 @@ public class QACli implements Product, Serializable {
 	public static final String QAF_BIN_PATH = "QAFBINPATH";
 	public static final String WORKSPACE_PATH = "WORKSPACEPATH";
 	public static final String QAF_INSTALL_PATH = "QAFINSTALLPATH";
-        public static final String QACLI = "qacli";
+    public static final String QACLI = "qacli";
 
 	@Override
 	public final String getProductVersion(Map<String, String> environment, File workspace, boolean isUnix) throws PrqaSetupException {
