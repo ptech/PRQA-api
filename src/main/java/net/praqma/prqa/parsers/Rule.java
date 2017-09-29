@@ -7,7 +7,8 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Rule implements Serializable {
+public class Rule
+        implements Serializable {
 
     private static final Pattern DIGITS = Pattern.compile("\\d+");
     private String ruleNumber;
@@ -15,12 +16,14 @@ public class Rule implements Serializable {
     private Map<String, Integer> messages;
     private transient boolean calculated;
 
-    public Rule(String ruleID, Map<String, Integer> messages) {
+    public Rule(String ruleID,
+                Map<String, Integer> messages) {
         this.ruleNumber = ruleID;
         this.messages = messages;
     }
 
-    public Rule(String ruleID, int ruleTotalViolations) {
+    public Rule(String ruleID,
+                int ruleTotalViolations) {
         this.ruleNumber = ruleID;
         this.ruleTotalViolations = ruleTotalViolations;
     }
@@ -44,7 +47,9 @@ public class Rule implements Serializable {
      */
     public int getRuleNumber() {
         Matcher matcher = DIGITS.matcher(ruleNumber);
-        return matcher.find() ? Integer.parseInt(matcher.group()) : 0;
+        return matcher.find()
+               ? Integer.parseInt(matcher.group())
+               : 0;
     }
 
     public Map<String, Integer> getMessages() {
@@ -52,7 +57,8 @@ public class Rule implements Serializable {
             // compatibility with old serialized data
             messages = new HashMap<>();
             if (ruleTotalViolations > 0) {
-                messages.put(ruleNumber, ruleTotalViolations);
+                messages.put(ruleNumber,
+                             ruleTotalViolations);
             }
         }
         return messages;

@@ -5,13 +5,15 @@
 package net.praqma.prqa.exceptions;
 
 /**
- *
  * @author Praqma
  */
-public class PrqaUploadException extends PrqaException {
+public class PrqaUploadException
+        extends PrqaException {
 
-    public PrqaUploadException(String message, Exception ex) {
-        super(message, ex);
+    public PrqaUploadException(String message,
+                               Exception ex) {
+        super(message,
+              ex);
     }
 }
 

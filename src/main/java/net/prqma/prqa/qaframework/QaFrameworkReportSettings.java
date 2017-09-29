@@ -4,7 +4,9 @@ import net.praqma.prqa.ReportSettings;
 
 import java.io.Serializable;
 
-public class QaFrameworkReportSettings implements ReportSettings, Serializable {
+public class QaFrameworkReportSettings
+        implements ReportSettings,
+                   Serializable {
 
     private String qaInstallation;
     private String qaProject;

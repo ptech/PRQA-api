@@ -1,7 +1,6 @@
 package net.praqma.prqa.status;
 
 /**
- *
  * @author Praqma
  */
 public enum StatusCategory {

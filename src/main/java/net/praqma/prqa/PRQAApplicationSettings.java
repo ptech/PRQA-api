@@ -7,21 +7,23 @@ package net.praqma.prqa;
 import java.io.Serializable;
 
 
-public class PRQAApplicationSettings implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
-	
-	public final String productHome;
+public class PRQAApplicationSettings
+        implements Serializable {
 
-	public PRQAApplicationSettings(final String productHome) {
-		this.productHome = productHome;
-	}
+    private static final long serialVersionUID = 1L;
 
-	public static String addSlash(String value, String pathSeperator) {
-		if (value.endsWith(pathSeperator)) {
-			return value;
-		} else {
-			return value + pathSeperator;
-		}
-	}
+    public final String productHome;
+
+    public PRQAApplicationSettings(final String productHome) {
+        this.productHome = productHome;
+    }
+
+    public static String addSlash(String value,
+                                  String pathSeperator) {
+        if (value.endsWith(pathSeperator)) {
+            return value;
+        } else {
+            return value + pathSeperator;
+        }
+    }
 }

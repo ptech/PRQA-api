@@ -13,7 +13,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
-public class PrqaCommandLine implements CommandLineInterface {
+public class PrqaCommandLine
+        implements CommandLineInterface {
     protected Logger logger = Logger.getLogger(PrqaCommandLine.class.getName());
     private static PrqaCommandLine instance = new PrqaCommandLine();
     private OperatingSystem thisos;
@@ -50,31 +51,94 @@ public class PrqaCommandLine implements CommandLineInterface {
         return instance;
     }
 
-    public CmdResult run(String cmd) throws CommandLineException, AbnormalProcessTerminationException {
-        return this.run(cmd, null, true, false);
+    public CmdResult run(String cmd)
+            throws
+            CommandLineException,
+            AbnormalProcessTerminationException {
+        return this.run(cmd,
+                        null,
+                        true,
+                        false);
     }
 
-    public CmdResult run(String cmd, File dir) throws CommandLineException, AbnormalProcessTerminationException {
-        return this.run(cmd, dir, true, false);
+    public CmdResult run(String cmd,
+                         File dir)
+            throws
+            CommandLineException,
+            AbnormalProcessTerminationException {
+        return this.run(cmd,
+                        dir,
+                        true,
+                        false);
     }
 
-    public CmdResult run(String cmd, File dir, boolean merge) throws CommandLineException, AbnormalProcessTerminationException {
-        return this.run(cmd, dir, merge, false);
+    public CmdResult run(String cmd,
+                         File dir,
+                         boolean merge)
+            throws
+            CommandLineException,
+            AbnormalProcessTerminationException {
+        return this.run(cmd,
+                        dir,
+                        merge,
+                        false);
     }
 
-    public CmdResult run(String cmd, File dir, boolean merge, boolean ignore) throws CommandLineException, AbnormalProcessTerminationException {
-        return this.run(cmd, dir, merge, ignore, new HashMap<String, String>());
+    public CmdResult run(String cmd,
+                         File dir,
+                         boolean merge,
+                         boolean ignore)
+            throws
+            CommandLineException,
+            AbnormalProcessTerminationException {
+        return this.run(cmd,
+                        dir,
+                        merge,
+                        ignore,
+                        new HashMap<String, String>());
     }
 
-    public synchronized CmdResult run(String cmd, File dir, boolean merge, boolean ignore, Map<String, String> variables) throws CommandLineException, AbnormalProcessTerminationException {
-        return this.run(cmd, dir, merge, ignore, null, null);
+    public synchronized CmdResult run(String cmd,
+                                      File dir,
+                                      boolean merge,
+                                      boolean ignore,
+                                      Map<String, String> variables)
+            throws
+            CommandLineException,
+            AbnormalProcessTerminationException {
+        return this.run(cmd,
+                        dir,
+                        merge,
+                        ignore,
+                        null,
+                        null);
     }
 
-    public CmdResult run(String cmd, File dir, boolean merge, boolean ignore, PrintStream printStream) throws CommandLineException, AbnormalProcessTerminationException {
-        return this.run(cmd, dir, merge, ignore, null, printStream);
+    public CmdResult run(String cmd,
+                         File dir,
+                         boolean merge,
+                         boolean ignore,
+                         PrintStream printStream)
+            throws
+            CommandLineException,
+            AbnormalProcessTerminationException {
+        return this.run(cmd,
+                        dir,
+                        merge,
+                        ignore,
+                        null,
+                        printStream);
     }
 
-    public synchronized CmdResult run(String cmd, File dir, boolean merge, boolean ignore, Map<String, String> variables, PrintStream printStream) throws CommandLineException, AbnormalProcessTerminationException {
+    public synchronized CmdResult run(String cmd,
+                                      File dir,
+                                      boolean merge,
+                                      boolean ignore,
+                                      Map<String, String> variables,
+                                      PrintStream printStream)
+            throws
+            CommandLineException,
+            AbnormalProcessTerminationException {
         this.cmd[this.last] = cmd;
         this.logger.config("$ " + cmd);
 
@@ -92,7 +156,8 @@ public class PrqaCommandLine implements CommandLineInterface {
                 Set<String> keys = variables.keySet();
 
                 for (String key : keys) {
-                    env.put(key, variables.get(key));
+                    env.put(key,
+                            variables.get(key));
                 }
             }
 
@@ -105,8 +170,10 @@ public class PrqaCommandLine implements CommandLineInterface {
             try (InputStream inputStream = p.getInputStream();
                  InputStream errorStream = p.getErrorStream()) {
 
-                output = new StreamGobbler(inputStream, printStream);
-                errors = new StreamGobbler(errorStream, printStream);
+                output = new StreamGobbler(inputStream,
+                                           printStream);
+                errors = new StreamGobbler(errorStream,
+                                           printStream);
 
                 output.start();
                 errors.start();
@@ -136,10 +203,14 @@ public class PrqaCommandLine implements CommandLineInterface {
                 this.logger.fine("Abnormal process termination(" + exitValue + "): " + errors.sres.toString());
                 if (!ignore) {
                     if (merge) {
-                        throw new AbnormalProcessTerminationException(output.sres.toString(), cmd, exitValue);
+                        throw new AbnormalProcessTerminationException(output.sres.toString(),
+                                                                      cmd,
+                                                                      exitValue);
                     }
 
-                    throw new AbnormalProcessTerminationException(errors.sres.toString(), cmd, exitValue);
+                    throw new AbnormalProcessTerminationException(errors.sres.toString(),
+                                                                  cmd,
+                                                                  exitValue);
                 }
             }
 
