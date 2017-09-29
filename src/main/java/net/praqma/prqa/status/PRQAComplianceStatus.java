@@ -1,17 +1,15 @@
 package net.praqma.prqa.status;
 
+import net.praqma.prqa.exceptions.PrqaException;
+import net.praqma.prqa.exceptions.PrqaReadingException;
+import net.praqma.prqa.parsers.MessageGroup;
+import net.praqma.prqa.parsers.Rule;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-
-import net.praqma.prqa.QaFrameworkVersion;
-
-import net.praqma.prqa.exceptions.PrqaException;
-import net.praqma.prqa.exceptions.PrqaReadingException;
-import net.praqma.prqa.parsers.MessageGroup;
-import net.praqma.prqa.parsers.Rule;
 
 /**
  * This class represent a compliance status readout. 3 values, file compliance,
@@ -19,7 +17,9 @@ import net.praqma.prqa.parsers.Rule;
  *
  * @author jes, man
  */
-public class PRQAComplianceStatus extends PRQAStatus implements Serializable, Comparable<PRQAComplianceStatus> {
+public class PRQAComplianceStatus
+        extends PRQAStatus
+        implements Serializable, Comparable<PRQAComplianceStatus> {
 
     private int messages;
     private int messagesWithinThreshold;
@@ -27,27 +27,27 @@ public class PRQAComplianceStatus extends PRQAStatus implements Serializable, Co
     private Double projectCompliance;
     private Map<Integer, Integer> messagesByLevel = new TreeMap<>();
     private List<MessageGroup> messagesGroups;
-    private QaFrameworkVersion qaFrameworkVersion;
 
     public PRQAComplianceStatus() {
     }
 
-    public PRQAComplianceStatus(int messages, Double fileCompliance, Double projectCompliance) {
+    public PRQAComplianceStatus(int messages,
+                                Double fileCompliance,
+                                Double projectCompliance) {
         this();
         logger.finest("Constructor called for class PRQAComplianceStatus");
         logger.finest(String.format("Input parameter messages type: %s; value: %s", "int", messages));
-        logger.finest(String.format("Input parameter fileCompliance type: %s; value: %s", fileCompliance.getClass(), fileCompliance));
-        logger.finest(String.format("Input parameter projectCompliance type: %s; value: %s", projectCompliance.getClass(), projectCompliance));
+        logger.finest(String.format("Input parameter fileCompliance type: %s; value: %s", fileCompliance.getClass(),
+                                    fileCompliance));
+        logger.finest(
+                String.format("Input parameter projectCompliance type: %s; value: %s", projectCompliance.getClass(),
+                              projectCompliance));
 
         this.messages = messages;
         this.fileCompliance = fileCompliance;
         this.projectCompliance = projectCompliance;
 
         logger.finest("Ending execution of constructor - PRQAComplianceStatus");
-    }
-
-    public void setQaFrameworkVersion(QaFrameworkVersion qaFrameworkVersion) {
-        this.qaFrameworkVersion = qaFrameworkVersion;
     }
 
     public int getMessages() {
@@ -75,7 +75,8 @@ public class PRQAComplianceStatus extends PRQAStatus implements Serializable, Co
 
     public void setFileCompliance(Double fileCompliance) {
         logger.finest("Starting execution of method - setFileCompliance");
-        logger.finest(String.format("Input parameter fileCompliance type: %s; value: %s", fileCompliance.getClass(), fileCompliance));
+        logger.finest(String.format("Input parameter fileCompliance type: %s; value: %s", fileCompliance.getClass(),
+                                    fileCompliance));
 
         this.fileCompliance = fileCompliance;
 
@@ -91,7 +92,8 @@ public class PRQAComplianceStatus extends PRQAStatus implements Serializable, Co
 
     public void setProjectCompliance(Double projCompliance) {
         logger.finest("Starting execution of method - setProjectCompliance");
-        logger.finest(String.format("Input parameter projCompliance type: %s; value: %s", projCompliance.getClass(), projCompliance));
+        logger.finest(String.format("Input parameter projCompliance type: %s; value: %s", projCompliance.getClass(),
+                                    projCompliance));
 
         this.projectCompliance = projCompliance;
 
@@ -99,7 +101,8 @@ public class PRQAComplianceStatus extends PRQAStatus implements Serializable, Co
     }
 
     @Override
-    public Number getReadout(StatusCategory cat) throws PrqaException {
+    public Number getReadout(StatusCategory cat)
+            throws PrqaException {
         logger.finest("Starting execution of method - getReadout");
         logger.finest(String.format("Input parameter cat type: %s; value: %s", cat.getClass(), cat));
 
@@ -124,16 +127,20 @@ public class PRQAComplianceStatus extends PRQAStatus implements Serializable, Co
 
                 return output;
             default:
-                PrqaReadingException exception = new PrqaReadingException(String.format("Didn't find category %s for class %s", cat, this.getClass()));
+                PrqaReadingException exception = new PrqaReadingException(
+                        String.format("Didn't find category %s for class %s", cat, this.getClass()));
 
-                logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
+                logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(),
+                                            exception.getMessage()));
 
                 throw exception;
         }
     }
 
     @Override
-    public void setReadout(StatusCategory category, Number value) throws PrqaException {
+    public void setReadout(StatusCategory category,
+                           Number value)
+            throws PrqaException {
         logger.finest("Starting execution of method - setReadout");
         logger.finest(String.format("Input parameter category type: %s; value: %s", category.getClass(), category));
         logger.finest(String.format("Input parameter value type: %s; value: %s", value.getClass(), value));
@@ -170,10 +177,12 @@ public class PRQAComplianceStatus extends PRQAStatus implements Serializable, Co
 
                 break;
             default:
-                PrqaReadingException exception = new PrqaReadingException(String.format("Could not set value of %s for category %s in class %s", value, category,
-                        this.getClass()));
+                PrqaReadingException exception = new PrqaReadingException(
+                        String.format("Could not set value of %s for category %s in class %s", value, category,
+                                      this.getClass()));
 
-                logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(), exception.getMessage()));
+                logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(),
+                                            exception.getMessage()));
 
                 throw exception;
         }
@@ -208,7 +217,8 @@ public class PRQAComplianceStatus extends PRQAStatus implements Serializable, Co
                 sb.append(messageGroup.getMessageGroupName() + "\n");
                 violatedRules = messageGroup.getViolatedRules();
                 for (Rule violatedRule : violatedRules) {
-                    sb.append(String.format("Rule %s messages (%s)%n", violatedRule.getRuleID(), violatedRule.getRuleTotalViolations()));
+                    sb.append(String.format("Rule %s messages (%s)%n", violatedRule.getRuleID(),
+                                            violatedRule.getRuleTotalViolations()));
                 }
             }
         }
@@ -259,20 +269,11 @@ public class PRQAComplianceStatus extends PRQAStatus implements Serializable, Co
         return result;
     }
 
-    public static PRQAComplianceStatus createEmptyResult() {
-        logger.finest("Starting execution of method - createEmptyResult");
-
-        PRQAComplianceStatus output = new PRQAComplianceStatus(0, 0d, 0d);
-
-        logger.finest(String.format("Returning value: %s", output));
-
-        return output;
-    }
-
     @Override
     public String toHtml() {
         StringBuilder sb = new StringBuilder();
-        sb.append("<table cellpadding=\"0\" style=\"border-style:none;margin:10px;border-collapse:collapse;border-spacing:0px\">");
+        sb.append(
+                "<table cellpadding=\"0\" style=\"border-style:none;margin:10px;border-collapse:collapse;border-spacing:0px\">");
         sb.append("<h2>Compliance Summary</h2>");
         sb.append("<thead>");
         sb.append("<tr>");
@@ -284,10 +285,18 @@ public class PRQAComplianceStatus extends PRQAStatus implements Serializable, Co
         sb.append("</thead>");
         sb.append("<tbody>");
         sb.append("<tr>");
-        sb.append("<td style=\"padding:10px;font-weight:400\">").append(getMessagesWithinThreshold()).append("</td>");
-        sb.append("<td style=\"padding:10px;font-weight:400;\">").append(getMessages()).append("</td>");
-        sb.append("<td style=\"padding:10px;font-weight:400;\">").append(getProjectCompliance() != null ? getProjectCompliance() : "N/A").append("%</td>");
-        sb.append("<td style=\"padding:10px;;font-weight:400\">").append(getFileCompliance() != null ? getFileCompliance() : "N/A").append("%</td>");
+        sb.append("<td style=\"padding:10px;font-weight:400\">")
+          .append(getMessagesWithinThreshold())
+          .append("</td>");
+        sb.append("<td style=\"padding:10px;font-weight:400;\">")
+          .append(getMessages())
+          .append("</td>");
+        sb.append("<td style=\"padding:10px;font-weight:400;\">")
+          .append(getProjectCompliance() != null ? getProjectCompliance() : "N/A")
+          .append("%</td>");
+        sb.append("<td style=\"padding:10px;;font-weight:400\">")
+          .append(getFileCompliance() != null ? getFileCompliance() : "N/A")
+          .append("%</td>");
         sb.append("</tr>");
         sb.append("</tbody>");
         sb.append("</table>");
@@ -303,7 +312,8 @@ public class PRQAComplianceStatus extends PRQAStatus implements Serializable, Co
             List<Rule> violatedRules;
             for (MessageGroup messageGroup : messagesGroups) {
 
-                sb.append("<th style=\"padding-right:5px;\">" + messageGroup.getMessageGroupName().trim() + ": </th>");
+                sb.append("<th style=\"padding-right:5px;\">" + messageGroup.getMessageGroupName()
+                                                                            .trim() + ": </th>");
                 sb.append("<th style=\"padding-right:5px;\">" + messageGroup.getTotalViolations() + "</th>");
                 sb.append("</tr>");
                 sb.append("</thead>");
@@ -313,10 +323,12 @@ public class PRQAComplianceStatus extends PRQAStatus implements Serializable, Co
                 int i = 0;
                 for (Rule violatedRule : violatedRules) {
                     if (i % 2 == 0) {
-                        sb.append(String.format("<tr><td style=\"background-color:#CCCCCC\">%s:Rule %s -> </td><td style=\"background-color:#CCCCCC\">%s</td></tr>",
+                        sb.append(String.format(
+                                "<tr><td style=\"background-color:#CCCCCC\">%s:Rule %s -> </td><td style=\"background-color:#CCCCCC\">%s</td></tr>",
                                 i, violatedRule.getRuleID(), violatedRule.getRuleTotalViolations()));
                     } else {
-                        sb.append(String.format("<tr><td style=\"background-color:#FFFFFF\">%s:Rule %s -> </td><td style=\"background-color:#FFFFFF\">%s</td></tr>",
+                        sb.append(String.format(
+                                "<tr><td style=\"background-color:#FFFFFF\">%s:Rule %s -> </td><td style=\"background-color:#FFFFFF\">%s</td></tr>",
                                 i, violatedRule.getRuleID(), violatedRule.getRuleTotalViolations()));
                     }
                     i++;
@@ -337,11 +349,13 @@ public class PRQAComplianceStatus extends PRQAStatus implements Serializable, Co
             sb.append("<tbody>");
             for (int i : getMessagesByLevel().keySet()) {
                 if (i % 2 == 0) {
-                    sb.append(String.format("<tr><td style=\"background-color:#CCCCCC\">%s</td><td style=\"background-color:#CCCCCC\">%s</td></tr>", i,
-                            getMessagesByLevel().get(i)));
+                    sb.append(String.format(
+                            "<tr><td style=\"background-color:#CCCCCC\">%s</td><td style=\"background-color:#CCCCCC\">%s</td></tr>",
+                            i, getMessagesByLevel().get(i)));
                 } else {
-                    sb.append(String.format("<tr><td style=\"background-color:#FFFFFF\">%s</td><td style=\"background-color:#FFFFFF\">%s</td></tr>", i,
-                            getMessagesByLevel().get(i)));
+                    sb.append(String.format(
+                            "<tr><td style=\"background-color:#FFFFFF\">%s</td><td style=\"background-color:#FFFFFF\">%s</td></tr>",
+                            i, getMessagesByLevel().get(i)));
                 }
 
             }

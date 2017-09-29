@@ -1,9 +1,10 @@
 package net.praqma.prqa.execute;
 
-public class CommandLineException  extends RuntimeException {
+public class CommandLineException
+        extends RuntimeException {
 
-    CommandLineException( String s ) {
-        super( s );
+    CommandLineException(String s) {
+        super(s);
     }
 
 }

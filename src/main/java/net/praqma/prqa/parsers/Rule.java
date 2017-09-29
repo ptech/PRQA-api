@@ -3,10 +3,12 @@ package net.praqma.prqa.parsers;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Rule implements Serializable {
+public class Rule
+        implements Serializable {
 
     private static final Pattern DIGITS = Pattern.compile("\\d+");
     private String ruleNumber;
@@ -14,12 +16,14 @@ public class Rule implements Serializable {
     private Map<String, Integer> messages;
     private transient boolean calculated;
 
-    public Rule(String ruleID, Map<String, Integer> messages) {
+    public Rule(String ruleID,
+                Map<String, Integer> messages) {
         this.ruleNumber = ruleID;
         this.messages = messages;
     }
 
-    public Rule(String ruleID, int ruleTotalViolations) {
+    public Rule(String ruleID,
+                int ruleTotalViolations) {
         this.ruleNumber = ruleID;
         this.ruleTotalViolations = ruleTotalViolations;
     }
@@ -74,7 +78,7 @@ public class Rule implements Serializable {
     public boolean equals(Object obj) {
         if (obj instanceof Rule) {
             Rule ruleObj = (Rule) obj;
-            return ruleNumber == ruleObj.ruleNumber;
+            return Objects.equals(ruleNumber, ruleObj.ruleNumber);
         }
         return false;
     }

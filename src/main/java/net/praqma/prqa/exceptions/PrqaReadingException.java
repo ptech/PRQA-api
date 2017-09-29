@@ -5,17 +5,18 @@
 package net.praqma.prqa.exceptions;
 
 /**
- *
  * @author Praqma
  */
-public class PrqaReadingException extends PrqaException {
-    
+public class PrqaReadingException
+        extends PrqaException {
+
     public PrqaReadingException(String message) {
         super(message);
     }
-    
-    public PrqaReadingException(String message, Exception ex) {
-        super(message,ex);
+
+    public PrqaReadingException(String message,
+                                Exception ex) {
+        super(message, ex);
     }
 }
 

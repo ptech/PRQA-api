@@ -5,11 +5,11 @@
 package net.praqma.prqa.exceptions;
 
 /**
- *
  * @author Praqma
  */
-public class PrqaParserException extends PrqaException {
-    public PrqaParserException(Exception originalException) {         
+public class PrqaParserException
+        extends PrqaException {
+    public PrqaParserException(Exception originalException) {
         super(originalException);
     }
 }

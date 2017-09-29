@@ -6,7 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MessageGroup implements Serializable {
+public class MessageGroup
+        implements Serializable {
 
     private String messageGroupName;
     private int totalViolations;
@@ -22,8 +23,7 @@ public class MessageGroup implements Serializable {
     }
 
     public int getTotalViolations() {
-        if (totalViolations == 0)
-        {
+        if (totalViolations == 0) {
             Map<String, Integer> map = new HashMap<>();
             for (Rule violatedRule : getViolatedRules()) {
                 map.putAll(violatedRule.getMessages());
@@ -45,8 +45,8 @@ public class MessageGroup implements Serializable {
         return messagesWithinTreshold;
     }
 
-    public void setMessagesWithinThreshold(int thresholdLevel, Map<String, Integer> total)
-    {
+    public void setMessagesWithinThreshold(int thresholdLevel,
+                                           Map<String, Integer> total) {
         Map<String, Integer> map = new HashMap<>();
         for (Rule violatedRule : getViolatedRules()) {
             int ruleID = violatedRule.getRuleNumber();

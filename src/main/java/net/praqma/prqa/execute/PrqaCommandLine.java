@@ -13,7 +13,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
-public class PrqaCommandLine implements CommandLineInterface {
+public class PrqaCommandLine
+        implements CommandLineInterface {
     protected Logger logger = Logger.getLogger(PrqaCommandLine.class.getName());
     private static PrqaCommandLine instance = new PrqaCommandLine();
     private OperatingSystem thisos;
@@ -50,31 +51,57 @@ public class PrqaCommandLine implements CommandLineInterface {
         return instance;
     }
 
-    public CmdResult run(String cmd) throws CommandLineException, AbnormalProcessTerminationException {
+    public CmdResult run(String cmd)
+            throws CommandLineException, AbnormalProcessTerminationException {
         return this.run(cmd, null, true, false);
     }
 
-    public CmdResult run(String cmd, File dir) throws CommandLineException, AbnormalProcessTerminationException {
+    public CmdResult run(String cmd,
+                         File dir)
+            throws CommandLineException, AbnormalProcessTerminationException {
         return this.run(cmd, dir, true, false);
     }
 
-    public CmdResult run(String cmd, File dir, boolean merge) throws CommandLineException, AbnormalProcessTerminationException {
+    public CmdResult run(String cmd,
+                         File dir,
+                         boolean merge)
+            throws CommandLineException, AbnormalProcessTerminationException {
         return this.run(cmd, dir, merge, false);
     }
 
-    public CmdResult run(String cmd, File dir, boolean merge, boolean ignore) throws CommandLineException, AbnormalProcessTerminationException {
+    public CmdResult run(String cmd,
+                         File dir,
+                         boolean merge,
+                         boolean ignore)
+            throws CommandLineException, AbnormalProcessTerminationException {
         return this.run(cmd, dir, merge, ignore, new HashMap<String, String>());
     }
 
-    public synchronized CmdResult run(String cmd, File dir, boolean merge, boolean ignore, Map<String, String> variables) throws CommandLineException, AbnormalProcessTerminationException {
+    public synchronized CmdResult run(String cmd,
+                                      File dir,
+                                      boolean merge,
+                                      boolean ignore,
+                                      Map<String, String> variables)
+            throws CommandLineException, AbnormalProcessTerminationException {
         return this.run(cmd, dir, merge, ignore, null, null);
     }
 
-    public CmdResult run(String cmd, File dir, boolean merge, boolean ignore, PrintStream printStream) throws CommandLineException, AbnormalProcessTerminationException {
+    public CmdResult run(String cmd,
+                         File dir,
+                         boolean merge,
+                         boolean ignore,
+                         PrintStream printStream)
+            throws CommandLineException, AbnormalProcessTerminationException {
         return this.run(cmd, dir, merge, ignore, null, printStream);
     }
 
-    public synchronized CmdResult run(String cmd, File dir, boolean merge, boolean ignore, Map<String, String> variables, PrintStream printStream) throws CommandLineException, AbnormalProcessTerminationException {
+    public synchronized CmdResult run(String cmd,
+                                      File dir,
+                                      boolean merge,
+                                      boolean ignore,
+                                      Map<String, String> variables,
+                                      PrintStream printStream)
+            throws CommandLineException, AbnormalProcessTerminationException {
         this.cmd[this.last] = cmd;
         this.logger.config("$ " + cmd);
 
@@ -151,7 +178,8 @@ public class PrqaCommandLine implements CommandLineInterface {
             return result;
         } catch (IOException var23) {
             this.logger.warning("Could not execute the command \"" + cmd + "\" correctly: " + var23.getMessage());
-            throw new CommandLineException("Could not execute the command \"" + cmd + "\" correctly: " + var23.getMessage());
+            throw new CommandLineException(
+                    "Could not execute the command \"" + cmd + "\" correctly: " + var23.getMessage());
         }
     }
 }
