@@ -19,8 +19,7 @@ import java.util.TreeMap;
  */
 public class PRQAComplianceStatus
         extends PRQAStatus
-        implements Serializable,
-                   Comparable<PRQAComplianceStatus> {
+        implements Serializable, Comparable<PRQAComplianceStatus> {
 
     private int messages;
     private int messagesWithinThreshold;
@@ -37,15 +36,12 @@ public class PRQAComplianceStatus
                                 Double projectCompliance) {
         this();
         logger.finest("Constructor called for class PRQAComplianceStatus");
-        logger.finest(String.format("Input parameter messages type: %s; value: %s",
-                                    "int",
-                                    messages));
-        logger.finest(String.format("Input parameter fileCompliance type: %s; value: %s",
-                                    fileCompliance.getClass(),
+        logger.finest(String.format("Input parameter messages type: %s; value: %s", "int", messages));
+        logger.finest(String.format("Input parameter fileCompliance type: %s; value: %s", fileCompliance.getClass(),
                                     fileCompliance));
-        logger.finest(String.format("Input parameter projectCompliance type: %s; value: %s",
-                                    projectCompliance.getClass(),
-                                    projectCompliance));
+        logger.finest(
+                String.format("Input parameter projectCompliance type: %s; value: %s", projectCompliance.getClass(),
+                              projectCompliance));
 
         this.messages = messages;
         this.fileCompliance = fileCompliance;
@@ -56,17 +52,14 @@ public class PRQAComplianceStatus
 
     public int getMessages() {
         logger.finest("Starting execution of method - getMessages");
-        logger.finest(String.format("Returning value: %s",
-                                    messages));
+        logger.finest(String.format("Returning value: %s", messages));
 
         return messages;
     }
 
     public void setMessages(int messages) {
         logger.finest("Starting execution of method - setMessages");
-        logger.finest(String.format("Input parameter messages type: %s; value: %s",
-                                    "int",
-                                    messages));
+        logger.finest(String.format("Input parameter messages type: %s; value: %s", "int", messages));
 
         this.messages = messages;
 
@@ -75,16 +68,14 @@ public class PRQAComplianceStatus
 
     public Double getFileCompliance() {
         logger.finest("Starting execution of method - getFileCompliance");
-        logger.finest(String.format("Returning value: %s",
-                                    this.fileCompliance));
+        logger.finest(String.format("Returning value: %s", this.fileCompliance));
 
         return this.fileCompliance;
     }
 
     public void setFileCompliance(Double fileCompliance) {
         logger.finest("Starting execution of method - setFileCompliance");
-        logger.finest(String.format("Input parameter fileCompliance type: %s; value: %s",
-                                    fileCompliance.getClass(),
+        logger.finest(String.format("Input parameter fileCompliance type: %s; value: %s", fileCompliance.getClass(),
                                     fileCompliance));
 
         this.fileCompliance = fileCompliance;
@@ -94,16 +85,14 @@ public class PRQAComplianceStatus
 
     public Double getProjectCompliance() {
         logger.finest("Starting execution of method - getProjectCompliance");
-        logger.finest(String.format("Returning value: %s",
-                                    this.projectCompliance));
+        logger.finest(String.format("Returning value: %s", this.projectCompliance));
 
         return this.projectCompliance;
     }
 
     public void setProjectCompliance(Double projCompliance) {
         logger.finest("Starting execution of method - setProjectCompliance");
-        logger.finest(String.format("Input parameter projCompliance type: %s; value: %s",
-                                    projCompliance.getClass(),
+        logger.finest(String.format("Input parameter projCompliance type: %s; value: %s", projCompliance.getClass(),
                                     projCompliance));
 
         this.projectCompliance = projCompliance;
@@ -113,43 +102,35 @@ public class PRQAComplianceStatus
 
     @Override
     public Number getReadout(StatusCategory cat)
-            throws
-            PrqaException {
+            throws PrqaException {
         logger.finest("Starting execution of method - getReadout");
-        logger.finest(String.format("Input parameter cat type: %s; value: %s",
-                                    cat.getClass(),
-                                    cat));
+        logger.finest(String.format("Input parameter cat type: %s; value: %s", cat.getClass(), cat));
 
         Number output;
         switch (cat) {
             case ProjectCompliance:
                 output = this.getProjectCompliance();
 
-                logger.finest(String.format("Returning value: %s",
-                                            output));
+                logger.finest(String.format("Returning value: %s", output));
 
                 return output;
             case Messages:
                 output = this.getMessages();
 
-                logger.finest(String.format("Returning value: %s",
-                                            output));
+                logger.finest(String.format("Returning value: %s", output));
 
                 return output;
             case FileCompliance:
                 output = this.getFileCompliance();
 
-                logger.finest(String.format("Returning this.getFileCompliance(): %s",
-                                            this.getFileCompliance()));
+                logger.finest(String.format("Returning this.getFileCompliance(): %s", this.getFileCompliance()));
 
                 return output;
             default:
-                PrqaReadingException exception = new PrqaReadingException(String.format("Didn't find category %s for class %s",
-                                                                                        cat,
-                                                                                        this.getClass()));
+                PrqaReadingException exception = new PrqaReadingException(
+                        String.format("Didn't find category %s for class %s", cat, this.getClass()));
 
-                logger.severe(String.format("Exception thrown type: %s; message: %s",
-                                            exception.getClass(),
+                logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(),
                                             exception.getMessage()));
 
                 throw exception;
@@ -159,22 +140,16 @@ public class PRQAComplianceStatus
     @Override
     public void setReadout(StatusCategory category,
                            Number value)
-            throws
-            PrqaException {
+            throws PrqaException {
         logger.finest("Starting execution of method - setReadout");
-        logger.finest(String.format("Input parameter category type: %s; value: %s",
-                                    category.getClass(),
-                                    category));
-        logger.finest(String.format("Input parameter value type: %s; value: %s",
-                                    value.getClass(),
-                                    value));
+        logger.finest(String.format("Input parameter category type: %s; value: %s", category.getClass(), category));
+        logger.finest(String.format("Input parameter value type: %s; value: %s", value.getClass(), value));
 
         switch (category) {
             case ProjectCompliance:
                 double prjCompliance = value.doubleValue();
 
-                logger.finest(String.format("Setting projectCompliance to: %s.",
-                                            prjCompliance));
+                logger.finest(String.format("Setting projectCompliance to: %s.", prjCompliance));
 
                 setProjectCompliance(prjCompliance);
 
@@ -184,8 +159,7 @@ public class PRQAComplianceStatus
             case Messages:
                 int msgs = value.intValue();
 
-                logger.finest(String.format("Setting messages to: %s.",
-                                            msgs));
+                logger.finest(String.format("Setting messages to: %s.", msgs));
 
                 setMessages(msgs);
 
@@ -195,8 +169,7 @@ public class PRQAComplianceStatus
             case FileCompliance:
                 double fileCompl = value.doubleValue();
 
-                logger.finest(String.format("Setting fileCompliance to: %s.",
-                                            fileCompl));
+                logger.finest(String.format("Setting fileCompliance to: %s.", fileCompl));
 
                 setFileCompliance(fileCompl);
 
@@ -204,13 +177,11 @@ public class PRQAComplianceStatus
 
                 break;
             default:
-                PrqaReadingException exception = new PrqaReadingException(String.format("Could not set value of %s for category %s in class %s",
-                                                                                        value,
-                                                                                        category,
-                                                                                        this.getClass()));
+                PrqaReadingException exception = new PrqaReadingException(
+                        String.format("Could not set value of %s for category %s in class %s", value, category,
+                                      this.getClass()));
 
-                logger.severe(String.format("Exception thrown type: %s; message: %s",
-                                            exception.getClass(),
+                logger.severe(String.format("Exception thrown type: %s; message: %s", exception.getClass(),
                                             exception.getMessage()));
 
                 throw exception;
@@ -227,15 +198,11 @@ public class PRQAComplianceStatus
         StringBuilder sb = new StringBuilder();
 
         sb.append("Project Compliance Index : ");
-        sb.append((getProjectCompliance() != null
-                   ? getProjectCompliance()
-                   : "N/A"));
+        sb.append((getProjectCompliance() != null ? getProjectCompliance() : "N/A"));
         sb.append("%" + System.getProperty("line.separator"));
 
         sb.append("File Compliance Index : ");
-        sb.append((getFileCompliance() != null
-                   ? getFileCompliance()
-                   : "N/A"));
+        sb.append((getFileCompliance() != null ? getFileCompliance() : "N/A"));
         sb.append("%" + System.getProperty("line.separator"));
 
         sb.append("Diagnostic Count : ");
@@ -250,8 +217,7 @@ public class PRQAComplianceStatus
                 sb.append(messageGroup.getMessageGroupName() + "\n");
                 violatedRules = messageGroup.getViolatedRules();
                 for (Rule violatedRule : violatedRules) {
-                    sb.append(String.format("Rule %s messages (%s)%n",
-                                            violatedRule.getRuleID(),
+                    sb.append(String.format("Rule %s messages (%s)%n", violatedRule.getRuleID(),
                                             violatedRule.getRuleTotalViolations()));
                 }
             }
@@ -259,9 +225,7 @@ public class PRQAComplianceStatus
 
         if (getMessagesByLevel() != null) {
             for (int i : getMessagesByLevel().keySet()) {
-                sb.append(String.format("Rule %s messages (%s)%n",
-                                        i,
-                                        getMessagesByLevel().get(i)));
+                sb.append(String.format("Rule %s messages (%s)%n", i, getMessagesByLevel().get(i)));
             }
         }
         if (notifications != null) {
@@ -300,8 +264,7 @@ public class PRQAComplianceStatus
 
         boolean result = this.fileCompliance != null && this.projectCompliance != null;
 
-        logger.finest(String.format("Returning value: %s",
-                                    result));
+        logger.finest(String.format("Returning value: %s", result));
 
         return result;
     }
@@ -309,7 +272,8 @@ public class PRQAComplianceStatus
     @Override
     public String toHtml() {
         StringBuilder sb = new StringBuilder();
-        sb.append("<table cellpadding=\"0\" style=\"border-style:none;margin:10px;border-collapse:collapse;border-spacing:0px\">");
+        sb.append(
+                "<table cellpadding=\"0\" style=\"border-style:none;margin:10px;border-collapse:collapse;border-spacing:0px\">");
         sb.append("<h2>Compliance Summary</h2>");
         sb.append("<thead>");
         sb.append("<tr>");
@@ -328,14 +292,10 @@ public class PRQAComplianceStatus
           .append(getMessages())
           .append("</td>");
         sb.append("<td style=\"padding:10px;font-weight:400;\">")
-          .append(getProjectCompliance() != null
-                  ? getProjectCompliance()
-                  : "N/A")
+          .append(getProjectCompliance() != null ? getProjectCompliance() : "N/A")
           .append("%</td>");
         sb.append("<td style=\"padding:10px;;font-weight:400\">")
-          .append(getFileCompliance() != null
-                  ? getFileCompliance()
-                  : "N/A")
+          .append(getFileCompliance() != null ? getFileCompliance() : "N/A")
           .append("%</td>");
         sb.append("</tr>");
         sb.append("</tbody>");
@@ -363,15 +323,13 @@ public class PRQAComplianceStatus
                 int i = 0;
                 for (Rule violatedRule : violatedRules) {
                     if (i % 2 == 0) {
-                        sb.append(String.format("<tr><td style=\"background-color:#CCCCCC\">%s:Rule %s -> </td><td style=\"background-color:#CCCCCC\">%s</td></tr>",
-                                                i,
-                                                violatedRule.getRuleID(),
-                                                violatedRule.getRuleTotalViolations()));
+                        sb.append(String.format(
+                                "<tr><td style=\"background-color:#CCCCCC\">%s:Rule %s -> </td><td style=\"background-color:#CCCCCC\">%s</td></tr>",
+                                i, violatedRule.getRuleID(), violatedRule.getRuleTotalViolations()));
                     } else {
-                        sb.append(String.format("<tr><td style=\"background-color:#FFFFFF\">%s:Rule %s -> </td><td style=\"background-color:#FFFFFF\">%s</td></tr>",
-                                                i,
-                                                violatedRule.getRuleID(),
-                                                violatedRule.getRuleTotalViolations()));
+                        sb.append(String.format(
+                                "<tr><td style=\"background-color:#FFFFFF\">%s:Rule %s -> </td><td style=\"background-color:#FFFFFF\">%s</td></tr>",
+                                i, violatedRule.getRuleID(), violatedRule.getRuleTotalViolations()));
                     }
                     i++;
                 }
@@ -391,13 +349,13 @@ public class PRQAComplianceStatus
             sb.append("<tbody>");
             for (int i : getMessagesByLevel().keySet()) {
                 if (i % 2 == 0) {
-                    sb.append(String.format("<tr><td style=\"background-color:#CCCCCC\">%s</td><td style=\"background-color:#CCCCCC\">%s</td></tr>",
-                                            i,
-                                            getMessagesByLevel().get(i)));
+                    sb.append(String.format(
+                            "<tr><td style=\"background-color:#CCCCCC\">%s</td><td style=\"background-color:#CCCCCC\">%s</td></tr>",
+                            i, getMessagesByLevel().get(i)));
                 } else {
-                    sb.append(String.format("<tr><td style=\"background-color:#FFFFFF\">%s</td><td style=\"background-color:#FFFFFF\">%s</td></tr>",
-                                            i,
-                                            getMessagesByLevel().get(i)));
+                    sb.append(String.format(
+                            "<tr><td style=\"background-color:#FFFFFF\">%s</td><td style=\"background-color:#FFFFFF\">%s</td></tr>",
+                            i, getMessagesByLevel().get(i)));
                 }
 
             }
@@ -430,9 +388,7 @@ public class PRQAComplianceStatus
     public int getMessageCount(int threshold) {
         int cnt = 0;
         Map<Integer, Integer> messagesByLevel = getMessagesByLevel();
-        for (int i = threshold;
-             i <= 9;
-             i++) {
+        for (int i = threshold; i <= 9; i++) {
             if (messagesByLevel != null && messagesByLevel.containsKey(i)) {
                 cnt += messagesByLevel.get(i);
             }
@@ -465,8 +421,7 @@ public class PRQAComplianceStatus
         if (messagesGroups != null && !messagesGroups.isEmpty()) {
             Map<String, Integer> map = new HashMap<>();
             for (MessageGroup messageGroup : messagesGroups) {
-                messageGroup.setMessagesWithinThreshold(thresholdLevel,
-                                                        map);
+                messageGroup.setMessagesWithinThreshold(thresholdLevel, map);
             }
             messagesWithinThreshold = Rule.calc(map);
         }

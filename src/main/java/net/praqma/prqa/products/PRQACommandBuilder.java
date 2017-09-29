@@ -29,9 +29,8 @@ public class PRQACommandBuilder
 
     public PRQACommandBuilder(String executable) {
         logger.finest(String.format("Constructor called for class PRQACommandBuilder()"));
-        logger.finest(String.format("Input parameter executable type: %s; value: %s",
-                                    executable.getClass(),
-                                    executable));
+        logger.finest(
+                String.format("Input parameter executable type: %s; value: %s", executable.getClass(), executable));
 
         this.executable = executable;
 
@@ -41,14 +40,11 @@ public class PRQACommandBuilder
     public PRQACommandBuilder appendArgument(String argument) {
         if (!StringUtils.isBlank(argument)) {
             logger.finest(String.format("Starting execution of method - appendArgument"));
-            logger.finest(String.format("Input parameter argument type: %s; value: %s",
-                                        argument.getClass(),
-                                        argument));
+            logger.finest(String.format("Input parameter argument type: %s; value: %s", argument.getClass(), argument));
             arguments.addLast(argument);
         }
 
-        logger.finest(String.format("Returning %s",
-                                    this));
+        logger.finest(String.format("Returning %s", this));
 
         return this;
     }
@@ -66,8 +62,7 @@ public class PRQACommandBuilder
 
         }
 
-        logger.finest(String.format("Returning value: %s",
-                                    builder.toString()));
+        logger.finest(String.format("Returning value: %s", builder.toString()));
 
         return builder.toString();
     }
@@ -78,90 +73,71 @@ public class PRQACommandBuilder
      */
     public static String resolveAbsOrRelativePath(File workspaceRoot,
                                                   String filePath)
-            throws
-            PrqaException {
+            throws PrqaException {
         File file = new File(filePath);
         if (!file.isAbsolute()) {
-            file = new File(workspaceRoot,
-                            filePath);
+            file = new File(workspaceRoot, filePath);
         }
         if (!file.exists()) {
-            throw new PrqaException(String.format("The file %s does not exist.",
-                                                  file.getPath()));
+            throw new PrqaException(String.format("The file %s does not exist.", file.getPath()));
         }
         return file.getPath();
     }
 
     public static String wrapFile(File workspaceRoot,
                                   String filePath)
-            throws
-            PrqaException {
-        return wrapInQuotationMarks(resolveAbsOrRelativePath(workspaceRoot,
-                                                             filePath));
+            throws PrqaException {
+        return wrapInQuotationMarks(resolveAbsOrRelativePath(workspaceRoot, filePath));
     }
 
     public static String getCmaf(String path,
                                  boolean escapeInputParameterWhiteSpace) {
-        logger.finest(String.format("Starting execution of method - getCmaf(String path, boolean escapeInputParameterWhiteSpace)"));
-        logger.finest(String.format("Input parameter path type: %s; value: %s",
-                                    path.getClass(),
-                                    path));
-        logger.finest(String.format("Input parameter escapeInputParameterWhiteSpace type: %s; value: %s",
-                                    "boolean",
+        logger.finest(String.format(
+                "Starting execution of method - getCmaf(String path, boolean escapeInputParameterWhiteSpace)"));
+        logger.finest(String.format("Input parameter path type: %s; value: %s", path.getClass(), path));
+        logger.finest(String.format("Input parameter escapeInputParameterWhiteSpace type: %s; value: %s", "boolean",
                                     escapeInputParameterWhiteSpace));
 
         if (escapeInputParameterWhiteSpace) {
             logger.finest(String.format("Replacing spaces with \"\\ \""));
 
-            String output = String.format("-cmaf \"%s\"",
-                                          path.replace(" ",
-                                                       "\\ "));
+            String output = String.format("-cmaf \"%s\"", path.replace(" ", "\\ "));
 
-            logger.finest(String.format("Returning value: %s",
-                                        output));
+            logger.finest(String.format("Returning value: %s", output));
 
             return output;
         }
 
-        String output = String.format("-cmaf \"%s\"",
-                                      path);
+        String output = String.format("-cmaf \"%s\"", path);
 
-        logger.finest(String.format("Returning value: %s",
-                                    output));
+        logger.finest(String.format("Returning value: %s", output));
 
         return output;
     }
 
     public static String getMaseq(String commandSequence,
                                   boolean escapeInputParameterWhiteSpace) {
-        logger.finest(String.format("Starting execution of method - getMaseq(String commandSequence, boolean escapeInputParameterWhiteSpace)"));
-        logger.finest(String.format("Input parameter commandSequence type: %s; value: %s",
-                                    commandSequence.getClass(),
+        logger.finest(String.format(
+                "Starting execution of method - getMaseq(String commandSequence, boolean escapeInputParameterWhiteSpace)"));
+        logger.finest(String.format("Input parameter commandSequence type: %s; value: %s", commandSequence.getClass(),
                                     commandSequence));
-        logger.finest(String.format("Input parameter escapeInputParameterWhiteSpace type: %s; value: %s",
-                                    "boolean",
+        logger.finest(String.format("Input parameter escapeInputParameterWhiteSpace type: %s; value: %s", "boolean",
                                     escapeInputParameterWhiteSpace));
 
         if (escapeInputParameterWhiteSpace) {
             logger.finest(String.format("Replacing spaces with \"\\ \""));
 
-            String output = String.format(commandSequence.replace(" ",
-                                                                  "\\ "),
-                                          commandSequence);
+            String output = String.format(commandSequence.replace(" ", "\\ "), commandSequence);
 
-            logger.finest(String.format("Returning value: %s",
-                                        output));
+            logger.finest(String.format("Returning value: %s", output));
 
 
-            return String.format("-maseq \"%s\"",
-                                 output);
+            return String.format("-maseq \"%s\"", output);
         }
 
-        String output = String.format("-maseq \"%s\"",
-                                      commandSequence);
+        String output = String.format("-maseq \"%s\"", commandSequence);
 
-        logger.finest(String.format("Returning value: %s",
-                                    output));
+        logger.finest(String.format("Returning value: %s", output));
 
         return output;
     }
@@ -172,85 +148,72 @@ public class PRQACommandBuilder
      * Constructs a valid secondary analysis command parameter for PRQA. Use this to wrap all your secondary analysis commands.
      */
     public static String getMaseq(String commandSequence) {
-        return PRQACommandBuilder.getMaseq(commandSequence,
-                                           false);
+        return PRQACommandBuilder.getMaseq(commandSequence, false);
     }
 
     public static String getReportFormatParameter(String reportFormat,
                                                   boolean escapeinInputParameterWhiteSpace) {
-        logger.finest(String.format("Starting execution of method - getReportFormatParameter(String reportFormat, boolean escapeinInputParameterWhiteSpace)"));
+        logger.finest(String.format(
+                "Starting execution of method - getReportFormatParameter(String reportFormat, boolean escapeinInputParameterWhiteSpace)"));
 
         if (escapeinInputParameterWhiteSpace) {
             logger.finest(String.format("Replacing spaces with \"\\ \""));
 
-            String output = String.format("-po qar::report_format=%s",
-                                          reportFormat.replace(" ",
-                                                               "\\ "));
+            String output = String.format("-po qar::report_format=%s", reportFormat.replace(" ", "\\ "));
 
-            logger.finest(String.format("Returning value: %s",
-                                        output));
+            logger.finest(String.format("Returning value: %s", output));
 
             return output;
         }
 
-        String output = String.format("-po qar::report_format=%s",
-                                      reportFormat);
+        String output = String.format("-po qar::report_format=%s", reportFormat);
 
-        logger.finest(String.format("Returning value: %s",
-                                    output));
+        logger.finest(String.format("Returning value: %s", output));
 
         return output;
     }
 
     public static String getReportTypeParameter(String reportType,
                                                 boolean escapeInputParameterWhiteSpace) {
-        logger.finest(String.format("Starting execution of method - getReportTypeParameter(String reportType, boolean escapeInputParameterWhiteSpace)"));
+        logger.finest(String.format(
+                "Starting execution of method - getReportTypeParameter(String reportType, boolean escapeInputParameterWhiteSpace)"));
 
         if (escapeInputParameterWhiteSpace) {
             logger.finest(String.format("Replacing spaces with \"\\ \""));
 
-            String output = String.format("-po qar::report_type=%s\\ Report",
-                                          reportType.replace(" ",
-                                                             "\\ "));
+            String output = String.format("-po qar::report_type=%s\\ Report", reportType.replace(" ", "\\ "));
 
-            logger.finest(String.format("Returning value: %s",
-                                        output));
+            logger.finest(String.format("Returning value: %s", output));
 
             return output;
         }
 
-        String output = String.format("-po qar::report_type=%s\\ Report",
-                                      reportType);
+        String output = String.format("-po qar::report_type=%s\\ Report", reportType);
 
-        logger.finest(String.format("Returning value: %s",
-                                    output));
+        logger.finest(String.format("Returning value: %s", output));
 
         return output;
     }
 
     public static String getOutputPathParameter(String outpath,
                                                 boolean escapeInputParameterWhiteSpace) {
-        logger.finest(String.format("Starting execution of method - getOutputPathParameter(String outpath, boolean escapeInputParameterWhiteSpace)"));
+        logger.finest(String.format(
+                "Starting execution of method - getOutputPathParameter(String outpath, boolean escapeInputParameterWhiteSpace)"));
 
 
         if (escapeInputParameterWhiteSpace) {
             logger.finest(String.format("Replacing spaces with \"\\ \""));
 
-            String output = String.format("-po qar::output_path=%s",
-                                          outpath.replace(" ",
-                                                          "\\ "));
+            String output = String.format("-po qar::output_path=%s", outpath.replace(" ", "\\ "));
 
-            logger.finest(String.format("Returning value: %s",
-                                        output));
+            logger.finest(String.format("Returning value: %s", output));
 
             return output;
         }
 
-        String output = String.format("-po qar::output_path=%s",
-                                      outpath);
+        String output = String.format("-po qar::output_path=%s", outpath);
 
-        logger.finest(String.format("Returning value: %s",
-                                    output));
+        logger.finest(String.format("Returning value: %s", output));
 
         return output;
     }
@@ -263,105 +226,74 @@ public class PRQACommandBuilder
 
         String output = "-po qar::project_name=%J";
 
-        logger.finest(String.format("Returning value: %s",
-                                    output));
+        logger.finest(String.format("Returning value: %s", output));
 
         return output;
     }
 
     public static String getViewingProgram(String program,
                                            boolean escapeInputParameterWhiteSpace) {
-        logger.finest(String.format("Starting execution of method - getViewingProgram(String program, boolean escapeInputParameterWhiteSpace)"));
+        logger.finest(String.format(
+                "Starting execution of method - getViewingProgram(String program, boolean escapeInputParameterWhiteSpace)"));
 
         if (escapeInputParameterWhiteSpace) {
             logger.finest(String.format("Replacing spaces with \"\\ \""));
 
-            String output = String.format("-po qar::viewing_program=%s",
-                                          program.replace(" ",
-                                                          "\\ "));
+            String output = String.format("-po qar::viewing_program=%s", program.replace(" ", "\\ "));
 
-            logger.finest(String.format("Returning value: %s",
-                                        output));
+            logger.finest(String.format("Returning value: %s", output));
 
             return output;
         }
 
-        String output = String.format("-po qar::viewing_program=%s",
-                                      program);
+        String output = String.format("-po qar::viewing_program=%s", program);
 
-        logger.finest(String.format("Returning value: %s",
-                                    output));
+        logger.finest(String.format("Returning value: %s", output));
 
         return output;
     }
 
     public static String getHost(String hostname) {
-        logger.entering(PRQACommandBuilder.class.getName(),
-                        "getHost",
-                        hostname);
-        String host = String.format("-host %s",
-                                    hostname);
-        logger.exiting(PRQACommandBuilder.class.getName(),
-                       "getHost",
-                       host);
+        logger.entering(PRQACommandBuilder.class.getName(), "getHost", hostname);
+        String host = String.format("-host %s", hostname);
+        logger.exiting(PRQACommandBuilder.class.getName(), "getHost", host);
         return host;
     }
 
     public static String getUser(String user) {
-        logger.entering(PRQACommandBuilder.class.getName(),
-                        "getUser",
-                        user);
-        String userres = String.format("-user %s",
-                                       user);
-        logger.exiting(PRQACommandBuilder.class.getName(),
-                       "getUser",
-                       userres);
+        logger.entering(PRQACommandBuilder.class.getName(), "getUser", user);
+        String userres = String.format("-user %s", user);
+        logger.exiting(PRQACommandBuilder.class.getName(), "getUser", userres);
         return userres;
     }
 
     public static String getPassword(String password) {
-        logger.entering(PRQACommandBuilder.class.getName(),
-                        "getPassword",
-                        password);
+        logger.entering(PRQACommandBuilder.class.getName(), "getPassword", password);
 
         String pass;
         if (StringUtils.isBlank(password)) {
             pass = "";
         } else {
-            pass = String.format("-pass %s",
-                                 password);
+            pass = String.format("-pass %s", password);
         }
-        logger.exiting(PRQACommandBuilder.class.getName(),
-                       "getPassword",
-                       pass);
+        logger.exiting(PRQACommandBuilder.class.getName(), "getPassword", pass);
         return pass;
     }
 
     public static String getProjectDatabase(String databaseName) {
-        logger.entering(PRQACommandBuilder.class.getName(),
-                        "getProjectDatabase",
-                        databaseName);
-        String dbname = String.format("-db %s",
-                                      databaseName);
-        logger.exiting(PRQACommandBuilder.class.getName(),
-                       "getProjectDatabase",
-                       dbname);
+        logger.entering(PRQACommandBuilder.class.getName(), "getProjectDatabase", databaseName);
+        String dbname = String.format("-db %s", databaseName);
+        logger.exiting(PRQACommandBuilder.class.getName(), "getProjectDatabase", dbname);
         return dbname;
     }
 
     public static String getSingle(boolean useSingleSnapshotMode) {
-        logger.entering(PRQACommandBuilder.class.getName(),
-                        "getSingle",
-                        useSingleSnapshotMode);
+        logger.entering(PRQACommandBuilder.class.getName(), "getSingle", useSingleSnapshotMode);
         if (useSingleSnapshotMode) {
-            logger.exiting(PRQACommandBuilder.class.getName(),
-                           "getSingle",
-                           "-single");
+            logger.exiting(PRQACommandBuilder.class.getName(), "getSingle", "-single");
             return "-single";
         }
-        logger.exiting(PRQACommandBuilder.class.getName(),
-                       "getSingle",
-                       "");
+        logger.exiting(PRQACommandBuilder.class.getName(), "getSingle", "");
         return "";
     }
 
@@ -379,56 +311,37 @@ public class PRQACommandBuilder
     }
 
     public static String escapeWhitespace(String string) {
-        return string.replace(" ",
-                              "\\ ");
+        return string.replace(" ", "\\ ");
     }
 
     public static String wrapInQuotationMarks(String string) {
-        logger.entering(PRQACommandBuilder.class.getName(),
-                        "wrapInQuotationMarks",
-                        string);
-        String wrapped = String.format("\"%s\"",
-                                       string);
-        logger.exiting(PRQACommandBuilder.class.getName(),
-                       "wrapInQuotationMarks",
-                       wrapped);
+        logger.entering(PRQACommandBuilder.class.getName(), "wrapInQuotationMarks", string);
+        String wrapped = String.format("\"%s\"", string);
+        logger.exiting(PRQACommandBuilder.class.getName(), "wrapInQuotationMarks", wrapped);
         return wrapped;
     }
 
     public static String getQavOutPathParameter(String outpath) {
-        return getQavOutPathParameter(outpath,
-                                      false);
+        return getQavOutPathParameter(outpath, false);
     }
 
     public static String getQavOutPathParameter(String outpath,
                                                 boolean escapeInputParameterWhiteSpace) {
-        logger.entering(PRQACommandBuilder.class.getName(),
-                        "getQavOutPathParameter",
-                        escapeInputParameterWhiteSpace);
+        logger.entering(PRQACommandBuilder.class.getName(), "getQavOutPathParameter", escapeInputParameterWhiteSpace);
         String out = "";
         if (escapeInputParameterWhiteSpace) {
-            out = String.format("-po qav::output=\\\"%s\\\"",
-                                outpath.replace(" ",
-                                                "\\ "));
+            out = String.format("-po qav::output=\\\"%s\\\"", outpath.replace(" ", "\\ "));
         } else {
-            out = String.format("-po qav::output=\\\"%s\\\"",
-                                outpath);
+            out = String.format("-po qav::output=\\\"%s\\\"", outpath);
         }
-        logger.exiting(PRQACommandBuilder.class.getName(),
-                       "getQavOutPathParameter",
-                       out);
+        logger.exiting(PRQACommandBuilder.class.getName(), "getQavOutPathParameter", out);
         return out;
     }
 
     public static String getVcsXmlString(String vcsXmlPath) {
-        logger.entering(PRQACommandBuilder.class.getName(),
-                        "getVcsXmlString",
-                        new Object[]{vcsXmlPath});
-        String vcsxml = String.format("-po qav::prqavcs=\\\"%s\\\"",
-                                      vcsXmlPath);
-        logger.exiting(PRQACommandBuilder.class.getName(),
-                       "getVcsXmlString",
-                       vcsxml);
+        logger.entering(PRQACommandBuilder.class.getName(), "getVcsXmlString", new Object[]{vcsXmlPath});
+        String vcsxml = String.format("-po qav::prqavcs=\\\"%s\\\"", vcsXmlPath);
+        logger.exiting(PRQACommandBuilder.class.getName(), "getVcsXmlString", vcsxml);
         return vcsxml;
     }
 
@@ -447,8 +360,7 @@ public class PRQACommandBuilder
     public static String getRepositorySetting(String repositoyPath) {
         String res = "";
         if (!StringUtils.isBlank(repositoyPath)) {
-            res = String.format("-r %s",
-                                repositoyPath);
+            res = String.format("-r %s", repositoyPath);
         }
         return res;
     }
@@ -456,20 +368,17 @@ public class PRQACommandBuilder
     public static String getMessageConfigurationParameter(String projConfigXml) {
         String res = "";
         if (!StringUtils.isBlank(projConfigXml)) {
-            res = String.format("-config %s",
-                                projConfigXml);
+            res = String.format("-config %s", projConfigXml);
         }
         return res;
     }
 
     public static String getLogFilePathParameter(String fullLogFilePath) {
-        return String.format("-log \\\"%s\\\"",
-                             fullLogFilePath);
+        return String.format("-log \\\"%s\\\"", fullLogFilePath);
     }
 
     public static String getImportLogFilePathParameter(String fullLogFilePath) {
-        return String.format("-po qav::log=\\\"%s\\\"",
-                             fullLogFilePath);
+        return String.format("-po qav::log=\\\"%s\\\"", fullLogFilePath);
     }
 
     /**
@@ -484,19 +393,16 @@ public class PRQACommandBuilder
     }
 
     public static String getNumberOfThreads(int number) {
-        return String.format("-po qav::thread=%s",
-                             number);
+        return String.format("-po qav::thread=%s", number);
     }
 
     public static String getSop(String topLevelSourceDir) {
         String sourceDir = topLevelSourceDir;
         if (topLevelSourceDir.endsWith("\\")) {
-            sourceDir = topLevelSourceDir.substring(0,
-                                                    sourceDir.length() - 1);
+            sourceDir = topLevelSourceDir.substring(0, sourceDir.length() - 1);
         }
 
-        return String.format("-sop \\\"%s\\\"",
-                             sourceDir);
+        return String.format("-sop \\\"%s\\\"", sourceDir);
     }
 
     public static String getProd(boolean single) {
@@ -509,13 +415,11 @@ public class PRQACommandBuilder
     }
 
     public static String getPort(int port) {
-        return String.format("-port %s",
-                             port);
+        return String.format("-port %s", port);
     }
 
     public static String wrapInEscapedQuotationMarks(String text) {
-        return String.format("\\\"%s\\\"",
-                             text);
+        return String.format("\\\"%s\\\"", text);
     }
 
     public static String getDataFlowAnanlysisParameter(boolean enabled) {

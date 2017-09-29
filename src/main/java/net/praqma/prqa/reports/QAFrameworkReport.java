@@ -61,15 +61,11 @@ public class QAFrameworkReport
     public static String extractReportsPath(final String root,
                                             final String qaProject,
                                             final String configuration)
-            throws
-            PrqaException {
+            throws PrqaException {
 
-        String path = StringUtils.isEmpty(root)
-                      ? root
-                      : root + File.separator;
+        String path = StringUtils.isEmpty(root) ? root : root + File.separator;
 
-        path = PRQACommandBuilder.resolveAbsOrRelativePath(new File(path),
-                                                           qaProject);
+        path = PRQACommandBuilder.resolveAbsOrRelativePath(new File(path), qaProject);
 
         try {
 
@@ -78,8 +74,7 @@ public class QAFrameworkReport
             if (StringUtils.isEmpty(cfg)) {
                 final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
                 final DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-                final Document document = documentBuilder.parse(new File(path,
-                                                                         "prqaproject.xml"));
+                final Document document = documentBuilder.parse(new File(path, "prqaproject.xml"));
                 final Element element = document.getDocumentElement();
                 final XPath xPath = XPathFactory.newInstance()
                                                 .newXPath();
@@ -94,9 +89,7 @@ public class QAFrameworkReport
             }
 
             final String fmt = "prqa%1$sconfigs%1$s%2$s%1$sreports";
-            String reportPath = path + File.separator + String.format(fmt,
-                                                                      File.separator,
-                                                                      cfg);
+            String reportPath = path + File.separator + String.format(fmt, File.separator, cfg);
 
             if (!new File(reportPath).exists()) {
                 throw new PrqaException("Configuration does not exist");
@@ -105,8 +98,7 @@ public class QAFrameworkReport
             return reportPath;
 
         } catch (IOException | SAXException | XPathExpressionException | ParserConfigurationException e) {
-            throw new PrqaException("Failed to parse project configuration",
-                                    e);
+            throw new PrqaException("Failed to parse project configuration", e);
         }
     }
 
@@ -125,31 +117,27 @@ public class QAFrameworkReport
     }
 
     public void pullUnifyProjectQacli(PrintStream out)
-            throws
-            PrqaException {
+            throws PrqaException {
         if (!settings.isLoginToQAV()) {
-            out.println("Configuration Error: Download Unified Project is Selected but QAV Server Connection Configuration is not Selected");
+            out.println(
+                    "Configuration Error: Download Unified Project is Selected but QAV Server Connection Configuration is not Selected");
         } else {
             String command = createPullUnifyProjectCommand();
             out.println("Perform DOWNLOAD UNIFIED PROJECT DEFINITION command:");
             out.println(command);
             try {
                 PrqaCommandLine.getInstance()
-                               .run(command,
-                                    workspace,
-                                    true,
-                                    false,
-                                    out);
+                               .run(command, workspace, true, false, out);
             } catch (AbnormalProcessTerminationException abnex) {
-                throw new PrqaException("ERROR: Failed to Download Unified Project, please check the download command message above for more details",
-                                        abnex);
+                throw new PrqaException(
+                        "ERROR: Failed to Download Unified Project, please check the download command message above for more details",
+                        abnex);
             }
         }
     }
 
     private String createPullUnifyProjectCommand()
-            throws
-            PrqaException {
+            throws PrqaException {
 
         if (StringUtils.isBlank(settings.getUniProjectName())) {
             throw new PrqaException(
@@ -161,14 +149,11 @@ public class QAFrameworkReport
         builder.appendArgument("admin");
         builder.appendArgument("--pull-unify-project");
         builder.appendArgument("--qaf-project");
-        builder.appendArgument(PRQACommandBuilder.wrapFile(workspace,
-                                                           settings.getQaProject()));
+        builder.appendArgument(PRQACommandBuilder.wrapFile(workspace, settings.getQaProject()));
         builder.appendArgument("--username");
         builder.appendArgument(qaVerifySettings.user);
         builder.appendArgument("--password");
-        builder.appendArgument(qaVerifySettings.password.isEmpty()
-                               ? "\"\""
-                               : qaVerifySettings.password);
+        builder.appendArgument(qaVerifySettings.password.isEmpty() ? "\"\"" : qaVerifySettings.password);
         builder.appendArgument("--url");
         builder.appendArgument(qaVerifySettings.host + ":" + qaVerifySettings.port);
         builder.appendArgument("--project-name");
@@ -178,8 +163,7 @@ public class QAFrameworkReport
 
     public void analyzeQacli(String options,
                              PrintStream out)
-            throws
-            PrqaException {
+            throws PrqaException {
         String finalCommand = createAnalysisCommandForQacli(options);
         out.println("Perform ANALYSIS command:");
         out.println(finalCommand);
@@ -187,79 +171,59 @@ public class QAFrameworkReport
         systemVars.putAll(System.getenv());
         try {
             if (getEnvironment() == null) {
-                _logEnv("Current analysis execution environment",
-                        systemVars);
+                _logEnv("Current analysis execution environment", systemVars);
                 PrqaCommandLine.getInstance()
-                               .run(finalCommand,
-                                    workspace,
-                                    true,
-                                    false,
-                                    out);
+                               .run(finalCommand, workspace, true, false, out);
             } else {
                 systemVars.putAll(getEnvironment());
-                _logEnv("Current modified analysis execution environment",
-                        systemVars);
+                _logEnv("Current modified analysis execution environment", systemVars);
                 PrqaCommandLine.getInstance()
-                               .run(finalCommand,
-                                    workspace,
-                                    true,
-                                    false,
-                                    systemVars,
-                                    out);
+                               .run(finalCommand, workspace, true, false, systemVars, out);
             }
         } catch (AbnormalProcessTerminationException abnex) {
-            throw new PrqaException("ERROR: Failed to analyze, please check the analysis command message above for more details",
-                                    abnex);
+            throw new PrqaException(
+                    "ERROR: Failed to analyze, please check the analysis command message above for more details",
+                    abnex);
         }
     }
 
     private String createSetCpuThreadsCommand() {
-        return new PRQACommandBuilder(formatQacliPath())
-                .appendArgument("admin")
-                .appendArgument("--set-cpus")
-                .appendArgument(settings.getMaxNumThreads())
-                .getCommand();
+        return new PRQACommandBuilder(formatQacliPath()).appendArgument("admin")
+                                                        .appendArgument("--set-cpus")
+                                                        .appendArgument(settings.getMaxNumThreads())
+                                                        .getCommand();
     }
 
     public void applyCpuThreads(PrintStream out)
-            throws
-            PrqaException {
+            throws PrqaException {
         String setCpuThreadsCmd = createSetCpuThreadsCommand();
         out.println("Perform MAX NUMBER of ANALYSIS THREADS command:");
         out.println(setCpuThreadsCmd);
         try {
             if (getEnvironment() == null) {
                 PrqaCommandLine.getInstance()
-                               .run(setCpuThreadsCmd,
-                                    workspace,
-                                    true,
-                                    false);
+                               .run(setCpuThreadsCmd, workspace, true, false);
             } else {
                 HashMap<String, String> systemVars = new HashMap<>();
                 systemVars.putAll(System.getenv());
                 systemVars.putAll(getEnvironment());
                 PrqaCommandLine.getInstance()
-                               .run(setCpuThreadsCmd,
-                                    workspace,
-                                    true,
-                                    false,
-                                    systemVars);
+                               .run(setCpuThreadsCmd, workspace, true, false, systemVars);
             }
         } catch (AbnormalProcessTerminationException abnex) {
-            throw new PrqaException("ERROR: Failed to set the number of CPUs used for analysis, please check the command message above for more details",
-                                    abnex);
+            throw new PrqaException(
+                    "ERROR: Failed to set the number of CPUs used for analysis, please check the command message above for more details",
+                    abnex);
         }
     }
 
     private String createAnalysisCommandForQacli(String options)
-            throws
-            PrqaException {
+            throws PrqaException {
         PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
         builder.appendArgument("analyze");
         String analyzeOptions = options;
         if (settings.isQaEnableDependencyMode() && analyzeOptions.contains("c")) {
-            analyzeOptions = analyzeOptions.replace("c",
-                                                    "");
+            analyzeOptions = analyzeOptions.replace("c", "");
         }
 
         builder.appendArgument(analyzeOptions);
@@ -284,8 +248,7 @@ public class QAFrameworkReport
         }
 
         builder.appendArgument("-P");
-        builder.appendArgument(PRQACommandBuilder.wrapFile(workspace,
-                                                           settings.getQaProject()));
+        builder.appendArgument(PRQACommandBuilder.wrapFile(workspace, settings.getQaProject()));
 
         if (StringUtils.isNotEmpty(settings.getProjectConfiguration())) {
             builder.appendArgument("-K");
@@ -296,29 +259,24 @@ public class QAFrameworkReport
     }
 
     public void cmaAnalysisQacli(PrintStream out)
-            throws
-            PrqaException {
+            throws PrqaException {
         if (settings.isQaCrossModuleAnalysis()) {
             String command = createCmaAnalysisCommand();
             out.println("Perform CROSS-MODULE ANALYSIS command:");
             out.println(command);
             try {
                 PrqaCommandLine.getInstance()
-                               .run(command,
-                                    workspace,
-                                    true,
-                                    false,
-                                    out);
+                               .run(command, workspace, true, false, out);
             } catch (AbnormalProcessTerminationException abnex) {
-                throw new PrqaException("ERROR: Failed to analyze, please check the Cross-Module-Analysis command message above for more details",
-                                        abnex);
+                throw new PrqaException(
+                        "ERROR: Failed to analyze, please check the Cross-Module-Analysis command message above for more details",
+                        abnex);
             }
         }
     }
 
     private String createCmaAnalysisCommand()
-            throws
-            PrqaException {
+            throws PrqaException {
         PRQACommandBuilder builder = new PRQACommandBuilder(formatQacliPath());
         builder.appendArgument("analyze");
 
@@ -331,8 +289,7 @@ public class QAFrameworkReport
 
         builder.appendArgument("-cf");
         builder.appendArgument("-P");
-        builder.appendArgument(PRQACommandBuilder.wrapFile(workspace,
-                                                           settings.getQaProject()));
+        builder.appendArgument(PRQACommandBuilder.wrapFile(workspace, settings.getQaProject()));
         builder.appendArgument("-C");
         builder.appendArgument(settings.getCmaProjectName());
 
@@ -346,51 +303,35 @@ public class QAFrameworkReport
 
     public void reportQacli(String repType,
                             PrintStream out)
-            throws
-            PrqaException {
-        String reportCommand = createReportCommandForQacli(repType,
-                                                           out);
+            throws PrqaException {
+        String reportCommand = createReportCommandForQacli(repType, out);
         Map<String, String> systemVars = new HashMap<>();
         systemVars.putAll(System.getenv());
         systemVars.putAll(getEnvironment());
         out.println(reportCommand);
         try {
-            _logEnv("Current report generation execution environment",
-                    systemVars);
+            _logEnv("Current report generation execution environment", systemVars);
             PrqaCommandLine.getInstance()
-                           .run(reportCommand,
-                                workspace,
-                                true,
-                                false,
-                                systemVars,
-                                out);
+                           .run(reportCommand, workspace, true, false, systemVars, out);
             return;
         } catch (AbnormalProcessTerminationException abnex) {
-            log.severe(String.format("Failed to execute report generation command: %s%n%s",
-                                     reportCommand,
+            log.severe(String.format("Failed to execute report generation command: %s%n%s", reportCommand,
                                      abnex.getMessage()));
-            log.logp(Level.SEVERE,
-                     this.getClass()
-                         .getName(),
-                     "report()",
-                     "Failed to execute report generation command",
-                     abnex);
-            out.println("Failed to execute report generation command, please check the report command message above for more details");
+            log.logp(Level.SEVERE, this.getClass()
+                                       .getName(), "report()", "Failed to execute report generation command", abnex);
+            out.println(
+                    "Failed to execute report generation command, please check the report command message above for more details");
         }
         new CmdResult();
     }
 
     private String createReportCommandForQacli(String reportType,
                                                PrintStream out)
-            throws
-            PrqaException {
+            throws PrqaException {
         out.println("Perform CREATE " + reportType + " REPORT command");
-        String projectLocation = PRQACommandBuilder.resolveAbsOrRelativePath(workspace,
-                                                                             settings.getQaProject());
-        removeOldReports(workspace.getAbsolutePath(),
-                         reportType);
-        return createReportCommand(projectLocation,
-                                   reportType);
+        String projectLocation = PRQACommandBuilder.resolveAbsOrRelativePath(workspace, settings.getQaProject());
+        removeOldReports(workspace.getAbsolutePath(), reportType);
+        return createReportCommand(projectLocation, reportType);
     }
 
     private String createReportCommand(String projectLocation,
@@ -411,27 +352,25 @@ public class QAFrameworkReport
 
     private void removeOldReports(String projectLocation,
                                   String reportType)
-            throws
-            PrqaException {
+            throws PrqaException {
 
-        File file = new File(extractReportsPath(projectLocation,
-                                                settings.getQaProject(),
-                                                settings.getProjectConfiguration()));
+        File file = new File(
+                extractReportsPath(projectLocation, settings.getQaProject(), settings.getProjectConfiguration()));
 
         if (file.isDirectory()) {
             File[] files = file.listFiles();
             if (files != null) {
                 for (File f : files) {
                     if ((f.getName()
-                          .contains(RCR.name()) && reportType.equals(RCR.name()))
-                            || (f.getName()
-                                 .contains(CRR.name()) && reportType.equals(CRR.name()))
-                            || (f.getName()
-                                 .contains(MDR.name()) && reportType.equals(MDR.name()))
-                            || (f.getName()
-                                 .contains(SUR.name()) && reportType.equals(SUR.name()))
-                            || f.getName()
-                                .contains("results_data")) {
+                          .contains(RCR.name()) && reportType.equals(RCR.name())) || (f.getName()
+                                                                                       .contains(
+                                                                                               CRR.name()) && reportType.equals(
+                            CRR.name())) || (f.getName()
+                                              .contains(MDR.name()) && reportType.equals(MDR.name())) || (f.getName()
+                                                                                                           .contains(
+                                                                                                                   SUR.name()) && reportType.equals(
+                            SUR.name())) || f.getName()
+                                             .contains("results_data")) {
 
                         if (f.delete()) {
                             log.finest("Deleted old report " + f.getAbsolutePath());
@@ -445,12 +384,10 @@ public class QAFrameworkReport
     }
 
     private String createUploadCommandQacli()
-            throws
-            PrqaException {
+            throws PrqaException {
         String projectLocation;
         if (!StringUtils.isBlank(settings.getQaVerifyProjectName())) {
-            projectLocation = PRQACommandBuilder.wrapFile(workspace,
-                                                          settings.getQaProject());
+            projectLocation = PRQACommandBuilder.wrapFile(workspace, settings.getQaProject());
         } else {
             throw new PrqaException("Neither file list nor project file has been set, this should not be happening");
         }
@@ -461,9 +398,7 @@ public class QAFrameworkReport
         builder.appendArgument("--username");
         builder.appendArgument(qaVerifySettings.user);
         builder.appendArgument("--password");
-        builder.appendArgument(qaVerifySettings.password.isEmpty()
-                               ? "\"\""
-                               : qaVerifySettings.password);
+        builder.appendArgument(qaVerifySettings.password.isEmpty() ? "\"\"" : qaVerifySettings.password);
         builder.appendArgument("--url");
         builder.appendArgument(qaVerifySettings.host + ":" + qaVerifySettings.port);
         builder.appendArgument("--upload-project");
@@ -488,10 +423,10 @@ public class QAFrameworkReport
     }
 
     public void uploadQacli(PrintStream out)
-            throws
-            PrqaException {
+            throws PrqaException {
         if (!settings.isLoginToQAV()) {
-            out.println("Configuration Error: Upload Results to QAV is Selected but QAV Server Connection Configuration is not Selected");
+            out.println(
+                    "Configuration Error: Upload Results to QAV is Selected but QAV Server Connection Configuration is not Selected");
             return;
         }
         String finalCommand = createUploadCommandQacli();
@@ -500,29 +435,16 @@ public class QAFrameworkReport
             Map<String, String> getEnv = getEnvironment();
             if (getEnv == null) {
                 PrqaCommandLine.getInstance()
-                               .run(finalCommand,
-                                    workspace,
-                                    true,
-                                    false,
-                                    out);
+                               .run(finalCommand, workspace, true, false, out);
             } else {
                 PrqaCommandLine.getInstance()
-                               .run(finalCommand,
-                                    workspace,
-                                    true,
-                                    false,
-                                    getEnv,
-                                    out);
+                               .run(finalCommand, workspace, true, false, getEnv, out);
             }
         } catch (AbnormalProcessTerminationException abnex) {
-            log.logp(Level.SEVERE,
-                     this.getClass()
-                         .getName(),
-                     "upload()",
-                     "Logged error with upload",
-                     abnex);
-            throw new PrqaUploadException("ERROR: Failed to upload, please check the upload command message above for more details",
-                                          abnex);
+            log.logp(Level.SEVERE, this.getClass()
+                                       .getName(), "upload()", "Logged error with upload", abnex);
+            throw new PrqaUploadException(
+                    "ERROR: Failed to upload, please check the upload command message above for more details", abnex);
         }
     }
 
@@ -537,39 +459,30 @@ public class QAFrameworkReport
 
     public static void _logEnv(String location,
                                Map<String, String> env) {
-        log.fine(String.format("%s",
-                               location));
+        log.fine(String.format("%s", location));
         log.fine("==========================================");
         if (env != null) {
             for (String key : env.keySet()) {
-                log.fine(String.format("%s=%s",
-                                       key,
-                                       env.get(key)));
+                log.fine(String.format("%s=%s", key, env.get(key)));
             }
         }
         log.fine("==========================================");
     }
 
     public PRQAComplianceStatus getComplianceStatus(PrintStream out)
-            throws
-            PrqaException {
+            throws PrqaException {
         PRQAComplianceStatus status = new PRQAComplianceStatus();
 
         String report_structure;
-        report_structure = new File(extractReportsPath(workspace.getAbsolutePath(),
-                                                       settings.getQaProject(),
-                                                       settings.getProjectConfiguration()))
-                .getPath();
+        report_structure = new File(extractReportsPath(workspace.getAbsolutePath(), settings.getQaProject(),
+                                                       settings.getProjectConfiguration())).getPath();
         File reportFolder = new File(report_structure);
         out.println("Report Folder Path: " + reportFolder);
 
         File resultsDataFile = new File(reportFolder + File.separator + "results_data.xml");
         out.println("Results Data File Path: " + resultsDataFile.getPath());
 
-        if (!reportFolder.exists()
-                || !reportFolder.isDirectory()
-                || !resultsDataFile.exists()
-                || !resultsDataFile.isFile()) {
+        if (!reportFolder.exists() || !reportFolder.isDirectory() || !resultsDataFile.exists() || !resultsDataFile.isFile()) {
             return status;
         }
 
@@ -586,9 +499,12 @@ public class QAFrameworkReport
                 if (reportFile.getName()
                               .contains(RCR.name())) {
                     ComplianceReportHtmlParser parser = new ComplianceReportHtmlParser(reportFile.getAbsolutePath());
-                    fileCompliance += Double.parseDouble(parser.getParseFirstResult(ComplianceReportHtmlParser.QAFfileCompliancePattern));
-                    projectCompliance += Double.parseDouble(parser.getParseFirstResult(ComplianceReportHtmlParser.QAFprojectCompliancePattern));
-                    messages += Integer.parseInt(parser.getParseFirstResult(ComplianceReportHtmlParser.QAFtotalMessagesPattern));
+                    fileCompliance += Double.parseDouble(
+                            parser.getParseFirstResult(ComplianceReportHtmlParser.QAFfileCompliancePattern));
+                    projectCompliance += Double.parseDouble(
+                            parser.getParseFirstResult(ComplianceReportHtmlParser.QAFprojectCompliancePattern));
+                    messages += Integer.parseInt(
+                            parser.getParseFirstResult(ComplianceReportHtmlParser.QAFtotalMessagesPattern));
                 }
             }
         }
@@ -612,15 +528,14 @@ public class QAFrameworkReport
 
     private void sortViolatedRulesByRuleID(List<MessageGroup> messagesGroups) {
         for (MessageGroup messageGroup : messagesGroups) {
-            Collections.sort(messageGroup.getViolatedRules(),
-                             new Comparator<Rule>() {
-                                 @Override
-                                 public int compare(Rule o1,
-                                                    Rule o2) {
-                                     return o1.getRuleID()
-                                              .compareTo(o2.getRuleID());
-                                 }
-                             });
+            Collections.sort(messageGroup.getViolatedRules(), new Comparator<Rule>() {
+                @Override
+                public int compare(Rule o1,
+                                   Rule o2) {
+                    return o1.getRuleID()
+                             .compareTo(o2.getRuleID());
+                }
+            });
         }
     }
 
@@ -645,8 +560,7 @@ public class QAFrameworkReport
     }
 
     public boolean applyCustomLicenseServer(PrintStream out)
-            throws
-            PrqaException {
+            throws PrqaException {
 
         if (!settings.isUseCustomLicenseServer()) {
             return false;
@@ -663,27 +577,18 @@ public class QAFrameworkReport
         try {
             if (getEnvironment() == null) {
                 PrqaCommandLine.getInstance()
-                               .run(setLicenseServerCmd,
-                                    workspace,
-                                    true,
-                                    false,
-                                    out);
+                               .run(setLicenseServerCmd, workspace, true, false, out);
             } else {
                 HashMap<String, String> systemVars = new HashMap<>();
                 systemVars.putAll(System.getenv());
                 systemVars.putAll(getEnvironment());
                 PrqaCommandLine.getInstance()
-                               .run(setLicenseServerCmd,
-                                    workspace,
-                                    true,
-                                    false,
-                                    systemVars,
-                                    out);
+                               .run(setLicenseServerCmd, workspace, true, false, systemVars, out);
             }
         } catch (AbnormalProcessTerminationException abnex) {
-            throw new PrqaException(String.format("ERROR: Failed to set license server, message is... \n %s ",
-                                                  abnex.getMessage()),
-                                    abnex);
+            throw new PrqaException(
+                    String.format("ERROR: Failed to set license server, message is... \n %s ", abnex.getMessage()),
+                    abnex);
         }
 
         return true;
@@ -691,8 +596,7 @@ public class QAFrameworkReport
 
     public void unsetCustomLicenseServer(boolean wasApplied,
                                          PrintStream out)
-            throws
-            PrqaException {
+            throws PrqaException {
         if (!wasApplied || !settings.isUseCustomLicenseServer()) {
             return;
         }
@@ -704,33 +608,22 @@ public class QAFrameworkReport
         try {
             if (getEnvironment() == null) {
                 PrqaCommandLine.getInstance()
-                               .run(setLicenseServerCmd,
-                                    workspace,
-                                    true,
-                                    false,
-                                    out);
+                               .run(setLicenseServerCmd, workspace, true, false, out);
             } else {
                 HashMap<String, String> systemVars = new HashMap<>();
                 systemVars.putAll(System.getenv());
                 systemVars.putAll(getEnvironment());
                 PrqaCommandLine.getInstance()
-                               .run(setLicenseServerCmd,
-                                    workspace,
-                                    true,
-                                    false,
-                                    systemVars,
-                                    out);
+                               .run(setLicenseServerCmd, workspace, true, false, systemVars, out);
             }
         } catch (AbnormalProcessTerminationException abnex) {
-            throw new PrqaException(String.format("ERROR: Failed to remove license , message is... \n %s ",
-                                                  abnex.getMessage()),
-                                    abnex);
+            throw new PrqaException(
+                    String.format("ERROR: Failed to remove license , message is... \n %s ", abnex.getMessage()), abnex);
         }
     }
 
     private boolean isCustomServerAlreadySet(PrintStream out)
-            throws
-            PrqaException {
+            throws PrqaException {
 
         String listLicenseServersCmd = createListLicenseServersCmd();
         out.println("Perform LIST LICENSE SERVERS command:");
@@ -740,31 +633,21 @@ public class QAFrameworkReport
         try {
             if (getEnvironment() == null) {
                 res = PrqaCommandLine.getInstance()
-                                     .run(listLicenseServersCmd,
-                                          workspace,
-                                          false,
-                                          true,
-                                          out);
+                                     .run(listLicenseServersCmd, workspace, false, true, out);
             } else {
                 HashMap<String, String> systemVars = new HashMap<>();
                 systemVars.putAll(System.getenv());
                 systemVars.putAll(getEnvironment());
                 res = PrqaCommandLine.getInstance()
-                                     .run(listLicenseServersCmd,
-                                          workspace,
-                                          false,
-                                          true,
-                                          systemVars,
-                                          out);
+                                     .run(listLicenseServersCmd, workspace, false, true, systemVars, out);
             }
         } catch (AbnormalProcessTerminationException abnex) {
-            throw new PrqaException(String.format("ERROR: Failed to list current servers, message is... \n %s ",
-                                                  abnex.getMessage()),
-                                    abnex);
+            throw new PrqaException(
+                    String.format("ERROR: Failed to list current servers, message is... \n %s ", abnex.getMessage()),
+                    abnex);
         }
 
-        boolean contains = StringUtils.contains(res.stdoutBuffer.toString(),
-                                                settings.getCustomLicenseServerAddress());
+        boolean contains = StringUtils.contains(res.stdoutBuffer.toString(), settings.getCustomLicenseServerAddress());
         if (contains) {
             out.println("Custom license server already set");
         } else {

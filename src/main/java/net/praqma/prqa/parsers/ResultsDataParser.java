@@ -25,8 +25,7 @@ public class ResultsDataParser
     }
 
     public List<MessageGroup> parseResultsData()
-            throws
-            Exception {
+            throws Exception {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
         Document document = dBuilder.parse(new FileInputStream(filePath));
@@ -36,30 +35,24 @@ public class ResultsDataParser
     private Map<String, Integer> getMessages(Element node) {
         Map<String, Integer> map = new HashMap<>();
         NodeList nList = node.getElementsByTagName("Message");
-        for (int i = 0;
-             i < nList.getLength();
-             ++i) {
+        for (int i = 0; i < nList.getLength(); ++i) {
             Node message = nList.item(i);
             map.put(message.getAttributes()
                            .getNamedItem("guid")
-                           .getNodeValue(),
-                    Integer.parseInt(message.getAttributes()
-                                            .getNamedItem("active")
-                                            .getNodeValue()));
+                           .getNodeValue(), Integer.parseInt(message.getAttributes()
+                                                                    .getNamedItem("active")
+                                                                    .getNodeValue()));
         }
         return map;
     }
 
     private List<MessageGroup> beginFileParsing(Document document)
-            throws
-            Exception {
+            throws Exception {
         List<MessageGroup> messagesGroups = new ArrayList<>();
         document.getDocumentElement()
                 .normalize();
         NodeList nList = document.getElementsByTagName("dataroot");
-        for (int varDataRoot = 0;
-             varDataRoot < nList.getLength();
-             varDataRoot++) {
+        for (int varDataRoot = 0; varDataRoot < nList.getLength(); varDataRoot++) {
             Node node = nList.item(varDataRoot);
             if (node.getNodeType() == Node.ELEMENT_NODE) {
                 if (node.getAttributes()
@@ -68,9 +61,7 @@ public class ResultsDataParser
                         .equals("project")) {
                     Element pElement = (Element) node;
                     NodeList pNodeList = pElement.getElementsByTagName("tree");
-                    for (int varTree = 0;
-                         varTree < pNodeList.getLength();
-                         varTree++) {
+                    for (int varTree = 0; varTree < pNodeList.getLength(); varTree++) {
                         Node cNode = pNodeList.item(varTree);
                         if (cNode.getNodeType() == Node.ELEMENT_NODE) {
                             if (cNode.getAttributes()
@@ -79,17 +70,13 @@ public class ResultsDataParser
                                      .equals("rules")) {
                                 Element cElement = (Element) cNode;
                                 NodeList cNodeList = cElement.getElementsByTagName("RuleGroup");
-                                for (int varRGroup = 0;
-                                     varRGroup < cNodeList.getLength();
-                                     varRGroup++) {
+                                for (int varRGroup = 0; varRGroup < cNodeList.getLength(); varRGroup++) {
                                     Element ccNode = (Element) cNodeList.item(varRGroup);
                                     MessageGroup messageGroup = new MessageGroup(ccNode.getAttributes()
                                                                                        .getNamedItem("name")
                                                                                        .getNodeValue());
                                     NodeList ccNodeList = ccNode.getChildNodes();
-                                    for (int varRule = 0;
-                                         varRule < ccNodeList.getLength();
-                                         varRule++) {
+                                    for (int varRule = 0; varRule < ccNodeList.getLength(); varRule++) {
                                         if (ccNodeList.item(varRule)
                                                       .getNodeType() != Node.ELEMENT_NODE) {
                                             continue;
@@ -100,8 +87,7 @@ public class ResultsDataParser
                                         }
                                         Rule violatedRule = new Rule(cccNode.getAttributes()
                                                                             .getNamedItem("id")
-                                                                            .getNodeValue(),
-                                                                     getMessages(cccNode));
+                                                                            .getNodeValue(), getMessages(cccNode));
                                         messageGroup.addViolatedRule(violatedRule);
                                     }
                                     messagesGroups.add(messageGroup);

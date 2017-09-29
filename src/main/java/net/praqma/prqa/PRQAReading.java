@@ -20,13 +20,11 @@ import java.util.HashMap;
 public interface PRQAReading
         extends Serializable {
     Number getReadout(StatusCategory category)
-            throws
-            PrqaException;
+            throws PrqaException;
 
     void setReadout(StatusCategory category,
                     Number value)
-            throws
-            PrqaException;
+            throws PrqaException;
 
     void addNotification(String notificaction);
 
@@ -35,7 +33,6 @@ public interface PRQAReading
     void setThresholds(HashMap<StatusCategory, Number> thresholds);
 
     HashMap<StatusCategory, Number> getReadouts(StatusCategory... categories)
-            throws
-            PrqaException;
+            throws PrqaException;
 }
 

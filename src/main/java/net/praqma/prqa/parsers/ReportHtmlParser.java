@@ -51,8 +51,7 @@ public abstract class ReportHtmlParser
      */
 
     public String getFullReportPath() {
-        logger.finest(String.format("Returning value: %s",
-                                    this.fullReportPath));
+        logger.finest(String.format("Returning value: %s", this.fullReportPath));
         return this.fullReportPath;
     }
 
@@ -63,28 +62,22 @@ public abstract class ReportHtmlParser
     }
 
     public String getParseFirstResult(Pattern pattern)
-            throws
-            PrqaException {
+            throws PrqaException {
         logger.finest("Starting execution of method - getResult");
-        String output = getFirstResult(parse(this.fullReportPath,
-                                             pattern));
-        logger.finest(String.format("Returning value: %s",
-                                    output));
+        String output = getFirstResult(parse(this.fullReportPath, pattern));
+        logger.finest(String.format("Returning value: %s", output));
         return output;
     }
 
     public List<String> getParseResults(Pattern pattern)
-            throws
-            PrqaException {
+            throws PrqaException {
         logger.finest("Starting execution of method - getResult");
-        return parse(this.fullReportPath,
-                     pattern);
+        return parse(this.fullReportPath, pattern);
     }
 
     public List<String> parse(String path,
                               Pattern pattern)
-            throws
-            PrqaParserException {
+            throws PrqaParserException {
         logger.finest("Starting execution of method - parse");
 
         List<String> result = new ArrayList<>();
@@ -95,9 +88,7 @@ public abstract class ReportHtmlParser
         try {
             fis = new FileInputStream(file);
         } catch (FileNotFoundException ex) {
-            logger.severe(String.format("Exception thrown type: %s; message: %s",
-                                        ex.getClass(),
-                                        ex.getMessage()));
+            logger.severe(String.format("Exception thrown type: %s; message: %s", ex.getClass(), ex.getMessage()));
             throw new PrqaParserException(ex);
         }
         logger.finest("File opened successfully!");
@@ -122,16 +113,13 @@ public abstract class ReportHtmlParser
 
                     logger.finest("Returning result:");
                     for (String s : result) {
-                        logger.finest(String.format("    %s",
-                                                    s));
+                        logger.finest(String.format("    %s", s));
                     }
                     return result;
                 }
             }
         } catch (IOException ex) {
-            logger.severe(String.format("Exception thrown type: %s; message: %s",
-                                        ex.getClass(),
-                                        ex.getMessage()));
+            logger.severe(String.format("Exception thrown type: %s; message: %s", ex.getClass(), ex.getMessage()));
             throw new PrqaParserException(ex);
         }
 
@@ -139,8 +127,7 @@ public abstract class ReportHtmlParser
 
         logger.finest("Returning result:");
         for (String s : result) {
-            logger.finest(String.format("    %s",
-                                        s));
+            logger.finest(String.format("    %s", s));
         }
 
         return result;
@@ -150,8 +137,7 @@ public abstract class ReportHtmlParser
         logger.finest("Starting execution of method - getFirstResult");
         if (results.size() > 0) {
             String output = results.get(0);
-            logger.finest(String.format("Returning value: %s",
-                                        output));
+            logger.finest(String.format("Returning value: %s", output));
             return output;
         }
 

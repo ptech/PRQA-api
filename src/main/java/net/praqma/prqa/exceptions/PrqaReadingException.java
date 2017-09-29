@@ -16,8 +16,7 @@ public class PrqaReadingException
 
     public PrqaReadingException(String message,
                                 Exception ex) {
-        super(message,
-              ex);
+        super(message, ex);
     }
 }
 

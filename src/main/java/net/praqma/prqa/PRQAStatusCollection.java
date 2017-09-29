@@ -33,8 +33,7 @@ public class PRQAStatusCollection
     public PRQAStatusCollection(ArrayList<PRQAReading> collection) {
         logger.finest("Constructor called for class PRQAStatusCollection(ArrayList<PRQAReading> collection)");
         for (PRQAReading e : collection) {
-            logger.finest(String.format("    %s",
-                                        e));
+            logger.finest(String.format("    %s", e));
         }
 
         this.addAll(collection);
@@ -43,8 +42,7 @@ public class PRQAStatusCollection
     public PRQAStatusCollection(PRQAStatusCollection collection) {
         logger.finest("Constructor called for class PRQAStatusCollection(PRQAStatusCollection collection)");
         for (PRQAReading e : collection) {
-            logger.finest(String.format("    %s",
-                                        e));
+            logger.finest(String.format("    %s", e));
         }
 
         this.addAll(collection);
@@ -58,19 +56,14 @@ public class PRQAStatusCollection
      * @return
      */
     public final Number getMax(StatusCategory category)
-            throws
-            PrqaException {
+            throws PrqaException {
         logger.finest("Starting execution of method - getMax");
-        logger.finest(String.format("Input parameter category type: %s; value: %s",
-                                    category.getClass(),
-                                    category));
+        logger.finest(String.format("Input parameter category type: %s; value: %s", category.getClass(), category));
 
         if (getOverriddenMax(category) != null) {
             Number output = getOverriddenMax(category);
 
-            logger.finest(String.format("Returning overridden max for StatusCategory %s, value: %s",
-                                        category,
-                                        output));
+            logger.finest(String.format("Returning overridden max for StatusCategory %s, value: %s", category, output));
 
             return output;
         }
@@ -78,19 +71,15 @@ public class PRQAStatusCollection
         int max = Integer.MIN_VALUE;
         int tmp = 0;
 
-        logger.finest(String.format("Searching for maximum value for StatusCategory %s...",
-                                    category));
+        logger.finest(String.format("Searching for maximum value for StatusCategory %s...", category));
 
         for (PRQAReading s : this) {
             try {
-                tmp = s.getReadout(category) == null
-                      ? 0
-                      : s.getReadout(category)
-                         .intValue();
+                tmp = s.getReadout(category) == null ? 0 : s.getReadout(category)
+                                                            .intValue();
             } catch (PrqaException iex) {
-                logger.severe(String.format("Exception thrown type: %s; message: %s",
-                                            iex.getClass(),
-                                            iex.getMessage()));
+                logger.severe(
+                        String.format("Exception thrown type: %s; message: %s", iex.getClass(), iex.getMessage()));
 
                 throw iex;
             }
@@ -100,9 +89,7 @@ public class PRQAStatusCollection
             }
         }
 
-        logger.finest(String.format("Returning max from StatusCategory %s, value: %s",
-                                    category,
-                                    max));
+        logger.finest(String.format("Returning max from StatusCategory %s, value: %s", category, max));
 
         return max;
     }
@@ -116,19 +103,14 @@ public class PRQAStatusCollection
      * specified category.
      */
     public final Number getMin(StatusCategory category)
-            throws
-            PrqaException {
+            throws PrqaException {
         logger.finest("Starting execution of method - getMin");
-        logger.finest(String.format("Input parameter category type: %s; value: %s",
-                                    category.getClass(),
-                                    category));
+        logger.finest(String.format("Input parameter category type: %s; value: %s", category.getClass(), category));
 
         if (getOverriddenMin(category) != null) {
             Number output = getOverriddenMin(category);
 
-            logger.finest(String.format("Returning overridden min for StatusCategory %s, value: %s",
-                                        category,
-                                        output));
+            logger.finest(String.format("Returning overridden min for StatusCategory %s, value: %s", category, output));
 
             return output;
         }
@@ -136,19 +118,15 @@ public class PRQAStatusCollection
         int min = Integer.MAX_VALUE;
         int tmp = 0;
 
-        logger.finest(String.format("Searching for minimum value for StatusCategory %s...",
-                                    category));
+        logger.finest(String.format("Searching for minimum value for StatusCategory %s...", category));
 
         for (PRQAReading s : this) {
             try {
-                tmp = s.getReadout(category) == null
-                      ? 0
-                      : s.getReadout(category)
-                         .intValue();
+                tmp = s.getReadout(category) == null ? 0 : s.getReadout(category)
+                                                            .intValue();
             } catch (PrqaException iex) {
-                logger.severe(String.format("Exception thrown type: %s; message: %s",
-                                            iex.getClass(),
-                                            iex.getMessage()));
+                logger.severe(
+                        String.format("Exception thrown type: %s; message: %s", iex.getClass(), iex.getMessage()));
 
                 throw iex;
             }
@@ -157,9 +135,7 @@ public class PRQAStatusCollection
             }
         }
 
-        logger.finest(String.format("Returning min from StatusCategory %s, value: %s",
-                                    category,
-                                    min));
+        logger.finest(String.format("Returning min from StatusCategory %s, value: %s", category, min));
 
         return min;
     }
@@ -175,67 +151,47 @@ public class PRQAStatusCollection
     public void overrideMin(StatusCategory category,
                             Number value) {
         logger.finest("Starting execution of method - overrideMin");
-        logger.finest(String.format("Input parameter category type: %s; value: %s",
-                                    category.getClass(),
-                                    category));
-        logger.finest(String.format("Input parameter value type: %s; value: %s",
-                                    value.getClass(),
-                                    value));
+        logger.finest(String.format("Input parameter category type: %s; value: %s", category.getClass(), category));
+        logger.finest(String.format("Input parameter value type: %s; value: %s", value.getClass(), value));
 
-        overrideMinimum.put(category,
-                            value);
+        overrideMinimum.put(category, value);
     }
 
     public void overrideMax(StatusCategory category,
                             Number value) {
         logger.finest("Starting execution of method - overrideMax");
-        logger.finest(String.format("Input parameter category type: %s; value: %s",
-                                    category.getClass(),
-                                    category));
-        logger.finest(String.format("Input parameter value type: %s; value: %s",
-                                    value.getClass(),
-                                    value));
+        logger.finest(String.format("Input parameter category type: %s; value: %s", category.getClass(), category));
+        logger.finest(String.format("Input parameter value type: %s; value: %s", value.getClass(), value));
 
-        overrideMaximum.put(category,
-                            value);
+        overrideMaximum.put(category, value);
     }
 
     public Number getOverriddenMax(StatusCategory category) {
         logger.finest("Starting execution of method - getOverriddenMax");
-        logger.finest(String.format("Input parameter category type: %s; value: %s",
-                                    category.getClass(),
-                                    category));
+        logger.finest(String.format("Input parameter category type: %s; value: %s", category.getClass(), category));
 
         if (overrideMaximum.containsKey(category)) {
             Number output = overrideMaximum.get(category);
 
-            logger.finest(String.format("Returning overridden max for StatusCategory %s, value: %s",
-                                        category,
-                                        output));
+            logger.finest(String.format("Returning overridden max for StatusCategory %s, value: %s", category, output));
 
             return output;
         }
 
-        logger.finest(String.format("Maximum for StatusCategory %s isn't set, returning null",
-                                    category));
+        logger.finest(String.format("Maximum for StatusCategory %s isn't set, returning null", category));
 
         return null;
     }
 
     public Number getOverriddenMin(StatusCategory category) {
         logger.finest("Starting execution of method - getOverriddenMin");
-        logger.finest(String.format("Input parameter category type: %s; value: %s",
-                                    category.getClass(),
-                                    category));
+        logger.finest(String.format("Input parameter category type: %s; value: %s", category.getClass(), category));
         if (overrideMinimum.containsKey(category)) {
             Number output = overrideMinimum.get(category);
-            logger.finest(String.format("Returning overridden min for StatusCategory %s, value: %s",
-                                        category,
-                                        output));
+            logger.finest(String.format("Returning overridden min for StatusCategory %s, value: %s", category, output));
             return output;
         }
-        logger.finest(String.format("Maximum for StatusCategory %s isn't set, returning null",
-                                    category));
+        logger.finest(String.format("Maximum for StatusCategory %s isn't set, returning null", category));
         return null;
     }
 

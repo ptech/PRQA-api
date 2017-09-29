@@ -12,8 +12,7 @@ public class PrqaUploadException
 
     public PrqaUploadException(String message,
                                Exception ex) {
-        super(message,
-              ex);
+        super(message, ex);
     }
 }
 

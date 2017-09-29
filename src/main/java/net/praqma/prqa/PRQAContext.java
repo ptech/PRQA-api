@@ -28,8 +28,7 @@ public class PRQAContext
         CodeReview,
         Suppression;
 
-        public static final EnumSet<QARReportType> OPTIONAL_TYPES = EnumSet.of(CodeReview,
-                                                                               Suppression);
+        public static final EnumSet<QARReportType> OPTIONAL_TYPES = EnumSet.of(CodeReview, Suppression);
         public static final EnumSet<QARReportType> REQUIRED_TYPES = EnumSet.of(Compliance);
     }
 }

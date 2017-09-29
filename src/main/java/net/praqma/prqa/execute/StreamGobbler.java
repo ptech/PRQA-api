@@ -55,9 +55,7 @@ public class StreamGobbler
             }
 
 			/* Building buffer */
-            for (int i = 0;
-                 i < lres.size() - 1;
-                 ++i) {
+            for (int i = 0; i < lres.size() - 1; ++i) {
                 sres.append(lres.get(i) + linesep);
             }
 

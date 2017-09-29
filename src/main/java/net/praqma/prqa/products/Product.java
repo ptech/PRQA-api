@@ -18,6 +18,5 @@ public interface Product
     String getProductVersion(Map<String, String> environment,
                              File currentDirectory,
                              boolean isUnix)
-            throws
-            PrqaSetupException;
+            throws PrqaSetupException;
 }

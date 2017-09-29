@@ -25,8 +25,7 @@ import java.util.logging.Logger;
  * @author Praqma
  */
 public abstract class PRQAStatus
-        implements PRQAReading,
-                   Serializable {
+        implements PRQAReading, Serializable {
 
     private static final long serialVersionUID = 1L;
     protected List<String> notifications = new ArrayList<>();
@@ -39,9 +38,7 @@ public abstract class PRQAStatus
     @Override
     public void addNotification(String message) {
         logger.finest("Starting execution of method - addNotification");
-        logger.finest(String.format("Input parameter message type: %s; value: %s",
-                                    message.getClass(),
-                                    message));
+        logger.finest(String.format("Input parameter message type: %s; value: %s", message.getClass(), message));
 
         notifications.add(message);
 
@@ -54,9 +51,7 @@ public abstract class PRQAStatus
             logger.finest("Starting execution of method - getThresholds");
             logger.finest("Returning HashMap<StatusCategory, Number> thresholds:");
             for (Entry<StatusCategory, Number> entry : thresholds.entrySet()) {
-                logger.finest(String.format("    StatusCategory: %s, Number: %s",
-                                            entry.getKey(),
-                                            entry.getValue()));
+                logger.finest(String.format("    StatusCategory: %s, Number: %s", entry.getKey(), entry.getValue()));
             }
 
             return thresholds;
@@ -68,12 +63,9 @@ public abstract class PRQAStatus
     @Override
     public void setThresholds(HashMap<StatusCategory, Number> thresholds) {
         logger.finest("Starting execution of method - setThresholds");
-        logger.finest(String.format("Input parameter thresholds type: %s, values:",
-                                    thresholds.getClass()));
+        logger.finest(String.format("Input parameter thresholds type: %s, values:", thresholds.getClass()));
         for (Entry<StatusCategory, Number> entry : thresholds.entrySet()) {
-            logger.finest(String.format("    StatusCategory: %s, Number: %s",
-                                        entry.getKey(),
-                                        entry.getValue()));
+            logger.finest(String.format("    StatusCategory: %s, Number: %s", entry.getKey(), entry.getValue()));
         }
 
         this.thresholds = thresholds;
@@ -86,13 +78,11 @@ public abstract class PRQAStatus
      */
     @Override
     public HashMap<StatusCategory, Number> getReadouts(StatusCategory... categories)
-            throws
-            PrqaException {
+            throws PrqaException {
         logger.finest("Starting execution of method - getReadouts");
 
         for (StatusCategory category : categories) {
-            logger.finest(String.format("    %s",
-                                        category));
+            logger.finest(String.format("    %s", category));
         }
         logger.finest("Attempting to get readouts...");
 
@@ -100,12 +90,9 @@ public abstract class PRQAStatus
         for (StatusCategory category : categories) {
             try {
                 Number readout = getReadout(category);
-                map.put(category,
-                        readout);
+                map.put(category, readout);
             } catch (PrqaReadingException ex) {
-                logger.severe(String.format("Exception thrown type: %s; message: %s",
-                                            ex.getClass(),
-                                            ex.getMessage()));
+                logger.severe(String.format("Exception thrown type: %s; message: %s", ex.getClass(), ex.getMessage()));
 
                 throw ex;
             }
@@ -113,9 +100,7 @@ public abstract class PRQAStatus
         logger.finest("Successfully got all readouts!");
         logger.finest("Returning HashMap<StatusCategory, Number> map:");
         for (Entry<StatusCategory, Number> entry : map.entrySet()) {
-            logger.finest(String.format("    StatusCategory: %s, Number: %s",
-                                        entry.getKey(),
-                                        entry.getValue()));
+            logger.finest(String.format("    StatusCategory: %s, Number: %s", entry.getKey(), entry.getValue()));
         }
 
         return map;

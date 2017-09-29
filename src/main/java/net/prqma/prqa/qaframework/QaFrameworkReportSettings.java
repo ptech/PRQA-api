@@ -5,8 +5,7 @@ import net.praqma.prqa.ReportSettings;
 import java.io.Serializable;
 
 public class QaFrameworkReportSettings
-        implements ReportSettings,
-                   Serializable {
+        implements ReportSettings, Serializable {
 
     private String qaInstallation;
     private String qaProject;
@@ -40,38 +39,37 @@ public class QaFrameworkReportSettings
     private boolean addBuildNumber;
     private String projectConfiguration;
 
-    public QaFrameworkReportSettings(
-            String qaInstallation,
-            boolean useCustomLicenseServer,
-            String customLicenseServerAddress,
-            String qaProject,
-            boolean pullUnifiedProject,
-            String uniProjectName,
-            boolean qaEnableDependencyMode,
-            boolean qaCrossModuleAnalysis,
-            String cmaProjectName,
-            boolean reuseCmaDb,
-            boolean useDiskStorage,
-            boolean generateReport,
-            boolean publishToQAV,
-            boolean loginToQAV,
-            boolean qaUploadWhenStable,
-            String qaVerifyProjectName,
-            String uploadSnapshotName,
-            String buildNumber,
-            String uploadSourceCode,
-            boolean genCrReport,
-            boolean genMdReport,
-            boolean genSupReport,
-            boolean analysisSettings,
-            boolean stopWhenFail,
-            boolean customCpuThreads,
-            String maxNumThreads,
-            boolean generatePreprocess,
-            boolean assembleSupportAnalytics,
-            boolean generateReportOnAnalysisError,
-            boolean addBuildNumber,
-            String projectConfiguration) {
+    public QaFrameworkReportSettings(String qaInstallation,
+                                     boolean useCustomLicenseServer,
+                                     String customLicenseServerAddress,
+                                     String qaProject,
+                                     boolean pullUnifiedProject,
+                                     String uniProjectName,
+                                     boolean qaEnableDependencyMode,
+                                     boolean qaCrossModuleAnalysis,
+                                     String cmaProjectName,
+                                     boolean reuseCmaDb,
+                                     boolean useDiskStorage,
+                                     boolean generateReport,
+                                     boolean publishToQAV,
+                                     boolean loginToQAV,
+                                     boolean qaUploadWhenStable,
+                                     String qaVerifyProjectName,
+                                     String uploadSnapshotName,
+                                     String buildNumber,
+                                     String uploadSourceCode,
+                                     boolean genCrReport,
+                                     boolean genMdReport,
+                                     boolean genSupReport,
+                                     boolean analysisSettings,
+                                     boolean stopWhenFail,
+                                     boolean customCpuThreads,
+                                     String maxNumThreads,
+                                     boolean generatePreprocess,
+                                     boolean assembleSupportAnalytics,
+                                     boolean generateReportOnAnalysisError,
+                                     boolean addBuildNumber,
+                                     String projectConfiguration) {
 
         this.qaInstallation = qaInstallation;
         this.useCustomLicenseServer = useCustomLicenseServer;

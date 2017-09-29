@@ -16,15 +16,12 @@ public class PrqaException
 
     public PrqaException(String msg,
                          Throwable cause) {
-        super(msg,
-              cause);
+        super(msg, cause);
     }
 
     @Override
     public String toString() {
-        return String.format("Caught exception with message:%n\t%s\nCaused by:%n\t%s",
-                             getMessage(),
-                             getCause());
+        return String.format("Caught exception with message:%n\t%s\nCaused by:%n\t%s", getMessage(), getCause());
     }
 }
 

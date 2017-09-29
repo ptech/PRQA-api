@@ -47,9 +47,7 @@ public class Rule
      */
     public int getRuleNumber() {
         Matcher matcher = DIGITS.matcher(ruleNumber);
-        return matcher.find()
-               ? Integer.parseInt(matcher.group())
-               : 0;
+        return matcher.find() ? Integer.parseInt(matcher.group()) : 0;
     }
 
     public Map<String, Integer> getMessages() {
@@ -57,8 +55,7 @@ public class Rule
             // compatibility with old serialized data
             messages = new HashMap<>();
             if (ruleTotalViolations > 0) {
-                messages.put(ruleNumber,
-                             ruleTotalViolations);
+                messages.put(ruleNumber, ruleTotalViolations);
             }
         }
         return messages;
@@ -81,8 +78,7 @@ public class Rule
     public boolean equals(Object obj) {
         if (obj instanceof Rule) {
             Rule ruleObj = (Rule) obj;
-            return Objects.equals(ruleNumber,
-                                  ruleObj.ruleNumber);
+            return Objects.equals(ruleNumber, ruleObj.ruleNumber);
         }
         return false;
     }

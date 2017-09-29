@@ -35,10 +35,7 @@ public class QaVerifyConfigurationFileParser {
 
     public void changeQaVerifyConfiFileSettings(QAVerifyServerSettings qaVerifySettings,
                                                 String project)
-            throws
-            PrqaException,
-            JDOMException,
-            IOException {
+            throws PrqaException, JDOMException, IOException {
 
         File qaVerifyFile = new File(qaVerifyFilePath);
 
@@ -48,7 +45,8 @@ public class QaVerifyConfigurationFileParser {
         if (!qaVerifyFile.isFile() || !(FilenameUtils.getExtension(qaVerifyFilePath)
                                                      .toLowerCase()
                                                      .equals(QA_VERIFIY_FILE_EXTENSION))) {
-            throw new PrqaException("The QA·Verify Configuration file has to be a file with" + "'" + QA_VERIFIY_FILE_EXTENSION + "' extension!");
+            throw new PrqaException(
+                    "The QA·Verify Configuration file has to be a file with" + "'" + QA_VERIFIY_FILE_EXTENSION + "' extension!");
         }
 
         SAXBuilder saxBuilder = new SAXBuilder();
@@ -83,7 +81,6 @@ public class QaVerifyConfigurationFileParser {
             }
         });
         XMLOutputter xmlOutput = new XMLOutputter(format);
-        xmlOutput.output(document,
-                         new FileWriter(qaVerifyFilePath));
+        xmlOutput.output(document, new FileWriter(qaVerifyFilePath));
     }
 }

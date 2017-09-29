@@ -15,8 +15,7 @@ public class PrqaSetupException
 
     public PrqaSetupException(String message,
                               Exception ex) {
-        super(message,
-              ex);
+        super(message, ex);
     }
 }
 
